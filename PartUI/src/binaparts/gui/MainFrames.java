@@ -920,7 +920,7 @@ public class MainFrames extends JFrame
 			
 	//JComboBoxes
 			
-			cboDescrip = new JComboBox();
+			cboDescrip = new JComboBox<Object>();
 			cboDescrip.setForeground(Color.BLACK);
 			cboDescrip.addMouseListener(new ContextMenuMouseListener());
 			
