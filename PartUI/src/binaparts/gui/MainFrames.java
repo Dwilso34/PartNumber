@@ -591,18 +591,18 @@ public class MainFrames extends JFrame
 							}catch(Exception ex){/*ignore*/}
 						}
 					}
-					if(cboMat.getSelectedItem()== null){
-						if(cboType.getSelectedItem()==null){
-							txtBPart.setText(generateBosalPartNumber("", "", txtSeq.getText()));
+					if(cboType.getSelectedItem() != null){
+						if(cboMat.getSelectedItem() != null){
+							txtBPart.setText(generateBosalPartNumber(cboType.getSelectedItem().toString(), 
+									cboMat.getSelectedItem().toString(), 
+									txtSeq.getText()));
 						}else{
 							txtBPart.setText(generateBosalPartNumber(cboType.getSelectedItem().toString(), 
-									"", 
-									txtSeq.getText()));
+								"", 
+								txtSeq.getText()));
 						}
 					}else{
-					txtBPart.setText(generateBosalPartNumber(cboType.getSelectedItem().toString(), 
-							cboMat.getSelectedItem().toString(), 
-							txtSeq.getText()));
+						txtBPart.setText(generateBosalPartNumber("", "", txtSeq.getText()));
 					}
 				}});
 			cboType.addItemListener(comboBoxSelectionListener);
