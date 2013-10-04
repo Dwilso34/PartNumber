@@ -890,6 +890,23 @@ public class MainFrames extends JFrame
 	//JComboBoxes
 		
 		private JComboBox<?> cboDescrip;
+		@SuppressWarnings("rawtypes")
+		private ComboBoxModel resetDescripComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<Object> descripComboBoxDefault = null;
+			String[] types = null;
+			
+			try {
+				temp1 = con.queryReturnAllDescrips();
+				types = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i++){
+					types[i] = temp1.getJSONObject(i).get("Name").toString();
+				}
+				descripComboBoxDefault = (new DefaultComboBoxModel<Object> (types));
+			}catch(Exception ex){/*Ignore*/}
+			return descripComboBoxDefault;
+		}
 		
 	//Update Panel
 		
@@ -923,6 +940,8 @@ public class MainFrames extends JFrame
 			cboDescrip = new JComboBox<Object>();
 			cboDescrip.setForeground(Color.BLACK);
 			cboDescrip.addMouseListener(new ContextMenuMouseListener());
+			cboDescrip.setModel(resetDescripComboBox());
+			cboDescrip.setSelectedIndex(-1);
 			
 	//Labels		
 			
@@ -963,6 +982,7 @@ public class MainFrames extends JFrame
 								txtSupDescrip.setText("");
 								txtCusDescrip.setText("");
 								txtFindBosal.setText("");
+								cboDescrip.setSelectedIndex(-1);
 								txtRev.setText("");
 								txtDrawingNum.setText("");
 							}catch(Exception ex){
@@ -992,6 +1012,7 @@ public class MainFrames extends JFrame
 						txtCusDescrip.setText("");
 						txtSupDescrip.setText("");
 						txtProgram.setText("");
+						cboDescrip.setSelectedIndex(-1);
 						txtRev.setText("");
 						txtDrawingNum.setText("");
 					}}});
@@ -1015,7 +1036,6 @@ public class MainFrames extends JFrame
 							String BosalPartNumber = txtFindBosal.getText();
 							String CustomerPartNumber = null;
 							String SupplierPartNumber= null;
-							String Description = null;
 							String Program = null;
 							
 							if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
@@ -1024,9 +1044,9 @@ public class MainFrames extends JFrame
 							if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
 								SupplierPartNumber = null;
 							}else{SupplierPartNumber = txtSupDescrip.getText();}
-							/*if(txtDescrip.getText().equals("-") || txtDescrip.getText().equals("")){
-								Description = null;
-							}else{Description= txtDescrip.getText();}*/
+							
+							String Description = (String) cboDescrip.getSelectedItem();
+														
 							if(txtProgram.getText().equals("-") || txtProgram.getText().equals("")){
 								Program = null;
 							}else{Program = txtProgram.getText();}
@@ -1047,6 +1067,7 @@ public class MainFrames extends JFrame
 								txtCusDescrip.setText("");
 								txtSupDescrip.setText("");
 								txtProgram.setText("");
+								cboDescrip.setSelectedIndex(-1);
 								txtDrawingNum.setText("");
 								txtRev.setText("");
 							}catch(Exception ex){
@@ -1082,11 +1103,11 @@ public class MainFrames extends JFrame
 							txtSupDescrip.setText(spartText);
 							
 							//set text for Description JTextField
-							/*String descripText= null;
+							String descripText= null;
 							try{
 								descripText = temp.get("PartDescription").toString();
 							}catch(Exception ex){descripText = "-";}
-							txtDescrip.setText(descripText);*/
+							cboDescrip.setModel(resetDescripComboBox());
 							
 							//set text for CustPartNumber JTextField
 							String programText = null;
