@@ -128,7 +128,6 @@ public class MainFrames extends JFrame
 				}else{
 					status.setText("Connected");
 					status.setForeground(new Color(154, 205, 50));
-					con.close();
 				}
 			}catch(SQLException SQLex){
 				status.setText("Not Connected SQLException");
@@ -138,9 +137,7 @@ public class MainFrames extends JFrame
 				status.setText("Not Connected EXCEPTION");
 				status.setForeground(new Color(204, 0, 0));
 				ex.printStackTrace();
-			}finally{
-				try{con.close();} catch(Exception ex) { /*ignore*/}
-			}	
+			}
 		}	
 		
 		public MainPanel(final JPanel main) 	

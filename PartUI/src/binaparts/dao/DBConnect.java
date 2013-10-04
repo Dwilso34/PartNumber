@@ -15,18 +15,15 @@ public class DBConnect {
 	protected Connection con = null;	
 	protected PreparedStatement pst = null;
 	private String configFilePath = "config.properties";
-	//closes a connection
-	public void close(){
+	public DBConnect(){
 		try {
-			con.close();
-		} catch (SQLException SQLex) {
-			SQLex.printStackTrace();
-		}catch (Exception ex) {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException ex) {
 			ex.printStackTrace();
 		}
 	}
 	//returns a boolean answer whether ResultSet is empty
-	public boolean isResultSetEmpty(ResultSet rs){
+	private boolean isResultSetEmpty(ResultSet rs){
 		boolean status = true;
 		try {
 			if (!rs.isBeforeFirst() ){
@@ -144,8 +141,8 @@ public class DBConnect {
 			return rowCount;
 		}
 	//get connection from database (done)
-	public Connection getDBConnection() throws Exception{
-		Class.forName("com.mysql.jdbc.Driver");
+	private Connection getDBConnection() throws Exception{
+		
 		ConfigurationManager configProps = new ConfigurationManager(configFilePath);
 		String host = configProps.getProperty("host");
 		String port = configProps.getProperty("port");
@@ -220,6 +217,13 @@ public class DBConnect {
 		String password = config.getProperty("appPassword");
 		boolean userCheck = false;
 		try{
+			if(con == null){
+			System.out.println("there is not a connection still");
+			}
+			if(con != null){
+				System.out.println("there is a connection still");
+			}
+			con = getDBConnection();
 			JSONObject temp = queryReturnUser(username).getJSONObject(0);
 			
 			String un = null;
@@ -238,6 +242,17 @@ public class DBConnect {
 				}
 			}
 		}catch(Exception ex){/*ignore*/}
+		finally{
+			try{
+				if(con != null){
+					System.out.println("there is a connection still");
+				}
+				con.close();
+				if(con != null){
+					System.out.println("there is a connection still");
+				}
+			}catch(Exception ex){ex.printStackTrace();}
+		}
 	return userCheck;
 	}
 	//create a user and add to database (Requires admin)
@@ -371,7 +386,7 @@ public class DBConnect {
 				try{rs.close();} catch(Exception ex) { /*ignore*/}
 				try{st.close();} catch(Exception ex) { /*ignore*/}
 				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{con.close();} catch(Exception ex) { ex.printStackTrace();/*ignore*/}
 			}
 			return json;
 	}	
