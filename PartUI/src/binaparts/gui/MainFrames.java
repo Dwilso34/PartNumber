@@ -23,6 +23,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -858,7 +859,7 @@ public class MainFrames extends JFrame
 	}
 	class UpdatePanel extends JPanel
 	{
-	//JLabels
+		//JLabels
 		
 		private JLabel lblBosal;
 		private JLabel lblUpdatePart;
@@ -880,12 +881,15 @@ public class MainFrames extends JFrame
 	//JTextFields
 		
 		private JTextField txtFindBosal;
-		private JTextField txtDescrip;
 		private JTextField txtCusDescrip;
 		private JTextField txtSupDescrip;
 		private JTextField txtProgram;
 		private JTextField txtRev;
 		private JTextField txtDrawingNum;
+		
+	//JComboBoxes
+		
+		private JComboBox<?> cboDescrip;
 		
 	//Update Panel
 		
@@ -898,9 +902,6 @@ public class MainFrames extends JFrame
 			txtFindBosal = new JTextField();
 			txtFindBosal.setForeground(Color.BLACK);
 			txtFindBosal.addMouseListener(new ContextMenuMouseListener());
-			txtDescrip = new JTextField();
-			txtDescrip.setForeground(Color.BLACK);
-			txtDescrip.addMouseListener(new ContextMenuMouseListener());
 			txtCusDescrip = new JTextField();
 			txtCusDescrip.setForeground(Color.BLACK);
 			txtCusDescrip.addMouseListener(new ContextMenuMouseListener());
@@ -916,6 +917,12 @@ public class MainFrames extends JFrame
 			txtDrawingNum = new JTextField();
 			txtDrawingNum.setForeground(Color.BLACK);
 			txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
+			
+	//JComboBoxes
+			
+			cboDescrip = new JComboBox();
+			cboDescrip.setForeground(Color.BLACK);
+			cboDescrip.addMouseListener(new ContextMenuMouseListener());
 			
 	//Labels		
 			
@@ -955,7 +962,6 @@ public class MainFrames extends JFrame
 								txtProgram.setText("");
 								txtSupDescrip.setText("");
 								txtCusDescrip.setText("");
-								txtDescrip.setText("");
 								txtFindBosal.setText("");
 								txtRev.setText("");
 								txtDrawingNum.setText("");
@@ -983,7 +989,6 @@ public class MainFrames extends JFrame
 						frame.setTitle("Main Menu:");
 						main.setVisible(true);
 						txtFindBosal.setText("");
-						txtDescrip.setText("");
 						txtCusDescrip.setText("");
 						txtSupDescrip.setText("");
 						txtProgram.setText("");
@@ -1019,9 +1024,9 @@ public class MainFrames extends JFrame
 							if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
 								SupplierPartNumber = null;
 							}else{SupplierPartNumber = txtSupDescrip.getText();}
-							if(txtDescrip.getText().equals("-") || txtDescrip.getText().equals("")){
+							/*if(txtDescrip.getText().equals("-") || txtDescrip.getText().equals("")){
 								Description = null;
-							}else{Description= txtDescrip.getText();}
+							}else{Description= txtDescrip.getText();}*/
 							if(txtProgram.getText().equals("-") || txtProgram.getText().equals("")){
 								Program = null;
 							}else{Program = txtProgram.getText();}
@@ -1039,7 +1044,6 @@ public class MainFrames extends JFrame
 								frame.setTitle("Main Menu:");
 								main.setVisible(true);
 								txtFindBosal.setText("");
-								txtDescrip.setText("");
 								txtCusDescrip.setText("");
 								txtSupDescrip.setText("");
 								txtProgram.setText("");
@@ -1078,11 +1082,11 @@ public class MainFrames extends JFrame
 							txtSupDescrip.setText(spartText);
 							
 							//set text for Description JTextField
-							String descripText= null;
+							/*String descripText= null;
 							try{
 								descripText = temp.get("PartDescription").toString();
 							}catch(Exception ex){descripText = "-";}
-							txtDescrip.setText(descripText);
+							txtDescrip.setText(descripText);*/
 							
 							//set text for CustPartNumber JTextField
 							String programText = null;
@@ -1125,10 +1129,8 @@ public class MainFrames extends JFrame
 			
 	//Group Layout
 			
-			txtDescrip.setColumns(10);
 			txtCusDescrip.setColumns(10);
 			txtSupDescrip.setColumns(10);
-			txtDescrip.setColumns(10);
 			txtCusDescrip.setColumns(10);
 			txtSupDescrip.setColumns(10);
 			GroupLayout groupLayout = new GroupLayout(this);
@@ -1141,24 +1143,25 @@ public class MainFrames extends JFrame
 						.addComponent(lblUpdatePart))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(28)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblBosalPartNum)
-							.addComponent(txtFindBosal, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblBosalPartNum))
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(28)
+						.addComponent(txtFindBosal, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
 						.addGap(12)
-						.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-						.addGap(216)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblRev, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
-							.addComponent(txtRev, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(28)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblDescription)
-							.addComponent(txtDescrip, GroupLayout.PREFERRED_SIZE, 432, GroupLayout.PREFERRED_SIZE))
+							.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblDescription))
+						.addGap(84)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(txtRev, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblRev, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
 						.addGap(75)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
-							.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(28)
 						.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
@@ -1190,31 +1193,30 @@ public class MainFrames extends JFrame
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(10)
 								.addComponent(lblUpdatePart)))
-						.addGap(23)
+						.addGap(34)
+						.addComponent(lblBosalPartNum)
+						.addGap(5)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(11)
-								.addComponent(lblBosalPartNum)
-								.addGap(11)
+								.addGap(6)
 								.addComponent(txtFindBosal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(33)
-								.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblRev, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtRev, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
 						.addGap(7)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(9)
-								.addComponent(lblDescription)
-								.addGap(11)
-								.addComponent(txtDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+									.addComponent(lblRev, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+									.addComponent(lblDescription))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+									.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(txtRev, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(37)
-								.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGap(16)
+								.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
+						.addGap(23)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
