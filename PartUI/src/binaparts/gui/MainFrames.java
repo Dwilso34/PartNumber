@@ -379,8 +379,7 @@ public class MainFrames extends JFrame
 		private JLabel lblBosal;
 		private JLabel lblProgram;
 		private JLabel lblDrawingNum;
-		
-
+	
 	//JTextField
 		
 		private JTextField txtDescrip;
@@ -2530,221 +2529,241 @@ public class MainFrames extends JFrame
 				}}//End of Class BDLPanel	
 	class ExperimentalPanel extends JPanel
 	{
+	//JLabels
+		private JLabel lblCreated;
+		private JLabel lblCreatedBy;
+		private JLabel lblUpdated;
+		private JLabel lblUpdatedBy;
+		private JLabel lblProgram;
+		private JLabel lblPartDescrip;
+		private JLabel lblCustomerPartNum;
+		private JLabel lblCustomer;
+		private JLabel lblYear;
+		private JLabel lblSearchPart;
+		private JLabel lblBosal;
+		private JLabel lblExperimental;
+	
+	//JTextFields
+		private JTextField txtCreated;
+		private JTextField txtCreatedBy;
+		private JTextField txtUpdated;
+		private JTextField txtUpdatedBy;
+		private JTextField txtCustomerPartNum;
+		private JTextField txtPartNum;
+		private JTextField txtSearchPart;
+		
+	//JComboBoxes
+		private JComboBox<?> cboProgram;
+		private JComboBox<String> cboPartDescrip;
+		private ComboBoxModel<String> resetDescripComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> descripComboBoxDefault = null;
+			String[] types = null;
+			
+			try {
+				temp1 = con.queryReturnAllDescrips();
+				types = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i++){
+					types[i] = temp1.getJSONObject(i).get("Name").toString();
+				}
+				descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+			}catch(Exception ex){/*Ignore*/}
+			return descripComboBoxDefault;
+		}
+		private JComboBox<?> cboCustomer;
+		private JComboBox<?> cboYear;
+		
+	//JButtons
+		private JButton btnSave;
+		private JButton btnBack;
+		private JButton btnCheck;
+		
+	//JRadioButtons
+		private JRadioButton rbtnSearch;
+		private JRadioButton rbtnCreate;
+		
+	public ExperimentalPanel(final JPanel experimental)
+	{
+		setBackground(new Color(95, 95, 95));
+		
+		
 		//JLabels
-				private JLabel lblCreated;
-				private JLabel lblCreatedBy;
-				private JLabel lblUpdated;
-				private JLabel lblUpdatedBy;
-				private JLabel lblProgram;
-				private JLabel lblPartDescrip;
-				private JLabel lblCustomerPartNum;
-				private JLabel lblCustomer;
-				private JLabel lblYear;
-				private JLabel lblSearchPart;
-				private JLabel lblBosal;
-				private JLabel lblExperimental;
+			lblCreated = new JLabel("Created");
+			lblCreatedBy = new JLabel("Created By");
+			lblUpdated = new JLabel("Updated");
+			lblUpdatedBy = new JLabel("Updated By");
+			lblProgram = new JLabel("Program");
+			lblPartDescrip = new JLabel("Part Description");
+			lblCustomerPartNum = new JLabel("Customer Part Number");
+			lblCustomer = new JLabel("Customer");
+			lblYear = new JLabel("Year Code");
+			lblSearchPart = new JLabel("Part Number");
+			ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+			lblBosal = new JLabel(bosal);
+			lblExperimental = new JLabel("Experimental Part Number");
 			
-			//JTextFields
-				private JTextField txtCreated;
-				private JTextField txtCreatedBy;
-				private JTextField txtUpdated;
-				private JTextField txtUpdatedBy;
-				private JTextField txtCustomerPartNum;
-				private JTextField txtPartNum;
-				private JTextField txtSearchPart;
-				
-			//JComboBoxes
-				private JComboBox<?> cboProgram;
-				private JComboBox<?> cboPartDescrip;
-				private JComboBox<?> cboCustomer;
-				private JComboBox<?> cboYear;
-				
-			//JButtons
-				private JButton btnSave;
-				private JButton btnBack;
-				private JButton btnCheck;
-				
-			//JRadioButtons
-				private JRadioButton rbtnSearch;
-				private JRadioButton rbtnCreate;
-				
-			public ExperimentalPanel(final JPanel experimental)
-			{
-				setBackground(new Color(95, 95, 95));
-				
-				
-				//JLabels
-					lblCreated = new JLabel("Created");
-					lblCreatedBy = new JLabel("Created By");
-					lblUpdated = new JLabel("Updated");
-					lblUpdatedBy = new JLabel("Updated By");
-					lblProgram = new JLabel("Program");
-					lblPartDescrip = new JLabel("Part Description");
-					lblCustomerPartNum = new JLabel("Customer Part Number");
-					lblCustomer = new JLabel("Customer");
-					lblYear = new JLabel("Year Code");
-					lblSearchPart = new JLabel("Part Number");
-					ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-					lblBosal = new JLabel(bosal);
-					lblExperimental = new JLabel("Experimental Part Number");
-					
-				//JTextFields
-					txtCreated = new JTextField();
-					txtCreated.setBackground(new Color(190, 190, 190));
-					txtCreated.setForeground(Color.BLACK);
-					txtCreated.addMouseListener(new ContextMenuMouseListener());
-					txtCreated.setEditable(false);
-					txtCreatedBy = new JTextField();
-					txtCreatedBy.setBackground(new Color(190, 190, 190));
-					txtCreatedBy.setForeground(Color.BLACK);
-					txtCreatedBy.addMouseListener(new ContextMenuMouseListener());
-					txtCreatedBy.setEditable(false);
-					txtUpdated = new JTextField();
-					txtUpdated.setBackground(new Color(190, 190, 190));
-					txtUpdated.setForeground(Color.BLACK);
-					txtUpdated.addMouseListener(new ContextMenuMouseListener());
-					txtUpdated.setEditable(false);
-					txtUpdatedBy = new JTextField();
-					txtUpdatedBy.setBackground(new Color(190, 190, 190));
-					txtUpdatedBy.setForeground(Color.BLACK);
-					txtUpdatedBy.addMouseListener(new ContextMenuMouseListener());
-					txtUpdatedBy.setEditable(false);
-					txtCustomerPartNum = new JTextField();
-					txtCustomerPartNum.setForeground(Color.BLACK);
-					txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
-					txtPartNum = new JTextField();
-					txtPartNum.setBackground(new Color(190, 190, 190));
-					txtPartNum.setForeground(Color.BLACK);
-					txtPartNum.addMouseListener(new ContextMenuMouseListener());
-					txtPartNum.setEditable(false);
-					txtSearchPart = new JTextField();
-					txtSearchPart.setForeground(Color.BLACK);
-					txtSearchPart.addMouseListener(new ContextMenuMouseListener());
-					txtSearchPart.setEditable(false);
-					
-				//JComboBoxes
-					cboProgram = new JComboBox<Object>();
-					cboProgram.setEditable(false);
-					cboProgram.setForeground(Color.BLACK);
-					cboPartDescrip = new JComboBox<Object>();
-					cboPartDescrip.setEditable(false);
-					cboPartDescrip.setForeground(Color.BLACK);
-					cboCustomer = new JComboBox<Object>();
-					cboCustomer.setEditable(false);
-					cboCustomer.setForeground(Color.BLACK);
-					cboYear = new JComboBox<Object>();
-					cboYear.setEditable(false);
-					cboYear.setForeground(Color.BLACK);
-					
-				//JRadioButtons
-					rbtnSearch = new JRadioButton("Search Part");
-					rbtnSearch.setFont(new Font("Tahoma", Font.BOLD, 14));
-					rbtnSearch.setForeground(Color.BLACK);
-					rbtnSearch.setBackground(new Color(95, 95, 95));
-					rbtnCreate = new JRadioButton("Create Part");
-					rbtnCreate.setFont(new Font("Tahoma", Font.BOLD, 14));
-					rbtnCreate.setForeground(Color.BLACK);
-					rbtnCreate.setBackground(new Color(95, 95, 95));
-					
-				//RadioButton Logic
-					rbtnCreate.setSelected(true);
-					rbtnCreate.addActionListener(new ActionListener(){
+		//JTextFields
+			txtCreated = new JTextField();
+			txtCreated.setBackground(new Color(190, 190, 190));
+			txtCreated.setForeground(Color.BLACK);
+			txtCreated.addMouseListener(new ContextMenuMouseListener());
+			txtCreated.setEditable(false);
+			txtCreatedBy = new JTextField();
+			txtCreatedBy.setBackground(new Color(190, 190, 190));
+			txtCreatedBy.setForeground(Color.BLACK);
+			txtCreatedBy.addMouseListener(new ContextMenuMouseListener());
+			txtCreatedBy.setEditable(false);
+			txtUpdated = new JTextField();
+			txtUpdated.setBackground(new Color(190, 190, 190));
+			txtUpdated.setForeground(Color.BLACK);
+			txtUpdated.addMouseListener(new ContextMenuMouseListener());
+			txtUpdated.setEditable(false);
+			txtUpdatedBy = new JTextField();
+			txtUpdatedBy.setBackground(new Color(190, 190, 190));
+			txtUpdatedBy.setForeground(Color.BLACK);
+			txtUpdatedBy.addMouseListener(new ContextMenuMouseListener());
+			txtUpdatedBy.setEditable(false);
+			txtCustomerPartNum = new JTextField();
+			txtCustomerPartNum.setForeground(Color.BLACK);
+			txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
+			txtPartNum = new JTextField();
+			txtPartNum.setBackground(new Color(190, 190, 190));
+			txtPartNum.setForeground(Color.BLACK);
+			txtPartNum.addMouseListener(new ContextMenuMouseListener());
+			txtPartNum.setEditable(false);
+			txtSearchPart = new JTextField();
+			txtSearchPart.setForeground(Color.BLACK);
+			txtSearchPart.addMouseListener(new ContextMenuMouseListener());
+			txtSearchPart.setEditable(false);
 						
-						public void actionPerformed(ActionEvent e)
-						{
-							if (e.getSource() == rbtnCreate){
-					            
-					            txtSearchPart.setText("");
-					            txtSearchPart.setEditable(false);
-					            txtCreated.setText("");
-					            txtCreatedBy.setText("");
-					            txtUpdated.setText("");
-					            txtUpdatedBy.setText("");
-					            txtCustomerPartNum.setText("");
-					            txtPartNum.setText("");
-					            
+		//JComboBoxes
+			cboProgram = new JComboBox<Object>();
+			cboProgram.setEditable(false);
+			cboProgram.setForeground(Color.BLACK);
+			cboPartDescrip = new JComboBox<String>();
+			AutoCompleteDecorator.decorate(cboPartDescrip);
+			cboPartDescrip.setForeground(Color.BLACK);
+			cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
+			cboPartDescrip.setModel(resetDescripComboBox());
+			cboPartDescrip.setSelectedIndex(-1);
+			cboCustomer = new JComboBox<Object>();
+			cboCustomer.setEditable(false);
+			cboCustomer.setForeground(Color.BLACK);
+			cboYear = new JComboBox<Object>();
+			cboYear.setEditable(false);
+			cboYear.setForeground(Color.BLACK);
+			
+		//JRadioButtons
+			rbtnSearch = new JRadioButton("Search Part");
+			rbtnSearch.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnSearch.setForeground(Color.BLACK);
+			rbtnSearch.setBackground(new Color(95, 95, 95));
+			rbtnCreate = new JRadioButton("Create Part");
+			rbtnCreate.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnCreate.setForeground(Color.BLACK);
+			rbtnCreate.setBackground(new Color(95, 95, 95));
+			
+		//RadioButton Logic
+			rbtnCreate.setSelected(true);
+			rbtnCreate.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e)
+				{
+					if (e.getSource() == rbtnCreate){
+			            
+			            txtSearchPart.setText("");
+			            txtSearchPart.setEditable(false);
+			            txtCreated.setText("");
+			            txtCreatedBy.setText("");
+			            txtUpdated.setText("");
+			            txtUpdatedBy.setText("");
+			            txtCustomerPartNum.setText("");
+			            txtPartNum.setText("");
+			            
+	            }
+			}});	
+								
+			rbtnSearch.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e)
+				{
+					if (e.getSource() == rbtnSearch){
+						
+			            txtSearchPart.setText("");
+			            txtSearchPart.setEditable(true);
+			            txtSearchPart.requestFocusInWindow();
+			            txtCreated.setText("");
+			            txtCreatedBy.setText("");
+			            txtUpdated.setText("");
+			            txtUpdatedBy.setText("");
+			            txtCustomerPartNum.setText("");
+			            txtPartNum.setText("");
+			            
 			            }
-					}});	
-										
-					rbtnSearch.addActionListener(new ActionListener(){
-						
-						public void actionPerformed(ActionEvent e)
-						{
-							if (e.getSource() == rbtnSearch){
-								
-					            txtSearchPart.setText("");
-					            txtSearchPart.setEditable(true);
-					            txtSearchPart.requestFocusInWindow();
-					            txtCreated.setText("");
-					            txtCreatedBy.setText("");
-					            txtUpdated.setText("");
-					            txtUpdatedBy.setText("");
-					            txtCustomerPartNum.setText("");
-					            txtPartNum.setText("");
-					            
-					            }
-					}});
-					
-				//JButtons
-					ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
-					btnSave = new JButton(save);
-					btnSave.addActionListener(new ActionListener() {
-						
-						public void actionPerformed(ActionEvent e) 
-						{
-							if (e.getSource() == btnSave) {
-								
-							}
-						}					
-					});
-								
-					ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
-					btnBack = new JButton(back);
-					btnBack.addActionListener(new ActionListener() {
-						
-						public void actionPerformed(ActionEvent e) 
-						{
-							if (e.getSource() == btnBack) {
-								setVisible(false);
-								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-								int height = screenSize.height;
-								int width = screenSize.width;
-								frame.setResizable(false);
-								frame.setSize(width/2, height/2);
-								frame.setLocationRelativeTo(null);
-								frame.setSize(865, 555);
-								frame.setTitle("Main Menu:");
-								main.setVisible(true);
-								txtCreated.setText("");
-								txtCreatedBy.setText("");
-								txtUpdated.setText("");
-								txtUpdatedBy.setText("");
-								txtCustomerPartNum.setText("");
-								txtPartNum.setText("");
-								txtSearchPart.setText("");
-							}
-						}					
-					});
-								
-					ImageIcon check= new ImageIcon(getClass().getResource("/images/check.jpg"));
-					btnCheck = new JButton(check);
-					btnCheck.addActionListener(new ActionListener() {
-						
-						public void actionPerformed(ActionEvent e) 
-						{
-							if (e.getSource() == btnCheck) {
-								
-							}
-						}					
-					});
-								
-				setupPanel();
-				ButtonGroup group = new ButtonGroup();
-				group.add(rbtnCreate);
-				group.add(rbtnSearch);
-			}
+			}});
 			
-				private void setupPanel()
+		//JButtons
+			ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
+			btnSave = new JButton(save);
+			btnSave.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (e.getSource() == btnSave) {
+						
+					}
+				}					
+			});
+						
+			ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
+			btnBack = new JButton(back);
+			btnBack.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (e.getSource() == btnBack) {
+						setVisible(false);
+						Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+						int height = screenSize.height;
+						int width = screenSize.width;
+						frame.setResizable(false);
+						frame.setSize(width/2, height/2);
+						frame.setLocationRelativeTo(null);
+						frame.setSize(865, 555);
+						frame.setTitle("Main Menu:");
+						main.setVisible(true);
+						cboPartDescrip.setSelectedIndex(-1);
+						txtCreated.setText("");
+						txtCreatedBy.setText("");
+						txtUpdated.setText("");
+						txtUpdatedBy.setText("");
+						txtCustomerPartNum.setText("");
+						txtPartNum.setText("");
+						txtSearchPart.setText("");
+					}
+				}					
+			});
+						
+			ImageIcon check= new ImageIcon(getClass().getResource("/images/check.jpg"));
+			btnCheck = new JButton(check);
+			btnCheck.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (e.getSource() == btnCheck) {
+						
+					}
+				}					
+			});
+						
+		setupPanel();
+		ButtonGroup group = new ButtonGroup();
+		group.add(rbtnCreate);
+		group.add(rbtnSearch);
+	}
+	
+		private void setupPanel()
 				{
 					lblCreated.setFont(new Font("Tahoma", Font.BOLD, 14));
 					lblCreated.setForeground(Color.BLACK);
