@@ -174,7 +174,6 @@ public class MainFrames extends JFrame
 					}
 				}					
 			});
-			add(btnExperimental);
 			
 			ImageIcon bd = new ImageIcon(getClass().getResource("/images/BDL Manager.jpg"));
 			btnBDL = new JButton(bd);

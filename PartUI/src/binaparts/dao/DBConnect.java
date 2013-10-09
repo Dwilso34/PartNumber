@@ -41,52 +41,49 @@ public class DBConnect {
 			}else{
 				pst = con.prepareStatement("SELECT * FROM `parts list` WHERE "+search+" = ?");
 				pst.setString(1, queryValue);
-			}
-						
+			}	
 			ResultSet rs = pst.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
-			
+			rs.close();
 			int count = rsmd.getColumnCount();
 			String[] columnNames = new String[count];
 			
 			for (int i = 0; i < count; i++ ) {
 				columnNames[i] = rsmd.getColumnName(i+1);
 			}
+			pst.close();
+			con.close();
 			return columnNames;			
 		}catch(Exception ex){
 			String[] columnNames = null;
 			System.out.println("i screwed up");
 			ex.printStackTrace();
 			return columnNames;
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
-	}
+}
 	//returns a String[] of delta 1 table's column names
 	public String[] getDelta1ColumnNames(String search, String queryValue){
 			try{		
 				con = getDBConnection();
-				System.out.println("i got a connection");
 				if (search.equals("All")){
 					pst = con.prepareStatement("SELECT * FROM `delta 1 parts`");
-					System.out.println("pst 1 created");
 				}else{
 					pst = con.prepareStatement("SELECT * FROM `delta 1 parts`, WHERE "+search+" = ?");
-					System.out.println("pst 2 created");
 					pst.setString(1, queryValue);
-					System.out.println("pst set");
-				}
-							
+				}		
 				ResultSet rs = pst.executeQuery();
-				System.out.println("result set filled");
 				ResultSetMetaData rsmd = rs.getMetaData();
-				System.out.println("rsmd filled");
+				rs.close();
 				int count = rsmd.getColumnCount();
-				System.out.println(count);
 				String[] columnNames = new String[count];
 				
 				for (int i = 0; i < count; i++ ) {
 					columnNames[i] = rsmd.getColumnName(i+1);
-					System.out.println(columnNames[i]);
 				}
+				pst.close();
+				con.close();
 				return columnNames;			
 			}catch(Exception ex){
 				String[] columnNames = null;
@@ -111,8 +108,10 @@ public class DBConnect {
 			while(rs.next()){
 				rowCount++;
 			}
-		}catch(Exception ex){ex.printStackTrace();
-		}
+			rs.close();
+			pst.close();
+			con.close();
+		}catch(Exception ex){ex.printStackTrace();}
 		return rowCount;
 	}
 	//returns an integer equal to the number of rows returned by a delta 1 list search
@@ -127,17 +126,13 @@ public class DBConnect {
 					pst.setString(1, queryValue);
 				}
 				ResultSet rs = pst.executeQuery();
-				
 				while(rs.next()){
-					for (int i = 1; i <= rs.getMetaData().getColumnCount();i++){
-						System.out.print(rs.getString(i)+" ");
-					}
-					System.out.println();
 					rowCount++;
-					System.out.println("row count"+rowCount);
 				}
-			}catch(Exception ex){ex.printStackTrace();
-			}
+				rs.close();
+				pst.close();
+				con.close();
+			}catch(Exception ex){ex.printStackTrace();}
 			return rowCount;
 		}
 	//get connection from database (done)
@@ -217,15 +212,9 @@ public class DBConnect {
 		String password = config.getProperty("appPassword");
 		boolean userCheck = false;
 		try{
-			if(con == null){
-			System.out.println("there is not a connection still");
-			}
-			if(con != null){
-				System.out.println("there is a connection still");
-			}
 			con = getDBConnection();
 			JSONObject temp = queryReturnUser(username).getJSONObject(0);
-			
+			con.close();
 			String un = null;
 			try{
 				un = temp.get("username").toString();
@@ -241,15 +230,14 @@ public class DBConnect {
 					userCheck = true;
 				}
 			}
-		}catch(Exception ex){/*ignore*/}
+		}catch(Exception ex){ex.printStackTrace();}
 		finally{
 			try{
-				if(con != null){
-					System.out.println("there is a connection still");
-				}
-				con.close();
-				if(con != null){
-					System.out.println("there is a connection still");
+				if(con.isClosed() == false){
+					System.out.println(con.isClosed());
+					System.out.println("connection was not terminated before finally");
+					System.out.println("trying again...");
+					con.close();
 				}
 			}catch(Exception ex){ex.printStackTrace();}
 		}
