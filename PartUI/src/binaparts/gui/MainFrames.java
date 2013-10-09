@@ -636,10 +636,10 @@ public class MainFrames extends JFrame
 								String Program = txtProgram.getText();
 								String CreatedBy = con.getUser();
 								Timestamp Created = con.getTimestamp();
-								Timestamp LastUpdated = con.getTimestamp();
+								Timestamp Updated = con.getTimestamp();
 								String UpdatedBy =  con.getUser();
 								con.insertNewPart(partType, mat, seq, typeDescription, Description, 
-													BosalPartNumber, CustomerPartNumber, SupplierPartNumber, CreatedBy, Program, Created, LastUpdated, UpdatedBy);
+													BosalPartNumber, CustomerPartNumber, SupplierPartNumber, CreatedBy, Program, Created, Updated, UpdatedBy);
 								
 								setVisible(false);
 								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1124,7 +1124,7 @@ public class MainFrames extends JFrame
 			
 			setupPanel();
 		}
-			private void setupPanel()
+		private void setupPanel()
 			{
 					
 	//Label Fonts
@@ -1423,7 +1423,7 @@ public class MainFrames extends JFrame
 		
 		//RadioButtons Logic
 			
-			rbtnFindBosal.setSelected(true);
+			
 			rbtnFindBosal.addActionListener(new ActionListener(){
 				
 				public void actionPerformed(ActionEvent e)
@@ -1478,7 +1478,7 @@ public class MainFrames extends JFrame
 			            txtSearch.requestFocusInWindow();
 			           }
 			}});
-
+			rbtnFindBosal.setSelected(true);
 		//JButton
 				
 			ImageIcon search = new ImageIcon(getClass().getResource("/images/search.jpg"));
@@ -1585,6 +1585,7 @@ public class MainFrames extends JFrame
 						TableModel newModel = new DefaultTableModel();
 						myTable.setModel(newModel);
 						txtSearch.setText("");
+						rbtnFindBosal.setSelected(true);
 										
 					}}});
 

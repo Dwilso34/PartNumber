@@ -657,7 +657,8 @@ public class DBConnect {
 		}
 		return json;
 	}
-public JSONArray queryReturnAllDescrips() throws Exception{
+	//
+	public JSONArray queryReturnAllDescrips() throws Exception{
 		
 		ToJSON converter = new ToJSON();
 		JSONArray json = new JSONArray();
@@ -685,7 +686,7 @@ public JSONArray queryReturnAllDescrips() throws Exception{
 		return json;
 	}
 	//returns jsonArray of all Part Descriptions (done)
-		public JSONArray queryReturnAllDescriptions() throws Exception{
+	public JSONArray queryReturnAllDescriptions() throws Exception{
 			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
@@ -790,12 +791,12 @@ public JSONArray queryReturnAllDescrips() throws Exception{
 	//inserts a new row into `parts list` to create a new part
 	public void insertNewPart(int partType, int mat, int seq, String typeDescription, String Description,
 								String BosalPartNumber, String CustomerPartNumber, String SupplierPartNumber,
-								String CreatedBy, String Program, Timestamp Created, Timestamp LastUpdated, String UpdatedBy) throws Exception{	
+								String CreatedBy, String Program, Timestamp Created, Timestamp Updated, String UpdatedBy) throws Exception{	
 		try{
 			con = getDBConnection();
 			pst = con.prepareStatement("INSERT INTO `parts list` (PartType, Material, BosalPartNumber, CustPartNumber,"
-										+ " SupPartNumber, PartDescription, Program, SeqNumber, TypeDescription, UpdatedBy, "
-										+ "LastUpdated, CreatedBy, Created ) "
+										+ " SupPartNumber, PartDescription, Program, SeqNumber, TypeDescription, CreatedBy, "
+										+ "Created, UpdatedBy, Updated ) "
 										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			pst.setInt(1, partType);
 			pst.setInt(2, mat);
@@ -806,10 +807,10 @@ public JSONArray queryReturnAllDescrips() throws Exception{
 			pst.setString(7, Program);
 			pst.setInt(8, seq);
 			pst.setString(9, typeDescription);
-			pst.setString(10, UpdatedBy);
-			pst.setTimestamp(11, LastUpdated);
-			pst.setString(12, CreatedBy);
-			pst.setTimestamp(13, Created);
+			pst.setString(10, CreatedBy);
+			pst.setTimestamp(11, Created);
+			pst.setString(12, UpdatedBy);
+			pst.setTimestamp(13, Updated);
 			pst.executeUpdate();
 			pst.close();
 			iterateNextSequenceNumber(partType);
@@ -850,7 +851,7 @@ public JSONArray queryReturnAllDescrips() throws Exception{
 			}
 		}
 	//updates Part Information
-	public void update(String bPartNum, String updateCusPartNumber, String updateSupPartNumber, String updatePartDescription, String program) throws Exception{
+	public void update(String bPartNum, String updatedCusPartNumber, String updatedSupPartNumber, String updatedPartDescription, String program) throws Exception{
 			
 			try{
 				con = getDBConnection();
@@ -859,11 +860,11 @@ public JSONArray queryReturnAllDescrips() throws Exception{
 						+ " `SupPartNumber` = ?, "
 						+ " `Program` = ?, "
 						+ " `UpdatedBy` = ?, "
-						+ " `LastUpdated` = ?"
+						+ " `Updated` = ?"
 						+ "WHERE `BosalPartNUmber`= ?");
-				pst.setString(1, updatePartDescription);
-				pst.setString(2, updateCusPartNumber);
-				pst.setString(3, updateSupPartNumber);
+				pst.setString(1, updatedPartDescription);
+				pst.setString(2, updatedCusPartNumber);
+				pst.setString(3, updatedSupPartNumber);
 				pst.setString(4,  program);
 				pst.setString(5, getUser());
 				pst.setTimestamp(6, getTimestamp());
