@@ -1287,56 +1287,17 @@ public class MainFrames extends JFrame
 		private JTable myTable;
 		private JScrollPane scrollPane;
 		
-		public TableModel populateTableModel(String search, JSONArray temp, String queryValue){
+		public TableModel populateTableModel(String table, String column, JSONArray temp, String queryValue){
 			 
 	        TableModel tableModel = null;
 	      				
 	        try{
-	            int columnCount = con.getColumnNames(search, queryValue).length;
-	            int rowCount = con.getRowCount(search, queryValue);
+	            int columnCount = con.getColumnNames(table, column, queryValue).length;
+	            int rowCount = con.getRowCount(table, column, queryValue);
 	            String[] temp1 = new String[columnCount];
 	            String[] columnNames = new String[(columnCount - 4)];
 	            String[][] data = new String[rowCount][columnCount];
-	            temp1 = con.getColumnNames(search, queryValue);	      
-	            
-	            int index = 0;
-	            for(int i = 0; i < columnCount; i++){
-	            	if(temp1[i].equals("PartType")){i++;}
-	            	if(temp1[i].equals("Material")){i++;}
-	            	if(temp1[i].equals("SeqNumber")){i++;}
-	            	if(temp1[i].equals("TypeDescription")){i++;}
-	            	columnNames[index] = temp1[i];
-	            	index++;
-	            }
-	            
-	            for(int i = 0; i < rowCount; i++){
-	                for(int j = 0; j < columnNames.length; j++){
-	                	try{
-	                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
-	                    }catch(Exception ex){/*Ignore*/
-	                        data[i][j] = "";
-	                    }
-	                }
-	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));
-	           
-				
-	        }catch(Exception ex){ex.printStackTrace();}
-	       
-	       
-	        return tableModel;
-	    }
-		public TableModel populateDeltaTableModel(String search, JSONArray temp, String queryValue){
-			 
-	        TableModel tableModel = null;
-	      				
-	        try{
-	            int columnCount = con.getDelta1ColumnNames(search, queryValue).length;
-	            int rowCount = con.getDelta1RowCount(search, queryValue);
-	            String[] temp1 = new String[columnCount];
-	            String[] columnNames = new String[(columnCount - 4)];
-	            String[][] data = new String[rowCount][columnCount];
-	            temp1 = con.getDelta1ColumnNames(search, queryValue);	      
+	            temp1 = con.getColumnNames(table, column, queryValue);	      
 	            
 	            int index = 0;
 	            for(int i = 0; i < columnCount; i++){
@@ -1496,7 +1457,7 @@ public class MainFrames extends JFrame
 								if(rbtnFindBosal.isSelected() == true){
 									try{
 										temp = (con.queryBosalPartNumber(searchText));
-										myTable.setModel(populateTableModel("BosalPartNumber", temp, searchText));
+										myTable.setModel(populateTableModel("parts list", "BosalPartNumber", temp, searchText));
 										}catch(Exception ex){
 										JOptionPane.showMessageDialog(
 												    frame,
@@ -1509,7 +1470,7 @@ public class MainFrames extends JFrame
 								if(rbtnFindEuro.isSelected() == true){
 									try{
 										temp = (con.queryDeltaPartNumber(searchText));
-										myTable.setModel(populateDeltaTableModel("DeltaPartNumber", temp, searchText));
+										myTable.setModel(populateTableModel("delta 1 parts", "DeltaPartNumber", temp, searchText));
 										}catch(Exception ex){
 										JOptionPane.showMessageDialog(
 												    frame,
@@ -1522,7 +1483,7 @@ public class MainFrames extends JFrame
 								if(rbtnFindSup.isSelected() == true){
 									try{
 										temp = (con.querySupplierPartNumber(searchText));
-										myTable.setModel(populateTableModel("SupPartNumber", temp, searchText));
+										myTable.setModel(populateTableModel("parts list", "SupPartNumber", temp, searchText));
 										
 										}catch(Exception ex){
 										JOptionPane.showMessageDialog(
@@ -1535,7 +1496,7 @@ public class MainFrames extends JFrame
 								if(rbtnFindCus.isSelected() == true){
 									try{
 										temp = (con.queryCustomerPartNumber(searchText));
-										myTable.setModel(populateTableModel("CustPartNumber", temp, searchText));
+										myTable.setModel(populateTableModel("parts list", "CustPartNumber", temp, searchText));
 
 										}catch(Exception ex){
 										JOptionPane.showMessageDialog(
@@ -1547,7 +1508,7 @@ public class MainFrames extends JFrame
 								if(rbtnFindPro.isSelected() == true){
 									try{
 										temp = (con.queryProgram(searchText));
-										myTable.setModel(populateTableModel("Program", temp, searchText));
+										myTable.setModel(populateTableModel("parts list", "Program", temp, searchText));
 
 										}catch(Exception ex){
 										JOptionPane.showMessageDialog(
@@ -1603,7 +1564,7 @@ public class MainFrames extends JFrame
 							//Searches using Bosal part number to fill table 
 							try{
 								temp = (con.queryAllParts(searchText));
-								myTable.setModel(populateTableModel("All", temp, searchText));
+								myTable.setModel(populateTableModel("parts list", "All", temp, searchText));
 								
 								}catch(Exception ex){
 								JOptionPane.showMessageDialog(
@@ -1614,12 +1575,8 @@ public class MainFrames extends JFrame
 								}
 						}catch (Exception ex){
 							ex.printStackTrace();
-						}	
-						
-						
-	
-														
-						}}});
+						}								
+				}}});
 			
 			ButtonGroup group = new ButtonGroup();
 			group.add(rbtnFindBosal);
