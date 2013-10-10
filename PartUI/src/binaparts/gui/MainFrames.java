@@ -410,7 +410,7 @@ public class MainFrames extends JFrame
 					types[i] = temp1.getJSONObject(i).get("PartType").toString();
 				}
 				typeComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){/*Ignore*/}
+			}catch(Exception ex){ex.printStackTrace();/*Ignore*/}
 			return typeComboBoxDefault;
 		}
 		private ComboBoxModel<String> resetDescripComboBox()
@@ -420,7 +420,7 @@ public class MainFrames extends JFrame
 			String[] types = null;
 			
 			try {
-				temp1 = con.queryReturnAllDescrips();
+				temp1 = con.queryReturnAllDescriptions();
 				types = new String[temp1.length()];
 				for(int i = 0; i < temp1.length(); i++){
 					types[i] = temp1.getJSONObject(i).get("Name").toString();
@@ -555,7 +555,7 @@ public class MainFrames extends JFrame
 							ComboBoxModel matComboBoxModel = null;
 							
 							try{
-								temp1 = con.queryPartType(partType);
+								temp1 = con.queryDatabase("type file", "PartType", partType);
 								temp2 = con.queryMaterialPartType(partType);
 								mats = new String[temp2.length()];
 								txtDescrip.setText(temp1.getJSONObject(0).get("TypeDescription").toString());
@@ -894,7 +894,7 @@ public class MainFrames extends JFrame
 			String[] types = null;
 			
 			try {
-				temp1 = con.queryReturnAllDescrips();
+				temp1 = con.queryReturnAllDescriptions();
 				types = new String[temp1.length()];
 				for(int i = 0; i < temp1.length(); i++){
 					types[i] = temp1.getJSONObject(i).get("Name").toString();
@@ -1085,7 +1085,7 @@ public class MainFrames extends JFrame
 						final String findBosalText = txtFindBosal.getText();
 						
 						try{
-							JSONObject temp = (con.queryBosalPartNumber(findBosalText)).getJSONObject(0);
+							JSONObject temp = (con.queryDatabase("parts list", "BosalPartNumber", findBosalText)).getJSONObject(0);
 							//set text for CustPartNumber JTextField
 							String cpartText= null;
 							try{
@@ -1457,7 +1457,7 @@ public class MainFrames extends JFrame
 								//Searches using Bosal part number to fill table 
 								if(rbtnFindBosal.isSelected() == true){
 									try{
-										temp = (con.queryBosalPartNumber(searchText));
+										temp = (con.queryDatabase("parts list", "BosalPartNumber", searchText));
 										myTable.setModel(populateTableModel("parts list", "BosalPartNumber", temp, searchText));
 										}catch(Exception ex){
 										JOptionPane.showMessageDialog(
@@ -1470,7 +1470,7 @@ public class MainFrames extends JFrame
 								//Searches using Europe part number to fill table 
 								if(rbtnFindEuro.isSelected() == true){
 									try{
-										temp = (con.queryDeltaPartNumber(searchText));
+										temp = (con.queryDatabase("delta 1 parts", "DeltaPartNumber", searchText));
 										myTable.setModel(populateTableModel("delta 1 parts", "DeltaPartNumber", temp, searchText));
 										}catch(Exception ex){
 										JOptionPane.showMessageDialog(
@@ -1483,7 +1483,7 @@ public class MainFrames extends JFrame
 								//Searches using supplier part number to fill table
 								if(rbtnFindSup.isSelected() == true){
 									try{
-										temp = (con.querySupplierPartNumber(searchText));
+										temp = (con.queryDatabase("parts list", "SupPartNumber", searchText));
 										myTable.setModel(populateTableModel("parts list", "SupPartNumber", temp, searchText));
 										
 										}catch(Exception ex){
@@ -1496,7 +1496,7 @@ public class MainFrames extends JFrame
 								//Searches using customer number to fill table				
 								if(rbtnFindCus.isSelected() == true){
 									try{
-										temp = (con.queryCustomerPartNumber(searchText));
+										temp = (con.queryDatabase("parts list", "CustPartNumber", searchText));
 										myTable.setModel(populateTableModel("parts list", "CustPartNumber", temp, searchText));
 
 										}catch(Exception ex){
@@ -1508,7 +1508,7 @@ public class MainFrames extends JFrame
 								}}
 								if(rbtnFindPro.isSelected() == true){
 									try{
-										temp = (con.queryProgram(searchText));
+										temp = (con.queryDatabase("parts list", "Program", searchText));
 										myTable.setModel(populateTableModel("parts list", "Program", temp, searchText));
 
 										}catch(Exception ex){
@@ -2702,7 +2702,7 @@ public class MainFrames extends JFrame
 			String[] types = null;
 			
 			try {
-				temp1 = con.queryReturnAllDescrips();
+				temp1 = con.queryReturnAllDescriptions();
 				types = new String[temp1.length()];
 				for(int i = 0; i < temp1.length(); i++){
 					types[i] = temp1.getJSONObject(i).get("Name").toString();

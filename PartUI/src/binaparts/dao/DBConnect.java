@@ -26,7 +26,7 @@ public class DBConnect {
 	private boolean isResultSetEmpty(ResultSet rs){
 		boolean status = true;
 		try {
-			if (!rs.isBeforeFirst() ){
+			if (rs.isBeforeFirst() == true){
 				 status = false;
 			}
 		}catch(Exception ex){/*Ignore*/}
@@ -163,7 +163,7 @@ public class DBConnect {
 		boolean userCheck = false;
 		try{
 			con = getDBConnection();
-			JSONObject temp = queryReturnUser(username).getJSONObject(0);
+			JSONObject temp = queryDatabase("users", "username", username).getJSONObject(0);
 			con.close();
 			String un = null;
 			try{
@@ -285,17 +285,19 @@ public class DBConnect {
 		}
 	}
 	//returns jsonArray of User filtered by username (done)
-	public JSONArray queryReturnUser(String username) throws Exception{
+	public JSONArray queryDatabase(String table, String column, String queryValue) throws Exception{
 			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
 			
 			try{
 				con = getDBConnection();
-				pst = con.prepareStatement("SELECT * from `users` WHERE username = ?");
-				pst.setString(1, username);
+				pst = con.prepareStatement("SELECT * from `"+table+"` WHERE `"+column+"` = ? ORDER BY `"+column+"`");
+				pst.setString(1, queryValue);
 				ResultSet rs = pst.executeQuery();
-				json = converter.toJSONArray(rs);
+				if (isResultSetEmpty(rs) == false ){    
+					json = converter.toJSONArray(rs);
+				}
 				pst.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
@@ -306,6 +308,30 @@ public class DBConnect {
 			}
 			return json;
 	}	
+	//returns jsonArray of User filtered by username (done)
+	public JSONArray queryDatabase(String table, String column, int queryValue) throws Exception{
+				
+				ToJSON converter = new ToJSON();
+				JSONArray json = new JSONArray();
+				
+				try{
+					con = getDBConnection();
+					pst = con.prepareStatement("SELECT * from `"+table+"` WHERE `"+column+"` = ? ORDER BY `"+column+"`");
+					pst.setInt(1, queryValue);
+					ResultSet rs = pst.executeQuery();
+					if (isResultSetEmpty(rs) == false ){    
+						json = converter.toJSONArray(rs);
+					}
+					pst.close();
+				}catch(SQLException SQLex){
+					SQLex.printStackTrace();
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}finally{
+					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				}
+				return json;
+		}	
 	//returns server user as a String (done)
 	public String getServerUser() throws Exception{
 		String username = null;;
@@ -331,132 +357,9 @@ public class DBConnect {
 				con = getDBConnection();
 				pst = con.prepareStatement("SELECT * FROM `parts list` ORDER BY `BosalPartNumber`");
 				ResultSet rs = pst.executeQuery();
-				if (isResultSetEmpty(rs) == true ){    
+				if (isResultSetEmpty(rs) == false ){    
 					json = converter.toJSONArray(rs);
 				}
-				pst.close();
-			}catch(SQLException SQLex){
-				SQLex.printStackTrace();
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}finally{
-				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-			}
-			return json;
-		}
-	//returns jsonArray filtered by BosalPartNumber
-	public JSONArray queryBosalPartNumber(String queryValue) throws Exception{
-			
-			ToJSON converter = new ToJSON();
-			JSONArray json = new JSONArray();
-			
-			try{
-				con = getDBConnection();
-				pst = con.prepareStatement("SELECT * FROM `parts list` WHERE BosalPartNumber = ? ORDER BY `BosalPartNumber`");
-				pst.setString(1, queryValue);
-				ResultSet rs = pst.executeQuery();
-				if (isResultSetEmpty(rs) == true ){    
-					json = converter.toJSONArray(rs);
-				}
-				pst.close();
-			}catch(SQLException SQLex){
-				SQLex.printStackTrace();
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}finally{
-				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-			}
-			return json;
-		}
-	//returns jsonArray filtered by delta 1 number
-	public JSONArray queryDeltaPartNumber(String queryValue) throws Exception{
-				
-				ToJSON converter = new ToJSON();
-				JSONArray json = new JSONArray();
-				
-				try{
-					con = getDBConnection();
-					pst = con.prepareStatement("SELECT * FROM `delta 1 parts` WHERE DeltaPartNumber = ? ORDER BY `DeltaPartNumber`");
-					pst.setString(1, queryValue);
-					ResultSet rs = pst.executeQuery();
-					if (isResultSetEmpty(rs) == true ){    
-						json = converter.toJSONArray(rs);
-					}
-					pst.close();
-				}catch(SQLException SQLex){
-					SQLex.printStackTrace();
-				}catch(Exception ex){
-					ex.printStackTrace();
-				}finally{
-					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-				}
-				return json;
-			}
-	//returns jsonArray filtered by CustomerPartNumber
-	public JSONArray queryCustomerPartNumber(String queryValue) throws Exception{
-			
-			ToJSON converter = new ToJSON();
-			JSONArray json = new JSONArray();
-			
-			try{
-				con = getDBConnection();
-				pst = con.prepareStatement("SELECT * FROM `parts list` WHERE CustPartNumber = ? ORDER BY `BosalPartNumber`");
-				pst.setString(1, queryValue);
-				ResultSet rs = pst.executeQuery();
-				
-				if (isResultSetEmpty(rs) == true ){    
-					json = converter.toJSONArray(rs);
-				}
-				pst.close();
-			}catch(SQLException SQLex){
-				SQLex.printStackTrace();
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}finally{
-				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-			}
-			return json;
-		}
-	//returns jsonArray filtered bySupplierPartNumber
-	public JSONArray querySupplierPartNumber(String queryValue) throws Exception{
-			
-			ToJSON converter = new ToJSON();
-			JSONArray json = new JSONArray();
-			
-			try{
-				con = getDBConnection();
-				pst = con.prepareStatement("SELECT * FROM `parts list` WHERE SupPartNumber = ? ORDER BY `BosalPartNumber`");
-				pst.setString(1, queryValue);
-				ResultSet rs = pst.executeQuery();
-				
-				if (isResultSetEmpty(rs) == true ){    
-					json = converter.toJSONArray(rs);
-				}
-				pst.close();
-			}catch(SQLException SQLex){
-				SQLex.printStackTrace();
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}finally{
-				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-			}
-			return json;
-		}
-	//returns jsonArray filtered by Program
-	public JSONArray queryProgram(String queryValue) throws Exception{
-			
-			ToJSON converter = new ToJSON();
-			JSONArray json = new JSONArray();
-			try{
-				con = getDBConnection();
-				pst = con.prepareStatement("SELECT * FROM `parts list` WHERE Program = ? ORDER BY `BosalPartNumber`");
-				pst.setString(1, queryValue);
-				ResultSet rs = pst.executeQuery();
-				if (isResultSetEmpty(rs) == true ){    
-					json = converter.toJSONArray(rs);
-				}
-
-				//sort.BosalLowToHigh(json);
 				pst.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
@@ -479,7 +382,7 @@ public class DBConnect {
 			pst.setInt(1, queryValue);
 			ResultSet rs = pst.executeQuery();
 			
-			if (isResultSetEmpty(rs) == true ){    
+			if (isResultSetEmpty(rs) == false){    
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
@@ -505,7 +408,7 @@ public class DBConnect {
 			pst.setInt(2, matNumber);
 			ResultSet rs = pst.executeQuery();
 			
-			if (isResultSetEmpty(rs) == true){    
+			if (isResultSetEmpty(rs) == false){    
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
@@ -530,32 +433,7 @@ public class DBConnect {
 			
 			ResultSet rs = pst.executeQuery();
 			
-			if (isResultSetEmpty(rs) == true ){    
-				json = converter.toJSONArray(rs);
-			}
-			pst.close();
-		}catch(SQLException SQLex){
-			SQLex.printStackTrace();
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}finally{
-			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-		}
-		return json;
-	}
-	//
-	public JSONArray queryReturnAllDescrips() throws Exception{
-		
-		ToJSON converter = new ToJSON();
-		JSONArray json = new JSONArray();
-		
-		try{
-			con = getDBConnection();
-			pst = con.prepareStatement("SELECT * from `description list` ORDER BY `Name` ASC");
-			
-			ResultSet rs = pst.executeQuery();
-			
-			if (isResultSetEmpty(rs) == true ){    
+			if (isResultSetEmpty(rs) == false ){    
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
@@ -580,7 +458,7 @@ public class DBConnect {
 				
 				ResultSet rs = pst.executeQuery();
 				
-				if (isResultSetEmpty(rs) == true ){    
+				if (isResultSetEmpty(rs) == false){    
 					json = converter.toJSONArray(rs);
 				}
 				pst.close();
@@ -593,57 +471,10 @@ public class DBConnect {
 			}
 			return json;
 		}
-	//returns jsonArray filtered by Part Types (rename)
-	public JSONArray queryPartType(int queryValue) throws Exception{
-		
-		ToJSON converter = new ToJSON();
-		JSONArray json = new JSONArray();
-		
-		try{
-			con = getDBConnection();
-			pst = con.prepareStatement("SELECT * from `type file` WHERE PartType = ?");
-			pst.setInt(1, queryValue);
-			ResultSet rs = pst.executeQuery();
-			
-			if (isResultSetEmpty(rs) == true ){    
-				json = converter.toJSONArray(rs);
-			}
-			pst.close();
-		}catch(SQLException SQLex){
-			SQLex.printStackTrace();
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}finally{
-			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-		}
-		return json;
-	}
-	//returns Current Type Sequence Number (done)
-	public int queryCurrentTypeSequenceNumber(int queryValue) throws Exception{
-		int seq = 0;		
-		try{
-			con = getDBConnection();
-			pst = con.prepareStatement("SELECT * FROM `type file` WHERE PartType = ?");
-			pst.setInt(1, queryValue);
-			ResultSet rs = pst.executeQuery();
-			
-			while(rs.next()){
-				seq = rs.getInt("SeqNumber");
-			}
-			pst.close();
-		}catch(SQLException SQLex){
-			SQLex.printStackTrace();
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}finally{
-			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-		}
-		return seq;
-	}
 	//iterates onto the next integer for Sequence based on PartType passed in
 	public void iterateNextSequenceNumber(int partType) throws Exception{	
 		try{
-			int curSeqNum = queryCurrentTypeSequenceNumber(partType);
+			int curSeqNum = (int) queryDatabase("type file", "PartType", partType).getJSONObject(0).get("SeqNumber");
 			int newSeqNum = curSeqNum + 1;
 			con = getDBConnection();
 			pst = con.prepareStatement("UPDATE `type file` SET `SeqNumber` = ? WHERE PartType = ?");
