@@ -1513,7 +1513,7 @@ public class MainFrames extends JFrame
 										}catch(Exception ex){
 										JOptionPane.showMessageDialog(
 												    frame,
-												    "Bosal Part Number: " + searchText + " does not exist",
+												    "European Bosal Part Number: " + searchText + " does not exist",
 												    "Missing Part Number",
 													JOptionPane.ERROR_MESSAGE);
 								}}

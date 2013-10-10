@@ -70,7 +70,7 @@ public class DBConnect {
 				if (search.equals("All")){
 					pst = con.prepareStatement("SELECT * FROM `delta 1 parts`");
 				}else{
-					pst = con.prepareStatement("SELECT * FROM `delta 1 parts`, WHERE "+search+" = ?");
+					pst = con.prepareStatement("SELECT * FROM `delta 1 parts` WHERE "+search+" = ?");
 					pst.setString(1, queryValue);
 				}		
 				ResultSet rs = pst.executeQuery();
