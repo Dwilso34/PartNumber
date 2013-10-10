@@ -90,6 +90,8 @@ public class DBConnect {
 				System.out.println("i screwed up");
 				ex.printStackTrace();
 				return columnNames;
+			}finally{
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}
 	//returns an integer equal to the number of rows returned by a parts list search
@@ -112,6 +114,9 @@ public class DBConnect {
 			pst.close();
 			con.close();
 		}catch(Exception ex){ex.printStackTrace();}
+		finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
 		return rowCount;
 	}
 	//returns an integer equal to the number of rows returned by a delta 1 list search
@@ -133,6 +138,9 @@ public class DBConnect {
 				pst.close();
 				con.close();
 			}catch(Exception ex){ex.printStackTrace();}
+			finally{
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
 			return rowCount;
 		}
 	//get connection from database (done)
@@ -197,10 +205,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 		return rk;
 	}
@@ -232,14 +237,7 @@ public class DBConnect {
 			}
 		}catch(Exception ex){ex.printStackTrace();}
 		finally{
-			try{
-				if(con.isClosed() == false){
-					System.out.println(con.isClosed());
-					System.out.println("connection was not terminated before finally");
-					System.out.println("trying again...");
-					con.close();
-				}
-			}catch(Exception ex){ex.printStackTrace();}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	return userCheck;
 	}
@@ -266,10 +264,7 @@ public class DBConnect {
 		        ex.printStackTrace();	
 			}finally{
 				con.setAutoCommit(true);
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
 			System.out.println(appUser+" does not have permission to do that!");
@@ -296,10 +291,7 @@ public class DBConnect {
 		        ex.printStackTrace();	
 			}finally{
 				con.setAutoCommit(true);
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
 			System.out.println(appUser+" does not have permission to do that!");
@@ -323,10 +315,7 @@ public class DBConnect {
 		        ex.printStackTrace();	
 			}finally{
 				con.setAutoCommit(true);
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
 			System.out.println(appUser+" does not have permission to do that!");
@@ -347,10 +336,7 @@ public class DBConnect {
 	        ex.printStackTrace();	
 		}finally{
 			con.setAutoCommit(true);
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
 	//returns jsonArray of User filtered by username (done)
@@ -371,10 +357,7 @@ public class DBConnect {
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}finally{
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { ex.printStackTrace();/*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 			return json;
 	}	
@@ -390,10 +373,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 		return username;
 	}
@@ -415,10 +395,7 @@ public class DBConnect {
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}finally{
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 			return json;
 		}
@@ -442,10 +419,7 @@ public class DBConnect {
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}finally{
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 			return json;
 		}
@@ -469,10 +443,7 @@ public class DBConnect {
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}finally{
-					try{rs.close();} catch(Exception ex) { /*ignore*/}
-					try{st.close();} catch(Exception ex) { /*ignore*/}
-					try{pst.close();} catch(Exception ex) { /*ignore*/}
-					try{con.close();} catch(Exception ex) { /*ignore*/}
+					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 				}
 				return json;
 			}
@@ -497,10 +468,7 @@ public class DBConnect {
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}finally{
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 			return json;
 		}
@@ -525,10 +493,7 @@ public class DBConnect {
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}finally{
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 			return json;
 		}
@@ -553,10 +518,7 @@ public class DBConnect {
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}finally{
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 			return json;
 		}
@@ -581,10 +543,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 		return json;
 	}
@@ -610,10 +569,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 		return json;
 	}
@@ -638,10 +594,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 		return json;
 	}
@@ -666,10 +619,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 		return json;
 	}
@@ -694,10 +644,7 @@ public class DBConnect {
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}finally{
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 			return json;
 		}
@@ -722,10 +669,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 		return json;
 	}
@@ -747,10 +691,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 		return seq;
 	}
@@ -770,10 +711,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
 	//inserts a new row into `parts list` to create a new part
@@ -807,10 +745,7 @@ public class DBConnect {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			try{rs.close();} catch(Exception ex) { /*ignore*/}
-			try{st.close();} catch(Exception ex) { /*ignore*/}
-			try{pst.close();} catch(Exception ex) { /*ignore*/}
-			try{con.close();} catch(Exception ex) { /*ignore*/}
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
 	//deletes a row from `parts list` using BosalPartNumber (admin)
@@ -829,10 +764,7 @@ public class DBConnect {
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}finally{
-					try{rs.close();} catch(Exception ex) { /*ignore*/}
-					try{st.close();} catch(Exception ex) { /*ignore*/}
-					try{pst.close();} catch(Exception ex) { /*ignore*/}
-					try{con.close();} catch(Exception ex) { /*ignore*/}
+					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 				}
 			}else{
 				System.out.println(appUser+" does not have permission to do that!");
@@ -865,10 +797,7 @@ public class DBConnect {
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}finally{
-				try{rs.close();} catch(Exception ex) { /*ignore*/}
-				try{st.close();} catch(Exception ex) { /*ignore*/}
-				try{pst.close();} catch(Exception ex) { /*ignore*/}
-				try{con.close();} catch(Exception ex) { /*ignore*/}
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}
 }
