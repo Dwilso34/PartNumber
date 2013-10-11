@@ -536,6 +536,7 @@ public class MainFrames extends JFrame
 			cboMat.setModel(resetMatComboBox());
 			cboMat.addMouseListener(new ContextMenuMouseListener());
 			cboDescrip = new JComboBox<String>();
+			cboDescrip.setEditable(true);
 			AutoCompleteDecorator.decorate(cboDescrip);
 			cboDescrip.setForeground(Color.BLACK);
 			cboDescrip.addMouseListener(new ContextMenuMouseListener());
@@ -551,20 +552,30 @@ public class MainFrames extends JFrame
 							int partType = Integer.valueOf((String) cboType.getSelectedItem());
 							JSONArray temp1 = new JSONArray();
 							JSONArray temp2 = new JSONArray();
+							JSONArray temp3 = new JSONArray();
 							String[] mats = null;
+							String[] descrip = null;
 							ComboBoxModel matComboBoxModel = null;
+							ComboBoxModel descripComboBoxModel = null;
 							
 							try{
 								temp1 = con.queryDatabase("type file", "PartType", partType);
 								temp2 = con.queryMaterialPartType(partType);
+								temp3 = con.queryDatabase("description list", "TypeNumber", partType);
+								System.out.println(temp3.length());
 								mats = new String[temp2.length()];
+								descrip = new String[temp3.length()];
 								txtDescrip.setText(temp1.getJSONObject(0).get("TypeDescription").toString());
 								txtSeq.setText(temp1.getJSONObject(0).get("SeqNumber").toString());
 								
 								for(int i = 0; i < temp2.length(); i++){
 									mats[i] = temp2.getJSONObject(i).get("Material").toString();
 								}
+								for(int i = 0; i < temp3.length(); i++){
+									descrip[i] = temp3.getJSONObject(i).get("Name").toString();
+								}
 								matComboBoxModel =  (new DefaultComboBoxModel (mats));
+								descripComboBoxModel = (new DefaultComboBoxModel(descrip));
 							}catch(Exception ex){/*ignore*/}
 							txtMDescrip.setText("");
 							txtBPart.setText("");
@@ -574,6 +585,8 @@ public class MainFrames extends JFrame
 							txtProgram.setText("");
 							cboMat.setModel(matComboBoxModel);
 							cboMat.setSelectedIndex(-1);
+							cboDescrip.setModel(descripComboBoxModel);
+							cboDescrip.setSelectedIndex(-1);
 						}
 					}
 					if(e.getSource().equals(cboMat)){

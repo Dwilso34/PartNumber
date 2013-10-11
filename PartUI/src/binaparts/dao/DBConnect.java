@@ -382,7 +382,7 @@ public class DBConnect {
 			pst.setInt(1, queryValue);
 			ResultSet rs = pst.executeQuery();
 			
-			if (isResultSetEmpty(rs) == false){    
+			if (isResultSetEmpty(rs) == false){ 
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
