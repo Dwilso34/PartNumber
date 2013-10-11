@@ -284,17 +284,45 @@ public class DBConnect {
 			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
-	//create a program and add to database (Requires engineer)
-	public void createProgram(String program) throws Exception{
+	//create a program and add to database (Requires admin)
+	public void createProgram(String program, String programStart, String programEnd) throws Exception{
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
 				con = getDBConnection();
 				con.setAutoCommit(false);
-				
-				pst = con.prepareStatement("INSERT INTO customers (Program) VALUES(?)");
+				pst = con.prepareStatement("INSERT INTO customers (Program, ProgramStart, ProgramEnd) VALUES(?, ?, ?)");
 				pst.setString(1, program);
+				pst.setDate(2, programStart);
+				pst.setString(3, programEnd);
+				pst.executeUpdate();
+					  
+				con.commit();
+				con.setAutoCommit(true);
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch (Exception ex) {
+		        ex.printStackTrace();	
+			}finally{
+				con.setAutoCommit(true);
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+		}else{
+			System.out.println(appUser+" does not have permission to do that!");
+		}
+	}
+	//create a customer and add it to the database (Requires admin)
+	public void createCustomer(String newCustomer, String newCust) throws Exception{
+		ConfigurationManager config = new ConfigurationManager(configFilePath);
+		String appUser = config.getProperty("appUser");
+		if(getUserRank().equals("admin")){
+			try{
+				con = getDBConnection();
+				con.setAutoCommit(false);
+				pst = con.prepareStatement("INSERT INTO customers (Customer, Cust) VALUES(?, ?)");
+				pst.setString(1, newCustomer);
+				pst.setString(2, newCust);
 				pst.executeUpdate();
 					  
 				con.commit();

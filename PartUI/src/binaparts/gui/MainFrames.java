@@ -143,7 +143,7 @@ public class MainFrames extends JFrame
 		
 		public MainPanel(final JPanel main) 	
 		{	
-			setBackground(new Color(95, 95, 95));
+			setBackground(new Color(105, 105, 105));
 			contentPane = main;
 			setOpaque(true);
 			setVisible(true);
@@ -484,7 +484,7 @@ public class MainFrames extends JFrame
 			lblDrawingNum = new JLabel("Drawing Number");
 			ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
 			lblBosal = new JLabel(bosal);
-			setBackground(new Color(95, 95, 95));
+			setBackground(new Color(105, 105, 105));
 			
 		//TextFields
 				
@@ -920,7 +920,7 @@ public class MainFrames extends JFrame
 				
 		public UpdatePanel(final JPanel update) 
 		{
-			setBackground(new Color(95, 95, 95));
+			setBackground(new Color(105, 105, 105));
 		
 	//TextFields		
 			
@@ -1352,26 +1352,26 @@ public class MainFrames extends JFrame
 		//RadioButtons	
 			
 			rbtnFindBosal = new JRadioButton("Bosal Part Number");
-			rbtnFindBosal.setBackground(new Color(95, 95, 95));
+			rbtnFindBosal.setBackground(new Color(105, 105, 105));
 			rbtnFindBosal.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnFindBosal.setForeground(Color.BLACK);
 			rbtnFindCus = new JRadioButton("Customer Part Number");
-			rbtnFindCus.setBackground(new Color(95, 95, 95));
+			rbtnFindCus.setBackground(new Color(105, 105, 105));
 			rbtnFindCus.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnFindCus.setForeground(Color.BLACK);
 			rbtnFindSup = new JRadioButton("Supplier Part Number");
-			rbtnFindSup.setBackground(new Color(95, 95, 95));
+			rbtnFindSup.setBackground(new Color(105, 105, 105));
 			rbtnFindSup.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnFindSup.setForeground(Color.BLACK);
 			rbtnFindPro = new JRadioButton("Program");
-			rbtnFindPro.setBackground(new Color(95, 95, 95));
+			rbtnFindPro.setBackground(new Color(105, 105, 105));
 			rbtnFindPro.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnFindPro.setForeground(Color.BLACK);
 			rbtnFindEuro = new JRadioButton("Europe Part Number");
-			rbtnFindEuro.setBackground(new Color(95, 95, 95));
+			rbtnFindEuro.setBackground(new Color(105, 105, 105));
 			rbtnFindEuro.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnFindEuro.setForeground(Color.BLACK);
-			setBackground(new Color(95, 95, 95));
+			setBackground(new Color(105, 105, 105));
 		
 		//JLabels	
 			
@@ -1706,7 +1706,7 @@ public class MainFrames extends JFrame
 		{		
 			try {
 				ConfigurationManager config = new ConfigurationManager(configFilePath);
-				setBackground(new Color(95, 95, 95));
+				setBackground(new Color(105, 105, 105));
 				txtIP = new JTextField(config.getProperty("host"));
 				txtIP.setForeground(Color.BLACK);
 				txtIP.addMouseListener(new ContextMenuMouseListener());
@@ -1900,7 +1900,7 @@ public class MainFrames extends JFrame
 	}
 	class ManagePanel extends JPanel
 	{
-		//JLabels	
+	//JLabels	
 		private JLabel lblbosal;
 		private JLabel lblmanageUsers;
 		private JLabel lblUsername;
@@ -2062,7 +2062,7 @@ public class MainFrames extends JFrame
 			String[] ranks = {"admin","gui","engineer", "default"};
 			cboUserRank = new JComboBox<Object>(ranks);
 			cboUserRank.addMouseListener(new ContextMenuMouseListener());
-			cboCustomer = new JComboBox<Object>();
+			cboCustomer = new JComboBox<String>();
 			cboCustomer.setVisible(false);
 			cboCustomer.addMouseListener(new ContextMenuMouseListener());
 			
@@ -2489,27 +2489,6 @@ public class MainFrames extends JFrame
 									}catch(Exception ex){/*Ignore*/}
 								}
 							}
-							if(rbtnAddProgram.isSelected() == true){
-								try{
-									if(con.getUserRank().equals("admin")){
-										n = JOptionPane.showConfirmDialog(
-												    frame,
-												    "Are you sure you want to create program: " + txtAddCusPro.getText() + "?",
-												    "Save:",
-												    JOptionPane.YES_NO_OPTION,
-													JOptionPane.WARNING_MESSAGE);
-									}else{
-										config = new ConfigurationManager(configFilePath);
-										JOptionPane.showMessageDialog(
-										    frame,
-										    "" + (config.getProperty("appUser") 
-										    		+ " does not have permission to Program Users"),
-										    "Creditenials Error",
-											JOptionPane.ERROR_MESSAGE);
-									}
-								}catch(Exception ex){/*Ignore*/}
-							}
-							
 							if(rbtnChangeUserRank.isSelected() == true){
 								if(txtUsername.getText().equals("")){
 									JOptionPane.showMessageDialog(
@@ -2556,11 +2535,42 @@ public class MainFrames extends JFrame
 											JOptionPane.WARNING_MESSAGE);
 								}
 							}
-							
+							if(rbtnAddProgram.isSelected() == true){
+								if(txtAddCusPro.getText().equals("")){
+									JOptionPane.showMessageDialog(
+											frame,
+											"Please Enter a Program",
+											"Creditenial Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									n = JOptionPane.showConfirmDialog(
+											frame,
+											"Are you sure you want to create " + txtAddCusPro.getText() + " as a new program?",
+											"Save:",
+											JOptionPane.OK_OPTION,
+											JOptionPane.WARNING_MESSAGE);
+								}
+							}
+							if(rbtnAddCustomer.isSelected() == true){
+								if(txtAddCusPro.getText().equals("")){
+									JOptionPane.showConfirmDialog(
+											frame,
+											"Please Enter a Customer",
+											"Creditential Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									n = JOptionPane.showConfirmDialog(
+											frame,
+											"Are you sure you want to create " + txtAddCusPro.getText() + " as a new Customer?",
+											"Save",
+											JOptionPane.YES_NO_OPTION,
+											JOptionPane.WARNING_MESSAGE);
+								}
+							}
 								if(n == 0){
 									try{
 										String username = txtUsername.getText();
-										String Program = txtAddCusPro.getText();
+										//String Customer = cboCustomer.getSelectedItem().toString();
 										String password = (new String(txtPassword.getPassword()));
 										String confirmPassword = (new String(txtConfirmPassword.getPassword()));
 										String rank = cboUserRank.getSelectedItem().toString();
@@ -2576,10 +2586,17 @@ public class MainFrames extends JFrame
 														JOptionPane.ERROR_MESSAGE);
 											}
 										}
-										if(rbtnAddProgram.isSelected() == true){
-											con.createProgram(Program);
+										if(rbtnAddCustomer.isSelected() == true){
+											String newCust = txtCust.getText();
+											String newCustomer = txtAddCusPro.getText();
+											con.createCustomer(newCustomer, newCust);
 										}
-										
+										if(rbtnAddProgram.isSelected() == true){
+											String Program = txtAddCusPro.getText();
+											String ProgramStart = txtProStart.getText();
+											String ProgramEnd = txtProEnd.getText();
+											con.createProgram(Program, ProgramStart, ProgramEnd);
+										}
 										if(rbtnChangeUserRank.isSelected() == true){
 											con.changeUserRank(username, rank);
 										}
@@ -2595,7 +2612,7 @@ public class MainFrames extends JFrame
 											}
 										}
 											
-									}catch(Exception ex){/*Ignore*/}
+									}catch(Exception ex){/*Ignore*/ex.printStackTrace();}
 									txtUsername.setText("");
 									txtPassword.setText("");
 									txtConfirmPassword.setText("");
@@ -2771,9 +2788,6 @@ public class MainFrames extends JFrame
 			);
 			setLayout(groupLayout);
 		}}//End of Class ManageUsersPanel
-
-
-
 	class BDLPanel extends JPanel
 	{
 		//JLabels	
@@ -2790,7 +2804,7 @@ public class MainFrames extends JFrame
 			public BDLPanel(final JPanel bdl) 
 			{
 			
-				setBackground(new Color(95, 95, 95));
+				setBackground(new Color(105, 105, 105));
 				
 			//JLabels
 				ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
@@ -2965,7 +2979,7 @@ public class MainFrames extends JFrame
 		
 	public ExperimentalPanel(final JPanel experimental)
 	{
-		setBackground(new Color(95, 95, 95));
+		setBackground(new Color(105, 105, 105));
 		
 		
 		//JLabels
@@ -3038,11 +3052,11 @@ public class MainFrames extends JFrame
 			rbtnSearch = new JRadioButton("Search Part");
 			rbtnSearch.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnSearch.setForeground(Color.BLACK);
-			rbtnSearch.setBackground(new Color(95, 95, 95));
+			rbtnSearch.setBackground(new Color(105, 105, 105));
 			rbtnCreate = new JRadioButton("Create Part");
 			rbtnCreate.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnCreate.setForeground(Color.BLACK);
-			rbtnCreate.setBackground(new Color(95, 95, 95));
+			rbtnCreate.setBackground(new Color(105, 105, 105));
 			
 		//RadioButton Logic
 			rbtnCreate.setSelected(true);

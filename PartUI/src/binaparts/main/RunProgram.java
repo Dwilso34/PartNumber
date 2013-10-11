@@ -11,7 +11,4 @@ public class RunProgram{
 		MainFrames m = new MainFrames();
 		m.displayGUI();
 	}
-}
-		
-		
-		
+}		
