@@ -254,6 +254,8 @@ public class DBConnect {
 				pst.setString(2,username);
 				pst.executeUpdate();
 				System.out.println("User Rank Updated Successfully!");
+				con.setAutoCommit(true);
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch (Exception ex) {
@@ -275,6 +277,8 @@ public class DBConnect {
 			pst.setString(2,username);
 			pst.executeUpdate();
 			System.out.println("User Password Updated Successfully!");
+			con.setAutoCommit(true);
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch (Exception ex) {
@@ -327,6 +331,7 @@ public class DBConnect {
 					  
 				con.commit();
 				con.setAutoCommit(true);
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch (Exception ex) {
@@ -354,6 +359,7 @@ public class DBConnect {
 					json = converter.toJSONArray(rs);
 				}
 				pst.close();
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch(Exception ex){
@@ -378,6 +384,7 @@ public class DBConnect {
 						json = converter.toJSONArray(rs);
 					}
 					pst.close();
+					con.close();
 				}catch(SQLException SQLex){
 					SQLex.printStackTrace();
 				}catch(Exception ex){
@@ -394,6 +401,7 @@ public class DBConnect {
 			con = getDBConnection();
 			DatabaseMetaData dmd = con.getMetaData();
 			username = dmd.getUserName();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -416,6 +424,7 @@ public class DBConnect {
 					json = converter.toJSONArray(rs);
 				}
 				pst.close();
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch(Exception ex){
@@ -441,6 +450,7 @@ public class DBConnect {
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -467,6 +477,7 @@ public class DBConnect {
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -492,6 +503,7 @@ public class DBConnect {
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -517,6 +529,7 @@ public class DBConnect {
 					json = converter.toJSONArray(rs);
 				}
 				pst.close();
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch(Exception ex){
@@ -537,6 +550,7 @@ public class DBConnect {
 			pst.setInt(2, partType);
 			pst.executeUpdate();
 			pst.close();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -546,15 +560,16 @@ public class DBConnect {
 		}
 	}
 	//inserts a new row into `parts list` to create a new part
-	public void insertNewPart(int partType, int mat, int seq, String typeDescription, String Description,
-								String BosalPartNumber, String CustomerPartNumber, String SupplierPartNumber,
-								String CreatedBy, String Program, Timestamp Created, Timestamp Updated, String UpdatedBy) throws Exception{	
+	public void insertNewPart(int partType, int mat, String BosalPartNumber, 
+			String CustomerPartNumber, String SupplierPartNumber, String Description,
+			String Program, int seq, String typeDescription, String DrawingNumber,
+			int Rev, String CreatedBy, Timestamp Created, Timestamp Updated, String UpdatedBy) throws Exception{	
 		try{
 			con = getDBConnection();
 			pst = con.prepareStatement("INSERT INTO `parts list` (PartType, Material, BosalPartNumber, CustPartNumber,"
-										+ " SupPartNumber, PartDescription, Program, SeqNumber, TypeDescription, CreatedBy, "
-										+ "Created, UpdatedBy, Updated ) "
-										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+										+ " SupPartNumber, PartDescription, Program, SeqNumber, TypeDescription, "
+										+ "DrawingNumber, Rev, CreatedBy, Created, UpdatedBy, Updated ) "
+										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			pst.setInt(1, partType);
 			pst.setInt(2, mat);
 			pst.setString(3, BosalPartNumber);
@@ -564,13 +579,16 @@ public class DBConnect {
 			pst.setString(7, Program);
 			pst.setInt(8, seq);
 			pst.setString(9, typeDescription);
-			pst.setString(10, CreatedBy);
-			pst.setTimestamp(11, Created);
-			pst.setString(12, UpdatedBy);
-			pst.setTimestamp(13, Updated);
+			pst.setString(10, DrawingNumber);
+			pst.setInt(11, Rev);
+			pst.setString(12, CreatedBy);
+			pst.setTimestamp(13, Created);
+			pst.setString(14, UpdatedBy);
+			pst.setTimestamp(15, Updated);
 			pst.executeUpdate();
 			pst.close();
 			iterateNextSequenceNumber(partType);
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -589,7 +607,8 @@ public class DBConnect {
 					pst = con.prepareStatement("DELETE FROM `parts list` WHERE `BosalPartNumber` = ?");
 					pst.setString(1, BosalPartNumber);
 					pst.executeUpdate();
-					pst.close();				
+					pst.close();	
+					con.close();
 				}catch(SQLException SQLex){
 					SQLex.printStackTrace();
 				}catch(Exception ex){
@@ -602,7 +621,9 @@ public class DBConnect {
 			}
 		}
 	//updates Part Information
-	public void update(String bPartNum, String updatedCusPartNumber, String updatedSupPartNumber, String updatedPartDescription, String program) throws Exception{
+	public void update(String BosalPartNumber, String CusPartNumber, 
+			String SupPartNumber, String Description, String program, 
+			String DrawingNumber, int Rev) throws Exception{
 			
 			try{
 				con = getDBConnection();
@@ -610,19 +631,23 @@ public class DBConnect {
 						+ " `CustPartNumber` = ?, " 
 						+ " `SupPartNumber` = ?, "
 						+ " `Program` = ?, "
+						+ " `DrawingNumber` = ?, "
+						+ " `Rev` = ?, "
 						+ " `UpdatedBy` = ?, "
 						+ " `Updated` = ?"
 						+ "WHERE `BosalPartNUmber`= ?");
-				pst.setString(1, updatedPartDescription);
-				pst.setString(2, updatedCusPartNumber);
-				pst.setString(3, updatedSupPartNumber);
+				pst.setString(1, Description);
+				pst.setString(2, CusPartNumber);
+				pst.setString(3, SupPartNumber);
 				pst.setString(4,  program);
-				pst.setString(5, getUser());
-				pst.setTimestamp(6, getTimestamp());
-				pst.setString(7, bPartNum);
+				pst.setString(5, DrawingNumber);
+				pst.setInt(6, Rev+1);
+				pst.setString(7, getUser());
+				pst.setTimestamp(8, getTimestamp());
+				pst.setString(9, BosalPartNumber);
 				pst.executeUpdate();
-				System.out.println("update successful!");
 				pst.close();
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch(Exception ex){

@@ -646,12 +646,15 @@ public class MainFrames extends JFrame
 								String CustomerPartNumber = txtCPart.getText();
 								String SupplierPartNumber = txtSPart.getText();
 								String Program = txtProgram.getText();
+								String DrawingNumber = txtDrawingNum.getText();
+								int Rev = 0;
 								String CreatedBy = con.getUser();
 								Timestamp Created = con.getTimestamp();
 								Timestamp Updated = con.getTimestamp();
 								String UpdatedBy =  con.getUser();
-								con.insertNewPart(partType, mat, seq, typeDescription, Description, 
-													BosalPartNumber, CustomerPartNumber, SupplierPartNumber, CreatedBy, Program, Created, Updated, UpdatedBy);
+								con.insertNewPart(partType, mat, BosalPartNumber, CustomerPartNumber, 
+										SupplierPartNumber, Description, Program, seq, typeDescription,
+										DrawingNumber, Rev,	CreatedBy, Created, Updated, UpdatedBy);
 								
 								setVisible(false);
 								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -937,6 +940,8 @@ public class MainFrames extends JFrame
 			txtProgram.setForeground(Color.BLACK);
 			txtProgram.addMouseListener(new ContextMenuMouseListener());
 			txtRev = new JTextField();
+			txtRev.setEditable(false);
+			txtRev.setBackground(new Color(190,190,190));
 			txtRev.setForeground(Color.BLACK);
 			txtRev.addMouseListener(new ContextMenuMouseListener());
 			txtDrawingNum = new JTextField();
@@ -992,6 +997,7 @@ public class MainFrames extends JFrame
 								txtSupDescrip.setText("");
 								txtCusDescrip.setText("");
 								txtFindBosal.setText("");
+								cboDescrip.setModel(resetDescripComboBox());
 								cboDescrip.setSelectedIndex(-1);
 								txtRev.setText("");
 								txtDrawingNum.setText("");
@@ -1022,6 +1028,7 @@ public class MainFrames extends JFrame
 						txtCusDescrip.setText("");
 						txtSupDescrip.setText("");
 						txtProgram.setText("");
+						cboDescrip.setModel(resetDescripComboBox());
 						cboDescrip.setSelectedIndex(-1);
 						txtRev.setText("");
 						txtDrawingNum.setText("");
@@ -1047,6 +1054,8 @@ public class MainFrames extends JFrame
 							String CustomerPartNumber = null;
 							String SupplierPartNumber= null;
 							String Program = null;
+							String DrawingNumber = null;
+							int Rev = 0;
 							
 							if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
 								CustomerPartNumber = null;
@@ -1054,6 +1063,12 @@ public class MainFrames extends JFrame
 							if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
 								SupplierPartNumber = null;
 							}else{SupplierPartNumber = txtSupDescrip.getText();}
+							if(txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")){
+								DrawingNumber = null;
+							}else{DrawingNumber = txtDrawingNum.getText();}
+							if(txtRev.getText().equals("-") || txtRev.getText().equals("")){
+								Rev = 0;
+							}else{Rev = Integer.valueOf(txtRev.getText());}
 							
 							String Description = (String) cboDescrip.getSelectedItem();
 														
@@ -1061,7 +1076,8 @@ public class MainFrames extends JFrame
 								Program = null;
 							}else{Program = txtProgram.getText();}
 							try {
-								con.update(BosalPartNumber, CustomerPartNumber, SupplierPartNumber, Description, Program);
+								con.update(BosalPartNumber, CustomerPartNumber, SupplierPartNumber, 
+										Description, Program, DrawingNumber, Rev);
 								
 								setVisible(false);
 								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1077,6 +1093,7 @@ public class MainFrames extends JFrame
 								txtCusDescrip.setText("");
 								txtSupDescrip.setText("");
 								txtProgram.setText("");
+								cboDescrip.setModel(resetDescripComboBox());
 								cboDescrip.setSelectedIndex(-1);
 								txtDrawingNum.setText("");
 								txtRev.setText("");
@@ -1100,6 +1117,21 @@ public class MainFrames extends JFrame
 							JSONObject temp = (con.queryDatabase("parts list", "BosalPartNumber", findBosalText)).getJSONObject(0);
 							//set text for CustPartNumber JTextField
 							String cpartText= null;
+							//filter Description Combo Box by the PartType of checked Bosal #
+							int partType = Integer.valueOf(txtFindBosal.getText(0, 2));
+							JSONArray temp1 = new JSONArray();
+							String[] descrip = null;
+							ComboBoxModel<String> descripComboBoxModel = null;
+							try{
+								temp1 = con.queryDatabase("description list", "TypeNumber", partType);
+								descrip = new String[temp1.length()];
+								for(int i = 0; i < temp1.length(); i++){
+									descrip[i] = temp1.getJSONObject(i).get("Name").toString();
+								}
+								descripComboBoxModel = (new DefaultComboBoxModel<String>(descrip));
+								cboDescrip.setModel(descripComboBoxModel);
+							}catch(Exception ex){ex.printStackTrace();}
+							//set text for CustPartNumber JTextField
 							try{
 								cpartText = temp.get("CustPartNumber").toString();
 							}catch(Exception ex){cpartText = "-";}
@@ -1119,18 +1151,40 @@ public class MainFrames extends JFrame
 							}catch(Exception ex){descripText = "-";}
 							cboDescrip.setSelectedItem(descripText);
 							
-							//set text for CustPartNumber JTextField
+							//set text for Program JTextField
 							String programText = null;
 							try{
 								programText = temp.get("Program").toString();
 							}catch(Exception ex){programText = "-";}
 							txtProgram.setText(programText);
+							
+							//set text for DrawingNumber JTextField
+							String DrawingNumber = null;
+							try{
+								DrawingNumber = temp.get("DrawingNumber").toString();
+							}catch(Exception ex){DrawingNumber = "-";}
+							txtDrawingNum.setText(DrawingNumber);
+							
+							//set text for Program JTextField
+							int Rev = 0;
+							try{
+								Rev = Integer.valueOf(temp.get("Rev").toString());
+							}catch(Exception ex){Rev = 0;}
+							txtRev.setText(Integer.toString(Rev));
+							
 						}catch(Exception ex){
 							JOptionPane.showMessageDialog(
 									    frame,
 									    "Bosal Part Number: " + findBosalText + " does not exist",
 									    "Missing Part Number",
 										JOptionPane.ERROR_MESSAGE);
+							txtCusDescrip.setText("");
+							txtSupDescrip.setText("");
+							txtProgram.setText("");
+							cboDescrip.setModel(resetDescripComboBox());
+							cboDescrip.setSelectedIndex(-1);
+							txtDrawingNum.setText("");
+							txtRev.setText("");
 						}
 			}}});
 			
