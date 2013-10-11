@@ -3,6 +3,10 @@ package binaparts.dao;
 import java.sql.*;
 
 import org.json.JSONArray;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import org.json.JSONObject;
 
 import binaparts.properties.*;
@@ -293,13 +297,18 @@ public class DBConnect {
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
+			System.out.println(programStart);
+			System.out.println(new SimpleDateFormat("yyyy", Locale.ENGLISH).parse(programStart));
+			System.out.println(programEnd);
+			Date progStart = (Date) new SimpleDateFormat("yyyy", Locale.ENGLISH).parse(programStart);
+			Date progEnd = (Date) new SimpleDateFormat("yyyy", Locale.ENGLISH).parse(programEnd);
 			try{
 				con = getDBConnection();
 				con.setAutoCommit(false);
 				pst = con.prepareStatement("INSERT INTO customers (Program, ProgramStart, ProgramEnd) VALUES(?, ?, ?)");
 				pst.setString(1, program);
-				pst.setString(2, programStart);
-				pst.setString(3, programEnd);
+				pst.setDate(2, progStart);
+				pst.setDate(3, progEnd);
 				pst.executeUpdate();
 					  
 				con.commit();
