@@ -562,7 +562,6 @@ public class MainFrames extends JFrame
 								temp1 = con.queryDatabase("type file", "PartType", partType);
 								temp2 = con.queryMaterialPartType(partType);
 								temp3 = con.queryDatabase("description list", "TypeNumber", partType);
-								System.out.println(temp3.length());
 								mats = new String[temp2.length()];
 								descrip = new String[temp3.length()];
 								txtDescrip.setText(temp1.getJSONObject(0).get("TypeDescription").toString());
