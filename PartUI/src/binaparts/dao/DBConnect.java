@@ -254,6 +254,8 @@ public class DBConnect {
 				pst.setString(2,username);
 				pst.executeUpdate();
 				System.out.println("User Rank Updated Successfully!");
+				con.setAutoCommit(true);
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch (Exception ex) {
@@ -275,6 +277,8 @@ public class DBConnect {
 			pst.setString(2,username);
 			pst.executeUpdate();
 			System.out.println("User Password Updated Successfully!");
+			con.setAutoCommit(true);
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch (Exception ex) {
@@ -299,6 +303,7 @@ public class DBConnect {
 					  
 				con.commit();
 				con.setAutoCommit(true);
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch (Exception ex) {
@@ -326,6 +331,7 @@ public class DBConnect {
 					json = converter.toJSONArray(rs);
 				}
 				pst.close();
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch(Exception ex){
@@ -350,6 +356,7 @@ public class DBConnect {
 						json = converter.toJSONArray(rs);
 					}
 					pst.close();
+					con.close();
 				}catch(SQLException SQLex){
 					SQLex.printStackTrace();
 				}catch(Exception ex){
@@ -366,6 +373,7 @@ public class DBConnect {
 			con = getDBConnection();
 			DatabaseMetaData dmd = con.getMetaData();
 			username = dmd.getUserName();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -388,6 +396,7 @@ public class DBConnect {
 					json = converter.toJSONArray(rs);
 				}
 				pst.close();
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch(Exception ex){
@@ -413,6 +422,7 @@ public class DBConnect {
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -439,6 +449,7 @@ public class DBConnect {
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -464,6 +475,7 @@ public class DBConnect {
 				json = converter.toJSONArray(rs);
 			}
 			pst.close();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -489,6 +501,7 @@ public class DBConnect {
 					json = converter.toJSONArray(rs);
 				}
 				pst.close();
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch(Exception ex){
@@ -509,6 +522,7 @@ public class DBConnect {
 			pst.setInt(2, partType);
 			pst.executeUpdate();
 			pst.close();
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -546,6 +560,7 @@ public class DBConnect {
 			pst.executeUpdate();
 			pst.close();
 			iterateNextSequenceNumber(partType);
+			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -564,7 +579,8 @@ public class DBConnect {
 					pst = con.prepareStatement("DELETE FROM `parts list` WHERE `BosalPartNumber` = ?");
 					pst.setString(1, BosalPartNumber);
 					pst.executeUpdate();
-					pst.close();				
+					pst.close();	
+					con.close();
 				}catch(SQLException SQLex){
 					SQLex.printStackTrace();
 				}catch(Exception ex){
@@ -603,6 +619,7 @@ public class DBConnect {
 				pst.setString(9, BosalPartNumber);
 				pst.executeUpdate();
 				pst.close();
+				con.close();
 			}catch(SQLException SQLex){
 				SQLex.printStackTrace();
 			}catch(Exception ex){
