@@ -1910,11 +1910,18 @@ public class MainFrames extends JFrame
 		private JLabel lblPassConfirm;	
 		private JLabel lblAddProgram;
 		private JLabel lblAddCustomer;
+		private JLabel lblProStart;
+		private JLabel lblProEnd;
+		private JLabel lblCust;
+		private JLabel lblCustomer;
 		
 	//JTextFields
-	
+
 		private JTextField txtUsername;
 		private JTextField txtAddCusPro;
+		private JTextField txtProStart;
+		private JTextField txtProEnd;
+		private JTextField txtCust;
 		
 	//JPasswordFields
 		
@@ -1922,13 +1929,15 @@ public class MainFrames extends JFrame
 		private JPasswordField txtConfirmPassword;
 		
 	//JComboBoxes
-	
+
 		private JComboBox<?> cboUserRank;
+		private JComboBox<?> cboCustomer;
 			
 	//JButtons
 		
 		private JButton btnBack;
-		private JButton btnExecute;
+		private JButton btnSave;
+		private JButton btnDelete;
 		
 	//JRadioButtons
 		
@@ -1992,14 +2001,30 @@ public class MainFrames extends JFrame
 			lblRank.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRank.setForeground(Color.BLACK);
 			lblPassConfirm = new JLabel("");
-			lblAddProgram = new JLabel("Enter New Program");
+			lblAddProgram = new JLabel("Enter New Program:");
 			lblAddProgram.setVisible(false);
 			lblAddProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblAddProgram.setForeground(Color.BLACK);
-			lblAddCustomer = new JLabel("Enter New Customer");
+			lblAddCustomer = new JLabel("Enter New Customer:");
 			lblAddCustomer.setVisible(false);
 			lblAddCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblAddCustomer.setForeground(Color.BLACK);
+			lblProStart = new JLabel("Program Start:");
+			lblProStart.setVisible(false);
+			lblProStart.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblProStart.setForeground(Color.BLACK);
+			lblProEnd = new JLabel("Program End:");
+			lblProEnd.setVisible(false);
+			lblProEnd.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblProEnd.setForeground(Color.BLACK);
+			lblCust = new JLabel("Customer Abrv:");
+			lblCust.setVisible(false);
+			lblCust.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblCust.setForeground(Color.BLACK);
+			lblCustomer = new JLabel("Customer:");
+			lblCustomer.setVisible(false);
+			lblCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblCustomer.setForeground(Color.BLACK);
 			
 		//TextFields	
 			
@@ -2015,16 +2040,31 @@ public class MainFrames extends JFrame
 			txtConfirmPassword.setVisible(true);
 			txtConfirmPassword.addMouseListener(new ContextMenuMouseListener());
 			txtConfirmPassword.setForeground(Color.BLACK);
-			txtAddCusPro = new JPasswordField();
+			txtAddCusPro = new JTextField();
 			txtAddCusPro.setVisible(false);
 			txtAddCusPro.addMouseListener(new ContextMenuMouseListener());
 			txtAddCusPro.setForeground(Color.BLACK);
+			txtProStart = new JTextField();
+			txtProStart.setVisible(false);
+			txtProStart.addMouseListener(new ContextMenuMouseListener());
+			txtProStart.setForeground(Color.BLACK);
+			txtProEnd = new JTextField();
+			txtProEnd.setVisible(false);
+			txtProEnd.addMouseListener(new ContextMenuMouseListener());
+			txtProEnd.setForeground(Color.BLACK);
+			txtCust = new JTextField();
+			txtCust.setVisible(false);
+			txtCust.addMouseListener(new ContextMenuMouseListener());
+			txtCust.setForeground(Color.BLACK);
 			
 		//ComboBox
 			
 			String[] ranks = {"admin","gui","engineer", "default"};
 			cboUserRank = new JComboBox<Object>(ranks);
 			cboUserRank.addMouseListener(new ContextMenuMouseListener());
+			cboCustomer = new JComboBox<Object>();
+			cboCustomer.setVisible(false);
+			cboCustomer.addMouseListener(new ContextMenuMouseListener());
 			
 		//RadioButton
 			
@@ -2061,14 +2101,25 @@ public class MainFrames extends JFrame
 			            lblUsername.setVisible(false);
 			            lblPassword.setVisible(false);
 			            lblPassword2.setVisible(false);
+			            lblProStart.setVisible(true);
+			            lblProEnd.setVisible(true);
 			            lblRank.setVisible(false);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(true);
+			            cboCustomer.setVisible(true);
 			            cboUserRank.setVisible(false);
 			            txtConfirmPassword.setVisible(false);
 			            txtPassword.setVisible(false);
 			            txtUsername.setVisible(false);
+			            txtProStart.setVisible(true);
+			            txtProEnd.setVisible(true);
+			            txtCust.setVisible(false);
 			            lblAddCustomer.setVisible(false);
 			            lblAddProgram.setVisible(true);
 			            txtAddCusPro.setVisible(true);
+			            btnDelete.setVisible(true);
+			            btnSave.setVisible(true);
+			            
 					}						
 			}});
 			
@@ -2085,13 +2136,23 @@ public class MainFrames extends JFrame
 			            lblPassword.setVisible(false);
 			            lblPassword2.setVisible(false);
 			            lblRank.setVisible(false);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblCust.setVisible(true);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
 			            cboUserRank.setVisible(false);
 			            txtConfirmPassword.setVisible(false);
 			            txtPassword.setVisible(false);
+			            txtProStart.setVisible(false);
+			            txtProEnd.setVisible(false);
 			            txtUsername.setVisible(false);
+			            txtCust.setVisible(true);
 			            lblAddProgram.setVisible(false);
 			            lblAddCustomer.setVisible(true);
 			            txtAddCusPro.setVisible(true);
+			            btnDelete.setVisible(true);
+			            btnSave.setVisible(true);
 					}						
 			}});
 			
@@ -2108,6 +2169,11 @@ public class MainFrames extends JFrame
 			            lblPassword.setVisible(true);
 			            lblPassword2.setVisible(true);
 			            lblRank.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
 			            cboUserRank.setVisible(true);
 			            txtConfirmPassword.setVisible(true);
 			            txtPassword.setVisible(true);
@@ -2116,7 +2182,12 @@ public class MainFrames extends JFrame
 			            lblAddProgram.setVisible(false);
 			            lblAddCustomer.setVisible(false);
 			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(true);
+			            btnSave.setVisible(false);
+			            txtProStart.setVisible(false);
+			            txtProEnd.setVisible(false);
 			            txtUsername.setEditable(true);
+			            txtCust.setVisible(false);
 			            txtUsername.setBackground(Color.white);
 			            txtPassword.setText("");
 			            txtPassword.setEditable(false);
@@ -2145,6 +2216,11 @@ public class MainFrames extends JFrame
 			            lblPassword.setVisible(true);
 			            lblPassword2.setVisible(true);
 			            lblRank.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
 			            cboUserRank.setVisible(true);
 			            txtConfirmPassword.setVisible(true);
 			            txtPassword.setVisible(true);
@@ -2153,6 +2229,11 @@ public class MainFrames extends JFrame
 			            lblAddProgram.setVisible(false);
 			            lblAddCustomer.setVisible(false);
 			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(false);
+			            btnSave.setVisible(true);
+			            txtProStart.setVisible(false);
+			            txtCust.setVisible(false);
+			            txtProEnd.setVisible(false);
 			            txtUsername.setEditable(true);
 			            txtUsername.setBackground(Color.white);
 			            txtPassword.setEditable(true);
@@ -2179,7 +2260,12 @@ public class MainFrames extends JFrame
 						lblUsername.setVisible(true);
 			            lblPassword.setVisible(true);
 			            lblPassword2.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
 			            lblRank.setVisible(true);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
 			            cboUserRank.setVisible(true);
 			            txtConfirmPassword.setVisible(true);
 			            txtPassword.setVisible(true);
@@ -2188,10 +2274,15 @@ public class MainFrames extends JFrame
 			            lblAddProgram.setVisible(false);
 			            lblAddCustomer.setVisible(false);
 			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(false);
+			            btnSave.setVisible(true);
 			            txtUsername.setEditable(true);
+			            txtCust.setVisible(false);
 			            txtUsername.setBackground(Color.white);
 			            txtPassword.setText("");
 			            txtPassword.setEditable(false);
+			            txtProStart.setVisible(false);
+			            txtProEnd.setVisible(false);
 			            txtPassword.setBackground(new Color(190, 190, 190));
 			            txtConfirmPassword.setText("");
 			            txtConfirmPassword.setEditable(false);
@@ -2215,7 +2306,12 @@ public class MainFrames extends JFrame
 						lblUsername.setVisible(true);
 			            lblPassword.setVisible(true);
 			            lblPassword2.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
 			            lblRank.setVisible(true);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
 			            cboUserRank.setVisible(true);
 			            txtConfirmPassword.setVisible(true);
 			            txtPassword.setVisible(true);
@@ -2224,6 +2320,11 @@ public class MainFrames extends JFrame
 			            lblAddProgram.setVisible(false);
 			            lblAddCustomer.setVisible(false);
 			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(false);
+			            btnSave.setVisible(true);
+			            txtProStart.setVisible(false);
+			            txtCust.setVisible(false);
+			            txtProEnd.setVisible(false);
 			            txtUsername.setEditable(true);
 			            txtUsername.setBackground(Color.white);
 			            txtPassword.setEditable(true);
@@ -2260,6 +2361,11 @@ public class MainFrames extends JFrame
 			            lblPassword.setVisible(true);
 			            lblPassword2.setVisible(true);
 			            lblRank.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
 			            cboUserRank.setVisible(true);
 			            txtConfirmPassword.setVisible(true);
 			            txtPassword.setVisible(true);
@@ -2268,10 +2374,15 @@ public class MainFrames extends JFrame
 			            lblAddProgram.setVisible(false);
 			            lblAddCustomer.setVisible(false);
 			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(false);
+			            btnSave.setVisible(true);
 			            rbtnCreateUser.setSelected(true);
 			            txtUsername.setEditable(true);
 			            txtUsername.setBackground(Color.white);
 			            txtPassword.setEditable(true);
+			            txtProStart.setVisible(false);
+			            txtProEnd.setVisible(false);
+			            txtCust.setVisible(false);
 			            txtPassword.setBackground(Color.white);
 			            txtConfirmPassword.setEditable(true);
 			            txtConfirmPassword.setBackground(Color.white);
@@ -2293,42 +2404,24 @@ public class MainFrames extends JFrame
 						txtConfirmPassword.setText("");
 			}}});
 			
-			ImageIcon create = new ImageIcon(getClass().getResource("/images/execute.jpg"));
-			btnExecute = new JButton(create);
-			btnExecute.addActionListener(new ActionListener() {
+			ImageIcon delete = new ImageIcon(getClass().getResource("/images/delete.jpg"));
+			btnDelete = new JButton(delete);
+			btnDelete.setVisible(false);
+			btnDelete.addActionListener(new ActionListener() {
 				
-				public void actionPerformed(ActionEvent e) 
+				public void actionPerformed(ActionEvent e)
 				{
-					if(txtUsername.getText().equals("")){
-						JOptionPane.showMessageDialog(
-							    frame,
-							    "Please Enter A Username",
-							    "Creditenials Error",
-								JOptionPane.ERROR_MESSAGE);
-					}else{
-						if (e.getSource() == btnExecute){
-							int n = 1;
-							if(rbtnCreateUser.isSelected() == true){
-								try{
-									if(con.getUserRank().equals("admin")){
-										n = JOptionPane.showConfirmDialog(
-												    frame,
-												    "Are you sure you want to create user: " + txtUsername.getText() + "?",
-												    "Save:",
-												    JOptionPane.YES_NO_OPTION,
-													JOptionPane.WARNING_MESSAGE);
-									}else{
-										config = new ConfigurationManager(configFilePath);
-										JOptionPane.showMessageDialog(
-										    frame,
-										    "" + (config.getProperty("appUser") 
-										    		+ " does not have permission to Create Users"),
-										    "Creditenials Error",
-											JOptionPane.ERROR_MESSAGE);
-									}
-								}catch(Exception ex){/*Ignore*/}
-							}
-							if(rbtnDeleteUser.isSelected() == true){
+					int n = 1;
+					if (e.getSource() == btnDelete)
+					{
+						if(rbtnDeleteUser.isSelected() == true){
+							if(txtUsername.getText().equals("")){
+								JOptionPane.showMessageDialog(
+									    frame,
+									    "Please Enter A Username",
+									    "Creditenials Error",
+										JOptionPane.ERROR_MESSAGE);
+							}else{
 								try{
 									if(con.getUserRank().equals("admin")){
 										n = JOptionPane.showConfirmDialog(
@@ -2348,14 +2441,60 @@ public class MainFrames extends JFrame
 									}
 								}catch(Exception ex){/*Ignore*/}
 							}
-							if(rbtnChangeUserRank.isSelected() == true){
+						}
+						if(n == 0){
+							try{
+								String username = txtUsername.getText();
+						if(rbtnDeleteUser.isSelected() == true){
+							con.deleteUser(username);
+						}
+							}catch(Exception ex){/*Ignore*/}
+							txtUsername.setText("");
+					}}}});
+			
+			ImageIcon create = new ImageIcon(getClass().getResource("/images/save.jpg"));
+			btnSave = new JButton(create);
+			btnSave.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					
+						if (e.getSource() == btnSave){
+							int n = 1;
+							if(rbtnCreateUser.isSelected() == true){
+								if(txtUsername.getText().equals("")){
+									JOptionPane.showMessageDialog(
+										    frame,
+										    "Please Enter A Username",
+										    "Creditenials Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									try{
+										if(con.getUserRank().equals("admin")){
+											n = JOptionPane.showConfirmDialog(
+													    frame,
+													    "Are you sure you want to create user: " + txtUsername.getText() + "?",
+													    "Save:",
+													    JOptionPane.YES_NO_OPTION,
+														JOptionPane.WARNING_MESSAGE);
+										}else{
+											config = new ConfigurationManager(configFilePath);
+											JOptionPane.showMessageDialog(
+											    frame,
+											    "" + (config.getProperty("appUser") 
+											    		+ " does not have permission to Create Users"),
+											    "Creditenials Error",
+												JOptionPane.ERROR_MESSAGE);
+										}
+									}catch(Exception ex){/*Ignore*/}
+								}
+							}
+							if(rbtnAddProgram.isSelected() == true){
 								try{
 									if(con.getUserRank().equals("admin")){
 										n = JOptionPane.showConfirmDialog(
 												    frame,
-												    "Are you sure you want to change " 
-												    		+ txtUsername.getText() + "'s rank to " 
-												    		+ cboUserRank.getSelectedItem().toString()+"?",
+												    "Are you sure you want to create program: " + txtAddCusPro.getText() + "?",
 												    "Save:",
 												    JOptionPane.YES_NO_OPTION,
 													JOptionPane.WARNING_MESSAGE);
@@ -2364,23 +2503,64 @@ public class MainFrames extends JFrame
 										JOptionPane.showMessageDialog(
 										    frame,
 										    "" + (config.getProperty("appUser") 
-										    		+ " does not have permission to Change User Rank"),
+										    		+ " does not have permission to Program Users"),
 										    "Creditenials Error",
 											JOptionPane.ERROR_MESSAGE);
 									}
 								}catch(Exception ex){/*Ignore*/}
 							}
-							if(rbtnChangePass.isSelected() == true){
-								n = JOptionPane.showConfirmDialog(
-									    frame,
-									    "Are you sure you want to change " + txtUsername.getText() + "'s password?",
-									    "Save:",
-									    JOptionPane.YES_NO_OPTION,
-										JOptionPane.WARNING_MESSAGE);
+							
+							if(rbtnChangeUserRank.isSelected() == true){
+								if(txtUsername.getText().equals("")){
+									JOptionPane.showMessageDialog(
+										    frame,
+										    "Please Enter A Username",
+										    "Creditenials Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									try{
+										if(con.getUserRank().equals("admin")){
+											n = JOptionPane.showConfirmDialog(
+													    frame,
+													    "Are you sure you want to change " 
+													    		+ txtUsername.getText() + "'s rank to " 
+													    		+ cboUserRank.getSelectedItem().toString()+"?",
+													    "Save:",
+													    JOptionPane.YES_NO_OPTION,
+														JOptionPane.WARNING_MESSAGE);
+										}else{
+											config = new ConfigurationManager(configFilePath);
+											JOptionPane.showMessageDialog(
+											    frame,
+											    "" + (config.getProperty("appUser") 
+											    		+ " does not have permission to Change User Rank"),
+											    "Creditenials Error",
+												JOptionPane.ERROR_MESSAGE);
+										}
+									}catch(Exception ex){/*Ignore*/}
+								}
 							}
+							if(rbtnChangePass.isSelected() == true){
+								if(txtUsername.getText().equals("")){
+									JOptionPane.showMessageDialog(
+										    frame,
+										    "Please Enter A Username",
+										    "Creditenials Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									n = JOptionPane.showConfirmDialog(
+										    frame,
+										    "Are you sure you want to change " + txtUsername.getText() + "'s password?",
+										    "Save:",
+										    JOptionPane.YES_NO_OPTION,
+											JOptionPane.WARNING_MESSAGE);
+								}
+							}
+							
 								if(n == 0){
 									try{
 										String username = txtUsername.getText();
+										String Program = txtAddCusPro.getText();
 										String password = (new String(txtPassword.getPassword()));
 										String confirmPassword = (new String(txtConfirmPassword.getPassword()));
 										String rank = cboUserRank.getSelectedItem().toString();
@@ -2396,9 +2576,10 @@ public class MainFrames extends JFrame
 														JOptionPane.ERROR_MESSAGE);
 											}
 										}
-										if(rbtnDeleteUser.isSelected() == true){
-											con.deleteUser(username);
+										if(rbtnAddProgram.isSelected() == true){
+											con.createProgram(Program);
 										}
+										
 										if(rbtnChangeUserRank.isSelected() == true){
 											con.changeUserRank(username, rank);
 										}
@@ -2415,8 +2596,14 @@ public class MainFrames extends JFrame
 										}
 											
 									}catch(Exception ex){/*Ignore*/}
-			}}}}});
-			
+									txtUsername.setText("");
+									txtPassword.setText("");
+									txtConfirmPassword.setText("");
+									txtCust.setText("");
+									txtAddCusPro.setText("");
+									txtProStart.setText("");
+									txtProEnd.setText("");
+							}}}});
 			setupPanel();
 		}
 		
@@ -2437,21 +2624,23 @@ public class MainFrames extends JFrame
 						.addGap(42)
 						.addComponent(rbtnDeleteUser)
 						.addGap(174)
-						.addComponent(lblUsername)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblUsername))
 						.addGap(10)
-						.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(42)
 						.addComponent(rbtnChangeUserRank)
-						.addGap(43)
+						.addGap(50)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(lblAddProgram)
+							.addComponent(lblAddCustomer, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(77)
-								.addComponent(lblPassword))
-							.addComponent(lblAddCustomer, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(12)
-								.addComponent(lblAddProgram)))
+								.addGap(70)
+								.addComponent(lblPassword)))
 						.addGap(10)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addComponent(txtPassword, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
@@ -2460,26 +2649,44 @@ public class MainFrames extends JFrame
 						.addGap(42)
 						.addComponent(rbtnChangePass)
 						.addGap(71)
-						.addComponent(lblPassword2)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(28)
+								.addComponent(lblCust))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(24)
+								.addComponent(lblProStart, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblPassword2))
 						.addGap(10)
-						.addComponent(txtConfirmPassword, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(txtProEnd, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txtCust, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txtConfirmPassword, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
 						.addGap(6)
 						.addComponent(lblPassConfirm, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(42)
 						.addComponent(rbtnAddCustomer, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
-						.addGap(140)
-						.addComponent(lblRank)
+						.addGap(119)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(21)
+								.addComponent(lblRank))
+							.addComponent(lblProEnd))
 						.addGap(10)
-						.addComponent(cboUserRank, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(cboUserRank, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txtProStart, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(42)
 						.addComponent(rbtnAddProgram, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(42)
 						.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-						.addGap(350)
-						.addComponent(btnExecute, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
+						.addGap(106)
+						.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
+						.addGap(100)
+						.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
 			);
 			groupLayout.setVerticalGroup(
 				groupLayout.createParallelGroup(Alignment.LEADING)
@@ -2497,19 +2704,23 @@ public class MainFrames extends JFrame
 							.addComponent(rbtnDeleteUser)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(4)
-								.addComponent(lblUsername))
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblCustomer)
+									.addComponent(lblUsername)))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(4)
-								.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 						.addGap(10)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addComponent(rbtnChangeUserRank)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(4)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblPassword)
+									.addComponent(lblAddProgram)
 									.addComponent(lblAddCustomer)
-									.addComponent(lblAddProgram)))
+									.addComponent(lblPassword)))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(4)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -2520,10 +2731,20 @@ public class MainFrames extends JFrame
 							.addComponent(rbtnChangePass)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(4)
-								.addComponent(lblPassword2))
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblCust)
+									.addComponent(lblProStart)
+									.addComponent(lblPassword2)))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(3)
-								.addComponent(txtConfirmPassword, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(1)
+										.addComponent(txtProEnd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(1)
+										.addComponent(txtCust, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addComponent(txtConfirmPassword, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(10)
 								.addComponent(lblPassConfirm)))
@@ -2532,19 +2753,26 @@ public class MainFrames extends JFrame
 							.addComponent(rbtnAddCustomer)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(4)
-								.addComponent(lblRank))
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblRank)
+									.addComponent(lblProEnd)))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(4)
-								.addComponent(cboUserRank, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(cboUserRank, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(txtProStart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 						.addGap(10)
 						.addComponent(rbtnAddProgram)
 						.addGap(32)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnExecute, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
 			);
 			setLayout(groupLayout);
 		}}//End of Class ManageUsersPanel
+
+
 
 	class BDLPanel extends JPanel
 	{

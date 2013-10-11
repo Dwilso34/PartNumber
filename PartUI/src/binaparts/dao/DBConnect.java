@@ -284,6 +284,33 @@ public class DBConnect {
 			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
+	//create a program and add to database (Requires engineer)
+	public void createProgram(String program) throws Exception{
+		ConfigurationManager config = new ConfigurationManager(configFilePath);
+		String appUser = config.getProperty("appUser");
+		if(getUserRank().equals("admin")){
+			try{
+				con = getDBConnection();
+				con.setAutoCommit(false);
+				
+				pst = con.prepareStatement("INSERT INTO customers (Program) VALUES(?)");
+				pst.setString(1, program);
+				pst.executeUpdate();
+					  
+				con.commit();
+				con.setAutoCommit(true);
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch (Exception ex) {
+		        ex.printStackTrace();	
+			}finally{
+				con.setAutoCommit(true);
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+		}else{
+			System.out.println(appUser+" does not have permission to do that!");
+		}
+	}
 	//returns jsonArray of User filtered by username (done)
 	public JSONArray queryDatabase(String table, String column, String queryValue) throws Exception{
 			
