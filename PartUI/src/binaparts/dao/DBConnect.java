@@ -298,7 +298,7 @@ public class DBConnect {
 				con.setAutoCommit(false);
 				pst = con.prepareStatement("INSERT INTO customers (Program, ProgramStart, ProgramEnd) VALUES(?, ?, ?)");
 				pst.setString(1, program);
-				pst.setDate(2, programStart);
+				pst.setString(2, programStart);
 				pst.setString(3, programEnd);
 				pst.executeUpdate();
 					  
