@@ -166,7 +166,7 @@ public class MainFrames extends JFrame
 				{
 					if (e.getSource() == btnExperimental) {
 						setVisible(false);
-						frame.setSize(780,470);
+						frame.setSize(837,470);
 						frame.setTitle("Experimental Parts:");
 						frame.setResizable(false);
 						frame.setLocationRelativeTo(main);
@@ -1676,7 +1676,7 @@ public class MainFrames extends JFrame
 						.addComponent(rbtnFindBosal, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
 						.addGap(2)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(rbtnFindEuro, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
+							.addComponent(rbtnFindEuro, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(178)
 								.addComponent(rbtnFindCus, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)))
@@ -2669,9 +2669,10 @@ public class MainFrames extends JFrame
 											String Customer = cboCustomer.getSelectedItem().toString();
 											String ProgramStart = txtProStart.getText();
 											String ProgramEnd = txtProEnd.getText();
+											String CreatedBy = con.getUser();
+											Timestamp Created = con.getTimestamp();
 											String Cust = con.queryDatabase("customers", "Customer", Customer).getJSONObject(0).getString("Cust").toString();
-											
-											con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd);
+											con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy);
 										}
 										if(rbtnChangeUserRank.isSelected() == true){
 											con.changeUserRank(username, rank);
@@ -3024,7 +3025,22 @@ public class MainFrames extends JFrame
 		private JTextField txtSearchPart;
 		
 	//JComboBoxes
-		private JComboBox<?> cboProgram;
+		private JComboBox<String> cboProgram;
+		private ComboBoxModel<String> resetProgramComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> proComboBoxDefault = null;
+			String[] types = null;
+			try {
+				temp1 = con.queryReturnAllPrograms();
+				types = new String[temp1.length()];
+						for(int i = 0; i < temp1.length(); i++){
+							types[i] = temp1.getJSONObject(i).getString("Program").toString();
+						}
+				proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+			}catch(Exception ex){/*Ignore*/}
+			return proComboBoxDefault;
+		}
 		private JComboBox<String> cboPartDescrip;
 		private ComboBoxModel<String> resetDescripComboBox()
 		{
@@ -3042,7 +3058,22 @@ public class MainFrames extends JFrame
 			}catch(Exception ex){/*Ignore*/}
 			return descripComboBoxDefault;
 		}
-		private JComboBox<?> cboCustomer;
+		private JComboBox<String> cboCustomer;
+		private ComboBoxModel<String> resetCustomerComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> custComboBoxDefault = null;
+			String[] types = null;
+			try {
+				temp1 = con.queryReturnAllCustomers();
+				types = new String[temp1.length()];
+						for(int i = 0; i < temp1.length(); i++){
+							types[i] = temp1.getJSONObject(i).getString("Cust").toString();
+				}
+				custComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+			}catch(Exception ex){/*Ignore*/}
+			return custComboBoxDefault;
+		}
 		private JComboBox<?> cboYear;
 		
 	//JButtons
@@ -3109,19 +3140,27 @@ public class MainFrames extends JFrame
 			txtSearchPart.setEditable(false);
 						
 		//JComboBoxes
-			cboProgram = new JComboBox<Object>();
-			cboProgram.setEditable(false);
+			cboProgram = new JComboBox<String>();
+			cboProgram.setModel(resetProgramComboBox());
+			AutoCompleteDecorator.decorate(cboProgram);
+			cboProgram.addMouseListener(new ContextMenuMouseListener());
 			cboProgram.setForeground(Color.BLACK);
+			cboProgram.setSelectedIndex(-1);
 			cboPartDescrip = new JComboBox<String>();
 			AutoCompleteDecorator.decorate(cboPartDescrip);
 			cboPartDescrip.setForeground(Color.BLACK);
 			cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
 			cboPartDescrip.setModel(resetDescripComboBox());
 			cboPartDescrip.setSelectedIndex(-1);
-			cboCustomer = new JComboBox<Object>();
-			cboCustomer.setEditable(false);
+			cboCustomer = new JComboBox<String>();
+			cboCustomer.setModel(resetCustomerComboBox());
+			AutoCompleteDecorator.decorate(cboCustomer);
+			cboCustomer.setSelectedIndex(-1);
+			cboCustomer.addMouseListener(new ContextMenuMouseListener());
 			cboCustomer.setForeground(Color.BLACK);
-			cboYear = new JComboBox<Object>();
+			String[] years = {"13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
+			cboYear = new JComboBox<Object>(years);
+			cboYear.setSelectedIndex(-1);
 			cboYear.setEditable(false);
 			cboYear.setForeground(Color.BLACK);
 			
@@ -3205,6 +3244,7 @@ public class MainFrames extends JFrame
 						frame.setTitle("Main Menu:");
 						main.setVisible(true);
 						cboPartDescrip.setSelectedIndex(-1);
+						cboYear.setSelectedIndex(-1);
 						txtCreated.setText("");
 						txtCreatedBy.setText("");
 						txtUpdated.setText("");
@@ -3212,6 +3252,8 @@ public class MainFrames extends JFrame
 						txtCustomerPartNum.setText("");
 						txtPartNum.setText("");
 						txtSearchPart.setText("");
+						cboCustomer.setSelectedIndex(-1);
+						cboProgram.setSelectedIndex(-1);
 					}
 				}					
 			});
@@ -3227,6 +3269,7 @@ public class MainFrames extends JFrame
 					}
 				}					
 			});
+				
 						
 		setupPanel();
 		ButtonGroup group = new ButtonGroup();
@@ -3272,7 +3315,7 @@ public class MainFrames extends JFrame
 								.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
 								.addGap(8)
 								.addComponent(lblPartDescrip, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-								.addGap(36)
+								.addGap(146)
 								.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
 								.addGap(20)
 								.addComponent(lblYear, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
@@ -3282,7 +3325,7 @@ public class MainFrames extends JFrame
 								.addGap(61)
 								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
 								.addGap(23)
-								.addComponent(cboPartDescrip, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
+								.addComponent(cboPartDescrip, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
 								.addGap(26)
 								.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
 								.addGap(24)
@@ -3294,14 +3337,14 @@ public class MainFrames extends JFrame
 								.addComponent(lblCreated, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
 								.addGap(48)
 								.addComponent(lblCreatedBy, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
-								.addGap(156)
+								.addGap(265)
 								.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
 								.addComponent(txtCreated, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
 								.addGap(35)
 								.addComponent(txtCreatedBy, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-								.addGap(209)
+								.addGap(319)
 								.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
@@ -3326,7 +3369,7 @@ public class MainFrames extends JFrame
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
 								.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-								.addGap(358)
+								.addGap(402)
 								.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
 					);
 					groupLayout.setVerticalGroup(

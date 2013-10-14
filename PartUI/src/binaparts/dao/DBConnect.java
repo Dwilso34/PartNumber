@@ -289,19 +289,21 @@ public class DBConnect {
 		}
 	}
 	//create a program and add to database (Requires admin)
-	public void createProgram(String Customer, String Cust, String Program, String programStart, String programEnd) throws Exception{
+	public void createProgram(String Customer, String Cust, String Program, String programStart, String programEnd, Timestamp Created, String CreatedBy) throws Exception{
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
 				con = getDBConnection();
 				con.setAutoCommit(false);
-				pst = con.prepareStatement("INSERT INTO programs (Customer, Cust, Program, ProgramStart, ProgramEnd) VALUES(?, ? ,?, ?, ?)");
+				pst = con.prepareStatement("INSERT INTO programs (Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy) VALUES(?, ? ,?, ?, ?, ?, ?)");
 				pst.setString(1, Customer);
 				pst.setString(2, Cust);
 				pst.setString(3, Program);
 				pst.setString(4, programStart);
 				pst.setString(5, programEnd);
+				pst.setTimestamp(6, Created);
+				pst.setString(7, CreatedBy);
 				pst.executeUpdate();
 					  
 				con.commit();
@@ -571,6 +573,32 @@ public class DBConnect {
 		}
 		return json;
 	}
+	//returns jsonArray of all Programs (done)
+		public JSONArray queryReturnAllPrograms() throws Exception{
+			
+			ToJSON converter = new ToJSON();
+			JSONArray json = new JSONArray();
+			
+			try{
+				con = getDBConnection();
+				pst = con.prepareStatement("SELECT * from `programs` ORDER BY `Program` ASC");
+				
+				ResultSet rs = pst.executeQuery();
+				
+				if (isResultSetEmpty(rs) == false ){    
+					json = converter.toJSONArray(rs);
+				}
+				pst.close();
+				con.close();
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}finally{
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+			return json;
+		}
 	//returns jsonArray of all Customers (done)
 		public JSONArray queryReturnAllCustomers() throws Exception{
 			
