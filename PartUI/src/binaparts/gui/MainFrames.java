@@ -3190,7 +3190,10 @@ public class MainFrames extends JFrame
 			            txtUpdatedBy.setText("");
 			            txtCustomerPartNum.setText("");
 			            txtPartNum.setText("");
-			            
+			            cboYear.setSelectedIndex(-1);
+			            cboProgram.setSelectedIndex(-1);
+			            cboCustomer.setSelectedIndex(-1);
+			            cboPartDescrip.setSelectedIndex(-1);
 	            }
 			}});	
 								
@@ -3254,6 +3257,7 @@ public class MainFrames extends JFrame
 						txtSearchPart.setText("");
 						cboCustomer.setSelectedIndex(-1);
 						cboProgram.setSelectedIndex(-1);
+						rbtnCreate.setSelected(true);
 					}
 				}					
 			});
@@ -3265,7 +3269,77 @@ public class MainFrames extends JFrame
 				public void actionPerformed(ActionEvent e) 
 				{
 					if (e.getSource() == btnCheck) {
+						con = new DBConnect();
+						final String findBosalText = txtSearchPart.getText();
 						
+						try{
+							JSONObject temp = (con.queryDatabase("experimental parts", "PartNumber", findBosalText)).getJSONObject(0);
+							String cpartText = null;
+						
+							//set text for CustPartNumber JTextField
+							try{
+								cpartText = temp.get("CustPartNumber").toString();
+							}catch(Exception ex){cpartText = "-";}
+							txtCustomerPartNum.setText(cpartText);
+							
+							//set text for Description JComboBox
+							String descrip = null;
+							try{
+								descrip = temp.get("PartDescription").toString();
+							}catch(Exception ex){descrip = "-";}
+							cboPartDescrip.setSelectedItem(descrip);
+							
+							//set text for Program JComboBox
+							String program = null;
+							try{
+								program = temp.get("Program").toString();
+							}catch(Exception ex){program = "-";}
+							cboProgram.setSelectedItem(program);
+							
+							//set text for Customer JComboBox
+							String cust = null;
+							try{
+								cust = temp.get("Customer").toString();
+							}catch(Exception ex){cust = "-";}
+							cboCustomer.setSelectedItem(cust);
+							
+							//set text for Year JComboBox
+							String year = null;
+							try{
+								year = temp.getString("YearCode").toString();
+							}catch(Exception ex){year = "-";}
+							cboYear.setSelectedItem(year);
+							
+							//set text for Created JTextField
+							String created = null;
+							try{
+								created = temp.get("Created").toString();
+							}catch(Exception ex){created = "-";}
+							txtCreated.setText(created);
+							
+							//set text for CreatedBy JTextField
+							String createdBy = null;
+							try{
+								createdBy = temp.get("CreatedBy").toString();
+							}catch(Exception ex){createdBy = "-";}
+							txtCreatedBy.setText(createdBy);
+							
+							//set text for Part Number JTextField
+							String part = null;
+							try{
+								part = temp.get("PartNumber").toString();
+							}catch(Exception ex){part = "-";}
+							txtPartNum.setText(part);
+							
+						}catch(Exception ex){
+							JOptionPane.showMessageDialog(
+									    frame,
+									    "Bosal Part Number: " + findBosalText + " does not exist",
+									    "Missing Part Number",
+										JOptionPane.ERROR_MESSAGE);
+							
+						}
+		
 					}
 				}					
 			});
