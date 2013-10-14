@@ -3001,7 +3001,7 @@ public class MainFrames extends JFrame
 		private JTextField txtSearchPart;
 		
 	//JComboBoxes
-		private JComboBox<?> cboProgram;
+		private JComboBox<String> cboProgram;
 		private JComboBox<String> cboPartDescrip;
 		private ComboBoxModel<String> resetDescripComboBox()
 		{
@@ -3019,8 +3019,8 @@ public class MainFrames extends JFrame
 			}catch(Exception ex){/*Ignore*/}
 			return descripComboBoxDefault;
 		}
-		private JComboBox<?> cboCustomer;
-		private JComboBox<?> cboYear;
+		private JComboBox<String> cboCustomer;
+		private JComboBox<String> cboYear;
 		
 	//JButtons
 		private JButton btnSave;
@@ -3086,7 +3086,7 @@ public class MainFrames extends JFrame
 			txtSearchPart.setEditable(false);
 						
 		//JComboBoxes
-			cboProgram = new JComboBox<Object>();
+			cboProgram = new JComboBox<String>();
 			cboProgram.setEditable(false);
 			cboProgram.setForeground(Color.BLACK);
 			cboPartDescrip = new JComboBox<String>();
@@ -3095,10 +3095,10 @@ public class MainFrames extends JFrame
 			cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
 			cboPartDescrip.setModel(resetDescripComboBox());
 			cboPartDescrip.setSelectedIndex(-1);
-			cboCustomer = new JComboBox<Object>();
+			cboCustomer = new JComboBox<String>();
 			cboCustomer.setEditable(false);
 			cboCustomer.setForeground(Color.BLACK);
-			cboYear = new JComboBox<Object>();
+			cboYear = new JComboBox<String>();
 			cboYear.setEditable(false);
 			cboYear.setForeground(Color.BLACK);
 			

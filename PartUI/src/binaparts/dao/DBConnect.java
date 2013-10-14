@@ -325,6 +325,33 @@ public class DBConnect {
 			System.out.println(appUser+" does not have permission to do that!");
 		}
 	}
+	//delete a Program from database (Requires admin)
+	public void deleteProgram(String Customer) throws Exception{
+		ConfigurationManager config = new ConfigurationManager(configFilePath);
+		String appUser = config.getProperty("appUser");
+		if(getUserRank().equals("admin")){
+			try{
+				con = getDBConnection();
+				con.setAutoCommit(false);
+				
+				pst = con.prepareStatement("DELETE FROM customers WHERE Customer = ?");
+				pst.setString(1, Customer);
+				pst.executeUpdate();
+				
+				con.commit();
+				con.setAutoCommit(true);
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch (Exception ex) {
+		        ex.printStackTrace();	
+			}finally{
+				con.setAutoCommit(true);
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+		}else{
+			System.out.println(appUser+" does not have permission to do that!");
+		}
+	}
 	//create a customer and add it to the database (Requires admin)
 	public void createCustomer(String newCustomer, String newCust) throws Exception{
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
