@@ -2169,6 +2169,7 @@ public class MainFrames extends JFrame
 				public void actionPerformed(ActionEvent e)
 				{		
 					if (e.getSource() == rbtnAddProgram){
+						cboCustomer.setModel(resetCustomerComboBox());
 			            lblUsername.setVisible(false);
 			            lblPassword.setVisible(false);
 			            lblPassword2.setVisible(false);
@@ -2659,14 +2660,18 @@ public class MainFrames extends JFrame
 										if(rbtnAddCustomer.isSelected() == true){
 											String newCust = txtCust.getText();
 											String newCustomer = txtAddCusPro.getText();
-											con.createCustomer(newCustomer, newCust);
+											String CreatedBy = con.getUser();
+											Timestamp Created = con.getTimestamp();
+											con.createCustomer(newCustomer, newCust, Created, CreatedBy);
 										}
 										if(rbtnAddProgram.isSelected() == true){
 											String Program = txtAddCusPro.getText();
 											String Customer = cboCustomer.getSelectedItem().toString();
 											String ProgramStart = txtProStart.getText();
 											String ProgramEnd = txtProEnd.getText();
-											con.createProgram(Program, ProgramStart, ProgramEnd, Customer);
+											String Cust = con.queryDatabase("customers", "Customer", Customer).getJSONObject(0).getString("Cust").toString();
+											
+											con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd);
 										}
 										if(rbtnChangeUserRank.isSelected() == true){
 											con.changeUserRank(username, rank);

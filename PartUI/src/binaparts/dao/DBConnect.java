@@ -289,18 +289,19 @@ public class DBConnect {
 		}
 	}
 	//create a program and add to database (Requires admin)
-	public void createProgram(String program, String programStart, String programEnd, String Customer) throws Exception{
+	public void createProgram(String Customer, String Cust, String Program, String programStart, String programEnd) throws Exception{
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
 				con = getDBConnection();
 				con.setAutoCommit(false);
-				pst = con.prepareStatement("INSERT INTO customers (Program, ProgramStart, ProgramEnd, Customer) VALUES(?, ?, ?, ?)");
-				pst.setString(1, program);
-				pst.setString(2, programStart);
-				pst.setString(3, programEnd);
-				pst.setString(4, Customer);
+				pst = con.prepareStatement("INSERT INTO programs (Customer, Cust, Program, ProgramStart, ProgramEnd) VALUES(?, ? ,?, ?, ?)");
+				pst.setString(1, Customer);
+				pst.setString(2, Cust);
+				pst.setString(3, Program);
+				pst.setString(4, programStart);
+				pst.setString(5, programEnd);
 				pst.executeUpdate();
 					  
 				con.commit();
@@ -317,17 +318,46 @@ public class DBConnect {
 			System.out.println(appUser+" does not have permission to do that!");
 		}
 	}
-	//create a customer and add it to the database (Requires admin)
-	public void createCustomer(String newCustomer, String newCust) throws Exception{
+	//delete a user from database (Requires admin)
+	public void deleteProgram(String program) throws Exception{
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
 				con = getDBConnection();
 				con.setAutoCommit(false);
-				pst = con.prepareStatement("INSERT INTO customers (Customer, Cust) VALUES(?, ?)");
+				
+				pst = con.prepareStatement("DELETE FROM programs WHERE Program = ?");
+				pst.setString(1, program);
+				pst.executeUpdate();
+				
+				con.commit();
+				con.setAutoCommit(true);
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch (Exception ex) {
+		        ex.printStackTrace();	
+			}finally{
+				con.setAutoCommit(true);
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+		}else{
+			System.out.println(appUser+" does not have permission to do that!");
+		}
+	}
+	//create a customer and add it to the database (Requires admin)
+	public void createCustomer(String newCustomer, String newCust, Timestamp created, String createdBy) throws Exception{
+		ConfigurationManager config = new ConfigurationManager(configFilePath);
+		String appUser = config.getProperty("appUser");
+		if(getUserRank().equals("admin")){
+			try{
+				con = getDBConnection();
+				con.setAutoCommit(false);
+				pst = con.prepareStatement("INSERT INTO customers (Customer, Cust, Created, CreatedBy) VALUES(?, ?, ?, ?)");
 				pst.setString(1, newCustomer);
 				pst.setString(2, newCust);
+				pst.setTimestamp(3, created);
+				pst.setString(4, createdBy);
 				pst.executeUpdate();
 					  
 				con.commit();
@@ -340,6 +370,33 @@ public class DBConnect {
 			}finally{
 				
 				try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+		}else{
+			System.out.println(appUser+" does not have permission to do that!");
+		}
+	}
+	//delete a user from database (Requires admin)
+	public void deleteCustomer(String customer) throws Exception{
+		ConfigurationManager config = new ConfigurationManager(configFilePath);
+		String appUser = config.getProperty("appUser");
+		if(getUserRank().equals("admin")){
+			try{
+				con = getDBConnection();
+				con.setAutoCommit(false);
+				
+				pst = con.prepareStatement("DELETE FROM customers WHERE Customer = ?");
+				pst.setString(1, customer);
+				pst.executeUpdate();
+				
+				con.commit();
+				con.setAutoCommit(true);
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch (Exception ex) {
+		        ex.printStackTrace();	
+			}finally{
+				con.setAutoCommit(true);
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
 			System.out.println(appUser+" does not have permission to do that!");
