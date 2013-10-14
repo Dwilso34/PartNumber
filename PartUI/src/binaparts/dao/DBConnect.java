@@ -3,10 +3,6 @@ package binaparts.dao;
 import java.sql.*;
 
 import org.json.JSONArray;
-
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 import org.json.JSONObject;
 
 import binaparts.properties.*;
@@ -293,22 +289,18 @@ public class DBConnect {
 		}
 	}
 	//create a program and add to database (Requires admin)
-	public void createProgram(String program, String programStart, String programEnd) throws Exception{
+	public void createProgram(String program, String programStart, String programEnd, String Customer) throws Exception{
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
-			System.out.println(programStart);
-			System.out.println(new SimpleDateFormat("yyyy", Locale.ENGLISH).parse(programStart));
-			System.out.println(programEnd);
-			Date progStart = (Date) new SimpleDateFormat("yyyy", Locale.ENGLISH).parse(programStart);
-			Date progEnd = (Date) new SimpleDateFormat("yyyy", Locale.ENGLISH).parse(programEnd);
 			try{
 				con = getDBConnection();
 				con.setAutoCommit(false);
-				pst = con.prepareStatement("INSERT INTO customers (Program, ProgramStart, ProgramEnd) VALUES(?, ?, ?)");
+				pst = con.prepareStatement("INSERT INTO customers (Program, ProgramStart, ProgramEnd, Customer) VALUES(?, ?, ?, ?)");
 				pst.setString(1, program);
-				pst.setDate(2, progStart);
-				pst.setDate(3, progEnd);
+				pst.setString(2, programStart);
+				pst.setString(3, programEnd);
+				pst.setString(4, Customer);
 				pst.executeUpdate();
 					  
 				con.commit();
@@ -318,35 +310,8 @@ public class DBConnect {
 			}catch (Exception ex) {
 		        ex.printStackTrace();	
 			}finally{
-				con.setAutoCommit(true);
-				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-			}
-		}else{
-			System.out.println(appUser+" does not have permission to do that!");
-		}
-	}
-	//delete a Program from database (Requires admin)
-	public void deleteProgram(String Customer) throws Exception{
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String appUser = config.getProperty("appUser");
-		if(getUserRank().equals("admin")){
-			try{
-				con = getDBConnection();
-				con.setAutoCommit(false);
 				
-				pst = con.prepareStatement("DELETE FROM customers WHERE Customer = ?");
-				pst.setString(1, Customer);
-				pst.executeUpdate();
-				
-				con.commit();
-				con.setAutoCommit(true);
-			}catch(SQLException SQLex){
-				SQLex.printStackTrace();
-			}catch (Exception ex) {
-		        ex.printStackTrace();	
-			}finally{
-				con.setAutoCommit(true);
-				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
 			System.out.println(appUser+" does not have permission to do that!");
@@ -373,8 +338,8 @@ public class DBConnect {
 			}catch (Exception ex) {
 		        ex.printStackTrace();	
 			}finally{
-				con.setAutoCommit(true);
-				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				
+				try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
 			System.out.println(appUser+" does not have permission to do that!");
@@ -549,6 +514,32 @@ public class DBConnect {
 		}
 		return json;
 	}
+	//returns jsonArray of all Customers (done)
+		public JSONArray queryReturnAllCustomers() throws Exception{
+			
+			ToJSON converter = new ToJSON();
+			JSONArray json = new JSONArray();
+			
+			try{
+				con = getDBConnection();
+				pst = con.prepareStatement("SELECT DISTINCT `Customer`, `Cust` from `customers` ORDER BY `Customer` ASC");
+				
+				ResultSet rs = pst.executeQuery();
+				
+				if (isResultSetEmpty(rs) == false ){    
+					json = converter.toJSONArray(rs);
+				}
+				pst.close();
+				con.close();
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}finally{
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+			return json;
+		}
 	//returns jsonArray of all Part Descriptions (done)
 	public JSONArray queryReturnAllDescriptions() throws Exception{
 			

@@ -1985,7 +1985,23 @@ public class MainFrames extends JFrame
 	//JComboBoxes
 
 		private JComboBox<?> cboUserRank;
-		private JComboBox<?> cboCustomer;
+		private JComboBox<String> cboCustomer;
+		private ComboBoxModel<String> resetCustomerComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> CustComboBoxDefault = null;
+			String[] Cust = null;
+			
+			try {
+				temp1 = con.queryReturnAllCustomers();
+				Cust = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i++){
+					Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
+				}
+				CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
+			}catch(Exception ex){ex.printStackTrace();/*Ignore*/}
+			return CustComboBoxDefault;
+		}
 			
 	//JButtons
 		
@@ -2117,6 +2133,7 @@ public class MainFrames extends JFrame
 			cboUserRank = new JComboBox<Object>(ranks);
 			cboUserRank.addMouseListener(new ContextMenuMouseListener());
 			cboCustomer = new JComboBox<String>();
+			cboCustomer.setModel(resetCustomerComboBox());
 			cboCustomer.setVisible(false);
 			cboCustomer.addMouseListener(new ContextMenuMouseListener());
 			
@@ -2601,13 +2618,13 @@ public class MainFrames extends JFrame
 											frame,
 											"Are you sure you want to create " + txtAddCusPro.getText() + " as a new program?",
 											"Save:",
-											JOptionPane.OK_OPTION,
+											JOptionPane.YES_NO_OPTION,
 											JOptionPane.WARNING_MESSAGE);
 								}
 							}
 							if(rbtnAddCustomer.isSelected() == true){
 								if(txtAddCusPro.getText().equals("")){
-									JOptionPane.showConfirmDialog(
+									JOptionPane.showMessageDialog(
 											frame,
 											"Please Enter a Customer",
 											"Creditential Error",
@@ -2624,7 +2641,6 @@ public class MainFrames extends JFrame
 								if(n == 0){
 									try{
 										String username = txtUsername.getText();
-										//String Customer = cboCustomer.getSelectedItem().toString();
 										String password = (new String(txtPassword.getPassword()));
 										String confirmPassword = (new String(txtConfirmPassword.getPassword()));
 										String rank = cboUserRank.getSelectedItem().toString();
@@ -2647,9 +2663,10 @@ public class MainFrames extends JFrame
 										}
 										if(rbtnAddProgram.isSelected() == true){
 											String Program = txtAddCusPro.getText();
+											String Customer = cboCustomer.getSelectedItem().toString();
 											String ProgramStart = txtProStart.getText();
 											String ProgramEnd = txtProEnd.getText();
-											con.createProgram(Program, ProgramStart, ProgramEnd);
+											con.createProgram(Program, ProgramStart, ProgramEnd, Customer);
 										}
 										if(rbtnChangeUserRank.isSelected() == true){
 											con.changeUserRank(username, rank);
@@ -2674,6 +2691,7 @@ public class MainFrames extends JFrame
 									txtAddCusPro.setText("");
 									txtProStart.setText("");
 									txtProEnd.setText("");
+									cboCustomer.setSelectedIndex(-1);
 							}}}});
 			setupPanel();
 		}
@@ -3001,7 +3019,7 @@ public class MainFrames extends JFrame
 		private JTextField txtSearchPart;
 		
 	//JComboBoxes
-		private JComboBox<String> cboProgram;
+		private JComboBox<?> cboProgram;
 		private JComboBox<String> cboPartDescrip;
 		private ComboBoxModel<String> resetDescripComboBox()
 		{
@@ -3019,8 +3037,8 @@ public class MainFrames extends JFrame
 			}catch(Exception ex){/*Ignore*/}
 			return descripComboBoxDefault;
 		}
-		private JComboBox<String> cboCustomer;
-		private JComboBox<String> cboYear;
+		private JComboBox<?> cboCustomer;
+		private JComboBox<?> cboYear;
 		
 	//JButtons
 		private JButton btnSave;
@@ -3086,7 +3104,7 @@ public class MainFrames extends JFrame
 			txtSearchPart.setEditable(false);
 						
 		//JComboBoxes
-			cboProgram = new JComboBox<String>();
+			cboProgram = new JComboBox<Object>();
 			cboProgram.setEditable(false);
 			cboProgram.setForeground(Color.BLACK);
 			cboPartDescrip = new JComboBox<String>();
@@ -3095,10 +3113,10 @@ public class MainFrames extends JFrame
 			cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
 			cboPartDescrip.setModel(resetDescripComboBox());
 			cboPartDescrip.setSelectedIndex(-1);
-			cboCustomer = new JComboBox<String>();
+			cboCustomer = new JComboBox<Object>();
 			cboCustomer.setEditable(false);
 			cboCustomer.setForeground(Color.BLACK);
-			cboYear = new JComboBox<String>();
+			cboYear = new JComboBox<Object>();
 			cboYear.setEditable(false);
 			cboYear.setForeground(Color.BLACK);
 			
