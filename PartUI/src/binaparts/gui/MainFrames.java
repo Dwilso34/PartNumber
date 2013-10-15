@@ -3085,6 +3085,14 @@ public class MainFrames extends JFrame
 		private JRadioButton rbtnSearch;
 		private JRadioButton rbtnCreate;
 		
+		public String generatePartNumber(String Customer, String Year, String curSeq)
+		{
+			String PartNumber = null;
+			
+			PartNumber = Customer + Year + curSeq;			
+			return PartNumber;
+		}
+		
 	public ExperimentalPanel(final JPanel experimental)
 	{
 		setBackground(new Color(105, 105, 105));
@@ -3166,6 +3174,23 @@ public class MainFrames extends JFrame
 			cboYear.setEditable(false);
 			cboYear.setForeground(Color.BLACK);
 			
+			ItemListener comboBoxSelectionListener = (new ItemListener(){	
+				public void itemStateChanged(ItemEvent e)
+				{
+					if(cboCustomer.getSelectedItem() != null){
+						if(cboYear.getSelectedItem() != null){
+							txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
+									cboYear.getSelectedItem().toString(), ""));
+						}else{
+							txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
+									"", ""));
+						}
+					}else{
+						txtPartNum.setText(generatePartNumber("", "", ""));
+					}
+				}});
+			cboCustomer.addItemListener(comboBoxSelectionListener);
+			cboYear.addItemListener(comboBoxSelectionListener);
 		//JRadioButtons
 			rbtnSearch = new JRadioButton("Search Part");
 			rbtnSearch.setFont(new Font("Tahoma", Font.BOLD, 14));
