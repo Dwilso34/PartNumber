@@ -648,13 +648,13 @@ public class MainFrames extends JFrame
 								String Program = txtProgram.getText();
 								String DrawingNumber = txtDrawingNum.getText();
 								int Rev = 0;
-								String CreatedBy = con.getUser();
-								Timestamp Created = con.getTimestamp();
-								Timestamp Updated = con.getTimestamp();
-								String UpdatedBy =  con.getUser();
+								//String CreatedBy = con.getUser();
+								//Timestamp Created = con.getTimestamp();
+								//Timestamp Updated = con.getTimestamp();
+								//String UpdatedBy =  con.getUser();
 								con.insertNewPart(partType, mat, BosalPartNumber, CustomerPartNumber, 
 										SupplierPartNumber, Description, Program, seq, typeDescription,
-										DrawingNumber, Rev,	CreatedBy, Created, Updated, UpdatedBy);
+										DrawingNumber, Rev);
 								
 								setVisible(false);
 								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -3113,25 +3113,21 @@ public class MainFrames extends JFrame
 			txtCreated.setForeground(Color.BLACK);
 			txtCreated.addMouseListener(new ContextMenuMouseListener());
 			txtCreated.setEditable(false);
-			txtCreated.setText(con.getTimestamp().toString());
 			txtCreatedBy = new JTextField();
 			txtCreatedBy.setBackground(new Color(190, 190, 190));
 			txtCreatedBy.setForeground(Color.BLACK);
 			txtCreatedBy.addMouseListener(new ContextMenuMouseListener());
 			txtCreatedBy.setEditable(false);
-			txtCreatedBy.setText(config.getProperty("appUser"));
 			txtUpdated = new JTextField();
 			txtUpdated.setBackground(new Color(190, 190, 190));
 			txtUpdated.setForeground(Color.BLACK);
 			txtUpdated.addMouseListener(new ContextMenuMouseListener());
 			txtUpdated.setEditable(false);
-			txtUpdated.setText(con.getTimestamp().toString());
 			txtUpdatedBy = new JTextField();
 			txtUpdatedBy.setBackground(new Color(190, 190, 190));
 			txtUpdatedBy.setForeground(Color.BLACK);
 			txtUpdatedBy.addMouseListener(new ContextMenuMouseListener());
 			txtUpdatedBy.setEditable(false);
-			txtUpdatedBy.setText(config.getProperty("appUser"));
 			txtCustomerPartNum = new JTextField();
 			txtCustomerPartNum.setForeground(Color.BLACK);
 			txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
@@ -3230,7 +3226,31 @@ public class MainFrames extends JFrame
 				public void actionPerformed(ActionEvent e) 
 				{
 					if (e.getSource() == btnSave) {
-						
+						txtCreated.setText(con.getDate().toString());
+						txtCreatedBy.setText(config.getProperty("appUser"));
+						int n = JOptionPane.showConfirmDialog(
+							    frame,
+							    "Are you sure you want to save part data?",
+							    "Save:",
+							    JOptionPane.YES_NO_OPTION,
+								JOptionPane.WARNING_MESSAGE);
+						if(n == 0){
+							try {
+								String Program = null;
+								String PartDescription = null;
+								String CustPartNumber =  null;
+								String Customer = null;
+								String Year = null;
+								
+								Program = (String) cboProgram.getSelectedItem();
+								PartDescription = (String) cboPartDescrip.getSelectedItem();
+								CustPartNumber = txtCustomerPartNum.getText();
+								Customer = (String) cboCustomer.getSelectedItem();
+								Year = (String) cboYear.getSelectedItem();
+								
+								con.insertExperimentalPart(Program, PartDescription, CustPartNumber, Customer, Year);								
+							}catch(Exception ex){/*Ignore*/};
+						}
 					}
 				}					
 			});
@@ -3415,25 +3435,25 @@ public class MainFrames extends JFrame
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
 								.addComponent(lblCreated, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-								.addGap(85)
+								.addGap(12)
 								.addComponent(lblCreatedBy, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
-								.addGap(220)
+								.addGap(293)
 								.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
-								.addComponent(txtCreated, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtCreated, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
 								.addGap(35)
 								.addComponent(txtCreatedBy, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-								.addGap(273)
+								.addGap(343)
 								.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
 								.addComponent(lblUpdated, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-								.addGap(85)
+								.addGap(12)
 								.addComponent(lblUpdatedBy, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
-								.addComponent(txtUpdated, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtUpdated, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
 								.addGap(35)
 								.addComponent(txtUpdatedBy, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
