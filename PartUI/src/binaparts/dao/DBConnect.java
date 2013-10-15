@@ -1,9 +1,11 @@
 package binaparts.dao;
 
 import java.sql.*;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.joda.time.LocalDate;
 
 import binaparts.properties.*;
 import binaparts.util.ToJSON;
@@ -15,6 +17,7 @@ public class DBConnect {
 	protected Connection con = null;	
 	protected PreparedStatement pst = null;
 	private String configFilePath = "config.properties";
+	
 	public DBConnect(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -118,6 +121,13 @@ public class DBConnect {
 		Timestamp curTimestamp = new Timestamp(date.getTime());
 		System.out.println(curTimestamp);
 		return curTimestamp;
+	}
+	//returns a Timestamp object of the current timestamp
+	public LocalDate getDate(){
+		LocalDate date = new LocalDate();
+		String text = date.toString("dd/MM/yyyy", Locale.US);
+		System.out.println(text);
+		return date;
 	}
 	//returns username based on specific applications config settings 
 	public String getUser() throws Exception{
@@ -574,7 +584,7 @@ public class DBConnect {
 		return json;
 	}
 	//returns jsonArray of all Programs (done)
-		public JSONArray queryReturnAllPrograms() throws Exception{
+	public JSONArray queryReturnAllPrograms() throws Exception{
 			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
@@ -600,7 +610,7 @@ public class DBConnect {
 			return json;
 		}
 	//returns jsonArray of all Customers (done)
-		public JSONArray queryReturnAllCustomers() throws Exception{
+	public JSONArray queryReturnAllCustomers() throws Exception{
 			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
@@ -675,7 +685,7 @@ public class DBConnect {
 	public void insertNewPart(int partType, int mat, String BosalPartNumber, 
 			String CustomerPartNumber, String SupplierPartNumber, String Description,
 			String Program, int seq, String typeDescription, String DrawingNumber,
-			int Rev, String CreatedBy, Timestamp Created, Timestamp Updated, String UpdatedBy) throws Exception{	
+			int Rev) throws Exception{	
 		try{
 			con = getDBConnection();
 			pst = con.prepareStatement("INSERT INTO `parts list` (PartType, Material, BosalPartNumber, CustPartNumber,"
@@ -693,13 +703,40 @@ public class DBConnect {
 			pst.setString(9, typeDescription);
 			pst.setString(10, DrawingNumber);
 			pst.setInt(11, Rev);
-			pst.setString(12, CreatedBy);
-			pst.setTimestamp(13, Created);
-			pst.setString(14, UpdatedBy);
-			pst.setTimestamp(15, Updated);
+			pst.setString(12, getUser());
+			pst.setTimestamp(13, getTimestamp());
+			pst.setString(14, getUser());
+			pst.setTimestamp(15, getTimestamp());
 			pst.executeUpdate();
 			pst.close();
 			iterateNextSequenceNumber(partType);
+			con.close();
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
+	}
+	//inserts a new row into `experimental parts` to create a new part
+	public void insertExperimentalPart(String Program, String PartDescription,
+			String CustPartNumber, String Customer, String Year) throws Exception{	
+		try{
+			con = getDBConnection();
+			pst = con.prepareStatement("INSERT INTO `experimental parts` (Engineer, Program, PartDescription,"
+					+ "CustPartNumber, Customer, YearCode, PartNumber, Date) "
+										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+			pst.setString(1, getUser());
+			pst.setString(2, Program);
+			pst.setString(3, PartDescription);
+			pst.setString(4, CustPartNumber);
+			pst.setString(5, Customer);
+			pst.setString(6, Year);
+			pst.setString(7, "something");
+			pst.setTimestamp(8, getTimestamp());
+			pst.executeUpdate();
+			pst.close();
 			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
