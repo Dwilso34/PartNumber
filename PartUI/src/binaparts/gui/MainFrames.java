@@ -3088,7 +3088,9 @@ public class MainFrames extends JFrame
 	public ExperimentalPanel(final JPanel experimental)
 	{
 		setBackground(new Color(105, 105, 105));
-		
+		try {
+			config = new ConfigurationManager(configFilePath);
+		}catch(Exception ex){ex.printStackTrace();}
 		
 		//JLabels
 			lblCreated = new JLabel("Created");
@@ -3111,21 +3113,25 @@ public class MainFrames extends JFrame
 			txtCreated.setForeground(Color.BLACK);
 			txtCreated.addMouseListener(new ContextMenuMouseListener());
 			txtCreated.setEditable(false);
+			txtCreated.setText(con.getTimestamp().toString());
 			txtCreatedBy = new JTextField();
 			txtCreatedBy.setBackground(new Color(190, 190, 190));
 			txtCreatedBy.setForeground(Color.BLACK);
 			txtCreatedBy.addMouseListener(new ContextMenuMouseListener());
 			txtCreatedBy.setEditable(false);
+			txtCreatedBy.setText(config.getProperty("appUser"));
 			txtUpdated = new JTextField();
 			txtUpdated.setBackground(new Color(190, 190, 190));
 			txtUpdated.setForeground(Color.BLACK);
 			txtUpdated.addMouseListener(new ContextMenuMouseListener());
 			txtUpdated.setEditable(false);
+			txtUpdated.setText(con.getTimestamp().toString());
 			txtUpdatedBy = new JTextField();
 			txtUpdatedBy.setBackground(new Color(190, 190, 190));
 			txtUpdatedBy.setForeground(Color.BLACK);
 			txtUpdatedBy.addMouseListener(new ContextMenuMouseListener());
 			txtUpdatedBy.setEditable(false);
+			txtUpdatedBy.setText(config.getProperty("appUser"));
 			txtCustomerPartNum = new JTextField();
 			txtCustomerPartNum.setForeground(Color.BLACK);
 			txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
@@ -3386,48 +3392,48 @@ public class MainFrames extends JFrame
 								.addComponent(lblExperimental))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
-								.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-								.addGap(8)
-								.addComponent(lblPartDescrip, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-								.addGap(146)
 								.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
 								.addGap(20)
+								.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+								.addGap(5)
+								.addComponent(lblPartDescrip, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+								.addGap(140)
 								.addComponent(lblYear, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
 								.addGap(14)
 								.addComponent(lblSearchPart, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
-								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-								.addGap(23)
-								.addComponent(cboPartDescrip, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
-								.addGap(26)
 								.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-								.addGap(24)
+								.addGap(23)
+								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+								.addGap(21)
+								.addComponent(cboPartDescrip, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+								.addGap(19)
 								.addComponent(cboYear, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
 								.addGap(14)
 								.addComponent(txtPartNum, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
 								.addComponent(lblCreated, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-								.addGap(48)
+								.addGap(85)
 								.addComponent(lblCreatedBy, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
-								.addGap(265)
+								.addGap(220)
 								.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
-								.addComponent(txtCreated, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtCreated, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
 								.addGap(35)
 								.addComponent(txtCreatedBy, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-								.addGap(319)
+								.addGap(273)
 								.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
 								.addComponent(lblUpdated, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-								.addGap(48)
+								.addGap(85)
 								.addComponent(lblUpdatedBy, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
-								.addComponent(txtUpdated, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtUpdated, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
 								.addGap(35)
 								.addComponent(txtUpdatedBy, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
