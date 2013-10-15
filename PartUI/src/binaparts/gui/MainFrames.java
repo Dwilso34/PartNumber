@@ -3088,7 +3088,16 @@ public class MainFrames extends JFrame
 		public String generatePartNumber(String Customer, String Year, String curSeq)
 		{
 			String PartNumber = null;
-			
+			if(Year.length() < 2){
+				for(int i = Year.length(); i < 2; i++){
+					Year = "0" + Year;
+				}
+			}
+			if(curSeq.length() < 4){
+				for(int i = curSeq.length(); i < 4; i++){
+					curSeq = "0" + curSeq;
+				}
+			}
 			PartNumber = Customer + Year + curSeq;			
 			return PartNumber;
 		}
