@@ -3499,7 +3499,12 @@ public class MainFrames extends JFrame
 								Customer = (String) cboCustomer.getSelectedItem();
 								Year = (String) cboYear.getSelectedItem();
 								
-								con.insertExperimentalPart(Program, PartDescription, CustPartNumber, Customer, Year);								
+								con.insertExperimentalPart(Program, PartDescription, CustPartNumber, Customer, Year);		
+								
+								JSONObject temp = con.queryReturnExpPart().getJSONObject(0);
+								String EPart = null;
+								EPart = temp.toString();
+								txtPartNum.setText(EPart);
 							}catch(Exception ex){/*Ignore*/};
 						}
 					}
@@ -3682,7 +3687,7 @@ public class MainFrames extends JFrame
 								.addGap(19)
 								.addComponent(cboYear, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
 								.addGap(14)
-								.addComponent(txtPartNum, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE))
+								.addComponent(txtPartNum, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
 								.addComponent(lblCreated, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)

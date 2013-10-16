@@ -142,7 +142,7 @@ public class DBConnect {
 		
 		try{
 			con = getDBConnection();
-			pst = con.prepareStatement("SELECT * FROM users WHERE username = ?");
+			pst = con.prepareStatement("SELECT * FROM `users` WHERE `username` = ?");
 			pst.setString(1, username);
 			ResultSet rs = pst.executeQuery();
 			
@@ -202,7 +202,7 @@ public class DBConnect {
 				con = getDBConnection();
 				con.setAutoCommit(false);
 				
-				pst = con.prepareStatement("INSERT INTO users (username, password, rank) VALUES(?, ?, ?)");
+				pst = con.prepareStatement("INSERT INTO `users` (username, password, rank) VALUES(?, ?, ?)");
 				pst.setString(1, username);
 				pst.setString(2, password);
 				pst.setString(3, rank);
@@ -231,7 +231,7 @@ public class DBConnect {
 				con = getDBConnection();
 				con.setAutoCommit(false);
 				
-				pst = con.prepareStatement("DELETE FROM users WHERE username = ?");
+				pst = con.prepareStatement("DELETE FROM `users` WHERE `username` = ?");
 				pst.setString(1, username);
 				pst.executeUpdate();
 				
@@ -279,7 +279,7 @@ public class DBConnect {
 	public void changeUserPassword(String username, String password) throws Exception{
 		try{
 			con = getDBConnection();				
-			pst = con.prepareStatement("UPDATE `users` SET `password` = ? WHERE username = ?");
+			pst = con.prepareStatement("UPDATE `users` SET `password` = ? WHERE `username` = ?");
 			pst.setString(1, password);
 			pst.setString(2,username);
 			pst.executeUpdate();
@@ -303,7 +303,7 @@ public class DBConnect {
 			try{
 				con = getDBConnection();
 				con.setAutoCommit(false);
-				pst = con.prepareStatement("INSERT INTO programs (Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy) VALUES(?, ? ,?, ?, ?, ?, ?)");
+				pst = con.prepareStatement("INSERT INTO `programs` (Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy) VALUES(?, ? ,?, ?, ?, ?, ?)");
 				pst.setString(1, Customer);
 				pst.setString(2, Cust);
 				pst.setString(3, Program);
@@ -336,7 +336,7 @@ public class DBConnect {
 				con = getDBConnection();
 				con.setAutoCommit(false);
 				
-				pst = con.prepareStatement("DELETE FROM programs WHERE Program = ?");
+				pst = con.prepareStatement("DELETE FROM `programs` WHERE `Program` = ?");
 				pst.setString(1, program);
 				pst.executeUpdate();
 				
@@ -362,7 +362,7 @@ public class DBConnect {
 			try{
 				con = getDBConnection();
 				con.setAutoCommit(false);
-				pst = con.prepareStatement("INSERT INTO customers (Customer, Cust, Created, CreatedBy) VALUES(?, ?, ?, ?)");
+				pst = con.prepareStatement("INSERT INTO `customers` (Customer, Cust, Created, CreatedBy) VALUES(?, ?, ?, ?)");
 				pst.setString(1, newCustomer);
 				pst.setString(2, newCust);
 				pst.setTimestamp(3, created);
@@ -393,7 +393,7 @@ public class DBConnect {
 				con = getDBConnection();
 				con.setAutoCommit(false);
 				
-				pst = con.prepareStatement("DELETE FROM customers WHERE Customer = ?");
+				pst = con.prepareStatement("DELETE FROM `customers` WHERE `Customer` = ?");
 				pst.setString(1, customer);
 				pst.executeUpdate();
 				
@@ -509,7 +509,7 @@ public class DBConnect {
 		
 		try{
 			con = getDBConnection();
-			pst = con.prepareStatement("SELECT * FROM `materials reference` WHERE PartType = ? ORDER BY `PartType`, `Material` ASC");
+			pst = con.prepareStatement("SELECT * FROM `materials reference` WHERE `PartType` = ? ORDER BY `PartType`, `Material` ASC");
 			pst.setInt(1, queryValue);
 			ResultSet rs = pst.executeQuery();
 			
@@ -664,7 +664,7 @@ public class DBConnect {
 			int curSeqNum = (int) queryDatabase("type file", "PartType", partType).getJSONObject(0).get("SeqNumber");
 			int newSeqNum = curSeqNum + 1;
 			con = getDBConnection();
-			pst = con.prepareStatement("UPDATE `type file` SET `SeqNumber` = ? WHERE PartType = ?");
+			pst = con.prepareStatement("UPDATE `type file` SET `SeqNumber` = ? WHERE `PartType` = ?");
 			pst.setInt(1, newSeqNum);
 			pst.setInt(2, partType);
 			pst.executeUpdate();
@@ -785,7 +785,34 @@ public class DBConnect {
 		}
 		return json;
 	}
-	//inserts a new row into `experimental parts2` to create a new part
+	//Returns JSONArray of Experimental Part Numbers for displaying part number
+		public JSONArray queryReturnExpPart() throws Exception{
+			
+			ToJSON converter = new ToJSON();
+			JSONArray json = new JSONArray();
+			
+			try{
+				con = getDBConnection();
+				pst = con.prepareStatement("SELECT `Customer`, + `YearCode`, + `PartNumber` FROM development.`experimental parts2` ORDER BY `PartNumber` DESC LIMIT 1 ");
+				
+				ResultSet rs = pst.executeQuery();
+				
+				if (isResultSetEmpty(rs) == false ){    
+					json = converter.toJSONArray(rs);
+					
+				}
+				pst.close();
+				con.close();
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}finally{
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+			return json;
+		}
+	//inserts a new row into `experimental parts2` to create a new part (used for auto increment conversion)
 	public void insertExperimentalPart2(String Engineer, String Program, String PartDescription,
 			String CustPartNumber, String Customer, String Year, String PartNumber, String Date) throws Exception{	
 		try{
