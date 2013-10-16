@@ -2161,21 +2161,25 @@ public class MainFrames extends JFrame
 		cboUserRank = new JComboBox<Object>(ranks);
 		cboUserRank.addMouseListener(new ContextMenuMouseListener());
 		cboUserRank.setSelectedIndex(-1);
+		cboUserRank.setBackground(Color.white);
 		cboCustomer = new JComboBox<String>();
 		cboCustomer.setModel(resetCustomerComboBox());
 		cboCustomer.setVisible(false);
 		cboCustomer.addMouseListener(new ContextMenuMouseListener());
 		cboCustomer.setSelectedIndex(-1);
+		cboCustomer.setBackground(Color.white);
 		cboDeleteCust = new JComboBox<String>();
 		cboDeleteCust.setModel(resetCustomerComboBox());
 		cboDeleteCust.setVisible(false);
 		cboDeleteCust.addMouseListener(new ContextMenuMouseListener());
 		cboDeleteCust.setSelectedIndex(-1);
+		cboDeleteCust.setBackground(Color.white);
 		cboDeletePro = new JComboBox<String>();
 		cboDeletePro.setModel(resetProgramComboBox());
 		cboDeletePro.setVisible(false);
 		cboDeletePro.addMouseListener(new ContextMenuMouseListener());
 		cboDeletePro.setSelectedIndex(-1);
+		cboDeletePro.setBackground(Color.white);
 		
 	//RadioButton
 		
@@ -2651,7 +2655,7 @@ public class MainFrames extends JFrame
 						try{
 							String program = cboDeletePro.getSelectedItem().toString();
 					if(rbtnAddProgram.isSelected() == true){
-						con.deletePro(program);
+						con.deleteProgram(program);
 					}
 					}catch(Exception ex){/*Ignore*/}
 						cboDeletePro.setSelectedIndex(-1);
@@ -2688,7 +2692,7 @@ public class MainFrames extends JFrame
 							try{
 								String customer = cboDeleteCust.getSelectedItem().toString();
 						if(rbtnAddCustomer.isSelected() == true){
-							con.deleteCust(customer);
+							con.deleteCustomer(customer);
 						}
 						}catch(Exception ex){/*Ignore*/}
 							cboDeleteCust.setSelectedIndex(-1);
