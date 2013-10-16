@@ -838,6 +838,52 @@ public class DBConnect {
 				System.out.println(appUser+" does not have permission to do that!");
 			}
 		}
+	//deletes Customer from customers using customer (admin)
+	public void deleteCust(String Customer) throws Exception{	
+		ConfigurationManager config = new ConfigurationManager(configFilePath);
+		String appUser = config.getProperty("appUser");
+		if(getUserRank().equals("admin")){
+			try{
+				con = getDBConnection();
+				pst = con.prepareStatement("DELETE FROM `customers` WHERE `Customer` = ?");
+				pst.setString(1, Customer);
+				pst.executeUpdate();
+				pst.close();	
+				con.close();
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}finally{
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+		}else{
+			System.out.println(appUser+" does not have permission to do that!");
+		}
+	}
+	//deletes Program from customers using customer (admin)
+		public void deletePro(String Program) throws Exception{	
+			ConfigurationManager config = new ConfigurationManager(configFilePath);
+			String appUser = config.getProperty("appUser");
+			if(getUserRank().equals("admin")){
+				try{
+					con = getDBConnection();
+					pst = con.prepareStatement("DELETE FROM `programs` WHERE `Program` = ?");
+					pst.setString(1, Program);
+					pst.executeUpdate();
+					pst.close();	
+					con.close();
+				}catch(SQLException SQLex){
+					SQLex.printStackTrace();
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}finally{
+					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				}
+			}else{
+				System.out.println(appUser+" does not have permission to do that!");
+			}
+		}
 	//updates Part Information
 	//updates a BosalPartNumber in parts list
 	public void update(String BosalPartNumber, String CusPartNumber, 
