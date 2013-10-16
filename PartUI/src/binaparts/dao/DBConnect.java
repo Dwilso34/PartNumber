@@ -1,7 +1,6 @@
 package binaparts.dao;
 
 import java.sql.*;
-import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -759,8 +758,7 @@ public class DBConnect {
 			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
-		//returns jsonArray of all Part Types (done)
-//Returns JSONArray of Experimental Part Numbers (to be used prior to Auto-Increment for conversion)
+	//Returns JSONArray of Experimental Part Numbers (to be used prior to Auto-Increment for conversion)
 	public JSONArray queryReturnAllExpParts() throws Exception{
 		
 		ToJSON converter = new ToJSON();
@@ -814,7 +812,6 @@ public class DBConnect {
 			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
-	//deletes a row from `parts list` using BosalPartNumber (admin)
 	//deletes a BosalPartNumber from parts list 
 	public void deletePart(String BosalPartNumber) throws Exception{	
 			ConfigurationManager config = new ConfigurationManager(configFilePath);
@@ -862,7 +859,7 @@ public class DBConnect {
 		}
 	}
 	//deletes Program from customers using customer (admin)
-		public void deletePro(String Program) throws Exception{	
+	public void deletePro(String Program) throws Exception{	
 			ConfigurationManager config = new ConfigurationManager(configFilePath);
 			String appUser = config.getProperty("appUser");
 			if(getUserRank().equals("admin")){
@@ -884,7 +881,6 @@ public class DBConnect {
 				System.out.println(appUser+" does not have permission to do that!");
 			}
 		}
-	//updates Part Information
 	//updates a BosalPartNumber in parts list
 	public void update(String BosalPartNumber, String CusPartNumber, 
 			String SupPartNumber, String Description, String program, 
