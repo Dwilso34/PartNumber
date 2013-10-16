@@ -1,7 +1,6 @@
 package binaparts.dao;
 
 import java.sql.*;
-import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -125,8 +124,6 @@ public class DBConnect {
 	//returns a Timestamp object of the current timestamp
 	public LocalDate getDate(){
 		LocalDate date = new LocalDate();
-		String text = date.toString("dd/MM/yyyy", Locale.US);
-		System.out.println(text);
 		return date;
 	}
 	//returns username based on specific applications config settings 
@@ -619,7 +616,7 @@ public class DBConnect {
 				con = getDBConnection();
 				pst = con.prepareStatement("SELECT DISTINCT `Customer`, `Cust` from `customers` ORDER BY `Customer` ASC");
 				
-				ResultSet rs = pst.executeQuery();
+				rs = pst.executeQuery();
 				
 				if (isResultSetEmpty(rs) == false ){    
 					json = converter.toJSONArray(rs);
@@ -645,7 +642,7 @@ public class DBConnect {
 				con = getDBConnection();
 				pst = con.prepareStatement("SELECT * from `description list` ORDER BY `Name` ASC");
 				
-				ResultSet rs = pst.executeQuery();
+				rs = pst.executeQuery();
 				
 				if (isResultSetEmpty(rs) == false){    
 					json = converter.toJSONArray(rs);
@@ -723,8 +720,9 @@ public class DBConnect {
 	public void insertExperimentalPart(String Program, String PartDescription,
 			String CustPartNumber, String Customer, String Year) throws Exception{	
 		try{
-			con = getDBConnection();
-			pst = con.prepareStatement("INSERT INTO `experimental parts` (Engineer, Program, PartDescription,"
+			getDBConnection();
+			String PartNumber = "";
+			pst = con.prepareStatement("INSERT INTO `experimental parts2` (Engineer, Program, PartDescription,"
 					+ "CustPartNumber, Customer, YearCode, PartNumber, Date) "
 										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
 			pst.setString(1, getUser());
@@ -733,8 +731,76 @@ public class DBConnect {
 			pst.setString(4, CustPartNumber);
 			pst.setString(5, Customer);
 			pst.setString(6, Year);
-			pst.setString(7, "something");
-			pst.setTimestamp(8, getTimestamp());
+			pst.setString(7, PartNumber);
+			pst.setString(8, getDate().toString());
+			pst.executeUpdate();
+			rs = pst.executeQuery("SELECT LAST_INSERT_ID()");
+			int lastID = 0;
+			while(rs.next()){
+				//System.out.println(rs.getInt(1));
+				lastID = rs.getInt(1);
+			}
+			//System.out.println("LastID used: " + lastID);
+			PartNumber = String.valueOf(lastID + 1328);
+			//System.out.println("The New PartNumber is: " + PartNumber);
+			pst = con.prepareStatement("UPDATE `experimental parts2` SET `PartNumber` = ? WHERE `Index` = ?");
+			pst.setString(1, PartNumber);
+			pst.setInt(2, lastID);
+			pst.executeUpdate();
+			System.out.println("SUCCESS!!!!!");
+			pst.close();
+			con.close();
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
+	}
+	//Returns JSONArray of Experimental Part Numbers (to be used prior to Auto-Increment for conversion)
+	public JSONArray queryReturnAllExpParts() throws Exception{
+		
+		ToJSON converter = new ToJSON();
+		JSONArray json = new JSONArray();
+		
+		try{
+			con = getDBConnection();
+			pst = con.prepareStatement("SELECT * FROM `experimental parts`");
+			
+			ResultSet rs = pst.executeQuery();
+			
+			if (isResultSetEmpty(rs) == false ){    
+				json = converter.toJSONArray(rs);
+				
+			}
+			pst.close();
+			con.close();
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
+		return json;
+	}
+	//inserts a new row into `experimental parts2` to create a new part
+	public void insertExperimentalPart2(String Engineer, String Program, String PartDescription,
+			String CustPartNumber, String Customer, String Year, String PartNumber, String Date) throws Exception{	
+		try{
+			con = getDBConnection();
+			pst = con.prepareStatement("INSERT INTO `experimental parts2` (Engineer, Program, PartDescription,"
+					+ "CustPartNumber, Customer, YearCode, PartNumber, Date) "
+										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+			pst.setString(1, Engineer);
+			pst.setString(2, Program);
+			pst.setString(3, PartDescription);
+			pst.setString(4, CustPartNumber);
+			pst.setString(5, Customer);
+			pst.setString(6, Year);
+			pst.setString(7, PartNumber);
+			pst.setString(8, Date);
 			pst.executeUpdate();
 			pst.close();
 			con.close();
@@ -746,7 +812,7 @@ public class DBConnect {
 			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
-	//deletes a row from `parts list` using BosalPartNumber (admin)
+	//deletes a BosalPartNumber from parts list 
 	public void deletePart(String BosalPartNumber) throws Exception{	
 			ConfigurationManager config = new ConfigurationManager(configFilePath);
 			String appUser = config.getProperty("appUser");
@@ -769,7 +835,53 @@ public class DBConnect {
 				System.out.println(appUser+" does not have permission to do that!");
 			}
 		}
-	//updates Part Information
+	//deletes Customer from customers using customer (admin)
+	public void deleteCust(String Customer) throws Exception{	
+		ConfigurationManager config = new ConfigurationManager(configFilePath);
+		String appUser = config.getProperty("appUser");
+		if(getUserRank().equals("admin")){
+			try{
+				con = getDBConnection();
+				pst = con.prepareStatement("DELETE FROM `customers` WHERE `Customer` = ?");
+				pst.setString(1, Customer);
+				pst.executeUpdate();
+				pst.close();	
+				con.close();
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}finally{
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+		}else{
+			System.out.println(appUser+" does not have permission to do that!");
+		}
+	}
+	//deletes Program from customers using customer (admin)
+	public void deletePro(String Program) throws Exception{	
+			ConfigurationManager config = new ConfigurationManager(configFilePath);
+			String appUser = config.getProperty("appUser");
+			if(getUserRank().equals("admin")){
+				try{
+					con = getDBConnection();
+					pst = con.prepareStatement("DELETE FROM `programs` WHERE `Program` = ?");
+					pst.setString(1, Program);
+					pst.executeUpdate();
+					pst.close();	
+					con.close();
+				}catch(SQLException SQLex){
+					SQLex.printStackTrace();
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}finally{
+					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				}
+			}else{
+				System.out.println(appUser+" does not have permission to do that!");
+			}
+		}
+	//updates a BosalPartNumber in parts list
 	public void update(String BosalPartNumber, String CusPartNumber, 
 			String SupPartNumber, String Description, String program, 
 			String DrawingNumber, int Rev) throws Exception{
