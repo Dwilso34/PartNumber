@@ -166,7 +166,7 @@ public class MainFrames extends JFrame
 				{
 					if (e.getSource() == btnExperimental) {
 						setVisible(false);
-						frame.setSize(837,470);
+						frame.setSize(825,415);
 						frame.setTitle("Experimental Parts:");
 						frame.setResizable(false);
 						frame.setLocationRelativeTo(main);
