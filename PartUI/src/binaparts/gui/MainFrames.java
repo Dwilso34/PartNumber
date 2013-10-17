@@ -3294,7 +3294,7 @@ public class MainFrames extends JFrame
 			setBackground(new Color(105, 105, 105));
 			try {
 				config = new ConfigurationManager(configFilePath);
-				JSONArray temp = con.queryReturnAllExpParts();
+				/*JSONArray temp = con.queryReturnAllExpParts();
 				System.out.println(temp.length());
 				for(int i = 0; i < temp.length(); i++){
 					System.out.println(temp.getJSONObject(i).toString());
@@ -3318,7 +3318,7 @@ public class MainFrames extends JFrame
 					
 					con.insertExperimentalPart2(Engineer, Program, PartDescription, CustPartNumber,
 							Customer, Year, PartNumber, Date);
-				}
+				}*/
 			}catch(Exception ex){ex.printStackTrace();}
 			
 			//JLabels
