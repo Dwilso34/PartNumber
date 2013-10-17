@@ -3476,14 +3476,10 @@ public class MainFrames extends JFrame
 									CustPartNumber = txtCustomerPartNum.getText();
 									Customer = (String) cboCustomer.getSelectedItem();
 									Year = (String) cboYear.getSelectedItem();
-									
 									con.insertExperimentalPart(Program, PartDescription, CustPartNumber, Customer, Year);		
 									JSONArray temp = con.queryReturnExpPart();
-									
 									EPart = temp.getJSONObject(0).get("PartNumber").toString();
-									
 									txtPartNum.setText(generatePartNumber(Customer, Year, EPart));
-									
 								}catch(Exception ex){/*Ignore*/};
 							}
 						}
