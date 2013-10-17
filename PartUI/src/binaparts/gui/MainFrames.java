@@ -2815,13 +2815,12 @@ public class MainFrames extends JFrame
 						}
 							if(n == 0){
 								try{
-									String username = txtUsername.getText();
-									String password = (new String(txtPassword.getPassword()));
-									String confirmPassword = (new String(txtConfirmPassword.getPassword()));
-									String rank = cboUserRank.getSelectedItem().toString();
-									
 									if(rbtnCreateUser.isSelected() == true){
+										String confirmPassword = (new String(txtConfirmPassword.getPassword()));
+										String password = (new String(txtPassword.getPassword()));
+										String username = txtUsername.getText();
 										if(comparePasswords(password, confirmPassword) == true){
+											String rank = cboUserRank.getSelectedItem().toString();
 											con.createUser(username, password, rank);
 										}else{
 											JOptionPane.showMessageDialog(
@@ -2849,9 +2848,14 @@ public class MainFrames extends JFrame
 										con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy);
 									}
 									if(rbtnChangeUserRank.isSelected() == true){
+										String rank = cboUserRank.getSelectedItem().toString();
+										String username = txtUsername.getText();
 										con.changeUserRank(username, rank);
 									}
 									if(rbtnChangePass.isSelected() == true){
+										String confirmPassword = (new String(txtConfirmPassword.getPassword()));
+										String password = (new String(txtPassword.getPassword()));
+										String username = txtUsername.getText();
 										if(comparePasswords(password, confirmPassword) == true){
 											con.changeUserPassword(username, password);
 										}else{
