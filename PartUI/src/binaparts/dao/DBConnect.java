@@ -132,6 +132,38 @@ public class DBConnect {
 		String username = config.getProperty("appUser");
 		return username;
 	}
+	//returns users Real name based on specific applications config settings 
+	public String getUsersName() throws Exception{
+		
+		ConfigurationManager config = new ConfigurationManager(configFilePath);
+		String username = config.getProperty("appUser");
+		String usersName = null;
+		String first = null;
+		String last = null;
+		
+		try{
+			getDBConnection();
+			pst = con.prepareStatement("SELECT * FROM `users` WHERE `username` = ?");
+			pst.setString(1, username);
+			ResultSet rs = pst.executeQuery();
+			
+			while(rs.next()){
+				first = rs.getString("firstName");
+				last = rs.getString("lastName");
+			}
+			usersName = first + " " + last;
+			pst.close();
+			rs.close();
+			con.close();
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
+		return usersName;
+	}
 	//returns the rank of the user defined in ConnectionProperties (done)
 	public String getUserRank() throws Exception{
 		
@@ -697,9 +729,9 @@ public class DBConnect {
 			pst.setString(9, typeDescription);
 			pst.setString(10, DrawingNumber);
 			pst.setInt(11, Rev);
-			pst.setString(12, getUser());
+			pst.setString(12, getUsersName());
 			pst.setTimestamp(13, getTimestamp());
-			pst.setString(14, getUser());
+			pst.setString(14, getUsersName());
 			pst.setTimestamp(15, getTimestamp());
 			pst.executeUpdate();
 			pst.close();
