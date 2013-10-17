@@ -3611,7 +3611,8 @@ public class MainFrames extends JFrame
 							try{
 								part = temp.get("PartNumber").toString();
 							}catch(Exception ex){part = "-";}
-							txtPartNum.setText(part);
+							
+							txtPartNum.setText(generatePartNumber(cust, year, part));
 							
 						}catch(Exception ex){
 							JOptionPane.showMessageDialog(
@@ -3687,7 +3688,7 @@ public class MainFrames extends JFrame
 								.addGap(19)
 								.addComponent(cboYear, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
 								.addGap(14)
-								.addComponent(txtPartNum, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+								.addComponent(txtPartNum, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(61)
 								.addComponent(lblCreated, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
