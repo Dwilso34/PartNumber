@@ -464,7 +464,6 @@ public class MainFrames extends JFrame
 		}
 	//StringPanel	
 		
-		@SuppressWarnings("unchecked")
 		public CreatePanel(final JPanel create)
 		{
 		
@@ -544,7 +543,6 @@ public class MainFrames extends JFrame
 			cboDescrip.setSelectedIndex(-1);
 			
 			ItemListener comboBoxSelectionListener = (new ItemListener(){	
-				@SuppressWarnings("rawtypes")
 				public void itemStateChanged(ItemEvent e)
 				{
 					if(e.getSource().equals(cboType)){
@@ -555,8 +553,8 @@ public class MainFrames extends JFrame
 							JSONArray temp3 = new JSONArray();
 							String[] mats = null;
 							String[] descrip = null;
-							ComboBoxModel matComboBoxModel = null;
-							ComboBoxModel descripComboBoxModel = null;
+							ComboBoxModel<String> matComboBoxModel = null;
+							ComboBoxModel<String> descripComboBoxModel = null;
 							
 							try{
 								temp1 = con.queryDatabase("type file", "PartType", partType);
@@ -573,8 +571,8 @@ public class MainFrames extends JFrame
 								for(int i = 0; i < temp3.length(); i++){
 									descrip[i] = temp3.getJSONObject(i).get("Name").toString();
 								}
-								matComboBoxModel =  (new DefaultComboBoxModel (mats));
-								descripComboBoxModel = (new DefaultComboBoxModel(descrip));
+								matComboBoxModel =  (new DefaultComboBoxModel<String> (mats));
+								descripComboBoxModel = (new DefaultComboBoxModel<String> (descrip));
 							}catch(Exception ex){/*ignore*/}
 							txtMDescrip.setText("");
 							txtBPart.setText("");
@@ -648,10 +646,6 @@ public class MainFrames extends JFrame
 								String Program = txtProgram.getText();
 								String DrawingNumber = txtDrawingNum.getText();
 								int Rev = 0;
-								//String CreatedBy = con.getUser();
-								//Timestamp Created = con.getTimestamp();
-								//Timestamp Updated = con.getTimestamp();
-								//String UpdatedBy =  con.getUser();
 								con.insertNewPart(partType, mat, BosalPartNumber, CustomerPartNumber, 
 										SupplierPartNumber, Description, Program, seq, typeDescription,
 										DrawingNumber, Rev);
