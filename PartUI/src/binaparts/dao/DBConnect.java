@@ -329,36 +329,30 @@ public class DBConnect {
 	}
 	//create a program and add to database (Requires admin)
 	public void createProgram(String Customer, String Cust, String Program, String programStart, String programEnd) throws Exception{
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String appUser = config.getProperty("appUser");
-		if(getUserRank().equals("admin")){
-			try{
-				getDBConnection();
-				Timestamp Created = getTimestamp();
-				String CreatedBy = getUsersName();
-				con.setAutoCommit(false);
-				pst = con.prepareStatement("INSERT INTO `programs` (Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy) VALUES(?, ? ,?, ?, ?, ?, ?)");
-				pst.setString(1, Customer);
-				pst.setString(2, Cust);
-				pst.setString(3, Program);
-				pst.setString(4, programStart);
-				pst.setString(5, programEnd);
-				pst.setTimestamp(6, Created);
-				pst.setString(7, CreatedBy);
-				pst.executeUpdate();
-					  
-				con.commit();
-				con.setAutoCommit(true);
-			}catch(SQLException SQLex){
-				SQLex.printStackTrace();
-			}catch (Exception ex) {
-		        ex.printStackTrace();	
-			}finally{
-				
-				try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
-			}
-		}else{
-			System.out.println(appUser+" does not have permission to do that!");
+		try{
+			Timestamp Created = getTimestamp();
+			String CreatedBy = getUsersName();
+			getDBConnection();
+			con.setAutoCommit(false);
+			pst = con.prepareStatement("INSERT INTO `programs` (Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy) VALUES(?, ? ,?, ?, ?, ?, ?)");
+			pst.setString(1, Customer);
+			pst.setString(2, Cust);
+			pst.setString(3, Program);
+			pst.setString(4, programStart);
+			pst.setString(5, programEnd);
+			pst.setTimestamp(6, Created);
+			pst.setString(7, CreatedBy);
+			pst.executeUpdate();
+				  
+			con.commit();
+			con.setAutoCommit(true);
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch (Exception ex) {
+	        ex.printStackTrace();	
+		}finally{
+			
+			try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
 	//delete a user from database (Requires admin)
@@ -390,35 +384,29 @@ public class DBConnect {
 	}
 	//create a customer and add it to the database (Requires admin)
 	public void createCustomer(String newCustomer, String newCust) throws Exception{
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String appUser = config.getProperty("appUser");
-		if(getUserRank().equals("admin")){
-			try{
-				getDBConnection();
-				Timestamp Created = getTimestamp();
-				String CreatedBy = getUsersName();
-				con.setAutoCommit(false);
-				pst = con.prepareStatement("INSERT INTO `customers` (Customer, Cust, Created, CreatedBy) VALUES(?, ?, ?, ?)");
-				pst.setString(1, newCustomer);
-				pst.setString(2, newCust);
-				pst.setTimestamp(3, Created);
-				pst.setString(4, CreatedBy);
-				pst.executeUpdate();
-					  
-				con.commit();
-				con.setAutoCommit(true);
-				con.close();
-			}catch(SQLException SQLex){
-				SQLex.printStackTrace();
-			}catch (Exception ex) {
-		        ex.printStackTrace();	
-			}finally{
-				
-				try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
-			}
-		}else{
-			System.out.println(appUser+" does not have permission to do that!");
-		}
+		try{
+			Timestamp Created = getTimestamp();
+			String CreatedBy = getUsersName();
+			getDBConnection();
+			con.setAutoCommit(false);
+			pst = con.prepareStatement("INSERT INTO `customers` (Customer, Cust, Created, CreatedBy) VALUES(?, ?, ?, ?)");
+			pst.setString(1, newCustomer);
+			pst.setString(2, newCust);
+			pst.setTimestamp(3, Created);
+			pst.setString(4, CreatedBy);
+			pst.executeUpdate();
+				  
+			con.commit();
+			con.setAutoCommit(true);
+			con.close();
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch (Exception ex) {
+	        ex.printStackTrace();	
+		}finally{
+			
+			try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}		
 	}
 	//delete a user from database (Requires admin)
 	public void deleteCustomer(String customer) throws Exception{
