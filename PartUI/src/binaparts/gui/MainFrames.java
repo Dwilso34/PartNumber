@@ -3492,6 +3492,7 @@ public class MainFrames extends JFrame
 								String CustPartNumber =  null;
 								String Customer = null;
 								String Year = null;
+								String EPart = null;
 								
 								Program = (String) cboProgram.getSelectedItem();
 								PartDescription = (String) cboPartDescrip.getSelectedItem();
@@ -3500,11 +3501,12 @@ public class MainFrames extends JFrame
 								Year = (String) cboYear.getSelectedItem();
 								
 								con.insertExperimentalPart(Program, PartDescription, CustPartNumber, Customer, Year);		
+								JSONArray temp = con.queryReturnExpPart();
 								
-								JSONObject temp = con.queryReturnExpPart().getJSONObject(0);
-								String EPart = null;
-								EPart = temp.toString();
-								txtPartNum.setText(EPart);
+								EPart = temp.getJSONObject(0).get("PartNumber").toString();
+								
+								txtPartNum.setText(generatePartNumber(Customer, Year, EPart));
+								
 							}catch(Exception ex){/*Ignore*/};
 						}
 					}
