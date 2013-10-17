@@ -3263,7 +3263,7 @@ public class MainFrames extends JFrame
 								types[i] = temp1.getJSONObject(i).getString("Cust").toString();
 					}
 					custComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-				}catch(Exception ex){/*Ignore*/}
+				}catch(Exception ex){ex.printStackTrace();/*Ignore*/}
 				return custComboBoxDefault;
 			}
 			private JComboBox<?> cboYear;
@@ -3300,7 +3300,7 @@ public class MainFrames extends JFrame
 			setBackground(new Color(105, 105, 105));
 			try {
 				config = new ConfigurationManager(configFilePath);
-				/*JSONArray temp = con.queryReturnAllExpParts();
+				JSONArray temp = con.queryReturnAllExpParts();
 				System.out.println(temp.length());
 				for(int i = 0; i < temp.length(); i++){
 					System.out.println(temp.getJSONObject(i).toString());
@@ -3312,127 +3312,7 @@ public class MainFrames extends JFrame
 					String Year = null;
 					String PartNumber = null;
 					String Date = null;
-=======
-				}					
-			});
-						
-			ImageIcon check= new ImageIcon(getClass().getResource("/images/check.jpg"));
-			btnCheck = new JButton(check);
-			btnCheck.addActionListener(new ActionListener() {
-				
-				public void actionPerformed(ActionEvent e) 
-				{
-					if (e.getSource() == btnCheck) {
-						con = new DBConnect();
-						final String findBosalText = txtSearchPart.getText();
-						
-						try{
-							JSONObject temp = (con.queryDatabase("experimental parts", "PartNumber", findBosalText)).getJSONObject(0);
-							String cpartText = null;
-						
-							//set text for CustPartNumber JTextField
-							try{
-								cpartText = temp.get("CustPartNumber").toString();
-							}catch(Exception ex){cpartText = "-";}
-							txtCustomerPartNum.setText(cpartText);
-							
-							//set text for Description JComboBox
-							String descrip = null;
-							try{
-								descrip = temp.get("PartDescription").toString();
-							}catch(Exception ex){descrip = "-";}
-							cboPartDescrip.setSelectedItem(descrip);
-							
-							//set text for Program JComboBox
-							String program = null;
-							try{
-								program = temp.get("Program").toString();
-							}catch(Exception ex){program = "-";}
-							cboProgram.setSelectedItem(program);
-							
-							//set text for Customer JComboBox
-							String cust = null;
-							try{
-								cust = temp.get("Customer").toString();
-							}catch(Exception ex){cust = "-";}
-							cboCustomer.setSelectedItem(cust);
-							
-							//set text for Year JComboBox
-							String year = null;
-							try{
-								year = temp.getString("YearCode").toString();
-							}catch(Exception ex){year = "-";}
-							cboYear.setSelectedItem(year);
-							
-							//set text for Created JTextField
-							String created = null;
-							try{
-								created = temp.get("Date").toString();
-							}catch(Exception ex){created = "-";}
-							txtCreated.setText(created);
-							
-							//set text for CreatedBy JTextField
-							String createdBy = null;
-							try{
-								createdBy = temp.get("Engineer").toString();
-							}catch(Exception ex){createdBy = "-";}
-							txtCreatedBy.setText(createdBy);
-							
-							//set text for Part Number JTextField
-							String part = null;
-							try{
-								part = temp.get("PartNumber").toString();
-							}catch(Exception ex){part = "-";}
-							
-							txtPartNum.setText(generatePartNumber(cust, year, part));
-							
-						}catch(Exception ex){
-							JOptionPane.showMessageDialog(
-									    frame,
-									    "Bosal Part Number: " + findBosalText + " does not exist",
-									    "Missing Part Number",
-										JOptionPane.ERROR_MESSAGE);
-							
-						}
-		
-					}
-				}					
-			});
-				
-						
-		setupPanel();
-		ButtonGroup group = new ButtonGroup();
-		group.add(rbtnCreate);
-		group.add(rbtnSearch);
-	}
-	
-		private void setupPanel()
-				{
-					lblCreated.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblCreated.setForeground(Color.BLACK);
-					lblCreatedBy.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblCreatedBy.setForeground(Color.BLACK);
-					lblUpdated.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblUpdated.setForeground(Color.BLACK);
-					lblUpdatedBy.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblUpdatedBy.setForeground(Color.BLACK);
-					lblProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblProgram.setForeground(Color.BLACK);
-					lblPartDescrip.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblPartDescrip.setForeground(Color.BLACK);
-					lblCustomerPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblCustomerPartNum.setForeground(Color.BLACK);
-					lblCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblCustomer.setForeground(Color.BLACK);
-					lblYear.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblYear.setForeground(Color.BLACK);
-					lblSearchPart.setFont(new Font("Tahoma", Font.BOLD, 14));
-					lblSearchPart.setForeground(Color.BLACK);
-					lblExperimental.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
-					lblExperimental.setForeground(Color.BLACK);
->>>>>>> branch 'Development' of https://github.com/Dwilso34/PartNumber.git
-					
-<<<<<<< HEAD
+
 					Engineer = temp.getJSONObject(i).get("Engineer").toString();
 					Program = temp.getJSONObject(i).get("Program").toString();
 					PartDescription = temp.getJSONObject(i).get("PartDescription").toString();
@@ -3444,7 +3324,7 @@ public class MainFrames extends JFrame
 					
 					con.insertExperimentalPart2(Engineer, Program, PartDescription, CustPartNumber,
 							Customer, Year, PartNumber, Date);
-				}*/
+				}
 			}catch(Exception ex){ex.printStackTrace();}
 			
 			//JLabels
