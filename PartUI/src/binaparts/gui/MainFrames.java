@@ -2813,9 +2813,11 @@ public class MainFrames extends JFrame
 										String confirmPassword = (new String(txtConfirmPassword.getPassword()));
 										String password = (new String(txtPassword.getPassword()));
 										String username = txtUsername.getText();
+										String firstName = null;
+										String lastName = null;
 										if(comparePasswords(password, confirmPassword) == true){
 											String rank = cboUserRank.getSelectedItem().toString();
-											con.createUser(username, password, rank);
+											con.createUser(username, password, rank, firstName, lastName);
 										}else{
 											JOptionPane.showMessageDialog(
 												    frame,
@@ -2827,19 +2829,15 @@ public class MainFrames extends JFrame
 									if(rbtnAddCustomer.isSelected() == true){
 										String newCust = txtCust.getText();
 										String newCustomer = txtAddCusPro.getText();
-										String CreatedBy = con.getUser();
-										Timestamp Created = con.getTimestamp();
-										con.createCustomer(newCustomer, newCust, Created, CreatedBy);
+										con.createCustomer(newCustomer, newCust);
 									}
 									if(rbtnAddProgram.isSelected() == true){
 										String Program = txtAddCusPro.getText();
 										String Customer = cboCustomer.getSelectedItem().toString();
 										String ProgramStart = txtProStart.getText();
 										String ProgramEnd = txtProEnd.getText();
-										String CreatedBy = con.getUser();
-										Timestamp Created = con.getTimestamp();
 										String Cust = con.queryDatabase("customers", "Customer", Customer).getJSONObject(0).getString("Cust").toString();
-										con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy);
+										con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd);
 									}
 									if(rbtnChangeUserRank.isSelected() == true){
 										String rank = cboUserRank.getSelectedItem().toString();

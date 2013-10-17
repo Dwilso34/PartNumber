@@ -225,7 +225,8 @@ public class DBConnect {
 	return userCheck;
 	}
 	//create a user and add to database (Requires admin)
-	public void createUser(String username, String password, String rank) throws Exception{
+	public void createUser(String username, String password, String rank, 
+			String firstName, String lastName) throws Exception{
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
@@ -233,10 +234,12 @@ public class DBConnect {
 				getDBConnection();
 				con.setAutoCommit(false);
 				
-				pst = con.prepareStatement("INSERT INTO `users` (username, password, rank) VALUES(?, ?, ?)");
+				pst = con.prepareStatement("INSERT INTO `users` (username, password, rank, firstName, lastName) VALUES(?, ?, ?, ?, ?)");
 				pst.setString(1, username);
 				pst.setString(2, password);
 				pst.setString(3, rank);
+				pst.setString(4, firstName);
+				pst.setString(5, lastName);
 				pst.executeUpdate();
 				
 				con.commit();
@@ -325,12 +328,14 @@ public class DBConnect {
 		}
 	}
 	//create a program and add to database (Requires admin)
-	public void createProgram(String Customer, String Cust, String Program, String programStart, String programEnd, Timestamp Created, String CreatedBy) throws Exception{
+	public void createProgram(String Customer, String Cust, String Program, String programStart, String programEnd) throws Exception{
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
 				getDBConnection();
+				Timestamp Created = getTimestamp();
+				String CreatedBy = getUsersName();
 				con.setAutoCommit(false);
 				pst = con.prepareStatement("INSERT INTO `programs` (Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy) VALUES(?, ? ,?, ?, ?, ?, ?)");
 				pst.setString(1, Customer);
@@ -384,18 +389,20 @@ public class DBConnect {
 		}
 	}
 	//create a customer and add it to the database (Requires admin)
-	public void createCustomer(String newCustomer, String newCust, Timestamp created, String createdBy) throws Exception{
+	public void createCustomer(String newCustomer, String newCust) throws Exception{
 		ConfigurationManager config = new ConfigurationManager(configFilePath);
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
 				getDBConnection();
+				Timestamp Created = getTimestamp();
+				String CreatedBy = getUsersName();
 				con.setAutoCommit(false);
 				pst = con.prepareStatement("INSERT INTO `customers` (Customer, Cust, Created, CreatedBy) VALUES(?, ?, ?, ?)");
 				pst.setString(1, newCustomer);
 				pst.setString(2, newCust);
-				pst.setTimestamp(3, created);
-				pst.setString(4, createdBy);
+				pst.setTimestamp(3, Created);
+				pst.setString(4, CreatedBy);
 				pst.executeUpdate();
 					  
 				con.commit();
@@ -913,7 +920,7 @@ public class DBConnect {
 				pst.setString(4,  program);
 				pst.setString(5, DrawingNumber);
 				pst.setInt(6, Rev+1);
-				pst.setString(7, getUser());
+				pst.setString(7, getUsersName());
 				pst.setTimestamp(8, getTimestamp());
 				pst.setString(9, BosalPartNumber);
 				pst.executeUpdate();
