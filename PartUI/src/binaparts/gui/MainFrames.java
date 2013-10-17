@@ -3359,31 +3359,6 @@ public class MainFrames extends JFrame
 			setBackground(new Color(105, 105, 105));
 			try {
 				config = new ConfigurationManager(configFilePath);
-				/*JSONArray temp = con.queryReturnAllExpParts();
-				System.out.println(temp.length());
-				for(int i = 0; i < temp.length(); i++){
-					System.out.println(temp.getJSONObject(i).toString());
-					String Engineer = null;
-					String Program = null;
-					String PartDescription = null;
-					String CustPartNumber = null;
-					String Customer = null;
-					String Year = null;
-					String PartNumber = null;
-					String Date = null;
-
-					Engineer = temp.getJSONObject(i).get("Engineer").toString();
-					Program = temp.getJSONObject(i).get("Program").toString();
-					PartDescription = temp.getJSONObject(i).get("PartDescription").toString();
-					CustPartNumber = temp.getJSONObject(i).get("CustPartNumber").toString();
-					Customer = temp.getJSONObject(i).get("Customer").toString();
-					Year = temp.getJSONObject(i).get("YearCode").toString();
-					PartNumber = temp.getJSONObject(i).get("PartNumber").toString();
-					Date = temp.getJSONObject(i).get("Date").toString();
-					
-					con.insertExperimentalPart2(Engineer, Program, PartDescription, CustPartNumber,
-							Customer, Year, PartNumber, Date);
-				}*/
 			}catch(Exception ex){ex.printStackTrace();}
 			
 			//JLabels

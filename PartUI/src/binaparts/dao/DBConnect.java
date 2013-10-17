@@ -758,7 +758,7 @@ public class DBConnect {
 		try{
 			getDBConnection();
 			String PartNumber = "";
-			pst = con.prepareStatement("INSERT INTO `experimental parts2` (Engineer, Program, PartDescription,"
+			pst = con.prepareStatement("INSERT INTO `experimental parts` (Engineer, Program, PartDescription,"
 					+ "CustPartNumber, Customer, YearCode, PartNumber, Date) "
 										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
 			pst.setString(1, getUser());
@@ -773,17 +773,13 @@ public class DBConnect {
 			rs = pst.executeQuery("SELECT LAST_INSERT_ID()");
 			int lastID = 0;
 			while(rs.next()){
-				//System.out.println(rs.getInt(1));
 				lastID = rs.getInt(1);
 			}
-			//System.out.println("LastID used: " + lastID);
 			PartNumber = String.valueOf(lastID + 1328);
-			//System.out.println("The New PartNumber is: " + PartNumber);
-			pst = con.prepareStatement("UPDATE `experimental parts2` SET `PartNumber` = ? WHERE `Index` = ?");
+			pst = con.prepareStatement("UPDATE `experimental parts` SET `PartNumber` = ? WHERE `Index` = ?");
 			pst.setString(1, PartNumber);
 			pst.setInt(2, lastID);
 			pst.executeUpdate();
-			System.out.println("SUCCESS!!!!!");
 			pst.close();
 			con.close();
 		}catch(SQLException SQLex){
@@ -848,33 +844,6 @@ public class DBConnect {
 			}
 			return json;
 		}
-	//inserts a new row into `experimental parts2` to create a new part (used for auto increment conversion)
-	public void insertExperimentalPart2(String Engineer, String Program, String PartDescription,
-			String CustPartNumber, String Customer, String Year, String PartNumber, String Date) throws Exception{	
-		try{
-			getDBConnection();
-			pst = con.prepareStatement("INSERT INTO `experimental parts2` (Engineer, Program, PartDescription,"
-					+ "CustPartNumber, Customer, YearCode, PartNumber, Date) "
-										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
-			pst.setString(1, Engineer);
-			pst.setString(2, Program);
-			pst.setString(3, PartDescription);
-			pst.setString(4, CustPartNumber);
-			pst.setString(5, Customer);
-			pst.setString(6, Year);
-			pst.setString(7, PartNumber);
-			pst.setString(8, Date);
-			pst.executeUpdate();
-			pst.close();
-			con.close();
-		}catch(SQLException SQLex){
-			SQLex.printStackTrace();
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}finally{
-			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-		}
-	}
 	//deletes a BosalPartNumber from parts list 
 	public void deletePart(String BosalPartNumber) throws Exception{	
 			ConfigurationManager config = new ConfigurationManager(configFilePath);
