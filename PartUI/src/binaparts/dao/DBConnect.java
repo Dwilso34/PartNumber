@@ -37,7 +37,7 @@ public class DBConnect {
 	//returns a String[] of parts list table's column names
 	public String[] getColumnNames(String table, String column, String queryValue){
 		try{		
-			con = getDBConnection();
+			getDBConnection();
 			if (column.equals("All")){
 				pst = con.prepareStatement("SELECT * FROM `"+table+"`");
 			}else{
@@ -69,7 +69,7 @@ public class DBConnect {
 	public int getRowCount(String table, String column, String queryValue) throws Exception{
 		int rowCount = 0;
 		try{		
-			con = getDBConnection();
+			getDBConnection();
 			if (column.equals("All")){
 				pst = con.prepareStatement("SELECT * FROM `"+table+"`");
 			}else{
@@ -118,7 +118,6 @@ public class DBConnect {
 	public Timestamp getTimestamp(){
 		java.util.Date date = new java.util.Date();
 		Timestamp curTimestamp = new Timestamp(date.getTime());
-		System.out.println(curTimestamp);
 		return curTimestamp;
 	}
 	//returns a Timestamp object of the current timestamp
@@ -141,7 +140,7 @@ public class DBConnect {
 		String rk = null;
 		
 		try{
-			con = getDBConnection();
+			getDBConnection();
 			pst = con.prepareStatement("SELECT * FROM `users` WHERE `username` = ?");
 			pst.setString(1, username);
 			ResultSet rs = pst.executeQuery();
@@ -169,7 +168,7 @@ public class DBConnect {
 		String password = config.getProperty("appPassword");
 		boolean userCheck = false;
 		try{
-			con = getDBConnection();
+			getDBConnection();
 			JSONObject temp = queryDatabase("users", "username", username).getJSONObject(0);
 			con.close();
 			String un = null;
@@ -199,7 +198,7 @@ public class DBConnect {
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				con.setAutoCommit(false);
 				
 				pst = con.prepareStatement("INSERT INTO `users` (username, password, rank) VALUES(?, ?, ?)");
@@ -228,7 +227,7 @@ public class DBConnect {
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				con.setAutoCommit(false);
 				
 				pst = con.prepareStatement("DELETE FROM `users` WHERE `username` = ?");
@@ -255,12 +254,11 @@ public class DBConnect {
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
-				con = getDBConnection();				
+				getDBConnection();				
 				pst = con.prepareStatement("UPDATE `users` SET `rank` = ? WHERE username = ?");
 				pst.setString(1, rank);
 				pst.setString(2,username);
 				pst.executeUpdate();
-				System.out.println("User Rank Updated Successfully!");
 				con.setAutoCommit(true);
 				con.close();
 			}catch(SQLException SQLex){
@@ -278,12 +276,11 @@ public class DBConnect {
 	//changes a users password in database (Requires admin)
 	public void changeUserPassword(String username, String password) throws Exception{
 		try{
-			con = getDBConnection();				
+			getDBConnection();				
 			pst = con.prepareStatement("UPDATE `users` SET `password` = ? WHERE `username` = ?");
 			pst.setString(1, password);
 			pst.setString(2,username);
 			pst.executeUpdate();
-			System.out.println("User Password Updated Successfully!");
 			con.setAutoCommit(true);
 			con.close();
 		}catch(SQLException SQLex){
@@ -301,7 +298,7 @@ public class DBConnect {
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				con.setAutoCommit(false);
 				pst = con.prepareStatement("INSERT INTO `programs` (Customer, Cust, Program, ProgramStart, ProgramEnd, Created, CreatedBy) VALUES(?, ? ,?, ?, ?, ?, ?)");
 				pst.setString(1, Customer);
@@ -333,7 +330,7 @@ public class DBConnect {
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				con.setAutoCommit(false);
 				
 				pst = con.prepareStatement("DELETE FROM `programs` WHERE `Program` = ?");
@@ -360,7 +357,7 @@ public class DBConnect {
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				con.setAutoCommit(false);
 				pst = con.prepareStatement("INSERT INTO `customers` (Customer, Cust, Created, CreatedBy) VALUES(?, ?, ?, ?)");
 				pst.setString(1, newCustomer);
@@ -390,7 +387,7 @@ public class DBConnect {
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				con.setAutoCommit(false);
 				
 				pst = con.prepareStatement("DELETE FROM `customers` WHERE `Customer` = ?");
@@ -418,7 +415,7 @@ public class DBConnect {
 			JSONArray json = new JSONArray();
 			
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				pst = con.prepareStatement("SELECT * from `"+table+"` WHERE `"+column+"` = ? ORDER BY `"+column+"`");
 				pst.setString(1, queryValue);
 				ResultSet rs = pst.executeQuery();
@@ -443,7 +440,7 @@ public class DBConnect {
 				JSONArray json = new JSONArray();
 				
 				try{
-					con = getDBConnection();
+					getDBConnection();
 					pst = con.prepareStatement("SELECT * from `"+table+"` WHERE `"+column+"` = ? ORDER BY `"+column+"`");
 					pst.setInt(1, queryValue);
 					ResultSet rs = pst.executeQuery();
@@ -465,7 +462,7 @@ public class DBConnect {
 	public String getServerUser() throws Exception{
 		String username = null;;
 		try{
-			con = getDBConnection();
+			getDBConnection();
 			DatabaseMetaData dmd = con.getMetaData();
 			username = dmd.getUserName();
 			con.close();
@@ -484,7 +481,7 @@ public class DBConnect {
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				pst = con.prepareStatement("SELECT * FROM `parts list` ORDER BY `BosalPartNumber`");
 				ResultSet rs = pst.executeQuery();
 				if (isResultSetEmpty(rs) == false ){    
@@ -508,7 +505,7 @@ public class DBConnect {
 		JSONArray json = new JSONArray();
 		
 		try{
-			con = getDBConnection();
+			getDBConnection();
 			pst = con.prepareStatement("SELECT * FROM `materials reference` WHERE `PartType` = ? ORDER BY `PartType`, `Material` ASC");
 			pst.setInt(1, queryValue);
 			ResultSet rs = pst.executeQuery();
@@ -534,7 +531,7 @@ public class DBConnect {
 		JSONArray json = new JSONArray();
 		
 		try{
-			con = getDBConnection();
+			getDBConnection();
 			pst = con.prepareStatement("SELECT * FROM `materials reference` WHERE `PartType` = ? and `Material` = ?");
 			pst.setInt(1, partType);
 			pst.setInt(2, matNumber);
@@ -561,7 +558,7 @@ public class DBConnect {
 		JSONArray json = new JSONArray();
 		
 		try{
-			con = getDBConnection();
+			getDBConnection();
 			pst = con.prepareStatement("SELECT * from `type file` ORDER BY `PartType` ASC");
 			
 			ResultSet rs = pst.executeQuery();
@@ -587,7 +584,7 @@ public class DBConnect {
 			JSONArray json = new JSONArray();
 			
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				pst = con.prepareStatement("SELECT * from `programs` ORDER BY `Program` ASC");
 				
 				ResultSet rs = pst.executeQuery();
@@ -613,7 +610,7 @@ public class DBConnect {
 			JSONArray json = new JSONArray();
 			
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				pst = con.prepareStatement("SELECT DISTINCT `Customer`, `Cust` from `customers` ORDER BY `Customer` ASC");
 				
 				rs = pst.executeQuery();
@@ -639,7 +636,7 @@ public class DBConnect {
 			JSONArray json = new JSONArray();
 			
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				pst = con.prepareStatement("SELECT * from `description list` ORDER BY `Name` ASC");
 				
 				rs = pst.executeQuery();
@@ -663,7 +660,7 @@ public class DBConnect {
 		try{
 			int curSeqNum = (int) queryDatabase("type file", "PartType", partType).getJSONObject(0).get("SeqNumber");
 			int newSeqNum = curSeqNum + 1;
-			con = getDBConnection();
+			getDBConnection();
 			pst = con.prepareStatement("UPDATE `type file` SET `SeqNumber` = ? WHERE `PartType` = ?");
 			pst.setInt(1, newSeqNum);
 			pst.setInt(2, partType);
@@ -684,7 +681,7 @@ public class DBConnect {
 			String Program, int seq, String typeDescription, String DrawingNumber,
 			int Rev) throws Exception{	
 		try{
-			con = getDBConnection();
+			getDBConnection();
 			pst = con.prepareStatement("INSERT INTO `parts list` (PartType, Material, BosalPartNumber, CustPartNumber,"
 										+ " SupPartNumber, PartDescription, Program, SeqNumber, TypeDescription, "
 										+ "DrawingNumber, Rev, CreatedBy, Created, UpdatedBy, Updated ) "
@@ -765,7 +762,7 @@ public class DBConnect {
 		JSONArray json = new JSONArray();
 		
 		try{
-			con = getDBConnection();
+			getDBConnection();
 			pst = con.prepareStatement("SELECT * FROM `experimental parts`");
 			
 			ResultSet rs = pst.executeQuery();
@@ -786,13 +783,13 @@ public class DBConnect {
 		return json;
 	}
 	//Returns JSONArray of Experimental Part Numbers for displaying part number
-		public JSONArray queryReturnExpPart() throws Exception{
+	public JSONArray queryReturnExpPart() throws Exception{
 			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
 			
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				pst = con.prepareStatement("SELECT `Customer`, + `YearCode`, + `PartNumber` FROM development.`experimental parts2` ORDER BY `PartNumber` DESC LIMIT 1 ");
 				
 				ResultSet rs = pst.executeQuery();
@@ -816,7 +813,7 @@ public class DBConnect {
 	public void insertExperimentalPart2(String Engineer, String Program, String PartDescription,
 			String CustPartNumber, String Customer, String Year, String PartNumber, String Date) throws Exception{	
 		try{
-			con = getDBConnection();
+			getDBConnection();
 			pst = con.prepareStatement("INSERT INTO `experimental parts2` (Engineer, Program, PartDescription,"
 					+ "CustPartNumber, Customer, YearCode, PartNumber, Date) "
 										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
@@ -845,7 +842,7 @@ public class DBConnect {
 			String appUser = config.getProperty("appUser");
 			if(getUserRank().equals("admin")){
 				try{
-					con = getDBConnection();
+					getDBConnection();
 					pst = con.prepareStatement("DELETE FROM `parts list` WHERE `BosalPartNumber` = ?");
 					pst.setString(1, BosalPartNumber);
 					pst.executeUpdate();
@@ -868,7 +865,7 @@ public class DBConnect {
 		String appUser = config.getProperty("appUser");
 		if(getUserRank().equals("admin")){
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				pst = con.prepareStatement("DELETE FROM `customers` WHERE `Customer` = ?");
 				pst.setString(1, Customer);
 				pst.executeUpdate();
@@ -891,7 +888,7 @@ public class DBConnect {
 			String appUser = config.getProperty("appUser");
 			if(getUserRank().equals("admin")){
 				try{
-					con = getDBConnection();
+					getDBConnection();
 					pst = con.prepareStatement("DELETE FROM `programs` WHERE `Program` = ?");
 					pst.setString(1, Program);
 					pst.executeUpdate();
@@ -914,7 +911,7 @@ public class DBConnect {
 			String DrawingNumber, int Rev) throws Exception{
 			
 			try{
-				con = getDBConnection();
+				getDBConnection();
 				pst = con.prepareStatement("UPDATE `parts list` SET `PartDescription` = ?, " 
 						+ " `CustPartNumber` = ?, " 
 						+ " `SupPartNumber` = ?, "
