@@ -97,9 +97,11 @@ public class MainFrames extends JFrame
 		
 		try{
 			frame.setIconImage(ImageIO.read(new File("res/bosalimage.png")));
-		}catch(Exception ex){/*Ignore*/}
+		}catch(Exception ex){ex.printStackTrace();}
 	}
-	
+	public void redoDisplay(){
+		
+	}
 	class MainPanel extends JPanel
 	{
 	//Image
