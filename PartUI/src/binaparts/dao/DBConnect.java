@@ -708,6 +708,8 @@ public class DBConnect {
 			String Program, int seq, String typeDescription, String DrawingNumber,
 			int Rev) throws Exception{	
 		try{
+			String usersname = getUsersName();
+			Timestamp timestamp = getTimestamp();
 			getDBConnection();
 			pst = con.prepareStatement("INSERT INTO `parts list` (PartType, Material, BosalPartNumber, CustPartNumber,"
 										+ " SupPartNumber, PartDescription, Program, SeqNumber, TypeDescription, "
@@ -724,10 +726,10 @@ public class DBConnect {
 			pst.setString(9, typeDescription);
 			pst.setString(10, DrawingNumber);
 			pst.setInt(11, Rev);
-			pst.setString(12, getUsersName());
-			pst.setTimestamp(13, getTimestamp());
-			pst.setString(14, getUsersName());
-			pst.setTimestamp(15, getTimestamp());
+			pst.setString(12, usersname);
+			pst.setTimestamp(13, timestamp);
+			pst.setString(14, usersname);
+			pst.setTimestamp(15, timestamp);
 			pst.executeUpdate();
 			pst.close();
 			iterateNextSequenceNumber(partType);
@@ -861,6 +863,8 @@ public class DBConnect {
 			String DrawingNumber, int Rev) throws Exception{
 			
 			try{
+				String usersname = getUsersName();
+				Timestamp timestamp = getTimestamp();
 				getDBConnection();
 				pst = con.prepareStatement("UPDATE `parts list` SET `PartDescription` = ?, " 
 						+ " `CustPartNumber` = ?, " 
@@ -877,8 +881,8 @@ public class DBConnect {
 				pst.setString(4,  program);
 				pst.setString(5, DrawingNumber);
 				pst.setInt(6, Rev+1);
-				pst.setString(7, getUsersName());
-				pst.setTimestamp(8, getTimestamp());
+				pst.setString(7, usersname);
+				pst.setTimestamp(8, timestamp);
 				pst.setString(9, BosalPartNumber);
 				pst.executeUpdate();
 				pst.close();
