@@ -878,7 +878,7 @@ public class DBConnect {
 				pst.setString(3, SupPartNumber);
 				pst.setString(4,  program);
 				pst.setString(5, DrawingNumber);
-				pst.setInt(6, Rev+1);
+				pst.setInt(6, Rev);
 				pst.setString(7, usersname);
 				pst.setTimestamp(8, timestamp);
 				pst.setString(9, BosalPartNumber);

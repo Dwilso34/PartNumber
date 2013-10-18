@@ -937,8 +937,7 @@ public class MainFrames extends JFrame
 			txtProgram.setForeground(Color.BLACK);
 			txtProgram.addMouseListener(new ContextMenuMouseListener());
 			txtRev = new JTextField();
-			txtRev.setEditable(false);
-			txtRev.setBackground(new Color(190,190,190));
+			txtRev.setEditable(true);
 			txtRev.setForeground(Color.BLACK);
 			txtRev.addMouseListener(new ContextMenuMouseListener());
 			txtDrawingNum = new JTextField();
