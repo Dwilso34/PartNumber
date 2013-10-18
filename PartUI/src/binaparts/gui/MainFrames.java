@@ -2003,6 +2003,22 @@ public class MainFrames extends JFrame
 				return ProComboBoxDefault;
 			}
 			private JComboBox<String> cboDeleteCust;
+			private ComboBoxModel<String> resetDeleteCustComboBox()
+			{
+				JSONArray temp1 = new JSONArray();
+				ComboBoxModel<String> CustComboBoxDefault = null;
+				String[] Cust = null;
+				
+				try {
+					temp1 = con.queryReturnAllCustomers();
+					Cust = new String[temp1.length()];
+					for(int i = 0; i < temp1.length(); i++){
+						Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
+					}
+					CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
+				}catch(Exception ex){ex.printStackTrace();}
+				return CustComboBoxDefault;
+			}
 			private JComboBox<String> cboCustomer;
 			private ComboBoxModel<String> resetCustomerComboBox()
 			{
@@ -2017,7 +2033,7 @@ public class MainFrames extends JFrame
 						Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
 					}
 					CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
-				}catch(Exception ex){ex.printStackTrace();/*Ignore*/}
+				}catch(Exception ex){ex.printStackTrace();}
 				return CustComboBoxDefault;
 			}
 				
@@ -2736,6 +2752,7 @@ public class MainFrames extends JFrame
 										String customer = cboDeleteCust.getSelectedItem().toString();
 								if(rbtnAddCustomer.isSelected() == true){
 									con.deleteCustomer(customer);
+									cboDeleteCust.setModel(resetDeleteCustComboBox());
 								}
 								}catch(Exception ex){/*Ignore*/}
 									cboDeleteCust.setSelectedIndex(-1);
@@ -2880,6 +2897,7 @@ public class MainFrames extends JFrame
 												String newCustomer = txtAddCusPro.getText();
 												con.createCustomer(newCustomer, newCust);
 												cboCustomer.setModel(resetCustomerComboBox());
+												cboDeleteCust.setModel(resetDeleteCustComboBox());
 											}
 											if(rbtnAddProgram.isSelected() == true){
 												String Program = txtAddCusPro.getText();
@@ -2909,14 +2927,14 @@ public class MainFrames extends JFrame
 												}
 											}
 												
-										}catch(Exception ex){/*Ignore*/ex.printStackTrace();}
+										}catch(Exception ex){ex.printStackTrace();}
 										txtUsername.setText("");
 										txtPassword.setText("");
 										txtConfirmPassword.setText("");
 										txtCust.setText("");
 										txtAddCusPro.setText("");
 										txtProStart.setText("");
-										txtProEnd.setText("");										
+										txtProEnd.setText("");				
 										cboCustomer.setSelectedIndex(-1);
 										cboUserRank.setSelectedIndex(-1);
 										cboDeleteCust.setSelectedIndex(-1);
