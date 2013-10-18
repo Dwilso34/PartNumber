@@ -2304,6 +2304,7 @@ public class MainFrames extends JFrame
 				            lblLastName.setVisible(false);
 				            lblFirstName.setVisible(false);
 				            cboUserRank.setSelectedIndex(-1);
+				            cboCustomer.setModel(resetCustomerComboBox());
 				            cboCustomer.setSelectedIndex(-1);
 				            cboDeleteCust.setSelectedIndex(-1);
 				            cboDeletePro.setSelectedIndex(-1);
@@ -2878,6 +2879,7 @@ public class MainFrames extends JFrame
 												String newCust = txtCust.getText();
 												String newCustomer = txtAddCusPro.getText();
 												con.createCustomer(newCustomer, newCust);
+												cboCustomer.setModel(resetCustomerComboBox());
 											}
 											if(rbtnAddProgram.isSelected() == true){
 												String Program = txtAddCusPro.getText();
@@ -2914,7 +2916,7 @@ public class MainFrames extends JFrame
 										txtCust.setText("");
 										txtAddCusPro.setText("");
 										txtProStart.setText("");
-										txtProEnd.setText("");
+										txtProEnd.setText("");										
 										cboCustomer.setSelectedIndex(-1);
 										cboUserRank.setSelectedIndex(-1);
 										cboDeleteCust.setSelectedIndex(-1);
@@ -3350,7 +3352,7 @@ public class MainFrames extends JFrame
 					}
 
 				}
-				PartNumber = Customer + Year + curSeq;			
+				PartNumber = Customer + Year + "-" + curSeq;			
 				return PartNumber;
 			}
 			
@@ -3406,10 +3408,10 @@ public class MainFrames extends JFrame
 				cboProgram.setForeground(Color.BLACK);
 				cboProgram.setSelectedIndex(-1);
 				cboPartDescrip = new JComboBox<String>();
+				cboPartDescrip.setModel(resetDescripComboBox());
 				AutoCompleteDecorator.decorate(cboPartDescrip);
 				cboPartDescrip.setForeground(Color.BLACK);
 				cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
-				cboPartDescrip.setModel(resetDescripComboBox());
 				cboPartDescrip.setSelectedIndex(-1);
 				cboCustomer = new JComboBox<String>();
 				cboCustomer.setModel(resetCustomerComboBox());
@@ -3451,7 +3453,6 @@ public class MainFrames extends JFrame
 				rbtnCreate.setBackground(new Color(105, 105, 105));
 				
 			//RadioButton Logic
-				rbtnCreate.setSelected(true);
 				rbtnCreate.addActionListener(new ActionListener(){
 					
 					public void actionPerformed(ActionEvent e)
@@ -3465,11 +3466,14 @@ public class MainFrames extends JFrame
 				            txtCustomerPartNum.setText("");
 				            txtPartNum.setText("");
 				            cboYear.setSelectedIndex(-1);
+				            cboProgram.setModel(resetProgramComboBox());
 				            cboProgram.setSelectedIndex(-1);
+				            cboCustomer.setModel(resetCustomerComboBox());
 				            cboCustomer.setSelectedIndex(-1);
 				            cboPartDescrip.setSelectedIndex(-1);
 		            }
-				}});	
+				}});
+				rbtnCreate.setSelected(true);
 									
 				rbtnSearch.addActionListener(new ActionListener(){
 					
@@ -3484,7 +3488,12 @@ public class MainFrames extends JFrame
 				            txtCreatedBy.setText("");
 				            txtCustomerPartNum.setText("");
 				            txtPartNum.setText("");
-				            
+				            cboYear.setSelectedIndex(-1);
+				            cboProgram.setModel(resetProgramComboBox());
+				            cboProgram.setSelectedIndex(-1);
+				            cboCustomer.setModel(resetCustomerComboBox());
+				            cboCustomer.setSelectedIndex(-1);
+				            cboPartDescrip.setSelectedIndex(-1);
 				            }
 				}});
 				
@@ -3626,7 +3635,7 @@ public class MainFrames extends JFrame
 								try{
 									part = temp.get("PartNumber").toString();
 								}catch(Exception ex){part = "-";}
-								txtPartNum.setText(part);
+								txtPartNum.setText(generatePartNumber(cust, year, part));
 								
 							}catch(Exception ex){
 								JOptionPane.showMessageDialog(
@@ -3636,14 +3645,10 @@ public class MainFrames extends JFrame
 											JOptionPane.ERROR_MESSAGE);
 								
 							}
-			
 						}
 					}					
-				});
-					
-							
+				});			
 			setupPanel();
-			
 		}
 		
 			private void setupPanel()
