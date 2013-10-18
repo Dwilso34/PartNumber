@@ -171,6 +171,7 @@ public class MainFrames extends JFrame
 						frame.setResizable(false);
 						frame.setLocationRelativeTo(main);
 						main.add(experimental);
+						experimental.validate();
 						experimental.setVisible(true);
 					}
 				}					
