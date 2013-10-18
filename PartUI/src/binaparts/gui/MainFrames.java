@@ -3312,13 +3312,10 @@ public class MainFrames extends JFrame
 				String[] types = null;
 				try {
 					temp1 = con.queryReturnAllPrograms();
-					System.out.println(temp1.length());
 					types = new String[temp1.length()];
 							for(int i = 0; i < temp1.length(); i++){
-								System.out.println(temp1.getJSONObject(i).getString("Program").toString());
 								types[i] = temp1.getJSONObject(i).getString("Program").toString();
-								System.out.println(types[i]);
-							}
+							}	
 					proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
 				}catch(Exception ex){ex.printStackTrace();}
 				return proComboBoxDefault;
@@ -3348,12 +3345,9 @@ public class MainFrames extends JFrame
 				String[] types = null;
 				try {
 					temp1 = con.queryReturnAllCustomers();
-					System.out.println(temp1.length());
 					types = new String[temp1.length()];
 							for(int i = 0; i < temp1.length(); i++){
-								System.out.println(temp1.getJSONObject(i).getString("Cust").toString());
 								types[i] = temp1.getJSONObject(i).getString("Cust").toString();
-								System.out.println(types[i]);
 					}
 					custComboBoxDefault = (new DefaultComboBoxModel<String> (types));
 				}catch(Exception ex){ex.printStackTrace();}
@@ -3445,7 +3439,6 @@ public class MainFrames extends JFrame
 				cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
 				cboPartDescrip.setSelectedIndex(-1);
 				cboCustomer = new JComboBox<String>();
-				System.out.println("Initialized");
 				cboCustomer.setModel(resetCustomerComboBox());
 				AutoCompleteDecorator.decorate(cboCustomer);
 				cboCustomer.setSelectedIndex(-1);
@@ -3460,12 +3453,6 @@ public class MainFrames extends JFrame
 				ItemListener comboBoxSelectionListener = (new ItemListener(){	
 					public void itemStateChanged(ItemEvent e)
 					{
-						
-						/*cboProgram.setModel(resetProgramComboBox());
-						cboProgram.setSelectedIndex(-1);
-						System.out.println("Itemlistner Fired");
-						cboCustomer.setModel(resetCustomerComboBox());
-						cboCustomer.setSelectedIndex(-1);*/
 						if(cboCustomer.getSelectedItem() != null){
 							if(cboYear.getSelectedItem() != null){
 								txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
@@ -3506,7 +3493,6 @@ public class MainFrames extends JFrame
 				            cboYear.setSelectedIndex(-1);
 				            cboProgram.setModel(resetProgramComboBox());
 				            cboProgram.setSelectedIndex(-1);
-				            System.out.println("Create Button Clicked");
 				            cboCustomer.setModel(resetCustomerComboBox());
 				            cboCustomer.setSelectedIndex(-1);
 				            cboPartDescrip.setSelectedIndex(-1);
@@ -3530,7 +3516,6 @@ public class MainFrames extends JFrame
 				            cboYear.setSelectedIndex(-1);
 				            cboProgram.setModel(resetProgramComboBox());
 				            cboProgram.setSelectedIndex(-1);
-				            System.out.println("Search Button Clicked");
 				            cboCustomer.setModel(resetCustomerComboBox());
 				            cboCustomer.setSelectedIndex(-1);
 				            cboPartDescrip.setSelectedIndex(-1);
