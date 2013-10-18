@@ -638,10 +638,8 @@ public class DBConnect {
 			
 			try{
 				getDBConnection();
-				pst = con.prepareStatement("SELECT DISTINCT `Customer`, `Cust` from `customers` ORDER BY `Customer` ASC");
-				
+				pst = con.prepareStatement("SELECT * from `customers` ORDER BY `Customer` ASC");
 				rs = pst.executeQuery();
-				
 				if (isResultSetEmpty(rs) == false ){    
 					json = converter.toJSONArray(rs);
 				}
