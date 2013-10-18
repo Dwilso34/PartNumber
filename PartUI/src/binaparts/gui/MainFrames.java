@@ -1499,7 +1499,7 @@ public class MainFrames extends JFrame
 			            txtSearch.requestFocusInWindow();
 			           }
 			}});
-			rbtnFindBosal.setSelected(true);
+			rbtnFindBosal.doClick();
 		//JButton
 				
 			ImageIcon search = new ImageIcon(getClass().getResource("/images/search.jpg"));
@@ -3473,7 +3473,7 @@ public class MainFrames extends JFrame
 				            cboPartDescrip.setSelectedIndex(-1);
 		            }
 				}});
-				rbtnCreate.setSelected(true);
+				rbtnCreate.doClick();
 									
 				rbtnSearch.addActionListener(new ActionListener(){
 					
