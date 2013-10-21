@@ -813,7 +813,7 @@ public class DBConnect {
 			
 			try{
 				getDBConnection();
-				pst = con.prepareStatement("SELECT `Customer`, + `YearCode`, + `PartNumber` FROM development.`experimental parts` ORDER BY `PartNumber` DESC LIMIT 1 ");
+				pst = con.prepareStatement("SELECT `Customer`, + `YearCode`, + `PartNumber` FROM `experimental parts` ORDER BY `PartNumber` DESC LIMIT 1 ");
 				
 				ResultSet rs = pst.executeQuery();
 				
