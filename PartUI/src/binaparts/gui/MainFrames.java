@@ -56,7 +56,6 @@ public class MainFrames extends JFrame
 	private FindPanel find;
 	private SettingsPanel settings;
 	private ManagePanel manage;
-	private BDLPanel bdl;
 	private ExperimentalPanel experimental;
 	JFrame frame = new JFrame("Main Menu:");
 	static final String configFilePath = "config.properties";
@@ -75,7 +74,6 @@ public class MainFrames extends JFrame
 		find = new FindPanel(contentPane);
 		settings = new SettingsPanel(contentPane);
 		manage = new ManagePanel(contentPane);
-		bdl = new BDLPanel(contentPane);
 		experimental = new ExperimentalPanel(contentPane);
 		contentPane.add(main, "Main Menu");
 		contentPane.add(create, "Create Part");
@@ -83,7 +81,6 @@ public class MainFrames extends JFrame
 		contentPane.add(find, "Find Part");
 		contentPane.add(settings, "Settings");
 		contentPane.add(manage, "Manage Users");
-		contentPane.add(bdl, "Breakdown List");
 		contentPane.add(experimental, "Experimental Part");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int height = screenSize.height;
@@ -184,13 +181,9 @@ public class MainFrames extends JFrame
 				public void actionPerformed(ActionEvent e) 
 				{
 					if (e.getSource() == btnBDL) {
-						setVisible(false);
-						frame.setSize(850,410);
-						frame.setTitle("Breakdown List Manager:");
-						frame.setResizable(false);
-						frame.setLocationRelativeTo(main);
-						main.add(bdl);
-						bdl.setVisible(true);
+						BDLFrame b = new BDLFrame();
+						b.displayBDL();
+						
 					}
 				}					
 			});
@@ -3146,139 +3139,6 @@ public class MainFrames extends JFrame
 				);
 				setLayout(groupLayout);
 			}}//End of Class ManageUsersPanel
-	class BDLPanel extends JPanel
-	{
-		//JLabels	
-			private JLabel lblBosal;
-			private JLabel lblBDLManager;
-			
-		//JButtons
-			private JButton btnCreate;
-			private JButton btnUpdate;
-			private JButton btnDelete;
-			private JButton btnBack;
-			private JButton btnCheck;
-				
-			public BDLPanel(final JPanel bdl) 
-			{
-			
-				setBackground(new Color(105, 105, 105));
-				
-			//JLabels
-				ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-				lblBosal = new JLabel(bosal);
-				lblBDLManager = new JLabel("Breakdown List Manager");
-				
-			//JButtons
-				ImageIcon create = new ImageIcon(getClass().getResource("/images/CreateBDL.jpg"));
-				btnCreate = new JButton(create);
-				btnCreate.addActionListener(new ActionListener() {
-					
-					public void actionPerformed(ActionEvent e) 
-					{
-						if (e.getSource() == btnCreate) {
-							  File file = new File("C:/users/shawg/desktop/Europe Breakdown List.xlsx");
-						        try {
-						            Desktop.getDesktop().open(file);
-						        } catch (IOException a) {
-						            a.printStackTrace();
-						        }
-						}
-					}					
-				});
-				
-				ImageIcon update = new ImageIcon(getClass().getResource("/images/updateBDL.jpg"));
-				btnUpdate = new JButton(update);
-				
-				ImageIcon delete = new ImageIcon(getClass().getResource("/images/delete.jpg"));
-				btnDelete = new JButton(delete);
-				
-				ImageIcon check = new ImageIcon(getClass().getResource("/images/check.jpg"));
-				btnCheck = new JButton(check);
-				
-				ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
-				btnBack = new JButton(back);
-				btnBack.addActionListener(new ActionListener() {
-					
-					public void actionPerformed(ActionEvent e) 
-					{
-						if (e.getSource() == btnBack)
-						{
-							setVisible(false);
-							Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-							int height = screenSize.height;
-							int width = screenSize.width;
-							frame.setResizable(false);
-							frame.setSize(width/2, height/2);
-							frame.setLocationRelativeTo(null);
-							frame.setSize(865, 555);
-							frame.setTitle("Main Menu:");
-							main.setVisible(true);
-						}}});
-							
-				lblBDLManager.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
-				lblBDLManager.setForeground(Color.BLACK);
-				
-			setupPanel();
-			}
-			
-				private void setupPanel()
-				{
-					GroupLayout groupLayout = new GroupLayout(this);
-					groupLayout.setHorizontalGroup(
-						groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(14)
-										.addComponent(lblBosal)
-										.addGap(27)
-										.addComponent(lblBDLManager))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(82)
-										.addComponent(btnCreate, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-										.addGap(251)
-										.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(82)
-										.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-										.addGap(68)
-										.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-										.addGap(79)
-										.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)))
-								.addContainerGap(103, Short.MAX_VALUE))
-					);
-					groupLayout.setVerticalGroup(
-						groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(10)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblBosal)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(lblBDLManager)))
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(129)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(btnCreate, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-											.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-										.addGap(1)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(32)
-												.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(32)
-												.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(184)
-										.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
-								.addContainerGap(156, Short.MAX_VALUE))
-					);
-					setLayout(groupLayout);
-					
-				}}//End of Class BDLPanel	
 	class ExperimentalPanel extends JPanel
 	{
 	//JLabels
