@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
 
 import binaparts.dao.DBConnect;
@@ -128,7 +129,7 @@ public class BDLFrame extends JFrame
 				}catch(Exception ex){ex.printStackTrace();}
 				return CustComboBoxDefault;
 			}
-			private JComboBox<String> cboPogram;
+			private JComboBox<String> cboProgram;
 			private ComboBoxModel<String> resetProgramComboBox()
 			{
 				JSONArray temp1 = new JSONArray();
@@ -137,9 +138,9 @@ public class BDLFrame extends JFrame
 				try {
 					temp1 = con.queryReturnAllPrograms();
 					types = new String[temp1.length()];
-							for(int i = 0; i < temp1.length(); i++){
-								types[i] = temp1.getJSONObject(i).getString("Program").toString();
-							}	
+					for(int i = 0; i < temp1.length(); i++){
+						types[i] = temp1.getJSONObject(i).getString("Program").toString();
+					}	
 					proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
 				}catch(Exception ex){ex.printStackTrace();}
 				return proComboBoxDefault;
@@ -151,11 +152,11 @@ public class BDLFrame extends JFrame
 				ComboBoxModel<String> engineComboBoxDefault = null;
 				String[] types = null;
 				try {
-					temp1 = con.queryReturnAllPrograms();
+					temp1 = con.queryReturnAllEngines();
 					types = new String[temp1.length()];
-							for(int i = 0; i < temp1.length(); i++){
-								types[i] = temp1.getJSONObject(i).getString("Program").toString();
-							}	
+					for(int i = 0; i < temp1.length(); i++){
+						types[i] = temp1.getJSONObject(i).getString("Engine").toString();
+					}	
 					engineComboBoxDefault = (new DefaultComboBoxModel<String> (types));
 				}catch(Exception ex){ex.printStackTrace();}
 				return engineComboBoxDefault;
@@ -414,6 +415,26 @@ public class BDLFrame extends JFrame
 				txtRelSupplier.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 				txtRelSupplier.setForeground(Color.BLACK);
 				
+				//JComboBoxes
+				cboCustomer = new JComboBox<String>();
+				cboCustomer.setModel(resetCustomerComboBox());
+				AutoCompleteDecorator.decorate(cboCustomer);
+				cboCustomer.addMouseListener(new ContextMenuMouseListener());
+				cboCustomer.setForeground(Color.BLACK);
+				cboCustomer.setSelectedIndex(-1);
+				cboProgram = new JComboBox<String>();
+				cboProgram.setModel(resetProgramComboBox());
+				AutoCompleteDecorator.decorate(cboProgram);
+				cboProgram.addMouseListener(new ContextMenuMouseListener());
+				cboProgram.setForeground(Color.BLACK);
+				cboProgram.setSelectedIndex(-1);
+				cboEngine = new JComboBox<String>();
+				cboEngine.setModel(resetEngineComboBox());
+				AutoCompleteDecorator.decorate(cboEngine);
+				cboEngine.addMouseListener(new ContextMenuMouseListener());
+				cboEngine.setForeground(Color.BLACK);
+				cboEngine.setSelectedIndex(-1);
+				
 				//JRadioButtons
 				rbtnCreateBDL = new JRadioButton("Add Program");
 				rbtnCreateBDL.setBackground(new Color(105, 105, 105));
@@ -426,7 +447,26 @@ public class BDLFrame extends JFrame
 						if (e.getSource() == rbtnCreateBDL){
 							try {
 								txtIssuedBy.setText(con.getUsersName());
-							} catch (Exception ex) {ex.printStackTrace();}
+								txtType.setText("");
+								txtVolume.setText("");
+								txtPower.setText("");
+								txtBosalPartNum.setText("");
+								txtCustomerPartNum.setText("");
+								txtIMDS.setText("");
+								txtDescription.setText("");
+								txtVolume2.setText("");
+								txtLength.setText("");
+								txtSection.setText("");
+								txtPage.setText("");
+								txtREV.setText("");
+								txtRelDate.setText("");
+								txtREVDate.setText("");
+								txtProduction.setText("");
+								txtRelPlant1.setText("");
+								txtRelPlant2.setText("");
+								txtRelSupplier.setText("");
+								
+							}catch (Exception ex){ex.printStackTrace();}
 				            
 						}						
 				}});
