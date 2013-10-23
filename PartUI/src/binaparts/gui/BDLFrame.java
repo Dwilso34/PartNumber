@@ -39,11 +39,6 @@ public class BDLFrame extends JFrame
 	
 	public void displayBDL() 
 	{
-<<<<<<< HEAD
-		//BDLframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-=======
-		
->>>>>>> 7dccac0a34ad2f5002d83c8c559c0e71ad67b071
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new CardLayout());
