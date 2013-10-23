@@ -5,14 +5,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
@@ -28,7 +32,7 @@ public class BDLFrame extends JFrame
 	
 	public void displayBDL() 
 	{
-		BDLframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//BDLframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new CardLayout());
@@ -100,6 +104,9 @@ public class BDLFrame extends JFrame
 			private JTextField txtRelPlant1;
 			private JTextField txtRelPlant2;
 			private JTextField txtRelSupplier;
+			
+		//JRadioButtons
+			private JRadioButton rbtnCreateBDL;
 			
 			JPanel contentPane;
 			
@@ -351,6 +358,26 @@ public class BDLFrame extends JFrame
 				txtRelSupplier = new JTextField();
 				txtRelSupplier.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 				txtRelSupplier.setForeground(Color.BLACK);
+				
+				//JRadioButtons
+				rbtnCreateBDL = new JRadioButton("Add Program");
+				rbtnCreateBDL.setBackground(new Color(105, 105, 105));
+				rbtnCreateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
+				rbtnCreateBDL.setForeground(Color.BLACK);
+				rbtnCreateBDL.addActionListener(new ActionListener(){
+					
+					public void actionPerformed(ActionEvent e)
+					{		
+						if (e.getSource() == rbtnCreateBDL){
+							
+				            
+						}						
+				}});
+				
+				ButtonGroup group = new ButtonGroup();
+				
+				group.add(rbtnCreateBDL);	
+				
 				
 				setupPanel();
 			}
