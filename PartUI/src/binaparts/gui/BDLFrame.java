@@ -10,9 +10,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,6 +24,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 
+import org.json.JSONArray;
+
+import binaparts.dao.DBConnect;
 import binaparts.gui.MainFrames.MainPanel;
 
 public class BDLFrame extends JFrame 
@@ -29,6 +35,7 @@ public class BDLFrame extends JFrame
 	}
 	private BDLMain pnlMain;
 	JFrame BDLframe = new JFrame("BreakDown List Manager:");
+	DBConnect con = null;
 	
 	public void displayBDL() 
 	{
@@ -51,7 +58,7 @@ public class BDLFrame extends JFrame
 		
 		class BDLMain extends JPanel 
 		{
-			//JLabels	
+		//JLabels	
 			private JLabel lblBosal;
 			private JLabel lblBDL;
 			private JLabel lblCustomer;
@@ -104,7 +111,56 @@ public class BDLFrame extends JFrame
 			private JTextField txtRelPlant1;
 			private JTextField txtRelPlant2;
 			private JTextField txtRelSupplier;
-			
+		//JComboBoxes
+			private JComboBox<String> cboCustomer;
+			private ComboBoxModel<String> resetCustomerComboBox()
+			{
+				JSONArray temp1 = new JSONArray();
+				ComboBoxModel<String> CustComboBoxDefault = null;
+				String[] Cust = null;
+				
+				try {
+					temp1 = con.queryReturnAllCustomers();
+					Cust = new String[temp1.length()];
+					for(int i = 0; i < temp1.length(); i++){
+						Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
+					}
+					CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
+				}catch(Exception ex){ex.printStackTrace();}
+				return CustComboBoxDefault;
+			}
+			private JComboBox<String> cboPogram;
+			private ComboBoxModel<String> resetProgramComboBox()
+			{
+				JSONArray temp1 = new JSONArray();
+				ComboBoxModel<String> proComboBoxDefault = null;
+				String[] types = null;
+				try {
+					temp1 = con.queryReturnAllPrograms();
+					types = new String[temp1.length()];
+							for(int i = 0; i < temp1.length(); i++){
+								types[i] = temp1.getJSONObject(i).getString("Program").toString();
+							}	
+					proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+				}catch(Exception ex){ex.printStackTrace();}
+				return proComboBoxDefault;
+			}
+			private JComboBox<String> cboEngine;
+			private ComboBoxModel<String> resetEngineComboBox()
+			{
+				JSONArray temp1 = new JSONArray();
+				ComboBoxModel<String> engineComboBoxDefault = null;
+				String[] types = null;
+				try {
+					temp1 = con.queryReturnAllPrograms();
+					types = new String[temp1.length()];
+							for(int i = 0; i < temp1.length(); i++){
+								types[i] = temp1.getJSONObject(i).getString("Program").toString();
+							}	
+					engineComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+				}catch(Exception ex){ex.printStackTrace();}
+				return engineComboBoxDefault;
+			}
 		//JRadioButtons
 			private JRadioButton rbtnCreateBDL;
 			
@@ -369,7 +425,9 @@ public class BDLFrame extends JFrame
 					public void actionPerformed(ActionEvent e)
 					{		
 						if (e.getSource() == rbtnCreateBDL){
-							
+							try {
+								txtIssuedBy.setText(con.getUsersName());
+							} catch (Exception ex) {ex.printStackTrace();}
 				            
 						}						
 				}});
