@@ -20,9 +20,7 @@ public class DBConnect {
 	public DBConnect(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
-		}
+		}catch(ClassNotFoundException ex){ex.printStackTrace();}
 	}
 	//returns a boolean answer whether ResultSet is empty
 	private boolean isResultSetEmpty(ResultSet rs){
@@ -31,7 +29,7 @@ public class DBConnect {
 			if (rs.isBeforeFirst() == true){
 				 status = false;
 			}
-		}catch(Exception ex){/*Ignore*/}
+		}catch(Exception ex){ex.printStackTrace();}
 		return status;
 	}
 	//returns a String[] of parts list table's column names
