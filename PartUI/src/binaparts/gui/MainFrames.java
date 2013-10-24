@@ -1135,7 +1135,7 @@ public class MainFrames extends JFrame
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnCheck)
 					{
-						con = new DBConnect();
+						//con = new DBConnect();
 						final String findBosalText = txtFindBosal.getText();
 						
 						try{

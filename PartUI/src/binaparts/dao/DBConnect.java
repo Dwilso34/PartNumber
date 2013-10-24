@@ -605,6 +605,32 @@ public class DBConnect {
 		return json;
 	}
 	//returns jsonArray of all Programs (done)
+	public JSONArray queryReturnAllEngines() throws Exception{
+			
+			ToJSON converter = new ToJSON();
+			JSONArray json = new JSONArray();
+			
+			try{
+				getDBConnection();
+				pst = con.prepareStatement("SELECT * from `engines` ORDER BY `Engine` ASC");
+				
+				ResultSet rs = pst.executeQuery();
+				
+				if (isResultSetEmpty(rs) == false ){    
+					json = converter.toJSONArray(rs);
+				}
+				pst.close();
+				con.close();
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}finally{
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+			return json;
+	}
+	//returns jsonArray of all Programs (done)
 	public JSONArray queryReturnAllPrograms() throws Exception{
 			
 			ToJSON converter = new ToJSON();
@@ -629,7 +655,7 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 			return json;
-		}
+	}
 	//returns jsonArray of all Customers (done)
 	public JSONArray queryReturnAllCustomers() throws Exception{
 			
