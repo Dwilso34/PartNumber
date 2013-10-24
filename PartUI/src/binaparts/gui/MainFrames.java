@@ -383,14 +383,31 @@ public class MainFrames extends JFrame
 		private JTextField txtBPart;
 		private JTextField txtCPart;
 		private JTextField txtSPart;
-		private JTextField txtProgram;
+		
 		
 	//JComboBox
 		
+		private JComboBox<String> cboProgram;
 		private JComboBox<String> cboDescrip;
 		private JComboBox<String> cboType;
 		private JComboBox<String> cboMat;
 		JPanel contentPane;	
+		private ComboBoxModel<String> resetProgramComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> programComboBoxDefault = null;
+			String[] pros = null;
+			
+			try {
+				temp1 = con.queryReturnAllPrograms();
+				pros = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i++){
+					pros[i] = temp1.getJSONObject(i).get("Program").toString();
+				}
+				programComboBoxDefault = (new DefaultComboBoxModel<String> (pros));
+			}catch(Exception ex){/*Ignore*/}
+			return programComboBoxDefault;
+		}
 		private ComboBoxModel<String> resetTypeComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
@@ -507,9 +524,6 @@ public class MainFrames extends JFrame
 			txtSPart = new JTextField();
 			txtSPart.setForeground(Color.BLACK);
 			txtSPart.addMouseListener(new ContextMenuMouseListener());
-			txtProgram = new JTextField();
-			txtProgram.setForeground(Color.BLACK);
-			txtProgram.addMouseListener(new ContextMenuMouseListener());
 			txtDrawingNum = new JTextField();
 			txtDrawingNum.setForeground(Color.BLACK);
 			txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
@@ -535,6 +549,12 @@ public class MainFrames extends JFrame
 			cboDescrip.addMouseListener(new ContextMenuMouseListener());
 			cboDescrip.setModel(resetDescripComboBox());
 			cboDescrip.setSelectedIndex(-1);
+			cboProgram = new JComboBox<String>();
+			cboProgram.setForeground(Color.BLACK);
+			cboProgram.addMouseListener(new ContextMenuMouseListener());
+			cboProgram.setModel(resetProgramComboBox());
+			AutoCompleteDecorator.decorate(cboProgram);
+			cboProgram.setSelectedIndex(-1);
 			
 			ItemListener comboBoxSelectionListener = (new ItemListener(){	
 				public void itemStateChanged(ItemEvent e)
@@ -573,7 +593,7 @@ public class MainFrames extends JFrame
 							txtSPart.setText("");
 							txtCPart.setText("");
 							txtDrawingNum.setText("");
-							txtProgram.setText("");
+							cboProgram.setSelectedIndex(-1);
 							cboMat.setModel(matComboBoxModel);
 							cboMat.setSelectedIndex(-1);
 							cboDescrip.setModel(descripComboBoxModel);
@@ -637,7 +657,7 @@ public class MainFrames extends JFrame
 								String BosalPartNumber = txtBPart.getText();
 								String CustomerPartNumber = txtCPart.getText();
 								String SupplierPartNumber = txtSPart.getText();
-								String Program = txtProgram.getText();
+								String Program = (String) cboProgram.getSelectedItem();
 								String DrawingNumber = txtDrawingNum.getText();
 								int Rev = 0;
 								con.insertNewPart(partType, mat, BosalPartNumber, CustomerPartNumber, 
@@ -664,7 +684,7 @@ public class MainFrames extends JFrame
 								txtBPart.setText("");
 								txtMDescrip.setText("");
 								txtDescrip.setText("");
-								txtProgram.setText("");
+								cboProgram.setSelectedIndex(-1);
 								txtSeq.setText("");	
 								txtDrawingNum.setText("");
 							}catch(Exception ex){/*Ignore*/};
@@ -699,7 +719,7 @@ public class MainFrames extends JFrame
 						txtMDescrip.setText("");
 						txtDescrip.setText("");
 						txtSeq.setText("");
-						txtProgram.setText("");
+						cboProgram.setSelectedIndex(-1);
 						txtDrawingNum.setText("");
 			}}});
 			setupPanel();	
@@ -795,7 +815,7 @@ public class MainFrames extends JFrame
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
 							.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-							.addComponent(txtProgram, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)))
 			);
 			groupLayout.setVerticalGroup(
 				groupLayout.createParallelGroup(Alignment.LEADING)
@@ -852,7 +872,7 @@ public class MainFrames extends JFrame
 								.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(4)
 								.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 			);
 			setLayout(groupLayout);
 		}
@@ -883,13 +903,29 @@ public class MainFrames extends JFrame
 		private JTextField txtFindBosal;
 		private JTextField txtCusDescrip;
 		private JTextField txtSupDescrip;
-		private JTextField txtProgram;
 		private JTextField txtRev;
 		private JTextField txtDrawingNum;
 		
 	//JComboBoxes
 		
+		private JComboBox<String> cboProgram;
 		private JComboBox<String> cboDescrip;
+		private ComboBoxModel<String> resetProgramComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> programComboBoxDefault = null;
+			String[] pros = null;
+			
+			try {
+				temp1 = con.queryReturnAllPrograms();
+				pros = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i++){
+					pros[i] = temp1.getJSONObject(i).get("Program").toString();
+				}
+				programComboBoxDefault = (new DefaultComboBoxModel<String> (pros));
+			}catch(Exception ex){/*Ignore*/}
+			return programComboBoxDefault;
+		}
 		private ComboBoxModel<String> resetDescripComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
@@ -924,9 +960,6 @@ public class MainFrames extends JFrame
 			txtSupDescrip = new JTextField();
 			txtSupDescrip.setForeground(Color.BLACK);
 			txtSupDescrip.addMouseListener(new ContextMenuMouseListener());
-			txtProgram = new JTextField();
-			txtProgram.setForeground(Color.BLACK);
-			txtProgram.addMouseListener(new ContextMenuMouseListener());
 			txtRev = new JTextField();
 			txtRev.setEditable(true);
 			txtRev.setForeground(Color.BLACK);
@@ -944,6 +977,13 @@ public class MainFrames extends JFrame
 			cboDescrip.setModel(resetDescripComboBox());
 			cboDescrip.setEditable(true);
 			cboDescrip.setSelectedIndex(-1);
+			cboProgram = new JComboBox<String>();
+			AutoCompleteDecorator.decorate(cboProgram);
+			cboProgram.setForeground(Color.BLACK);
+			cboProgram.addMouseListener(new ContextMenuMouseListener());
+			cboProgram.setModel(resetProgramComboBox());
+			cboProgram.setEditable(true);
+			cboProgram.setSelectedIndex(-1);
 			
 	//Labels		
 			
@@ -980,7 +1020,7 @@ public class MainFrames extends JFrame
 						if(n == 0){
 							try {
 								con.deletePart(txtFindBosal.getText());
-								txtProgram.setText("");
+								cboProgram.setSelectedIndex(-1);
 								txtSupDescrip.setText("");
 								txtCusDescrip.setText("");
 								txtFindBosal.setText("");
@@ -1014,7 +1054,7 @@ public class MainFrames extends JFrame
 						txtFindBosal.setText("");
 						txtCusDescrip.setText("");
 						txtSupDescrip.setText("");
-						txtProgram.setText("");
+						cboProgram.setSelectedIndex(-1);
 						cboDescrip.setModel(resetDescripComboBox());
 						cboDescrip.setSelectedIndex(-1);
 						txtRev.setText("");
@@ -1040,7 +1080,6 @@ public class MainFrames extends JFrame
 							String BosalPartNumber = txtFindBosal.getText();
 							String CustomerPartNumber = null;
 							String SupplierPartNumber= null;
-							String Program = null;
 							String DrawingNumber = null;
 							int Rev = 0;
 							
@@ -1058,10 +1097,9 @@ public class MainFrames extends JFrame
 							}else{Rev = Integer.valueOf(txtRev.getText());}
 							
 							String Description = (String) cboDescrip.getSelectedItem();
-														
-							if(txtProgram.getText().equals("-") || txtProgram.getText().equals("")){
-								Program = null;
-							}else{Program = txtProgram.getText();}
+							
+							String Program = (String) cboProgram.getSelectedItem();							
+							
 							try {
 								con.update(BosalPartNumber, CustomerPartNumber, SupplierPartNumber, 
 										Description, Program, DrawingNumber, Rev);
@@ -1079,7 +1117,7 @@ public class MainFrames extends JFrame
 								txtFindBosal.setText("");
 								txtCusDescrip.setText("");
 								txtSupDescrip.setText("");
-								txtProgram.setText("");
+								cboProgram.setSelectedIndex(-1);
 								cboDescrip.setModel(resetDescripComboBox());
 								cboDescrip.setSelectedIndex(-1);
 								txtDrawingNum.setText("");
@@ -1131,19 +1169,19 @@ public class MainFrames extends JFrame
 							}catch(Exception ex){spartText = "-";}
 							txtSupDescrip.setText(spartText);
 							
-							//set text for Description JTextField
+							//set text for Description JComboBox
 							String descripText= null;
 							try{
 								descripText = temp.get("PartDescription").toString();
 							}catch(Exception ex){descripText = "-";}
 							cboDescrip.setSelectedItem(descripText);
 							
-							//set text for Program JTextField
+							//set text for Program JComboBox
 							String programText = null;
 							try{
 								programText = temp.get("Program").toString();
 							}catch(Exception ex){programText = "-";}
-							txtProgram.setText(programText);
+							cboProgram.setSelectedItem(programText);
 							
 							//set text for DrawingNumber JTextField
 							String DrawingNumber = null;
@@ -1152,7 +1190,7 @@ public class MainFrames extends JFrame
 							}catch(Exception ex){DrawingNumber = "-";}
 							txtDrawingNum.setText(DrawingNumber);
 							
-							//set text for Program JTextField
+							//set text for REV JTextField
 							int Rev = 0;
 							try{
 								Rev = Integer.valueOf(temp.get("Rev").toString());
@@ -1167,7 +1205,7 @@ public class MainFrames extends JFrame
 										JOptionPane.ERROR_MESSAGE);
 							txtCusDescrip.setText("");
 							txtSupDescrip.setText("");
-							txtProgram.setText("");
+							cboProgram.setSelectedIndex(-1);
 							cboDescrip.setModel(resetDescripComboBox());
 							cboDescrip.setSelectedIndex(-1);
 							txtDrawingNum.setText("");
@@ -1243,7 +1281,7 @@ public class MainFrames extends JFrame
 						.addComponent(lblSupplierPartNum))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(28)
-						.addComponent(txtProgram, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
 						.addGap(84)
 						.addComponent(txtCusDescrip, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
 						.addGap(75)
@@ -1298,7 +1336,7 @@ public class MainFrames extends JFrame
 								.addGap(11)
 								.addComponent(lblSupplierPartNum)))
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(txtProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(txtCusDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(txtSupDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(10)
