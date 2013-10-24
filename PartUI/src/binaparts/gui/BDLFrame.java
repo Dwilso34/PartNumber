@@ -57,6 +57,7 @@ public class BDLFrame extends JFrame
 		BDLframe.setVisible(true);	
 	}
 		
+	@SuppressWarnings("serial")
 	class BDLMain extends JPanel 
 	{			
 
@@ -133,7 +134,7 @@ public class BDLFrame extends JFrame
 			return CustComboBoxDefault;
 		}
 		private JComboBox<String> cboPlatform;
-		private ComboBoxModel<String> resetProgramComboBox()
+		private ComboBoxModel<String> resetPlatformComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
 			ComboBoxModel<String> proComboBoxDefault = null;
@@ -354,23 +355,17 @@ public class BDLFrame extends JFrame
 
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
-			cboCustomer.setModel(resetCustomerComboBox());
 			AutoCompleteDecorator.decorate(cboCustomer);
 			cboCustomer.addMouseListener(new ContextMenuMouseListener());
 			cboCustomer.setForeground(Color.BLACK);
-			cboCustomer.setSelectedIndex(-1);
 			cboPlatform = new JComboBox<String>();
-			cboPlatform.setModel(resetProgramComboBox());
 			AutoCompleteDecorator.decorate(cboPlatform);
 			cboPlatform.addMouseListener(new ContextMenuMouseListener());
 			cboPlatform.setForeground(Color.BLACK);
-			cboPlatform.setSelectedIndex(-1);
 			cboEngine = new JComboBox<String>();
-			cboEngine.setModel(resetEngineComboBox());
 			AutoCompleteDecorator.decorate(cboEngine);
 			cboEngine.addMouseListener(new ContextMenuMouseListener());
-			cboEngine.setForeground(Color.BLACK);
-			cboEngine.setSelectedIndex(-1);				
+			cboEngine.setForeground(Color.BLACK);		
 			
 			ItemListener comboBoxSelectionListener = (new ItemListener(){	
 				public void itemStateChanged(ItemEvent e)
@@ -393,6 +388,9 @@ public class BDLFrame extends JFrame
 							}catch(Exception ex){ex.printStackTrace();}
 							cboPlatform.setModel(platformComboBoxModel);
 							cboPlatform.setSelectedIndex(-1);
+							txtType.setText("");
+							txtVolume.setText("");
+							txtPower.setText("");
 						}
 					}	
 					if(e.getSource().equals(cboPlatform)){
@@ -413,11 +411,112 @@ public class BDLFrame extends JFrame
 							}catch(Exception ex){ex.printStackTrace();}
 							cboEngine.setModel(engineComboBoxModel);
 							cboEngine.setSelectedIndex(-1);
+							txtType.setText("");
+							txtVolume.setText("");
+							txtPower.setText("");
+						}
+					}	
+					if(e.getSource().equals(cboEngine)){
+						if(e.getStateChange() == ItemEvent.SELECTED){
+							String customer = null;
+							String platform = null;
+							String engine = null;
+							try{
+								engine = cboEngine.getSelectedItem().toString();
+								platform = cboPlatform.getSelectedItem().toString();
+								customer = cboCustomer.getSelectedItem().toString();
+							} catch (Exception ex) {ex.printStackTrace();}
+							
+							if(customer == null && platform == null){
+								String[] customers = null;
+								String[] platforms = null;
+								ComboBoxModel<String> customerComboBoxModel = null;
+								ComboBoxModel<String> platformComboBoxModel = null;
+								JSONArray temp1 = new JSONArray();
+								JSONArray temp2 = new JSONArray();
+								//JSONArray temp3 = new JSONArray();
+								
+								try {
+									temp1 = con.queryDatabase("engines",
+											"Engine", engine);
+									platform = temp1.getJSONObject(0).getString("Platform").toString();
+									System.out.println(platform);
+									temp2 = con.queryDatabase("programs",
+											"Program", platform);
+									System.out.println(temp2.length());
+									System.out.println(temp2.toString());
+									customers = new String[temp2.length()];
+									platforms = new String[temp2.length()];
+									
+									for(int i = 0; i < temp1.length(); i++){
+										customers[i] = temp2.getJSONObject(i).get("Customer").toString();
+										platforms[i] = temp2.getJSONObject(i).get("Program").toString();
+									}
+									customerComboBoxModel =  (new DefaultComboBoxModel<String> (customers));
+									platformComboBoxModel =  (new DefaultComboBoxModel<String> (platforms));
+									
+									txtType.setText(temp1.getJSONObject(0)
+											.get("Type").toString());
+									txtVolume.setText(temp1.getJSONObject(0)
+											.get("Volume").toString());
+									txtPower.setText(temp1.getJSONObject(0)
+											.get("Power").toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+								cboCustomer.setModel(customerComboBoxModel);
+								cboPlatform.setModel(platformComboBoxModel);
+							}
+							if(customer != null && platform == null){
+								String[] platforms = null;
+								ComboBoxModel<String> platformComboBoxModel = null;
+								JSONArray temp1 = new JSONArray();
+								JSONArray temp2 = new JSONArray();
+								
+								try {
+									temp1 = con.queryDatabase("engines",
+											"Engine", engine);
+									temp2 = con.queryDatabase("programs",
+											"Customer", customer);
+									platforms = new String[temp2.length()];
+									
+									for(int i = 0; i < temp1.length(); i++){
+										platforms[i] = temp2.getJSONObject(i).get("Program").toString();
+									}
+									platformComboBoxModel =  (new DefaultComboBoxModel<String> (platforms));
+									
+									txtType.setText(temp1.getJSONObject(0)
+											.get("Type").toString());
+									txtVolume.setText(temp1.getJSONObject(0)
+											.get("Volume").toString());
+									txtPower.setText(temp1.getJSONObject(0)
+											.get("Power").toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+								cboPlatform.setModel(platformComboBoxModel);
+							}
+							if (customer != null && platform != null) {
+								JSONArray temp1 = new JSONArray();
+								try {
+									temp1 = con.queryDatabase("engines",
+											"Engine", engine);
+									txtType.setText(temp1.getJSONObject(0)
+											.get("Type").toString());
+									txtVolume.setText(temp1.getJSONObject(0)
+											.get("Volume").toString());
+									txtPower.setText(temp1.getJSONObject(0)
+											.get("Power").toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+							}
 						}
 					}	
 				}});
 			cboCustomer.addItemListener(comboBoxSelectionListener);
 			cboPlatform.addItemListener(comboBoxSelectionListener);
+			cboEngine.addItemListener(comboBoxSelectionListener);
 			
 		//JTextFields
 			txtCustomer = new JTextField();
@@ -519,11 +618,19 @@ public class BDLFrame extends JFrame
 							txtRelSupplier.setText("");
 							txtCustomer.setText("");
 							txtCustomer.setVisible(false);
+							cboCustomer.setVisible(true);
+							cboCustomer.setModel(resetCustomerComboBox());
+							cboCustomer.setSelectedIndex(-1);
 							txtPlatform.setText("");
 							txtPlatform.setVisible(false);
+							cboPlatform.setVisible(true);
+							cboPlatform.setModel(resetPlatformComboBox());
+							cboPlatform.setSelectedIndex(-1);
 							txtName.setText("");
 							txtName.setVisible(false);
-							
+							cboEngine.setVisible(true);
+							cboEngine.setModel(resetEngineComboBox());
+							cboEngine.setSelectedIndex(-1);
 						}catch (Exception ex){ex.printStackTrace();}
 			            
 					}						
@@ -541,6 +648,33 @@ public class BDLFrame extends JFrame
 					if (e.getSource() == rbtnSearchBDL){
 						try {
 							txtIssuedBy.setText(con.getUsersName());
+							txtType.setText("");
+							txtVolume.setText("");
+							txtPower.setText("");
+							txtBosalPartNum.setText("");
+							txtCustomerPartNum.setText("");
+							txtIMDS.setText("");
+							txtDescription.setText("");
+							txtVolume2.setText("");
+							txtLength.setText("");
+							txtSection.setText("");
+							txtPage.setText("");
+							txtREV.setText("");
+							txtRelDate.setText("");
+							txtREVDate.setText("");
+							txtProduction.setText("");
+							txtRelPlant1.setText("");
+							txtRelPlant2.setText("");
+							txtRelSupplier.setText("");
+							txtCustomer.setText("");
+							txtCustomer.setVisible(true);
+							cboCustomer.setVisible(false);
+							txtPlatform.setText("");
+							txtPlatform.setVisible(true);
+							cboPlatform.setVisible(false);
+							txtName.setText("");
+							txtName.setVisible(true);
+							cboEngine.setVisible(false);							
 						} catch (Exception ex) {ex.printStackTrace();}
 			            
 					}						
@@ -551,7 +685,6 @@ public class BDLFrame extends JFrame
 			
 			group.add(rbtnCreateBDL);	
 			group.add(rbtnSearchBDL);
-			
 			
 			setupPanel();
 		}
