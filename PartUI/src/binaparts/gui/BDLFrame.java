@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -130,7 +132,7 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return CustComboBoxDefault;
 		}
-		private JComboBox<String> cboProgram;
+		private JComboBox<String> cboPlatform;
 		private ComboBoxModel<String> resetProgramComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
@@ -357,19 +359,66 @@ public class BDLFrame extends JFrame
 			cboCustomer.addMouseListener(new ContextMenuMouseListener());
 			cboCustomer.setForeground(Color.BLACK);
 			cboCustomer.setSelectedIndex(-1);
-			cboProgram = new JComboBox<String>();
-			cboProgram.setModel(resetProgramComboBox());
-			AutoCompleteDecorator.decorate(cboProgram);
-			cboProgram.addMouseListener(new ContextMenuMouseListener());
-			cboProgram.setForeground(Color.BLACK);
-			cboProgram.setSelectedIndex(-1);
+			cboPlatform = new JComboBox<String>();
+			cboPlatform.setModel(resetProgramComboBox());
+			AutoCompleteDecorator.decorate(cboPlatform);
+			cboPlatform.addMouseListener(new ContextMenuMouseListener());
+			cboPlatform.setForeground(Color.BLACK);
+			cboPlatform.setSelectedIndex(-1);
 			cboEngine = new JComboBox<String>();
 			cboEngine.setModel(resetEngineComboBox());
 			AutoCompleteDecorator.decorate(cboEngine);
 			cboEngine.addMouseListener(new ContextMenuMouseListener());
 			cboEngine.setForeground(Color.BLACK);
 			cboEngine.setSelectedIndex(-1);				
-				
+			
+			ItemListener comboBoxSelectionListener = (new ItemListener(){	
+				public void itemStateChanged(ItemEvent e)
+				{
+					if(e.getSource().equals(cboCustomer)){
+						if(e.getStateChange() == ItemEvent.SELECTED){
+							String customer =  cboCustomer.getSelectedItem().toString();
+							JSONArray temp1 = new JSONArray();
+							String[] platform = null;
+							ComboBoxModel<String> platformComboBoxModel = null;
+							
+							try{
+								temp1 = con.queryDatabase("programs", "Customer", customer);
+								platform = new String[temp1.length()];
+								
+								for(int i = 0; i < temp1.length(); i++){
+									platform[i] = temp1.getJSONObject(i).get("Program").toString();
+								}
+								platformComboBoxModel =  (new DefaultComboBoxModel<String> (platform));
+							}catch(Exception ex){ex.printStackTrace();}
+							cboPlatform.setModel(platformComboBoxModel);
+							cboPlatform.setSelectedIndex(-1);
+						}
+					}	
+					if(e.getSource().equals(cboPlatform)){
+						if(e.getStateChange() == ItemEvent.SELECTED){
+							String customer =  cboPlatform.getSelectedItem().toString();
+							JSONArray temp1 = new JSONArray();
+							String[] engine = null;
+							ComboBoxModel<String> engineComboBoxModel = null;
+							
+							try{
+								temp1 = con.queryDatabase("engines", "Platform", customer);
+								engine = new String[temp1.length()];
+								
+								for(int i = 0; i < temp1.length(); i++){
+									engine[i] = temp1.getJSONObject(i).get("Engine").toString();
+								}
+								engineComboBoxModel =  (new DefaultComboBoxModel<String> (engine));
+							}catch(Exception ex){ex.printStackTrace();}
+							cboEngine.setModel(engineComboBoxModel);
+							cboEngine.setSelectedIndex(-1);
+						}
+					}	
+				}});
+			cboCustomer.addItemListener(comboBoxSelectionListener);
+			cboPlatform.addItemListener(comboBoxSelectionListener);
+			
 		//JTextFields
 			txtCustomer = new JTextField();
 			txtCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
@@ -439,7 +488,7 @@ public class BDLFrame extends JFrame
 			txtRelSupplier.setForeground(Color.BLACK);
 		
 		//JRadioButtons
-			rbtnCreateBDL = new JRadioButton("Add Program");
+			rbtnCreateBDL = new JRadioButton("Create BDL");
 			rbtnCreateBDL.setBackground(new Color(105, 105, 105));
 			rbtnCreateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnCreateBDL.setForeground(Color.BLACK);
@@ -468,6 +517,12 @@ public class BDLFrame extends JFrame
 							txtRelPlant1.setText("");
 							txtRelPlant2.setText("");
 							txtRelSupplier.setText("");
+							txtCustomer.setText("");
+							txtCustomer.setVisible(false);
+							txtPlatform.setText("");
+							txtPlatform.setVisible(false);
+							txtName.setText("");
+							txtName.setVisible(false);
 							
 						}catch (Exception ex){ex.printStackTrace();}
 			            
@@ -554,7 +609,7 @@ public class BDLFrame extends JFrame
 								.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(127)
-								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)))
 						.addGap(31)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
@@ -708,7 +763,7 @@ public class BDLFrame extends JFrame
 								.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(91)
-								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+								.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(13)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
