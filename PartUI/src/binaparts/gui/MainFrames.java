@@ -405,7 +405,7 @@ public class MainFrames extends JFrame
 					pros[i] = temp1.getJSONObject(i).get("Program").toString();
 				}
 				programComboBoxDefault = (new DefaultComboBoxModel<String> (pros));
-			}catch(Exception ex){/*Ignore*/}
+			}catch(Exception ex){ex.printStackTrace();}
 			return programComboBoxDefault;
 		}
 		private ComboBoxModel<String> resetTypeComboBox()
@@ -421,7 +421,7 @@ public class MainFrames extends JFrame
 					types[i] = temp1.getJSONObject(i).get("PartType").toString();
 				}
 				typeComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();/*Ignore*/}
+			}catch(Exception ex){ex.printStackTrace();}
 			return typeComboBoxDefault;
 		}
 		private ComboBoxModel<String> resetDescripComboBox()
@@ -437,7 +437,7 @@ public class MainFrames extends JFrame
 					types[i] = temp1.getJSONObject(i).get("Name").toString();
 				}
 				descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){/*Ignore*/}
+			}catch(Exception ex){ex.printStackTrace();}
 			return descripComboBoxDefault;
 		}
 		private ComboBoxModel<String> resetMatComboBox()
@@ -587,7 +587,7 @@ public class MainFrames extends JFrame
 								}
 								matComboBoxModel =  (new DefaultComboBoxModel<String> (mats));
 								descripComboBoxModel = (new DefaultComboBoxModel<String> (descrip));
-							}catch(Exception ex){/*ignore*/}
+							}catch(Exception ex){ex.printStackTrace();}
 							txtMDescrip.setText("");
 							txtBPart.setText("");
 							txtSPart.setText("");
@@ -609,7 +609,7 @@ public class MainFrames extends JFrame
 							try{
 								temp1 = con.queryMaterialDescription(partType, matNumber);
 								txtMDescrip.setText(temp1.getJSONObject(0).getString("MaterialDescription").toString());
-							}catch(Exception ex){/*ignore*/}
+							}catch(Exception ex){ex.printStackTrace();}
 						}
 					}
 					if(cboType.getSelectedItem() != null){
@@ -3180,394 +3180,394 @@ public class MainFrames extends JFrame
 	class ExperimentalPanel extends JPanel
 	{
 	//JLabels
-			private JLabel lblCreated;
-			private JLabel lblCreatedBy;
-			private JLabel lblProgram;
-			private JLabel lblPartDescrip;
-			private JLabel lblCustomerPartNum;
-			private JLabel lblCustomer;
-			private JLabel lblYear;
-			private JLabel lblSearchPart;
-			private JLabel lblBosal;
-			private JLabel lblExperimental;
+		private JLabel lblCreated;
+		private JLabel lblCreatedBy;
+		private JLabel lblProgram;
+		private JLabel lblPartDescrip;
+		private JLabel lblCustomerPartNum;
+		private JLabel lblCustomer;
+		private JLabel lblYear;
+		private JLabel lblSearchPart;
+		private JLabel lblBosal;
+		private JLabel lblExperimental;
+	
+	//JTextFields
+		private JTextField txtCreated;
+		private JTextField txtCreatedBy;
+		private JTextField txtCustomerPartNum;
+		private JTextField txtPartNum;
+		private JTextField txtSearchPart;
 		
-		//JTextFields
-			private JTextField txtCreated;
-			private JTextField txtCreatedBy;
-			private JTextField txtCustomerPartNum;
-			private JTextField txtPartNum;
-			private JTextField txtSearchPart;
+	//JComboBoxes
+		private JComboBox<String> cboProgram;
+		private ComboBoxModel<String> resetProgramComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> proComboBoxDefault = null;
+			String[] types = null;
+			try {
+				temp1 = con.queryReturnAllPrograms();
+				types = new String[temp1.length()];
+						for(int i = 0; i < temp1.length(); i++){
+							types[i] = temp1.getJSONObject(i).getString("Program").toString();
+						}	
+				proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+			}catch(Exception ex){ex.printStackTrace();}
+			return proComboBoxDefault;
+		}
+		private JComboBox<String> cboPartDescrip;
+		private ComboBoxModel<String> resetDescripComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> descripComboBoxDefault = null;
+			String[] types = null;
 			
-		//JComboBoxes
-			private JComboBox<String> cboProgram;
-			private ComboBoxModel<String> resetProgramComboBox()
-			{
-				JSONArray temp1 = new JSONArray();
-				ComboBoxModel<String> proComboBoxDefault = null;
-				String[] types = null;
-				try {
-					temp1 = con.queryReturnAllPrograms();
-					types = new String[temp1.length()];
-							for(int i = 0; i < temp1.length(); i++){
-								types[i] = temp1.getJSONObject(i).getString("Program").toString();
-							}	
-					proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-				}catch(Exception ex){ex.printStackTrace();}
-				return proComboBoxDefault;
-			}
-			private JComboBox<String> cboPartDescrip;
-			private ComboBoxModel<String> resetDescripComboBox()
-			{
-				JSONArray temp1 = new JSONArray();
-				ComboBoxModel<String> descripComboBoxDefault = null;
-				String[] types = null;
-				
-				try {
-					temp1 = con.queryReturnAllDescriptions();
-					types = new String[temp1.length()];
-					for(int i = 0; i < temp1.length(); i++){
-						types[i] = temp1.getJSONObject(i).get("Name").toString();
-					}
-					descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-				}catch(Exception ex){ex.printStackTrace();}
-				return descripComboBoxDefault;
-			}
-			private JComboBox<String> cboCustomer;
-			private ComboBoxModel<String> resetCustomerComboBox()
-			{
-				JSONArray temp1 = new JSONArray();
-				ComboBoxModel<String> custComboBoxDefault = null;
-				String[] types = null;
-				try {
-					temp1 = con.queryReturnAllCustomers();
-					types = new String[temp1.length()];
-							for(int i = 0; i < temp1.length(); i++){
-								types[i] = temp1.getJSONObject(i).getString("Cust").toString();
-					}
-					custComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-				}catch(Exception ex){ex.printStackTrace();}
-				return custComboBoxDefault;
-			}
-			private JComboBox<?> cboYear;
-			
-		//JButtons
-			private JButton btnSave;
-			private JButton btnBack;
-			private JButton btnCheck;
-			
-		//JRadioButtons
-			private JRadioButton rbtnSearch;
-			private JRadioButton rbtnCreate;
-			
-			public String generatePartNumber(String Customer, String Year, String curSeq)
-			{
-				String PartNumber = null;
-				if(Year.length() < 2){
-					for(int i = Year.length(); i < 2; i++){
-						Year = "0" + Year;
-					}
+			try {
+				temp1 = con.queryReturnAllDescriptions();
+				types = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i++){
+					types[i] = temp1.getJSONObject(i).get("Name").toString();
 				}
-				if(curSeq.length() < 4){
-					for(int i = curSeq.length(); i < 4; i++){
-						curSeq = "0" + curSeq;
-					}
+				descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+			}catch(Exception ex){ex.printStackTrace();}
+			return descripComboBoxDefault;
+		}
+		private JComboBox<String> cboCustomer;
+		private ComboBoxModel<String> resetCustomerComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> custComboBoxDefault = null;
+			String[] types = null;
+			try {
+				temp1 = con.queryReturnAllCustomers();
+				types = new String[temp1.length()];
+						for(int i = 0; i < temp1.length(); i++){
+							types[i] = temp1.getJSONObject(i).getString("Cust").toString();
 				}
-				PartNumber = Customer + Year + "-" + curSeq;			
-				return PartNumber;
+				custComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+			}catch(Exception ex){ex.printStackTrace();}
+			return custComboBoxDefault;
+		}
+		private JComboBox<?> cboYear;
+		
+	//JButtons
+		private JButton btnSave;
+		private JButton btnBack;
+		private JButton btnCheck;
+		
+	//JRadioButtons
+		private JRadioButton rbtnSearch;
+		private JRadioButton rbtnCreate;
+		
+		public String generatePartNumber(String Customer, String Year, String curSeq)
+		{
+			String PartNumber = null;
+			if(Year.length() < 2){
+				for(int i = Year.length(); i < 2; i++){
+					Year = "0" + Year;
+				}
 			}
-			
+			if(curSeq.length() < 4){
+				for(int i = curSeq.length(); i < 4; i++){
+					curSeq = "0" + curSeq;
+				}
+			}
+			PartNumber = Customer + Year + "-" + curSeq;			
+			return PartNumber;
+		}
+		
 		public ExperimentalPanel(final JPanel experimental)
 		{
 			setBackground(new Color(105, 105, 105));
 			try {
 				config = new ConfigurationManager(configFilePath);
 			}catch(Exception ex){ex.printStackTrace();}
+		
+		//JLabels
+			lblCreated = new JLabel("Created");
+			lblCreatedBy = new JLabel("Created By");
+			lblProgram = new JLabel("Program");
+			lblPartDescrip = new JLabel("Part Description");
+			lblCustomerPartNum = new JLabel("Customer Part Number");
+			lblCustomer = new JLabel("Customer");
+			lblYear = new JLabel("Year Code");
+			lblSearchPart = new JLabel("Part Number");
+			ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+			lblBosal = new JLabel(bosal);
+			lblExperimental = new JLabel("Experimental Part Number");
 			
-			//JLabels
-				lblCreated = new JLabel("Created");
-				lblCreatedBy = new JLabel("Created By");
-				lblProgram = new JLabel("Program");
-				lblPartDescrip = new JLabel("Part Description");
-				lblCustomerPartNum = new JLabel("Customer Part Number");
-				lblCustomer = new JLabel("Customer");
-				lblYear = new JLabel("Year Code");
-				lblSearchPart = new JLabel("Part Number");
-				ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-				lblBosal = new JLabel(bosal);
-				lblExperimental = new JLabel("Experimental Part Number");
-				
-			//JTextFields
-				txtCreated = new JTextField();
-				txtCreated.setBackground(new Color(190, 190, 190));
-				txtCreated.setForeground(Color.BLACK);
-				txtCreated.addMouseListener(new ContextMenuMouseListener());
-				txtCreated.setEditable(false);
-				txtCreatedBy = new JTextField();
-				txtCreatedBy.setBackground(new Color(190, 190, 190));
-				txtCreatedBy.setForeground(Color.BLACK);
-				txtCreatedBy.addMouseListener(new ContextMenuMouseListener());
-				txtCreatedBy.setEditable(false);
-				txtCustomerPartNum = new JTextField();
-				txtCustomerPartNum.setForeground(Color.BLACK);
-				txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
-				txtPartNum = new JTextField();
-				txtPartNum.setBackground(new Color(190, 190, 190));
-				txtPartNum.setForeground(Color.BLACK);
-				txtPartNum.addMouseListener(new ContextMenuMouseListener());
-				txtPartNum.setEditable(false);
-				txtSearchPart = new JTextField();
-				txtSearchPart.setForeground(Color.BLACK);
-				txtSearchPart.addMouseListener(new ContextMenuMouseListener());
-				txtSearchPart.setEditable(false);
-							
-			//JComboBoxes
-				cboProgram = new JComboBox<String>();
-				cboProgram.setModel(resetProgramComboBox());
-				AutoCompleteDecorator.decorate(cboProgram);
-				cboProgram.addMouseListener(new ContextMenuMouseListener());
-				cboProgram.setForeground(Color.BLACK);
-				cboProgram.setSelectedIndex(-1);
-				cboPartDescrip = new JComboBox<String>();
-				cboPartDescrip.setModel(resetDescripComboBox());
-				AutoCompleteDecorator.decorate(cboPartDescrip);
-				cboPartDescrip.setForeground(Color.BLACK);
-				cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
-				cboPartDescrip.setSelectedIndex(-1);
-				cboCustomer = new JComboBox<String>();
-				cboCustomer.setModel(resetCustomerComboBox());
-				AutoCompleteDecorator.decorate(cboCustomer);
-				cboCustomer.setSelectedIndex(-1);
-				cboCustomer.addMouseListener(new ContextMenuMouseListener());
-				cboCustomer.setForeground(Color.BLACK);
-				String[] years = {"13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
-				cboYear = new JComboBox<Object>(years);
-				cboYear.setSelectedIndex(-1);
-				cboYear.setEditable(false);
-				cboYear.setForeground(Color.BLACK);
-				
-				ItemListener comboBoxSelectionListener = (new ItemListener(){	
-					public void itemStateChanged(ItemEvent e)
-					{
-						if(cboCustomer.getSelectedItem() != null){
-							if(cboYear.getSelectedItem() != null){
-								txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
-										cboYear.getSelectedItem().toString(), ""));
-							}else{
-								txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
-										"", ""));
-							}
+		//JTextFields
+			txtCreated = new JTextField();
+			txtCreated.setBackground(new Color(190, 190, 190));
+			txtCreated.setForeground(Color.BLACK);
+			txtCreated.addMouseListener(new ContextMenuMouseListener());
+			txtCreated.setEditable(false);
+			txtCreatedBy = new JTextField();
+			txtCreatedBy.setBackground(new Color(190, 190, 190));
+			txtCreatedBy.setForeground(Color.BLACK);
+			txtCreatedBy.addMouseListener(new ContextMenuMouseListener());
+			txtCreatedBy.setEditable(false);
+			txtCustomerPartNum = new JTextField();
+			txtCustomerPartNum.setForeground(Color.BLACK);
+			txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
+			txtPartNum = new JTextField();
+			txtPartNum.setBackground(new Color(190, 190, 190));
+			txtPartNum.setForeground(Color.BLACK);
+			txtPartNum.addMouseListener(new ContextMenuMouseListener());
+			txtPartNum.setEditable(false);
+			txtSearchPart = new JTextField();
+			txtSearchPart.setForeground(Color.BLACK);
+			txtSearchPart.addMouseListener(new ContextMenuMouseListener());
+			txtSearchPart.setEditable(false);
+						
+		//JComboBoxes
+			cboProgram = new JComboBox<String>();
+			cboProgram.setModel(resetProgramComboBox());
+			AutoCompleteDecorator.decorate(cboProgram);
+			cboProgram.addMouseListener(new ContextMenuMouseListener());
+			cboProgram.setForeground(Color.BLACK);
+			cboProgram.setSelectedIndex(-1);
+			cboPartDescrip = new JComboBox<String>();
+			cboPartDescrip.setModel(resetDescripComboBox());
+			AutoCompleteDecorator.decorate(cboPartDescrip);
+			cboPartDescrip.setForeground(Color.BLACK);
+			cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
+			cboPartDescrip.setSelectedIndex(-1);
+			cboCustomer = new JComboBox<String>();
+			cboCustomer.setModel(resetCustomerComboBox());
+			AutoCompleteDecorator.decorate(cboCustomer);
+			cboCustomer.setSelectedIndex(-1);
+			cboCustomer.addMouseListener(new ContextMenuMouseListener());
+			cboCustomer.setForeground(Color.BLACK);
+			String[] years = {"13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
+			cboYear = new JComboBox<Object>(years);
+			cboYear.setSelectedIndex(-1);
+			cboYear.setEditable(false);
+			cboYear.setForeground(Color.BLACK);
+			
+			ItemListener comboBoxSelectionListener = (new ItemListener(){	
+				public void itemStateChanged(ItemEvent e)
+				{
+					if(cboCustomer.getSelectedItem() != null){
+						if(cboYear.getSelectedItem() != null){
+							txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
+									cboYear.getSelectedItem().toString(), ""));
 						}else{
-							txtPartNum.setText(generatePartNumber("", "", ""));
+							txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
+									"", ""));
 						}
-					}});
-				cboCustomer.addItemListener(comboBoxSelectionListener);
-				cboYear.addItemListener(comboBoxSelectionListener);
-			//JRadioButtons
-				rbtnSearch = new JRadioButton("Search Part");
-				rbtnSearch.setFont(new Font("Tahoma", Font.BOLD, 14));
-				rbtnSearch.setForeground(Color.BLACK);
-				rbtnSearch.setBackground(new Color(105, 105, 105));
-				rbtnCreate = new JRadioButton("Create Part");
-				rbtnCreate.setFont(new Font("Tahoma", Font.BOLD, 14));
-				rbtnCreate.setForeground(Color.BLACK);
-				rbtnCreate.setBackground(new Color(105, 105, 105));
-				
-			//RadioButton Logic
-				rbtnCreate.addActionListener(new ActionListener(){
-					
-					public void actionPerformed(ActionEvent e)
-					{
-						if (e.getSource() == rbtnCreate){
-				            
-				            txtSearchPart.setText("");
-				            txtSearchPart.setEditable(false);
-				            txtCreated.setText("");
-				            txtCreatedBy.setText("");
-				            txtCustomerPartNum.setText("");
-				            txtPartNum.setText("");
-				            cboYear.setSelectedIndex(-1);
-				            cboProgram.setModel(resetProgramComboBox());
-				            cboProgram.setSelectedIndex(-1);
-				            cboCustomer.setModel(resetCustomerComboBox());
-				            cboCustomer.setSelectedIndex(-1);
-				            cboPartDescrip.setSelectedIndex(-1);
-		            }
+					}else{
+						txtPartNum.setText(generatePartNumber("", "", ""));
+					}
 				}});
-				rbtnCreate.doClick();
-									
-				rbtnSearch.addActionListener(new ActionListener(){
-					
-					public void actionPerformed(ActionEvent e)
-					{
-						if (e.getSource() == rbtnSearch){
-							
-				            txtSearchPart.setText("");
-				            txtSearchPart.setEditable(true);
-				            txtSearchPart.requestFocusInWindow();
-				            txtCreated.setText("");
-				            txtCreatedBy.setText("");
-				            txtCustomerPartNum.setText("");
-				            txtPartNum.setText("");
-				            cboYear.setSelectedIndex(-1);
-				            cboProgram.setModel(resetProgramComboBox());
-				            cboProgram.setSelectedIndex(-1);
-				            cboCustomer.setModel(resetCustomerComboBox());
-				            cboCustomer.setSelectedIndex(-1);
-				            cboPartDescrip.setSelectedIndex(-1);
-				            }
-				}});
+			cboCustomer.addItemListener(comboBoxSelectionListener);
+			cboYear.addItemListener(comboBoxSelectionListener);
+		//JRadioButtons
+			rbtnSearch = new JRadioButton("Search Part");
+			rbtnSearch.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnSearch.setForeground(Color.BLACK);
+			rbtnSearch.setBackground(new Color(105, 105, 105));
+			rbtnCreate = new JRadioButton("Create Part");
+			rbtnCreate.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnCreate.setForeground(Color.BLACK);
+			rbtnCreate.setBackground(new Color(105, 105, 105));
+			
+		//RadioButton Logic
+			rbtnCreate.addActionListener(new ActionListener(){
 				
-			//JButtons
-				ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
-				btnSave = new JButton(save);
-				btnSave.addActionListener(new ActionListener() {
-					
-					public void actionPerformed(ActionEvent e) 
-					{
-						if (e.getSource() == btnSave) {
-							txtCreated.setText(con.getDate().toString());
-							txtCreatedBy.setText(config.getProperty("appUser"));
-							int n = JOptionPane.showConfirmDialog(
-								    frame,
-								    "Are you sure you want to save part data?",
-								    "Save:",
-								    JOptionPane.YES_NO_OPTION,
-									JOptionPane.WARNING_MESSAGE);
-							if(n == 0){
-								try {
-									String Program = null;
-									String PartDescription = null;
-									String CustPartNumber =  null;
-									String Customer = null;
-									String Year = null;
-									String EPart = null;
-									
-									Program = (String) cboProgram.getSelectedItem();
-									PartDescription = (String) cboPartDescrip.getSelectedItem();
-									CustPartNumber = txtCustomerPartNum.getText();
-									Customer = (String) cboCustomer.getSelectedItem();
-									Year = (String) cboYear.getSelectedItem();
-									con.insertExperimentalPart(Program, PartDescription, CustPartNumber, Customer, Year);		
-									JSONArray temp = con.queryReturnExpPart();
-									EPart = temp.getJSONObject(0).get("PartNumber").toString();
-									txtPartNum.setText(generatePartNumber(Customer, Year, EPart));
-								}catch(Exception ex){/*Ignore*/};
-							}
+				public void actionPerformed(ActionEvent e)
+				{
+					if (e.getSource() == rbtnCreate){
+			            
+			            txtSearchPart.setText("");
+			            txtSearchPart.setEditable(false);
+			            txtCreated.setText("");
+			            txtCreatedBy.setText("");
+			            txtCustomerPartNum.setText("");
+			            txtPartNum.setText("");
+			            cboYear.setSelectedIndex(-1);
+			            cboProgram.setModel(resetProgramComboBox());
+			            cboProgram.setSelectedIndex(-1);
+			            cboCustomer.setModel(resetCustomerComboBox());
+			            cboCustomer.setSelectedIndex(-1);
+			            cboPartDescrip.setSelectedIndex(-1);
+	            }
+			}});
+			rbtnCreate.doClick();
+								
+			rbtnSearch.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e)
+				{
+					if (e.getSource() == rbtnSearch){
+						
+			            txtSearchPart.setText("");
+			            txtSearchPart.setEditable(true);
+			            txtSearchPart.requestFocusInWindow();
+			            txtCreated.setText("");
+			            txtCreatedBy.setText("");
+			            txtCustomerPartNum.setText("");
+			            txtPartNum.setText("");
+			            cboYear.setSelectedIndex(-1);
+			            cboProgram.setModel(resetProgramComboBox());
+			            cboProgram.setSelectedIndex(-1);
+			            cboCustomer.setModel(resetCustomerComboBox());
+			            cboCustomer.setSelectedIndex(-1);
+			            cboPartDescrip.setSelectedIndex(-1);
+			            }
+			}});
+			
+		//JButtons
+			ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
+			btnSave = new JButton(save);
+			btnSave.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (e.getSource() == btnSave) {
+						txtCreated.setText(con.getDate().toString());
+						txtCreatedBy.setText(config.getProperty("appUser"));
+						int n = JOptionPane.showConfirmDialog(
+							    frame,
+							    "Are you sure you want to save part data?",
+							    "Save:",
+							    JOptionPane.YES_NO_OPTION,
+								JOptionPane.WARNING_MESSAGE);
+						if(n == 0){
+							try {
+								String Program = null;
+								String PartDescription = null;
+								String CustPartNumber =  null;
+								String Customer = null;
+								String Year = null;
+								String EPart = null;
+								
+								Program = (String) cboProgram.getSelectedItem();
+								PartDescription = (String) cboPartDescrip.getSelectedItem();
+								CustPartNumber = txtCustomerPartNum.getText();
+								Customer = (String) cboCustomer.getSelectedItem();
+								Year = (String) cboYear.getSelectedItem();
+								con.insertExperimentalPart(Program, PartDescription, CustPartNumber, Customer, Year);		
+								JSONArray temp = con.queryReturnExpPart();
+								EPart = temp.getJSONObject(0).get("PartNumber").toString();
+								txtPartNum.setText(generatePartNumber(Customer, Year, EPart));
+							}catch(Exception ex){/*Ignore*/};
 						}
-					}					
-				});
-							
-				ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
-				btnBack = new JButton(back);
-				btnBack.addActionListener(new ActionListener() {
-					
-					public void actionPerformed(ActionEvent e) 
-					{
-						if (e.getSource() == btnBack) {
-							setVisible(false);
-							Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-							int height = screenSize.height;
-							int width = screenSize.width;
-							frame.setResizable(false);
-							frame.setSize(width/2, height/2);
-							frame.setLocationRelativeTo(null);
-							frame.setSize(865, 555);
-							frame.setTitle("Main Menu:");
-							main.setVisible(true);
-							cboPartDescrip.setSelectedIndex(-1);
-							cboYear.setSelectedIndex(-1);
-							txtCreated.setText("");
-							txtCreatedBy.setText("");
-							txtCustomerPartNum.setText("");
-							txtPartNum.setText("");
-							txtSearchPart.setText("");
-							cboCustomer.setSelectedIndex(-1);
-							cboProgram.setSelectedIndex(-1);
-							rbtnCreate.setSelected(true);
-						}
-					}					
-				});
-							
-				ImageIcon check= new ImageIcon(getClass().getResource("/images/check.jpg"));
-				btnCheck = new JButton(check);
-				btnCheck.addActionListener(new ActionListener() {
-					
-					public void actionPerformed(ActionEvent e) 
-					{
-						if (e.getSource() == btnCheck) {
-							con = new DBConnect();
-							final String findBosalText = txtSearchPart.getText();
-							
+					}
+				}					
+			});
+						
+			ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
+			btnBack = new JButton(back);
+			btnBack.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (e.getSource() == btnBack) {
+						setVisible(false);
+						Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+						int height = screenSize.height;
+						int width = screenSize.width;
+						frame.setResizable(false);
+						frame.setSize(width/2, height/2);
+						frame.setLocationRelativeTo(null);
+						frame.setSize(865, 555);
+						frame.setTitle("Main Menu:");
+						main.setVisible(true);
+						cboPartDescrip.setSelectedIndex(-1);
+						cboYear.setSelectedIndex(-1);
+						txtCreated.setText("");
+						txtCreatedBy.setText("");
+						txtCustomerPartNum.setText("");
+						txtPartNum.setText("");
+						txtSearchPart.setText("");
+						cboCustomer.setSelectedIndex(-1);
+						cboProgram.setSelectedIndex(-1);
+						rbtnCreate.setSelected(true);
+					}
+				}					
+			});
+						
+			ImageIcon check= new ImageIcon(getClass().getResource("/images/check.jpg"));
+			btnCheck = new JButton(check);
+			btnCheck.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (e.getSource() == btnCheck) {
+						con = new DBConnect();
+						final String findBosalText = txtSearchPart.getText();
+						
+						try{
+							JSONObject temp = (con.queryDatabase("experimental parts", "PartNumber", findBosalText)).getJSONObject(0);
+							String cpartText = null;
+						
+							//set text for CustPartNumber JTextField
 							try{
-								JSONObject temp = (con.queryDatabase("experimental parts", "PartNumber", findBosalText)).getJSONObject(0);
-								String cpartText = null;
+								cpartText = temp.get("CustPartNumber").toString();
+							}catch(Exception ex){cpartText = "-";}
+							txtCustomerPartNum.setText(cpartText);
 							
-								//set text for CustPartNumber JTextField
-								try{
-									cpartText = temp.get("CustPartNumber").toString();
-								}catch(Exception ex){cpartText = "-";}
-								txtCustomerPartNum.setText(cpartText);
-								
-								//set text for Description JComboBox
-								String descrip = null;
-								try{
-									descrip = temp.get("PartDescription").toString();
-								}catch(Exception ex){descrip = "-";}
-								cboPartDescrip.setSelectedItem(descrip);
-								
-								//set text for Program JComboBox
-								String program = null;
-								try{
-									program = temp.get("Program").toString();
-								}catch(Exception ex){program = "-";}
-								cboProgram.setSelectedItem(program);
-								
-								//set text for Customer JComboBox
-								String cust = null;
-								try{
-									cust = temp.get("Customer").toString();
-								}catch(Exception ex){cust = "-";}
-								cboCustomer.setSelectedItem(cust);
-								
-								//set text for Year JComboBox
-								String year = null;
-								try{
-									year = temp.getString("YearCode").toString();
-								}catch(Exception ex){year = "-";}
-								cboYear.setSelectedItem(year);
-								
-								//set text for Created JTextField
-								String created = null;
-								try{
-									created = temp.get("Date").toString();
-								}catch(Exception ex){created = "-";}
-								txtCreated.setText(created);
-								
-								//set text for CreatedBy JTextField
-								String createdBy = null;
-								try{
-									createdBy = temp.get("Engineer").toString();
-								}catch(Exception ex){createdBy = "-";}
-								txtCreatedBy.setText(createdBy);
-								
-								//set text for Part Number JTextField
-								String part = null;
-								try{
-									part = temp.get("PartNumber").toString();
-								}catch(Exception ex){part = "-";}
-								txtPartNum.setText(generatePartNumber(cust, year, part));
-								
-							}catch(Exception ex){
-								JOptionPane.showMessageDialog(
-										    frame,
-										    "Bosal Part Number: " + findBosalText + " does not exist",
-										    "Missing Part Number",
-											JOptionPane.ERROR_MESSAGE);
-								
-							}
+							//set text for Description JComboBox
+							String descrip = null;
+							try{
+								descrip = temp.get("PartDescription").toString();
+							}catch(Exception ex){descrip = "-";}
+							cboPartDescrip.setSelectedItem(descrip);
+							
+							//set text for Program JComboBox
+							String program = null;
+							try{
+								program = temp.get("Program").toString();
+							}catch(Exception ex){program = "-";}
+							cboProgram.setSelectedItem(program);
+							
+							//set text for Customer JComboBox
+							String cust = null;
+							try{
+								cust = temp.get("Customer").toString();
+							}catch(Exception ex){cust = "-";}
+							cboCustomer.setSelectedItem(cust);
+							
+							//set text for Year JComboBox
+							String year = null;
+							try{
+								year = temp.getString("YearCode").toString();
+							}catch(Exception ex){year = "-";}
+							cboYear.setSelectedItem(year);
+							
+							//set text for Created JTextField
+							String created = null;
+							try{
+								created = temp.get("Date").toString();
+							}catch(Exception ex){created = "-";}
+							txtCreated.setText(created);
+							
+							//set text for CreatedBy JTextField
+							String createdBy = null;
+							try{
+								createdBy = temp.get("Engineer").toString();
+							}catch(Exception ex){createdBy = "-";}
+							txtCreatedBy.setText(createdBy);
+							
+							//set text for Part Number JTextField
+							String part = null;
+							try{
+								part = temp.get("PartNumber").toString();
+							}catch(Exception ex){part = "-";}
+							txtPartNum.setText(generatePartNumber(cust, year, part));
+							
+						}catch(Exception ex){
+							JOptionPane.showMessageDialog(
+									    frame,
+									    "Bosal Part Number: " + findBosalText + " does not exist",
+									    "Missing Part Number",
+										JOptionPane.ERROR_MESSAGE);
+							
 						}
-					}					
-				});			
+					}
+				}					
+			});			
 			setupPanel();
 		}
 		
