@@ -9,7 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
@@ -55,6 +57,9 @@ public class BDLFrame extends JFrame
 		BDLframe.setSize(1100, 555);
 		BDLframe.setContentPane(contentPane);
 		BDLframe.setVisible(true);	
+		try{
+			BDLframe.setIconImage(ImageIO.read(new File("res/bosalimage.png")));
+		}catch(Exception ex){ex.printStackTrace();}
 	}
 		
 	@SuppressWarnings("serial")
@@ -674,7 +679,9 @@ public class BDLFrame extends JFrame
 							cboPlatform.setVisible(false);
 							txtName.setText("");
 							txtName.setVisible(true);
-							cboEngine.setVisible(false);							
+							cboEngine.setVisible(false);
+							Search s = new Search();
+							s.displaySearch();
 						} catch (Exception ex) {ex.printStackTrace();}
 			            
 					}						
