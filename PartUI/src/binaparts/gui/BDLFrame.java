@@ -423,12 +423,18 @@ public class BDLFrame extends JFrame
 					}	
 					if(e.getSource().equals(cboEngine)){
 						if(e.getStateChange() == ItemEvent.SELECTED){
-							String customer = null;
-							String platform = null;
 							String engine = null;
 							try{
 								engine = cboEngine.getSelectedItem().toString();
+							} catch (Exception ex) {ex.printStackTrace();}
+							
+							String platform = null;
+							try{
 								platform = cboPlatform.getSelectedItem().toString();
+							} catch (Exception ex) {ex.printStackTrace();}
+							
+							String customer = null;
+							try{
 								customer = cboCustomer.getSelectedItem().toString();
 							} catch (Exception ex) {ex.printStackTrace();}
 							
@@ -439,7 +445,6 @@ public class BDLFrame extends JFrame
 								ComboBoxModel<String> platformComboBoxModel = null;
 								JSONArray temp1 = new JSONArray();
 								JSONArray temp2 = new JSONArray();
-								//JSONArray temp3 = new JSONArray();
 								
 								try {
 									temp1 = con.queryDatabase("engines",
@@ -500,6 +505,35 @@ public class BDLFrame extends JFrame
 									ex.printStackTrace();
 								}
 								cboPlatform.setModel(platformComboBoxModel);
+							}
+							if(customer == null && platform != null){
+								String[] customers = null;
+								ComboBoxModel<String> customerComboBoxModel = null;
+								JSONArray temp1 = new JSONArray();
+								JSONArray temp2 = new JSONArray();
+								
+								try {
+									temp1 = con.queryDatabase("engines",
+											"Engine", engine);
+									temp2 = con.queryDatabase("programs",
+											"Program", platform);
+									customers = new String[temp2.length()];
+									
+									for(int i = 0; i < temp1.length(); i++){
+										customers[i] = temp2.getJSONObject(i).get("Customer").toString();
+									}
+									customerComboBoxModel =  (new DefaultComboBoxModel<String> (customers));
+									
+									txtType.setText(temp1.getJSONObject(0)
+											.get("Type").toString());
+									txtVolume.setText(temp1.getJSONObject(0)
+											.get("Volume").toString());
+									txtPower.setText(temp1.getJSONObject(0)
+											.get("Power").toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+								cboCustomer.setModel(customerComboBoxModel);
 							}
 							if (customer != null && platform != null) {
 								JSONArray temp1 = new JSONArray();
