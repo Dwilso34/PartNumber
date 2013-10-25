@@ -65,8 +65,13 @@ public class BDLFrame extends JFrame
 	}
 		
 	class BDLMain extends JPanel 
-	{			
-
+	{		
+		//temp arrays to hold comboBox info 
+		private JSONArray temp1;
+		private JSONArray temp2;
+		private JSONArray temp3;
+		//^^reset will be on doClick() action of rbtnCreateBDL^^
+		
 		//JLabels	
 		private JLabel lblBosal;
 		private JLabel lblBDL;
@@ -130,6 +135,20 @@ public class BDLFrame extends JFrame
 		private JComboBox<String> cboCustomer;
 		private ComboBoxModel<String> resetCustomerComboBox()
 		{
+			ComboBoxModel<String> CustComboBoxDefault = null;
+			String[] Cust = null;
+			
+			try {
+				Cust = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i++){
+					Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
+				}
+				CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
+			}catch(Exception ex){ex.printStackTrace();}
+			return CustComboBoxDefault;
+		}
+		/*private ComboBoxModel<String> resetCustomerComboBox()
+		{
 			JSONArray temp1 = new JSONArray();
 			ComboBoxModel<String> CustComboBoxDefault = null;
 			String[] Cust = null;
@@ -143,9 +162,22 @@ public class BDLFrame extends JFrame
 				CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
 			}catch(Exception ex){ex.printStackTrace();}
 			return CustComboBoxDefault;
-		}
+		}*/
 		private JComboBox<String> cboPlatform;
 		private ComboBoxModel<String> resetPlatformComboBox()
+		{
+			ComboBoxModel<String> proComboBoxDefault = null;
+			String[] types = null;
+			try {
+				types = new String[temp2.length()];
+				for(int i = 0; i < temp2.length(); i++){
+					types[i] = temp2.getJSONObject(i).getString("Program").toString();
+				}	
+				proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+			}catch(Exception ex){ex.printStackTrace();}
+			return proComboBoxDefault;
+		}
+		/*private ComboBoxModel<String> resetPlatformComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
 			ComboBoxModel<String> proComboBoxDefault = null;
@@ -159,9 +191,22 @@ public class BDLFrame extends JFrame
 				proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
 			}catch(Exception ex){ex.printStackTrace();}
 			return proComboBoxDefault;
-		}
+		}*/
 		private JComboBox<String> cboName;
 		private ComboBoxModel<String> resetEngineComboBox()
+		{
+			ComboBoxModel<String> engineComboBoxDefault = null;
+			String[] types = null;
+			try {
+				types = new String[temp3.length()];
+				for(int i = 0; i < temp3.length(); i++){
+					types[i] = temp3.getJSONObject(i).getString("Engine").toString();
+				}	
+				engineComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+			}catch(Exception ex){ex.printStackTrace();}
+			return engineComboBoxDefault;
+		}
+		/*private ComboBoxModel<String> resetEngineComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
 			ComboBoxModel<String> engineComboBoxDefault = null;
@@ -175,8 +220,8 @@ public class BDLFrame extends JFrame
 				engineComboBoxDefault = (new DefaultComboBoxModel<String> (types));
 			}catch(Exception ex){ex.printStackTrace();}
 			return engineComboBoxDefault;
-		}
-	
+		}*/
+		
 	//JRadioButtons
 		private JRadioButton rbtnCreateBDL;
 		private JRadioButton rbtnSearchBDL;
@@ -377,11 +422,6 @@ public class BDLFrame extends JFrame
 			AutoCompleteDecorator.decorate(cboName);
 			cboName.addMouseListener(new ContextMenuMouseListener());
 			cboName.setForeground(Color.BLACK);	
-			
-			//temp arrays to hold comboBox info 
-			JSONArray temp1 = null;
-			JSONArray temp2 = null;
-			//^^reset will be on doClick() action of rbtnCreateBDL^^
 			
 			ItemListener comboBoxSelectionListener = (new ItemListener(){	
 				public void itemStateChanged(ItemEvent e)
@@ -659,6 +699,9 @@ public class BDLFrame extends JFrame
 					if (e.getSource() == rbtnCreateBDL){
 						try {
 							txtIssuedBy.setText(con.getUsersName());
+							temp1 = con.queryReturnAllCustomers();
+							temp2 = con.queryReturnAllPrograms();
+							temp3 = con.queryReturnAllEngines();
 							txtType.setText("");
 							txtVolume.setText("");
 							txtPower.setText("");
