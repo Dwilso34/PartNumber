@@ -245,7 +245,7 @@ public class MainFrames extends JFrame
 								if(con.verifyUser() == true){
 									setStatus();
 									setVisible(false);
-									frame.setSize(695,400);
+									frame.setSize(680,355);
 									frame.setTitle("Create Part:");
 									frame.setResizable(false);
 									frame.setLocationRelativeTo(main);
@@ -1359,404 +1359,400 @@ public class MainFrames extends JFrame
 	{
 	//JLabels
 	
-			private JLabel lblFindPartInfo;
-			private JLabel lblBosal;
-			
-		//JButtons
-			
-			private JButton btnBack;
-			private JButton btnSearch;
-			private JButton btnSearchAll;
+	private JLabel lblFindPartInfo;
+	private JLabel lblBosal;
+	
+//JButtons
+	
+	private JButton btnBack;
+	private JButton btnSearch;
+	private JButton btnSearchAll;
 
-		//JTextFields	
+//JTextFields	
+	
+	private JTextField txtSearch;
+	
+//JRadioButtons
+	
+	private JRadioButton rbtnFindBosal;
+	private JRadioButton rbtnFindCus;
+	private JRadioButton rbtnFindSup;
+	private JRadioButton rbtnFindPro;
+	private JRadioButton rbtnFindEuro;
+	
+//JTable	
+	
+	private JTable myTable;
+	private JScrollPane scrollPane;
+	
+	public TableModel populateTableModel(String table, String column, JSONArray temp, String queryValue){
+		 
+        TableModel tableModel = null;
+      				
+        try{
+            int columnCount = con.getColumnNames(table, column, queryValue).length;
+            int rowCount = con.getRowCount(table, column, queryValue);
+            String[] temp1 = new String[columnCount];
+            String[] columnNames = new String[(columnCount - 4)];
+            String[][] data = new String[rowCount][columnCount];
+            temp1 = con.getColumnNames(table, column, queryValue);	      
+            
+            int index = 0;
+            for(int i = 0; i < columnCount; i++){
+            	if(temp1[i].equals("PartType")){i++;}
+            	if(temp1[i].equals("Material")){i++;}
+            	if(temp1[i].equals("SeqNumber")){i++;}
+            	if(temp1[i].equals("TypeDescription")){i++;}
+            	columnNames[index] = temp1[i];
+            	index++;
+            }
+            
+            for(int i = 0; i < rowCount; i++){
+                for(int j = 0; j < columnNames.length; j++){
+                	try{
+                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
+                    }catch(Exception ex){/*Ignore*/
+                        data[i][j] = "";
+                    }
+                }
+            }
+            tableModel = (new DefaultTableModel(data, columnNames));
+           
 			
-			private JTextField txtSearch;
+        }catch(Exception ex){ex.printStackTrace();}
+       
+       
+        return tableModel;
+    }
+	
+	public FindPanel(final JPanel find)
+	{
+	//JTextFields
+	
+		txtSearch = new JTextField();
+		txtSearch.setForeground(Color.BLACK);
+		txtSearch.addMouseListener(new ContextMenuMouseListener());
+		
+		
+	//RadioButtons	
+		
+		rbtnFindBosal = new JRadioButton("Bosal Part Number");
+		rbtnFindBosal.setBackground(new Color(105, 105, 105));
+		rbtnFindBosal.setFont(new Font("Tahoma", Font.BOLD, 14));
+		rbtnFindBosal.setForeground(Color.BLACK);
+		rbtnFindCus = new JRadioButton("Customer Part Number");
+		rbtnFindCus.setBackground(new Color(105, 105, 105));
+		rbtnFindCus.setFont(new Font("Tahoma", Font.BOLD, 14));
+		rbtnFindCus.setForeground(Color.BLACK);
+		rbtnFindSup = new JRadioButton("Supplier Part Number");
+		rbtnFindSup.setBackground(new Color(105, 105, 105));
+		rbtnFindSup.setFont(new Font("Tahoma", Font.BOLD, 14));
+		rbtnFindSup.setForeground(Color.BLACK);
+		rbtnFindPro = new JRadioButton("Program");
+		rbtnFindPro.setBackground(new Color(105, 105, 105));
+		rbtnFindPro.setFont(new Font("Tahoma", Font.BOLD, 14));
+		rbtnFindPro.setForeground(Color.BLACK);
+		rbtnFindEuro = new JRadioButton("Europe Part Number");
+		rbtnFindEuro.setBackground(new Color(105, 105, 105));
+		rbtnFindEuro.setFont(new Font("Tahoma", Font.BOLD, 14));
+		rbtnFindEuro.setForeground(Color.BLACK);
+		setBackground(new Color(105, 105, 105));
+	
+	//JLabels	
+		
+		lblFindPartInfo = new JLabel("Find Part Information");
+		
+	//JTable	
+		
+		
+		
+		myTable = new JTable(){	
+			public boolean isCellEditable(int row, int column){
+				return false;
+			}
+		};
+		scrollPane = new JScrollPane(myTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+		
+	//Image		
 			
-		//JRadioButtons
+		ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+		lblBosal = new JLabel(bosal);
+	
+	//RadioButtons Logic
+		
+		
+		rbtnFindBosal.addActionListener(new ActionListener(){
 			
-			private JRadioButton rbtnFindBosal;
-			private JRadioButton rbtnFindCus;
-			private JRadioButton rbtnFindSup;
-			private JRadioButton rbtnFindPro;
-			private JRadioButton rbtnFindEuro;
-			
-		//JTable	
-			
-			private JTable myTable;
-			private JScrollPane scrollPane;
-			
-			public TableModel populateTableModel(String table, String column, JSONArray temp, String queryValue){
-				 
-		        TableModel tableModel = null;
-		      				
-		        try{
-		            int columnCount = con.getColumnNames(table, column, queryValue).length;
-		            int rowCount = con.getRowCount(table, column, queryValue);
-		            String[] temp1 = new String[columnCount];
-		            String[] columnNames = new String[(columnCount - 4)];
-		            String[][] data = new String[rowCount][columnCount];
-		            temp1 = con.getColumnNames(table, column, queryValue);	      
-		            
-		            int index = 0;
-		            for(int i = 0; i < columnCount; i++){
-		            	if(temp1[i].equals("PartType")){i++;}
-		            	if(temp1[i].equals("Material")){i++;}
-		            	if(temp1[i].equals("SeqNumber")){i++;}
-		            	if(temp1[i].equals("TypeDescription")){i++;}
-		            	columnNames[index] = temp1[i];
-		            	index++;
-		            }
-		            
-		            for(int i = 0; i < rowCount; i++){
-		                for(int j = 0; j < columnNames.length; j++){
-		                	try{
-		                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
-		                    }catch(Exception ex){/*Ignore*/
-		                        data[i][j] = "";
-		                    }
-		                }
-		            }
-		            tableModel = (new DefaultTableModel(data, columnNames));
-		           
-					
-		        }catch(Exception ex){ex.printStackTrace();}
-		       
-		       
-		        return tableModel;
-		    }
-			
-			public FindPanel(final JPanel find)
+			public void actionPerformed(ActionEvent e)
 			{
-			//JTextFields
-			
-				txtSearch = new JTextField();
-				txtSearch.setForeground(Color.BLACK);
-				txtSearch.addMouseListener(new ContextMenuMouseListener());
-				
-				
-			//RadioButtons	
-				
-				rbtnFindBosal = new JRadioButton("Bosal Part Number");
-				rbtnFindBosal.setBackground(new Color(105, 105, 105));
-				rbtnFindBosal.setFont(new Font("Tahoma", Font.BOLD, 14));
-				rbtnFindBosal.setForeground(Color.BLACK);
-				rbtnFindCus = new JRadioButton("Customer Part Number");
-				rbtnFindCus.setBackground(new Color(105, 105, 105));
-				rbtnFindCus.setFont(new Font("Tahoma", Font.BOLD, 14));
-				rbtnFindCus.setForeground(Color.BLACK);
-				rbtnFindSup = new JRadioButton("Supplier Part Number");
-				rbtnFindSup.setBackground(new Color(105, 105, 105));
-				rbtnFindSup.setFont(new Font("Tahoma", Font.BOLD, 14));
-				rbtnFindSup.setForeground(Color.BLACK);
-				rbtnFindPro = new JRadioButton("Program");
-				rbtnFindPro.setBackground(new Color(105, 105, 105));
-				rbtnFindPro.setFont(new Font("Tahoma", Font.BOLD, 14));
-				rbtnFindPro.setForeground(Color.BLACK);
-				rbtnFindEuro = new JRadioButton("Europe Part Number");
-				rbtnFindEuro.setBackground(new Color(105, 105, 105));
-				rbtnFindEuro.setFont(new Font("Tahoma", Font.BOLD, 14));
-				rbtnFindEuro.setForeground(Color.BLACK);
-				setBackground(new Color(105, 105, 105));
-			
-			//JLabels	
-				
-				lblFindPartInfo = new JLabel("Find Part Information");
-				
-			//JTable	
-				
-				scrollPane = new JScrollPane();
-				scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-				myTable = new JTable(){	
-					public boolean isCellEditable(int row, int column){
-						return false;
-					}
-				};
-				scrollPane.setViewportView(myTable);
-
-				
-			//Image		
-					
-				ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-				lblBosal = new JLabel(bosal);
-			
-			//RadioButtons Logic
-				
-				
-				rbtnFindBosal.addActionListener(new ActionListener(){
-					
-					public void actionPerformed(ActionEvent e)
-					{
-						if (e.getSource() == rbtnFindBosal){
-				            
-				            txtSearch.setText("");
-				            txtSearch.requestFocusInWindow();
-				           }
-				}});	
-									
-				rbtnFindCus.addActionListener(new ActionListener(){
-					
-					public void actionPerformed(ActionEvent e)
-					{
-						if (e.getSource() == rbtnFindCus){
+				if (e.getSource() == rbtnFindBosal){
+		            
+		            txtSearch.setText("");
+		            txtSearch.requestFocusInWindow();
+		           }
+		}});	
 							
-				            txtSearch.setText("");
-				            txtSearch.requestFocusInWindow();
-				            }
-				}});
+		rbtnFindCus.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == rbtnFindCus){
+					
+		            txtSearch.setText("");
+		            txtSearch.requestFocusInWindow();
+		            }
+		}});
+		
+		rbtnFindSup.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == rbtnFindSup){
 				
-				rbtnFindSup.addActionListener(new ActionListener(){
-					
-					public void actionPerformed(ActionEvent e)
-					{
-						if (e.getSource() == rbtnFindSup){
-						
-				            txtSearch.setText("");
-				            txtSearch.requestFocusInWindow();
-				           }
-				}});
+		            txtSearch.setText("");
+		            txtSearch.requestFocusInWindow();
+		           }
+		}});
+		
+		rbtnFindPro.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == rbtnFindPro){
 				
-				rbtnFindPro.addActionListener(new ActionListener(){
-					
-					public void actionPerformed(ActionEvent e)
-					{
-						if (e.getSource() == rbtnFindPro){
-						
-				            txtSearch.setText("");
-				            txtSearch.requestFocusInWindow();
-				           }
-				}});
+		            txtSearch.setText("");
+		            txtSearch.requestFocusInWindow();
+		           }
+		}});
+		
+		rbtnFindEuro.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == rbtnFindEuro){
 				
-				rbtnFindEuro.addActionListener(new ActionListener(){
-					
-					public void actionPerformed(ActionEvent e)
+		            txtSearch.setText("");
+		            txtSearch.requestFocusInWindow();
+		           }
+		}});
+		rbtnFindBosal.doClick();
+	//JButton
+			
+		ImageIcon search = new ImageIcon(getClass().getResource("/images/search.jpg"));
+		btnSearch = new JButton(search);
+		btnSearch.addActionListener(new ActionListener() {
+			
+				public void actionPerformed(ActionEvent e) {
+					if (e.getSource() == btnSearch)
 					{
-						if (e.getSource() == rbtnFindEuro){
-						
-				            txtSearch.setText("");
-				            txtSearch.requestFocusInWindow();
-				           }
-				}});
-				rbtnFindBosal.doClick();
-			//JButton
-					
-				ImageIcon search = new ImageIcon(getClass().getResource("/images/search.jpg"));
-				btnSearch = new JButton(search);
-				btnSearch.addActionListener(new ActionListener() {
-					
-						public void actionPerformed(ActionEvent e) {
-							if (e.getSource() == btnSearch)
-							{
-								con = new DBConnect();
-								final String searchText = txtSearch.getText();
-								JSONArray temp = null;
-																						
+						con = new DBConnect();
+						final String searchText = txtSearch.getText();
+						JSONArray temp = null;
+																				
+						try{
+							//Searches using Bosal part number to fill table 
+							if(rbtnFindBosal.isSelected() == true){
 								try{
-									//Searches using Bosal part number to fill table 
-									if(rbtnFindBosal.isSelected() == true){
-										try{
-											temp = (con.queryDatabase("parts list", "BosalPartNumber", searchText));
-											myTable.setModel(populateTableModel("parts list", "BosalPartNumber", temp, searchText));
-											}catch(Exception ex){
-											JOptionPane.showMessageDialog(
-													    frame,
-													    "Bosal Part Number: " + searchText + " does not exist",
-													    "Missing Part Number",
-														JOptionPane.ERROR_MESSAGE);
-									}}
-									
-									//Searches using Europe part number to fill table 
-									if(rbtnFindEuro.isSelected() == true){
-										try{
-											temp = (con.queryDatabase("delta 1 parts", "DeltaPartNumber", searchText));
-											myTable.setModel(populateTableModel("delta 1 parts", "DeltaPartNumber", temp, searchText));
-											}catch(Exception ex){
-											JOptionPane.showMessageDialog(
-													    frame,
-													    "European Bosal Part Number: " + searchText + " does not exist",
-													    "Missing Part Number",
-														JOptionPane.ERROR_MESSAGE);
-									}}
-								
-									//Searches using supplier part number to fill table
-									if(rbtnFindSup.isSelected() == true){
-										try{
-											temp = (con.queryDatabase("parts list", "SupPartNumber", searchText));
-											myTable.setModel(populateTableModel("parts list", "SupPartNumber", temp, searchText));
-											
-											}catch(Exception ex){
-											JOptionPane.showMessageDialog(
-													    frame,
-													    "Supplier Part Number: " + searchText + " does not exist",
-													    "Missing Part Number",
-														JOptionPane.ERROR_MESSAGE);
-									}}
-									//Searches using customer number to fill table				
-									if(rbtnFindCus.isSelected() == true){
-										try{
-											temp = (con.queryDatabase("parts list", "CustPartNumber", searchText));
-											myTable.setModel(populateTableModel("parts list", "CustPartNumber", temp, searchText));
-
-											}catch(Exception ex){
-											JOptionPane.showMessageDialog(
-													    frame,
-													    "Customer Part Number: " + searchText + " does not exist",
-													    "Missing Part Number",
-														JOptionPane.ERROR_MESSAGE);
-									}}
-									if(rbtnFindPro.isSelected() == true){
-										try{
-											temp = (con.queryDatabase("parts list", "Program", searchText));
-											myTable.setModel(populateTableModel("parts list", "Program", temp, searchText));
-
-											}catch(Exception ex){
-											JOptionPane.showMessageDialog(
-													    frame,
-													    "Program: " + searchText + " does not exist",
-													    "Missing Part Number",
-														JOptionPane.ERROR_MESSAGE);
-									}}
-								}catch (Exception ex){
-									ex.printStackTrace();
-								}							
-							}
-						}
-				});
-				
-				ImageIcon done1 = new ImageIcon(getClass().getResource("/images/back.jpg"));
-				btnBack = new JButton(done1);
-				btnBack.addActionListener(new ActionListener() {
-					
-					public void actionPerformed(ActionEvent e) {
-						if (e.getSource() == btnBack)
-						{
-
-							setVisible(false);
-							Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-							int height = screenSize.height;
-							int width = screenSize.width;
-							frame.setResizable(false);
-							frame.setSize(width/2, height/2);
-							frame.setLocationRelativeTo(null);
-							frame.setSize(865, 555);
-							frame.setTitle("Main Menu:");
-							main.setVisible(true);
-							TableModel newModel = new DefaultTableModel();
-							myTable.setModel(newModel);
-							txtSearch.setText("");
-							rbtnFindBosal.setSelected(true);
-											
-						}}});
-
-				ImageIcon searchA = new ImageIcon(getClass().getResource("/images/searchAll.jpg"));
-				btnSearchAll = new JButton(searchA);
-				btnSearchAll.addActionListener(new ActionListener() {
-					
-					public void actionPerformed(ActionEvent e) {
-						if (e.getSource() == btnSearchAll)
-						{
-							con = new DBConnect();
-							final String searchText = txtSearch.getText();
-							JSONArray temp = null;
-														
-							try{
-								//Searches using Bosal part number to fill table 
+									temp = (con.queryDatabase("parts list", "BosalPartNumber", searchText));
+									myTable.setModel(populateTableModel("parts list", "BosalPartNumber", temp, searchText));
+									}catch(Exception ex){
+									JOptionPane.showMessageDialog(
+											    frame,
+											    "Bosal Part Number: " + searchText + " does not exist",
+											    "Missing Part Number",
+												JOptionPane.ERROR_MESSAGE);
+							}}
+							
+							//Searches using Europe part number to fill table 
+							if(rbtnFindEuro.isSelected() == true){
 								try{
-									temp = (con.queryAllParts(searchText));
-									myTable.setModel(populateTableModel("parts list", "All", temp, searchText));
+									temp = (con.queryDatabase("delta 1 parts", "DeltaPartNumber", searchText));
+									myTable.setModel(populateTableModel("delta 1 parts", "DeltaPartNumber", temp, searchText));
+									}catch(Exception ex){
+									JOptionPane.showMessageDialog(
+											    frame,
+											    "European Bosal Part Number: " + searchText + " does not exist",
+											    "Missing Part Number",
+												JOptionPane.ERROR_MESSAGE);
+							}}
+						
+							//Searches using supplier part number to fill table
+							if(rbtnFindSup.isSelected() == true){
+								try{
+									temp = (con.queryDatabase("parts list", "SupPartNumber", searchText));
+									myTable.setModel(populateTableModel("parts list", "SupPartNumber", temp, searchText));
 									
 									}catch(Exception ex){
 									JOptionPane.showMessageDialog(
 											    frame,
-											    ": " + searchText + " does not exist",
+											    "Supplier Part Number: " + searchText + " does not exist",
 											    "Missing Part Number",
 												JOptionPane.ERROR_MESSAGE);
-									}
-							}catch (Exception ex){
-								ex.printStackTrace();
-							}								
-					}}});
-				
-				ButtonGroup group = new ButtonGroup();
-				group.add(rbtnFindBosal);
-				group.add(rbtnFindCus);
-				group.add(rbtnFindSup);
-				group.add(rbtnFindPro);
-				group.add(rbtnFindEuro);
-				setupPanel();
-				
-			}
+							}}
+							//Searches using customer number to fill table				
+							if(rbtnFindCus.isSelected() == true){
+								try{
+									temp = (con.queryDatabase("parts list", "CustPartNumber", searchText));
+									myTable.setModel(populateTableModel("parts list", "CustPartNumber", temp, searchText));
+
+									}catch(Exception ex){
+									JOptionPane.showMessageDialog(
+											    frame,
+											    "Customer Part Number: " + searchText + " does not exist",
+											    "Missing Part Number",
+												JOptionPane.ERROR_MESSAGE);
+							}}
+							if(rbtnFindPro.isSelected() == true){
+								try{
+									temp = (con.queryDatabase("parts list", "Program", searchText));
+									myTable.setModel(populateTableModel("parts list", "Program", temp, searchText));
+
+									}catch(Exception ex){
+									JOptionPane.showMessageDialog(
+											    frame,
+											    "Program: " + searchText + " does not exist",
+											    "Missing Part Number",
+												JOptionPane.ERROR_MESSAGE);
+							}}
+						}catch (Exception ex){
+							ex.printStackTrace();
+						}							
+					}
+				}
+		});
+		
+		ImageIcon done1 = new ImageIcon(getClass().getResource("/images/back.jpg"));
+		btnBack = new JButton(done1);
+		btnBack.addActionListener(new ActionListener() {
 			
-			private void setupPanel()
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() == btnBack)
+				{
+
+					setVisible(false);
+					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+					int height = screenSize.height;
+					int width = screenSize.width;
+					frame.setResizable(false);
+					frame.setSize(width/2, height/2);
+					frame.setLocationRelativeTo(null);
+					frame.setSize(865, 555);
+					frame.setTitle("Main Menu:");
+					main.setVisible(true);
+					TableModel newModel = new DefaultTableModel();
+					myTable.setModel(newModel);
+					txtSearch.setText("");
+					rbtnFindBosal.setSelected(true);
+									
+				}}});
+
+		ImageIcon searchA = new ImageIcon(getClass().getResource("/images/searchAll.jpg"));
+		btnSearchAll = new JButton(searchA);
+		btnSearchAll.addActionListener(new ActionListener() {
 			
-			{
-				
-		//Label Fonts		
-				
-				lblFindPartInfo.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
-				lblFindPartInfo.setForeground(Color.BLACK);
-				GroupLayout groupLayout = new GroupLayout(this);
-				groupLayout.setHorizontalGroup(
-					groupLayout.createParallelGroup(Alignment.LEADING)
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() == btnSearchAll)
+				{
+					con = new DBConnect();
+					final String searchText = txtSearch.getText();
+					JSONArray temp = null;
+												
+					try{
+						//Searches using Bosal part number to fill table 
+						try{
+							temp = (con.queryAllParts(searchText));
+							myTable.setModel(populateTableModel("parts list", "All", temp, searchText));
+							
+							}catch(Exception ex){
+							JOptionPane.showMessageDialog(
+									    frame,
+									    ": " + searchText + " does not exist",
+									    "Missing Part Number",
+										JOptionPane.ERROR_MESSAGE);
+							}
+					}catch (Exception ex){
+						ex.printStackTrace();
+					}								
+			}}});
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add(rbtnFindBosal);
+		group.add(rbtnFindCus);
+		group.add(rbtnFindSup);
+		group.add(rbtnFindPro);
+		group.add(rbtnFindEuro);
+		setupPanel();
+		
+	}
+	
+	private void setupPanel()
+	
+	{
+		
+//Label Fonts		
+		
+		lblFindPartInfo.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+		lblFindPartInfo.setForeground(Color.BLACK);
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(10)
+					.addComponent(lblBosal)
+					.addGap(10)
+					.addComponent(lblFindPartInfo))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(33)
+					.addComponent(rbtnFindBosal, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+					.addComponent(rbtnFindEuro, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
+					.addComponent(rbtnFindCus, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+					.addComponent(rbtnFindSup, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
+					.addComponent(rbtnFindPro, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(33)
+					.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+					.addGap(28)
+					.addComponent(btnSearchAll, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+					.addGap(26)
+					.addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(33)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 804, GroupLayout.PREFERRED_SIZE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(11)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblBosal)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(10)
-							.addComponent(lblBosal)
-							.addGap(10)
-							.addComponent(lblFindPartInfo))
+							.addGap(17)
+							.addComponent(lblFindPartInfo)))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(rbtnFindBosal, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(rbtnFindEuro, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(rbtnFindCus, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(rbtnFindSup, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(rbtnFindPro, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+					.addGap(21)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnSearchAll, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(239)
-							.addComponent(rbtnFindBosal, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
-							.addGap(2)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(178)
-									.addComponent(rbtnFindCus, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE))
-								.addComponent(rbtnFindEuro, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE))
-							.addGap(2)
-							.addComponent(rbtnFindSup, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
-							.addGap(2)
-							.addComponent(rbtnFindPro, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(33)
-							.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-							.addGap(28)
-							.addComponent(btnSearchAll, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-							.addGap(26)
-							.addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-							.addGap(10)
-							.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(33)
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 1225, GroupLayout.PREFERRED_SIZE))
-				);
-				groupLayout.setVerticalGroup(
-					groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(11)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblBosal)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(17)
-									.addComponent(lblFindPartInfo)))
-							.addGap(18)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(rbtnFindBosal, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(rbtnFindCus, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(rbtnFindEuro, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(rbtnFindSup, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(rbtnFindPro, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-							.addGap(21)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnSearchAll, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(6)
-									.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addGap(11)
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
-				);
-				setLayout(groupLayout);
-	}	
+							.addGap(6)
+							.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGap(11)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
+		);
+		setLayout(groupLayout);
+}	
+
 }
 	class SettingsPanel extends JPanel
 	{
