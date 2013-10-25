@@ -32,6 +32,7 @@ import org.json.JSONArray;
 import binaparts.dao.DBConnect;
 import binaparts.gui.MainFrames.MainPanel;
 
+@SuppressWarnings("serial")
 public class BDLFrame extends JFrame 
 {
 	public BDLFrame(){}
@@ -57,7 +58,6 @@ public class BDLFrame extends JFrame
 		BDLframe.setVisible(true);	
 	}
 		
-	@SuppressWarnings("serial")
 	class BDLMain extends JPanel 
 	{			
 
