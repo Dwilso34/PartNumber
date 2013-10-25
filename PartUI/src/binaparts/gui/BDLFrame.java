@@ -160,7 +160,7 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return proComboBoxDefault;
 		}
-		private JComboBox<String> cboEngine;
+		private JComboBox<String> cboName;
 		private ComboBoxModel<String> resetEngineComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
@@ -373,10 +373,15 @@ public class BDLFrame extends JFrame
 			AutoCompleteDecorator.decorate(cboPlatform);
 			cboPlatform.addMouseListener(new ContextMenuMouseListener());
 			cboPlatform.setForeground(Color.BLACK);
-			cboEngine = new JComboBox<String>();
-			AutoCompleteDecorator.decorate(cboEngine);
-			cboEngine.addMouseListener(new ContextMenuMouseListener());
-			cboEngine.setForeground(Color.BLACK);		
+			cboName = new JComboBox<String>();
+			AutoCompleteDecorator.decorate(cboName);
+			cboName.addMouseListener(new ContextMenuMouseListener());
+			cboName.setForeground(Color.BLACK);	
+			
+			//temp arrays to hold comboBox info 
+			JSONArray temp1 = null;
+			JSONArray temp2 = null;
+			//^^reset will be on doClick() action of rbtnCreateBDL^^
 			
 			ItemListener comboBoxSelectionListener = (new ItemListener(){	
 				public void itemStateChanged(ItemEvent e)
@@ -420,21 +425,27 @@ public class BDLFrame extends JFrame
 								}
 								engineComboBoxModel =  (new DefaultComboBoxModel<String> (engine));
 							}catch(Exception ex){ex.printStackTrace();}
-							cboEngine.setModel(engineComboBoxModel);
-							cboEngine.setSelectedIndex(-1);
+							cboName.setModel(engineComboBoxModel);
+							cboName.setSelectedIndex(-1);
 							txtType.setText("");
 							txtVolume.setText("");
 							txtPower.setText("");
 						}
 					}	
-					if(e.getSource().equals(cboEngine)){
+					if(e.getSource().equals(cboName)){
 						if(e.getStateChange() == ItemEvent.SELECTED){
-							String customer = null;
-							String platform = null;
 							String engine = null;
 							try{
-								engine = cboEngine.getSelectedItem().toString();
+								engine = cboName.getSelectedItem().toString();
+							} catch (Exception ex) {ex.printStackTrace();}
+							
+							String platform = null;
+							try{
 								platform = cboPlatform.getSelectedItem().toString();
+							} catch (Exception ex) {ex.printStackTrace();}
+							
+							String customer = null;
+							try{
 								customer = cboCustomer.getSelectedItem().toString();
 							} catch (Exception ex) {ex.printStackTrace();}
 							
@@ -445,7 +456,6 @@ public class BDLFrame extends JFrame
 								ComboBoxModel<String> platformComboBoxModel = null;
 								JSONArray temp1 = new JSONArray();
 								JSONArray temp2 = new JSONArray();
-								//JSONArray temp3 = new JSONArray();
 								
 								try {
 									temp1 = con.queryDatabase("engines",
@@ -507,6 +517,35 @@ public class BDLFrame extends JFrame
 								}
 								cboPlatform.setModel(platformComboBoxModel);
 							}
+							if(customer == null && platform != null){
+								String[] customers = null;
+								ComboBoxModel<String> customerComboBoxModel = null;
+								JSONArray temp1 = new JSONArray();
+								JSONArray temp2 = new JSONArray();
+								
+								try {
+									temp1 = con.queryDatabase("engines",
+											"Engine", engine);
+									temp2 = con.queryDatabase("programs",
+											"Program", platform);
+									customers = new String[temp2.length()];
+									
+									for(int i = 0; i < temp1.length(); i++){
+										customers[i] = temp2.getJSONObject(i).get("Customer").toString();
+									}
+									customerComboBoxModel =  (new DefaultComboBoxModel<String> (customers));
+									
+									txtType.setText(temp1.getJSONObject(0)
+											.get("Type").toString());
+									txtVolume.setText(temp1.getJSONObject(0)
+											.get("Volume").toString());
+									txtPower.setText(temp1.getJSONObject(0)
+											.get("Power").toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+								cboCustomer.setModel(customerComboBoxModel);
+							}
 							if (customer != null && platform != null) {
 								JSONArray temp1 = new JSONArray();
 								try {
@@ -527,7 +566,7 @@ public class BDLFrame extends JFrame
 				}});
 			cboCustomer.addItemListener(comboBoxSelectionListener);
 			cboPlatform.addItemListener(comboBoxSelectionListener);
-			cboEngine.addItemListener(comboBoxSelectionListener);
+			cboName.addItemListener(comboBoxSelectionListener);
 			
 		//JTextFields
 			txtCustomer = new JTextField();
@@ -640,22 +679,22 @@ public class BDLFrame extends JFrame
 							txtRelSupplier.setText("");
 							txtCustomer.setText("");
 							txtCustomer.setVisible(false);
+							cbxCustomer.setVisible(true);
 							cboCustomer.setVisible(true);
 							cboCustomer.setModel(resetCustomerComboBox());
 							cboCustomer.setSelectedIndex(-1);
 							txtPlatform.setText("");
 							txtPlatform.setVisible(false);
+							cbxPlatform.setVisible(true);
 							cboPlatform.setVisible(true);
 							cboPlatform.setModel(resetPlatformComboBox());
 							cboPlatform.setSelectedIndex(-1);
-							cbxCustomer.setVisible(true);
-							cbxPlatform.setVisible(true);
-							cbxName.setVisible(true);
 							txtName.setText("");
 							txtName.setVisible(false);
-							cboEngine.setVisible(true);
-							cboEngine.setModel(resetEngineComboBox());
-							cboEngine.setSelectedIndex(-1);
+							cbxName.setVisible(true);
+							cboName.setVisible(true);
+							cboName.setModel(resetEngineComboBox());
+							cboName.setSelectedIndex(-1);
 						}catch (Exception ex){ex.printStackTrace();}
 			            
 					}						
@@ -702,7 +741,7 @@ public class BDLFrame extends JFrame
 							cbxCustomer.setVisible(false);
 							cbxPlatform.setVisible(false);
 							cbxName.setVisible(false);
-							cboEngine.setVisible(false);
+							cboName.setVisible(false);
 							Search s = new Search();
 							s.displaySearch();
 						} catch (Exception ex) {ex.printStackTrace();}
@@ -747,7 +786,7 @@ public class BDLFrame extends JFrame
 								.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(127)
-								.addComponent(cboEngine, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+								.addComponent(cboName, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(127)
 								.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
@@ -900,7 +939,7 @@ public class BDLFrame extends JFrame
 										.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(26)
-										.addComponent(cboEngine, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+										.addComponent(cboName, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(26)
 										.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
