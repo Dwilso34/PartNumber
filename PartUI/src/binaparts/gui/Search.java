@@ -8,7 +8,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -21,7 +20,6 @@ import javax.swing.JTextField;
 import javax.swing.GroupLayout.Alignment;
 
 import binaparts.dao.DBConnect;
-import binaparts.gui.BDLFrame.BDLMain;
 
 public class Search extends JFrame 
 {

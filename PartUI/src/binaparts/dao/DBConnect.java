@@ -1,11 +1,9 @@
 package binaparts.dao;
 
 import java.sql.*;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.joda.time.LocalDate;
-
 import binaparts.properties.*;
 import binaparts.util.ToJSON;
 
