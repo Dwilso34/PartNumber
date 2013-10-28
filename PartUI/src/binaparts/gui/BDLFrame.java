@@ -134,7 +134,6 @@ public class BDLFrame extends JFrame
 		private JCheckBox cbxPlatform;
 		private JCheckBox cbxName;
 		
-		private ItemListener comboBoxSelectionListener;
 	//JComboBoxes
 		private JComboBox<String> cboCustomer;
 		private ComboBoxModel<String> resetCustomerComboBox()
