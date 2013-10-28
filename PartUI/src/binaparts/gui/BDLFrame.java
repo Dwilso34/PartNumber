@@ -66,6 +66,14 @@ public class BDLFrame extends JFrame
 		
 	class BDLMain extends JPanel 
 	{		
+		
+		private String customer;
+		private String platform;
+		private String engine;
+		private String type;
+		private String volume;
+		private String power;
+		
 		//temp arrays to hold comboBox info 
 		private JSONArray temp1;
 		private JSONArray temp2;
@@ -131,6 +139,7 @@ public class BDLFrame extends JFrame
 		private JCheckBox cbxPlatform;
 		private JCheckBox cbxName;
 		
+		private ItemListener comboBoxSelectionListener;
 	//JComboBoxes
 		private JComboBox<String> cboCustomer;
 		private ComboBoxModel<String> resetCustomerComboBox()
@@ -221,8 +230,60 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return engineComboBoxDefault;
 		}*/
+		/*@SuppressWarnings({ "unused", "null" })
+		private void filterComboBox(){
+			String customer = null;
+			String platform = null;
+			String engine = null;
+			String type = null;
+			String volume = null;
+			String power = null;
+			
+			if(customer == null && platform == null){								
+				try {									
+					for(int i = 0; i < temp3.length(); i++){
+						if(engine.equals(temp3.getJSONObject(i).get("Engine").toString())){
+							cboPlatform.setSelectedItem(temp3.getJSONObject(i).get("Platform").toString());											
+							txtType.setText(temp3.getJSONObject(i).get("Type").toString());
+							txtVolume.setText(temp3.getJSONObject(i).get("Volume").toString());
+							txtPower.setText(temp3.getJSONObject(i).get("Power").toString());
+						}
+					}									
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			if(customer != null && platform == null){	
+				
+			}
+			if(customer == null && platform != null){	
+				
+			}
+			if(customer != null && platform != null){	
+				
+			}
+		}*/
 		
-	//JRadioButtons
+		public String getCustomer() {
+			return customer;
+		}
+		public void setCustomer(String customer) {
+			this.customer = customer;
+		}
+		public String getPlatform() {
+			return platform;
+		}
+		public void setPlatform(String platform) {
+			this.platform = platform;
+		}
+		public String getEngine() {
+			return engine;
+		}
+		public void setEngine(String engine) {
+			this.engine = engine;
+		}
+		
+		//JRadioButtons
 		private JRadioButton rbtnCreateBDL;
 		private JRadioButton rbtnSearchBDL;
 		
@@ -411,203 +472,173 @@ public class BDLFrame extends JFrame
 
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
+			cboCustomer.setEditable(true);
 			AutoCompleteDecorator.decorate(cboCustomer);
 			cboCustomer.addMouseListener(new ContextMenuMouseListener());
 			cboCustomer.setForeground(Color.BLACK);
 			cboPlatform = new JComboBox<String>();
+			cboPlatform.setEditable(true);
 			AutoCompleteDecorator.decorate(cboPlatform);
 			cboPlatform.addMouseListener(new ContextMenuMouseListener());
 			cboPlatform.setForeground(Color.BLACK);
 			cboName = new JComboBox<String>();
+			cboName.setEditable(true);
 			AutoCompleteDecorator.decorate(cboName);
 			cboName.addMouseListener(new ContextMenuMouseListener());
 			cboName.setForeground(Color.BLACK);	
 			
-			ItemListener comboBoxSelectionListener = (new ItemListener(){	
+			final ItemListener comboBoxSelectionListener = (new ItemListener(){	
 				public void itemStateChanged(ItemEvent e)
 				{
-					if(e.getSource().equals(cboCustomer)){
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							String customer =  cboCustomer.getSelectedItem().toString();
-							JSONArray temp1 = new JSONArray();
-							String[] platform = null;
-							ComboBoxModel<String> platformComboBoxModel = null;
-							
-							try{
-								temp1 = con.queryDatabase("programs", "Customer", customer);
-								platform = new String[temp1.length()];
-								
-								for(int i = 0; i < temp1.length(); i++){
-									platform[i] = temp1.getJSONObject(i).get("Program").toString();
-								}
-								platformComboBoxModel =  (new DefaultComboBoxModel<String> (platform));
-							}catch(Exception ex){ex.printStackTrace();}
-							cboPlatform.setModel(platformComboBoxModel);
-							cboPlatform.setSelectedIndex(-1);
-							txtType.setText("");
-							txtVolume.setText("");
-							txtPower.setText("");
+					if(e.getStateChange() == ItemEvent.SELECTED){
+						type = null;
+						volume = null;
+						power = null;
+						if(e.getSource().equals(cboCustomer)){
+							if(e.getStateChange() == ItemEvent.SELECTED){
+								cbxCustomer.setSelected(true);
+							}
 						}
-					}	
-					if(e.getSource().equals(cboPlatform)){
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							String customer =  cboPlatform.getSelectedItem().toString();
-							JSONArray temp1 = new JSONArray();
-							String[] engine = null;
-							ComboBoxModel<String> engineComboBoxModel = null;
-							
-							try{
-								temp1 = con.queryDatabase("engines", "Platform", customer);
-								engine = new String[temp1.length()];
-								
-								for(int i = 0; i < temp1.length(); i++){
-									engine[i] = temp1.getJSONObject(i).get("Engine").toString();
-								}
-								engineComboBoxModel =  (new DefaultComboBoxModel<String> (engine));
-							}catch(Exception ex){ex.printStackTrace();}
-							cboName.setModel(engineComboBoxModel);
-							cboName.setSelectedIndex(-1);
-							txtType.setText("");
-							txtVolume.setText("");
-							txtPower.setText("");
+						else if(e.getSource().equals(cboPlatform)){
+							if(e.getStateChange() == ItemEvent.SELECTED){
+								cbxPlatform.setSelected(true);
+							}
 						}
-					}	
-					if(e.getSource().equals(cboName)){
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							String engine = null;
-							try{
-								engine = cboName.getSelectedItem().toString();
-							} catch (Exception ex) {ex.printStackTrace();}
-							
-							String platform = null;
-							try{
-								platform = cboPlatform.getSelectedItem().toString();
-							} catch (Exception ex) {ex.printStackTrace();}
-							
-							String customer = null;
-							try{
-								customer = cboCustomer.getSelectedItem().toString();
-							} catch (Exception ex) {ex.printStackTrace();}
-							
-							if(customer == null && platform == null){
-								String[] customers = null;
-								String[] platforms = null;
-								ComboBoxModel<String> customerComboBoxModel = null;
-								ComboBoxModel<String> platformComboBoxModel = null;
-								JSONArray temp1 = new JSONArray();
-								JSONArray temp2 = new JSONArray();
-								
-								try {
-									temp1 = con.queryDatabase("engines",
-											"Engine", engine);
-									platform = temp1.getJSONObject(0).getString("Platform").toString();
-									System.out.println(platform);
-									temp2 = con.queryDatabase("programs",
-											"Program", platform);
-									System.out.println(temp2.length());
-									System.out.println(temp2.toString());
-									customers = new String[temp2.length()];
-									platforms = new String[temp2.length()];
-									
-									for(int i = 0; i < temp1.length(); i++){
-										customers[i] = temp2.getJSONObject(i).get("Customer").toString();
-										platforms[i] = temp2.getJSONObject(i).get("Program").toString();
-									}
-									customerComboBoxModel =  (new DefaultComboBoxModel<String> (customers));
-									platformComboBoxModel =  (new DefaultComboBoxModel<String> (platforms));
-									
-									txtType.setText(temp1.getJSONObject(0)
-											.get("Type").toString());
-									txtVolume.setText(temp1.getJSONObject(0)
-											.get("Volume").toString());
-									txtPower.setText(temp1.getJSONObject(0)
-											.get("Power").toString());
-								} catch (Exception ex) {
-									ex.printStackTrace();
-								}
-								cboCustomer.setModel(customerComboBoxModel);
-								cboPlatform.setModel(platformComboBoxModel);
+						else if(e.getSource().equals(cboName)){
+							if(e.getStateChange() == ItemEvent.SELECTED){
+								cbxName.setSelected(true);
 							}
-							if(customer != null && platform == null){
-								String[] platforms = null;
-								ComboBoxModel<String> platformComboBoxModel = null;
-								JSONArray temp1 = new JSONArray();
-								JSONArray temp2 = new JSONArray();
-								
-								try {
-									temp1 = con.queryDatabase("engines",
-											"Engine", engine);
-									temp2 = con.queryDatabase("programs",
-											"Customer", customer);
-									platforms = new String[temp2.length()];
-									
-									for(int i = 0; i < temp1.length(); i++){
-										platforms[i] = temp2.getJSONObject(i).get("Program").toString();
-									}
-									platformComboBoxModel =  (new DefaultComboBoxModel<String> (platforms));
-									
-									txtType.setText(temp1.getJSONObject(0)
-											.get("Type").toString());
-									txtVolume.setText(temp1.getJSONObject(0)
-											.get("Volume").toString());
-									txtPower.setText(temp1.getJSONObject(0)
-											.get("Power").toString());
-								} catch (Exception ex) {
-									ex.printStackTrace();
+						}
+						if(cbxName.isSelected()==true){
+							try{
+								setEngine(cboName.getSelectedItem().toString());
+							} catch (Exception ex) {ex.printStackTrace();}
+						}
+						
+						if(cbxPlatform.isSelected()==true){
+							try{
+								setPlatform(cboPlatform.getSelectedItem().toString());
+							} catch (Exception ex) {ex.printStackTrace();}
+						}
+						
+						if(cbxCustomer.isSelected()==true){
+							try{
+								setCustomer(cboCustomer.getSelectedItem().toString());
+							} catch (Exception ex) {ex.printStackTrace();}
+						}
+						
+						//possible truth table outcomes
+						if(cbxCustomer.isSelected() == true){
+							if(cbxPlatform.isSelected() == true){
+								if(cbxName.isSelected() == true){
+									System.out.println("T T T");
+									try{									
+										for(int i = 0; i < temp3.length(); i++){
+											if(getEngine().equals(temp3.getJSONObject(i).get("Engine").toString())){
+												type = temp3.getJSONObject(i).get("Type").toString();
+												volume = temp3.getJSONObject(i).get("Volume").toString();
+												power = temp3.getJSONObject(i).get("Power").toString();
+												i=temp3.length();
+											}
+										}	
+									}catch(Exception ex){ex.printStackTrace();}
 								}
-								cboPlatform.setModel(platformComboBoxModel);
-							}
-							if(customer == null && platform != null){
-								String[] customers = null;
-								ComboBoxModel<String> customerComboBoxModel = null;
-								JSONArray temp1 = new JSONArray();
-								JSONArray temp2 = new JSONArray();
-								
-								try {
-									temp1 = con.queryDatabase("engines",
-											"Engine", engine);
-									temp2 = con.queryDatabase("programs",
-											"Program", platform);
-									customers = new String[temp2.length()];
-									
-									for(int i = 0; i < temp1.length(); i++){
-										customers[i] = temp2.getJSONObject(i).get("Customer").toString();
-									}
-									customerComboBoxModel =  (new DefaultComboBoxModel<String> (customers));
-									
-									txtType.setText(temp1.getJSONObject(0)
-											.get("Type").toString());
-									txtVolume.setText(temp1.getJSONObject(0)
-											.get("Volume").toString());
-									txtPower.setText(temp1.getJSONObject(0)
-											.get("Power").toString());
-								} catch (Exception ex) {
-									ex.printStackTrace();
+								else if(cbxName.isSelected() == false){
+									System.out.println("T T F");
 								}
-								cboCustomer.setModel(customerComboBoxModel);
 							}
-							if (customer != null && platform != null) {
-								JSONArray temp1 = new JSONArray();
-								try {
-									temp1 = con.queryDatabase("engines",
-											"Engine", engine);
-									txtType.setText(temp1.getJSONObject(0)
-											.get("Type").toString());
-									txtVolume.setText(temp1.getJSONObject(0)
-											.get("Volume").toString());
-									txtPower.setText(temp1.getJSONObject(0)
-											.get("Power").toString());
-								} catch (Exception ex) {
-									ex.printStackTrace();
+							else if(cbxPlatform.isSelected() == false){
+								if(cbxName.isSelected() == true){
+									System.out.println("T F T");
+									try{									
+										for(int i = 0; i < temp3.length(); i++){
+											if(getEngine().equals(temp3.getJSONObject(i).get("Engine").toString())){
+												setPlatform(temp3.getJSONObject(i).get("Platform").toString());
+												type = temp3.getJSONObject(i).get("Type").toString();
+												volume = temp3.getJSONObject(i).get("Volume").toString();
+												power = temp3.getJSONObject(i).get("Power").toString();
+												i=temp3.length();
+											}
+										}	
+									}catch(Exception ex){ex.printStackTrace();}
+								}
+								else if(cbxName.isSelected() == false){
+									System.out.println("T F F");
 								}
 							}
 						}
-					}	
-				}});
-			cboCustomer.addItemListener(comboBoxSelectionListener);
-			cboPlatform.addItemListener(comboBoxSelectionListener);
-			cboName.addItemListener(comboBoxSelectionListener);
-			
+						else if(cbxCustomer.isSelected() == false){
+							if(cbxPlatform.isSelected() == true){
+								if(cbxName.isSelected() == true){
+									System.out.println("F T T");
+									try{									
+										for(int i = 0; i < temp3.length(); i++){
+											if(getEngine().equals(temp3.getJSONObject(i).get("Engine").toString())){
+												type = temp3.getJSONObject(i).get("Type").toString();
+												volume = temp3.getJSONObject(i).get("Volume").toString();
+												power = temp3.getJSONObject(i).get("Power").toString();
+												i=temp3.length();
+											}
+										}	
+										for(int i = 0; i < temp2.length(); i++){
+											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
+												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
+												i=temp2.length();
+											}
+										}
+									}catch(Exception ex){ex.printStackTrace();}
+								}
+								else if(cbxName.isSelected() == false){
+									System.out.println("F T F");
+									try{
+										for(int i = 0; i < temp2.length(); i++){								
+											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
+												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
+												i=temp2.length();
+											}
+										}
+									}catch(Exception ex){ex.printStackTrace();}									
+								}
+							}
+							else if(cbxPlatform.isSelected() == false){
+								if(cbxName.isSelected() == true){
+									System.out.println("F F T1");
+									try{
+										System.out.println("F F T2");
+										for(int i = 0; i < temp3.length(); i++){
+											System.out.println("F F T3");
+											if(getEngine().equals(temp3.getJSONObject(i).get("Engine").toString())){
+												System.out.println("F F T4");
+												setPlatform(temp3.getJSONObject(i).get("Platform").toString());
+												type = temp3.getJSONObject(i).get("Type").toString();
+												volume = temp3.getJSONObject(i).get("Volume").toString();
+												power = temp3.getJSONObject(i).get("Power").toString();
+												i=temp3.length();
+											}
+										}	
+										for(int i = 0; i < temp2.length(); i++){
+											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
+												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
+												i=temp2.length();
+											}
+										}
+									}catch(Exception ex){ex.printStackTrace();}
+								}
+								else if(cbxName.isSelected() == false){
+									System.out.println("F F F");
+								}
+							}
+						}
+					
+						//setComboBoxItemCust(getCustomer());
+						//setComboBoxItemPlat(getPlatform());
+						//setComboBoxItemName(getName());
+						txtType.setText(type);
+						txtVolume.setText(volume);
+						txtPower.setText(power);		
+					}
+				}
+			});		
 		//JTextFields
 			txtCustomer = new JTextField();
 			txtCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
@@ -738,6 +769,9 @@ public class BDLFrame extends JFrame
 							cboName.setVisible(true);
 							cboName.setModel(resetEngineComboBox());
 							cboName.setSelectedIndex(-1);
+							cboCustomer.addItemListener(comboBoxSelectionListener);
+							cboPlatform.addItemListener(comboBoxSelectionListener);
+							cboName.addItemListener(comboBoxSelectionListener);
 						}catch (Exception ex){ex.printStackTrace();}
 			            
 					}						
@@ -785,6 +819,9 @@ public class BDLFrame extends JFrame
 							cbxPlatform.setVisible(false);
 							cbxName.setVisible(false);
 							cboName.setVisible(false);
+							cboCustomer.removeItemListener(comboBoxSelectionListener);
+							cboPlatform.removeItemListener(comboBoxSelectionListener);
+							cboName.removeItemListener(comboBoxSelectionListener);
 							Search s = new Search();
 							s.displaySearch();
 						} catch (Exception ex) {ex.printStackTrace();}
