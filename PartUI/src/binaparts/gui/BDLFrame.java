@@ -70,7 +70,7 @@ public class BDLFrame extends JFrame
 		
 		private String customer;
 		private String platform;
-		private String engine;
+		private String name;
 		private String type;
 		private String volume;
 		private String power;
@@ -234,57 +234,30 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return engineComboBoxDefault;
 		}*/
-		/*@SuppressWarnings({ "unused", "null" })
-		private void filterComboBox(){
-			String customer = null;
-			String platform = null;
-			String engine = null;
-			String type = null;
-			String volume = null;
-			String power = null;
-			
-			if(customer == null && platform == null){								
-				try {									
-					for(int i = 0; i < temp3.length(); i++){
-						if(engine.equals(temp3.getJSONObject(i).get("Engine").toString())){
-							cboPlatform.setSelectedItem(temp3.getJSONObject(i).get("Platform").toString());											
-							txtType.setText(temp3.getJSONObject(i).get("Type").toString());
-							txtVolume.setText(temp3.getJSONObject(i).get("Volume").toString());
-							txtPower.setText(temp3.getJSONObject(i).get("Power").toString());
-						}
-					}									
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			if(customer != null && platform == null){	
 				
-			}
-			if(customer == null && platform != null){	
-				
-			}
-			if(customer != null && platform != null){	
-				
-			}
-		}*/
-		
 		public String getCustomer() {
 			return customer;
 		}
 		public void setCustomer(String customer) {
+			System.out.println(customer+" is being put into the customer variable");
 			this.customer = customer;
+			System.out.println(this.customer+" was put into the customer variable");
 		}
 		public String getPlatform() {
 			return platform;
 		}
 		public void setPlatform(String platform) {
+			System.out.println(platform+" is being put into the platform variable");
 			this.platform = platform;
+			System.out.println(this.platform+" was put into the platform variable");
 		}
-		public String getEngine() {
-			return engine;
+		public String getName() {
+			return name;
 		}
-		public void setEngine(String engine) {
-			this.engine = engine;
+		public void setName(String name) {
+			System.out.println(name+" is being put into the name variable");
+			this.name = name;
+			System.out.println(this.name+" was put into the name variable");
 		}
 		
 		//JRadioButtons
@@ -500,7 +473,7 @@ public class BDLFrame extends JFrame
 			AutoCompleteDecorator.decorate(cboName);
 			cboName.addMouseListener(new ContextMenuMouseListener());
 			cboName.setForeground(Color.BLACK);	
-			
+		
 			final ItemListener comboBoxSelectionListener = (new ItemListener(){	
 				public void itemStateChanged(ItemEvent e)
 				{
@@ -510,82 +483,73 @@ public class BDLFrame extends JFrame
 						power = null;
 						if(e.getSource().equals(cboCustomer)){
 							if(e.getStateChange() == ItemEvent.SELECTED){
-								cbxCustomer.doClick();
-								
-											String str = (String)cboCustomer.getSelectedItem();
-											txtCustomer.setText(str);
-											cboCustomer.setVisible(false);
-											txtCustomer.setVisible(true);
-											txtCustomer.setEditable(false);
-							}
-						}
-						else if(e.getSource().equals(cboPlatform)){
-							if(e.getStateChange() == ItemEvent.SELECTED){
-								cbxPlatform.doClick();
-								
-											String str = (String)cboPlatform.getSelectedItem();
-											txtPlatform.setText(str);
-											cboPlatform.setVisible(false);
-											txtPlatform.setVisible(true);
-											txtPlatform.setEditable(false);
-							}
-						}
-						else if(e.getSource().equals(cboName)){
-							if(e.getStateChange() == ItemEvent.SELECTED){
-								cbxName.doClick();
-								
-											String str = (String)cboName.getSelectedItem();
-											txtName.setText(str);
-											cboName.setVisible(false);
-											txtName.setVisible(true);
-											txtName.setEditable(false);
-							}
-						}
-						if(cbxName.isSelected()==true){
-							try{
-								setEngine(cboName.getSelectedItem().toString());
-							} catch (Exception ex) {ex.printStackTrace();}
-						}
-						
-						if(cbxPlatform.isSelected()==true){
-							try{
-								setPlatform(cboPlatform.getSelectedItem().toString());
-							} catch (Exception ex) {ex.printStackTrace();}
-						}
-						
-						if(cbxCustomer.isSelected()==true){
-							try{
+								System.out.println(cboCustomer.getSelectedItem().toString());
 								setCustomer(cboCustomer.getSelectedItem().toString());
-							} catch (Exception ex) {ex.printStackTrace();}
+								System.out.println("See I put "+getCustomer()+" into Customer like you said!");
+								System.out.println("I Grabbed the Text from the Customer ComboBox!");								
+								System.out.println("I am about to Click the Customer CheckBox!");
+								cbxCustomer.doClick();
+							}
 						}
-						
+						else if(e.getSource().equals(cboPlatform)){							
+							if(e.getStateChange() == ItemEvent.SELECTED){
+								System.out.println(cboPlatform.getSelectedItem().toString());
+								setPlatform(cboPlatform.getSelectedItem().toString());
+								System.out.println("See I put "+getPlatform()+" into Platform like you said!");
+								System.out.println("I Grabbed the Text from the Platform ComboBox!");
+								System.out.println("I am about to Click the Platform CheckBox!");
+								cbxPlatform.doClick();
+							}
+						}
+						else if(e.getSource().equals(cboName)){							
+							if(e.getStateChange() == ItemEvent.SELECTED){
+								System.out.println(cboName.getSelectedItem().toString());
+								setName(cboName.getSelectedItem().toString());
+								System.out.println("See I put "+getName()+" into Name like you said!");
+								System.out.println(cboName.getSelectedItem().toString());
+								System.out.println("I Grabbed the Text from the Name ComboBox!");
+								System.out.println("I am about to Click the Name CheckBox!");
+								cbxName.doClick();
+							}
+						}				
 						//possible truth table outcomes
 						if(cbxCustomer.isSelected() == true){
+							System.out.println(getCustomer()+" is the Customer that was selected");
 							if(cbxPlatform.isSelected() == true){
+								System.out.println(getPlatform()+" is the Platform that was selected");
 								if(cbxName.isSelected() == true){
-									System.out.println("T T T");
-									try{									
+									System.out.println(getName()+" is the Engine that was selected");
+									System.out.println("T T T1");
+									try{		
+										System.out.println("T T T2");
 										for(int i = 0; i < temp3.length(); i++){
-											if(getEngine().equals(temp3.getJSONObject(i).get("Engine").toString())){
+											System.out.println("T T T3");
+											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
+												System.out.println("T T T4");
 												type = temp3.getJSONObject(i).get("Type").toString();
 												volume = temp3.getJSONObject(i).get("Volume").toString();
 												power = temp3.getJSONObject(i).get("Power").toString();
-												i=temp3.length();
-												
+												i=temp3.length();												
 											}
 										}	
 									}catch(Exception ex){ex.printStackTrace();}
 								}
 								else if(cbxName.isSelected() == false){
+									System.out.println("No Engine was selected");
 									System.out.println("T T F");
 								}
 							}
 							else if(cbxPlatform.isSelected() == false){
+								System.out.println("No Platform was selected");
 								if(cbxName.isSelected() == true){
-									System.out.println("T F T");
-									try{									
+									System.out.println(getName()+" is the Engine that was selected");
+									System.out.println("T F T1");
+									try{		
+										System.out.println("T F T2");
 										for(int i = 0; i < temp3.length(); i++){
-											if(getEngine().equals(temp3.getJSONObject(i).get("Engine").toString())){
+											System.out.println("T F T3");
+											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
+												System.out.println("T F T4");
 												setPlatform(temp3.getJSONObject(i).get("Platform").toString());
 												type = temp3.getJSONObject(i).get("Type").toString();
 												volume = temp3.getJSONObject(i).get("Volume").toString();
@@ -596,17 +560,24 @@ public class BDLFrame extends JFrame
 									}catch(Exception ex){ex.printStackTrace();}
 								}
 								else if(cbxName.isSelected() == false){
+									System.out.println("No Engine was selected");
 									System.out.println("T F F");
 								}
 							}
 						}
 						else if(cbxCustomer.isSelected() == false){
+							System.out.println("No Customer was selected");
 							if(cbxPlatform.isSelected() == true){
+								System.out.println(getPlatform()+" is the Platform that was selected");
 								if(cbxName.isSelected() == true){
-									System.out.println("F T T");
-									try{									
+									System.out.println(getName()+" is the Engine that was selected");
+									System.out.println("F T T1");
+									try{		
+										System.out.println("F T T2");
 										for(int i = 0; i < temp3.length(); i++){
-											if(getEngine().equals(temp3.getJSONObject(i).get("Engine").toString())){
+											System.out.println("F T T3");
+											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
+												System.out.println("F T T4");
 												type = temp3.getJSONObject(i).get("Type").toString();
 												volume = temp3.getJSONObject(i).get("Volume").toString();
 												power = temp3.getJSONObject(i).get("Power").toString();
@@ -614,7 +585,9 @@ public class BDLFrame extends JFrame
 											}
 										}	
 										for(int i = 0; i < temp2.length(); i++){
+											System.out.println("F T T5");
 											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
+												System.out.println("F T T6");
 												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
 												i=temp2.length();
 											}
@@ -622,10 +595,14 @@ public class BDLFrame extends JFrame
 									}catch(Exception ex){ex.printStackTrace();}
 								}
 								else if(cbxName.isSelected() == false){
-									System.out.println("F T F");
+									System.out.println("No Engine was selected");
+									System.out.println("F T F1");
 									try{
-										for(int i = 0; i < temp2.length(); i++){								
+										System.out.println("F T F2");
+										for(int i = 0; i < temp2.length(); i++){
+											System.out.println("F T F3");
 											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
+												System.out.println("F T F4");
 												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
 												i=temp2.length();
 											}
@@ -634,13 +611,15 @@ public class BDLFrame extends JFrame
 								}
 							}
 							else if(cbxPlatform.isSelected() == false){
+								System.out.println("No Platform was selected");
 								if(cbxName.isSelected() == true){
+									System.out.println(getName()+" is the Engine that was selected");
 									System.out.println("F F T1");
 									try{
 										System.out.println("F F T2");
 										for(int i = 0; i < temp3.length(); i++){
 											System.out.println("F F T3");
-											if(getEngine().equals(temp3.getJSONObject(i).get("Engine").toString())){
+											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
 												System.out.println("F F T4");
 												setPlatform(temp3.getJSONObject(i).get("Platform").toString());
 												type = temp3.getJSONObject(i).get("Type").toString();
@@ -650,7 +629,9 @@ public class BDLFrame extends JFrame
 											}
 										}	
 										for(int i = 0; i < temp2.length(); i++){
+											System.out.println("F F T5");
 											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
+												System.out.println("F F T6");
 												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
 												i=temp2.length();
 											}
@@ -658,14 +639,20 @@ public class BDLFrame extends JFrame
 									}catch(Exception ex){ex.printStackTrace();}
 								}
 								else if(cbxName.isSelected() == false){
+									System.out.println("No Engine was selected");
 									System.out.println("F F F");
 								}
 							}
 						}
-						
-						//setComboBoxItemCust(getCustomer());
-						//setComboBoxItemPlat(getPlatform());
-						//setComboBoxItemName(getName());
+						if (cbxCustomer.isSelected() == false) {
+							cboCustomer.setSelectedItem(getCustomer());
+						}
+						if (cbxPlatform.isSelected() == false) {
+							cboPlatform.setSelectedItem(getPlatform());
+						}
+						if (cbxName.isSelected() == false) {
+							cboName.setSelectedItem(getName());
+						}
 						txtType.setText(type);
 						txtVolume.setText(volume);
 						txtPower.setText(power);		
@@ -752,6 +739,72 @@ public class BDLFrame extends JFrame
 			cbxName = new JCheckBox();
 			cbxName.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			cbxName.setBackground(new Color(105, 105, 105));
+			
+			ActionListener cbxListener = (new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					//String str = null;
+					if(e.getSource() == cbxCustomer){
+						if(cbxCustomer.isSelected() == true){
+							System.out.println("Customer CheckBox was Clicked!");
+							System.out.println("I am putting "+getCustomer()+" into the Customer txtField!");
+							txtCustomer.setText(getCustomer());
+							cboCustomer.removeItemListener(comboBoxSelectionListener);
+							cboCustomer.setVisible(false);
+							txtCustomer.setVisible(true);
+							txtCustomer.setEditable(false);
+						}
+						else if (cbxCustomer.isSelected() == false){
+							System.out.println("cbxCustomer was Deselected!");
+							txtCustomer.setEditable(true);
+							txtCustomer.setVisible(false);
+							cboCustomer.setVisible(true);
+							cboCustomer.setSelectedIndex(-1);
+							cboCustomer.addItemListener(comboBoxSelectionListener);
+						}
+					}					
+					if(e.getSource() == cbxPlatform){
+						if(cbxPlatform.isSelected() == true){
+							System.out.println("Platform CheckBox was Clicked!");
+							System.out.println("I am putting "+getPlatform()+" into the Platform txtField!");
+							txtPlatform.setText(getPlatform());
+							cboPlatform.removeItemListener(comboBoxSelectionListener);
+							cboPlatform.setVisible(false);
+							txtPlatform.setVisible(true);
+							txtPlatform.setEditable(false);
+						}
+						else if (cbxPlatform.isSelected() == false){
+							System.out.println("cbxPlatform was Deselected!");
+							txtPlatform.setEditable(true);
+							txtPlatform.setVisible(false);
+							cboPlatform.setVisible(true);
+							cboPlatform.setSelectedIndex(-1);
+							cboPlatform.addItemListener(comboBoxSelectionListener);
+						}
+					}					
+					if(e.getSource() == cbxName){
+						if(cbxName.isSelected() == true){
+							System.out.println("Name CheckBox was Clicked!");
+							System.out.println("I am putting "+getName()+" into the Name txtField!");
+							txtName.setText(getName());
+							cboName.removeItemListener(comboBoxSelectionListener);	
+							cboName.setVisible(false);
+							txtName.setVisible(true);
+							txtName.setEditable(false);
+						}
+						else if (cbxName.isSelected() == false){
+							System.out.println("cbxName was Deselected!");
+							txtName.setEditable(true);
+							txtName.setVisible(false);
+							cboName.setVisible(true);			
+							cboName.setSelectedIndex(-1);
+							cboName.addItemListener(comboBoxSelectionListener);
+						}
+					}
+				}
+			});
+			cbxCustomer.addActionListener(cbxListener);
+			cbxPlatform.addActionListener(cbxListener);
+			cbxName.addActionListener(cbxListener);
 			
 		//JRadioButtons
 			rbtnCreateBDL = new JRadioButton("Create BDL");
