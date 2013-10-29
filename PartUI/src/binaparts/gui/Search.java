@@ -86,91 +86,23 @@ public class Search extends JFrame
 				{
 					if (e.getSource() == btnSearch) 
 					{
-						//con = new DBConnect();
-							final String findBosalText = txtFindBosal.getText();
-							
-							try{
-								JSONObject temp = (con.queryDatabase("parts list", "BosalPartNumber", findBosalText)).getJSONObject(0);
-								//set text for CustPartNumber JTextField
-								String cpartText= null;
-								//filter Description Combo Box by the PartType of checked Bosal #
-								int partType = Integer.valueOf(txtFindBosal.getText(0, 2));
-								JSONArray temp1 = new JSONArray();
-								String[] descrip = null;
-								ComboBoxModel<String> descripComboBoxModel = null;
-								try{
-									temp1 = con.queryDatabase("description list", "TypeNumber", partType);
-									descrip = new String[temp1.length()];
-									for(int i = 0; i < temp1.length(); i++){
-										descrip[i] = temp1.getJSONObject(i).get("Name").toString();
-									}
-									descripComboBoxModel = (new DefaultComboBoxModel<String>(descrip));
-									cboDescrip.setModel(descripComboBoxModel);
-								}catch(Exception ex){ex.printStackTrace();}
-								//set text for CustPartNumber JTextField
-								try{
-									cpartText = temp.get("CustPartNumber").toString();
-								}catch(Exception ex){cpartText = "-";}
-								txtCusDescrip.setText(cpartText);
-								
-								//set text for SupPartNumber JTextField
-								String spartText= null;
-								try{
-									spartText = temp.get("SupPartNumber").toString();
-								}catch(Exception ex){spartText = "-";}
-								txtSupDescrip.setText(spartText);
-								
-								//set text for Description JComboBox
-								String descripText= null;
-								try{
-									descripText = temp.get("PartDescription").toString();
-								}catch(Exception ex){descripText = "-";}
-								cboDescrip.setSelectedItem(descripText);
-								
-								//set text for Program JComboBox
-								String programText = null;
-								try{
-									programText = temp.get("Program").toString();
-								}catch(Exception ex){programText = "-";}
-								cboProgram.setSelectedItem(programText);
-								
-								//set text for DrawingNumber JTextField
-								String DrawingNumber = null;
-								try{
-									DrawingNumber = temp.get("DrawingNumber").toString();
-								}catch(Exception ex){DrawingNumber = "-";}
-								txtDrawingNum.setText(DrawingNumber);
-								
-								//set text for REV JTextField
-								int Rev = 0;
-								try{
-									Rev = Integer.valueOf(temp.get("Rev").toString());
-								}catch(Exception ex){Rev = 0;}
-								txtRev.setText(Integer.toString(Rev));
-								
-							}catch(Exception ex){
-								JOptionPane.showMessageDialog(
-										    frame,
-										    "Bosal Part Number: " + findBosalText + " does not exist",
-										    "Missing Part Number",
-											JOptionPane.ERROR_MESSAGE);
-								txtCusDescrip.setText("");
-								txtSupDescrip.setText("");
-								cboProgram.setSelectedIndex(-1);
-								cboDescrip.setModel(resetDescripComboBox());
-								cboDescrip.setSelectedIndex(-1);
-								txtDrawingNum.setText("");
-								txtRev.setText("");
-							}
+						String search = txtSearch.getText();						
+						try{
+							JSONArray temp = (con.queryDatabase("parts list", "BosalPartNumber", search));							
+						}catch(Exception ex){
+							JOptionPane.showMessageDialog(
+									    Searchframe,
+									    "Bosal Part Number: " + search + " does not exist",
+									    "Missing Part Number",
+										JOptionPane.ERROR_MESSAGE);
+						}
 					}
-					}					
-				});
-			
-			setupPanel();
-			
+				}					
+			});			
+			setupPanel();			
 		}
 
-			private void setupPanel() 
+		private void setupPanel() 
 			{
 				GroupLayout groupLayout = new GroupLayout(this);
 				groupLayout.setHorizontalGroup(
