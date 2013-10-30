@@ -67,7 +67,7 @@ public class BDLFrame extends JFrame
 		
 	class BDLMain extends JPanel 
 	{		
-		
+	//global variables
 		private String customer;
 		private String platform;
 		private String name;
@@ -75,13 +75,13 @@ public class BDLFrame extends JFrame
 		private String volume;
 		private String power;
 		
-		//temp arrays to hold comboBox info 
+	//temp arrays to hold comboBox info 
 		private JSONArray temp1;
 		private JSONArray temp2;
 		private JSONArray temp3;
-		//^^reset will be on doClick() action of rbtnCreateBDL^^
+	//^^reset will be on doClick() action of rbtnCreateBDL^^
 		
-		//JLabels	
+	//JLabels	
 		private JLabel lblBosal;
 		private JLabel lblBDL;
 		private JLabel lblCustomer;
@@ -160,22 +160,6 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return CustComboBoxDefault;
 		}
-		/*private ComboBoxModel<String> resetCustomerComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> CustComboBoxDefault = null;
-			String[] Cust = null;
-			
-			try {
-				temp1 = con.queryReturnAllCustomers();
-				Cust = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
-				}
-				CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
-			}catch(Exception ex){ex.printStackTrace();}
-			return CustComboBoxDefault;
-		}*/
 		private JComboBox<String> cboPlatform;
 		private ComboBoxModel<String> resetPlatformComboBox()
 		{
@@ -190,21 +174,6 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return proComboBoxDefault;
 		}
-		/*private ComboBoxModel<String> resetPlatformComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> proComboBoxDefault = null;
-			String[] types = null;
-			try {
-				temp1 = con.queryReturnAllPrograms();
-				types = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					types[i] = temp1.getJSONObject(i).getString("Program").toString();
-				}	
-				proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();}
-			return proComboBoxDefault;
-		}*/
 		private JComboBox<String> cboName;
 		private ComboBoxModel<String> resetEngineComboBox()
 		{
@@ -219,22 +188,7 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return engineComboBoxDefault;
 		}
-		/*private ComboBoxModel<String> resetEngineComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> engineComboBoxDefault = null;
-			String[] types = null;
-			try {
-				temp1 = con.queryReturnAllEngines();
-				types = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					types[i] = temp1.getJSONObject(i).getString("Engine").toString();
-				}	
-				engineComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();}
-			return engineComboBoxDefault;
-		}*/
-				
+						
 		public String getCustomer() {
 			return customer;
 		}
@@ -283,7 +237,8 @@ public class BDLFrame extends JFrame
 			this.power = power;
 			System.out.println(this.power+" was put into the power variable");
 		}
-		//JRadioButtons
+		
+	//JRadioButtons
 		private JRadioButton rbtnCreateBDL;
 		private JRadioButton rbtnSearchBDL;
 		
@@ -496,28 +451,7 @@ public class BDLFrame extends JFrame
 			AutoCompleteDecorator.decorate(cboName);
 			cboName.addMouseListener(new ContextMenuMouseListener());
 			cboName.setForeground(Color.BLACK);	
-			/*		
-			final ItemListener cboSetInfo = (new ItemListener(){	
-				public void itemStateChanged(ItemEvent e)
-				{
-					if(e.getSource().equals(cboCustomer)){
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							
-						}
-					}	
-					if(e.getSource().equals(cboPlatform)){
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							
-						}
-					}	
-					if(e.getSource().equals(cboName)){
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							
-						}
-					}	
-				}
-			});	
-			*/
+			
 			final ItemListener cboGetInfo = (new ItemListener(){	
 				public void itemStateChanged(ItemEvent e)
 				{							
