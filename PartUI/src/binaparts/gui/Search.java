@@ -34,6 +34,21 @@ public class Search extends JFrame
 	private Searchpnl pnlMain;
 	JFrame Searchframe = new JFrame("Search:");
 	DBConnect con = new DBConnect();
+	private String searchText;
+	
+	/**
+	 * @return the searchText
+	 */
+	public String getSearchText() {
+		return searchText;
+	}
+
+	/**
+	 * @param searchText the searchText to set
+	 */
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
 	
 	public void displaySearch() 
 	{
@@ -56,6 +71,8 @@ public class Search extends JFrame
 		}catch(Exception ex){ex.printStackTrace();}
 	}
 		
+	
+
 	class Searchpnl extends JPanel 
 	{	
 		private JLabel lblSearch;
@@ -86,8 +103,8 @@ public class Search extends JFrame
 				{
 					if (e.getSource() == btnSearch) 
 					{
-						String search = txtSearch.getText();						
-						try{
+						setSearchText(txtSearch.getText());						
+						/*try{
 							JSONArray temp = (con.queryDatabase("parts list", "BosalPartNumber", search));							
 						}catch(Exception ex){
 							JOptionPane.showMessageDialog(
@@ -95,7 +112,7 @@ public class Search extends JFrame
 									    "Bosal Part Number: " + search + " does not exist",
 									    "Missing Part Number",
 										JOptionPane.ERROR_MESSAGE);
-						}
+						}*/
 					}
 				}					
 			});			
