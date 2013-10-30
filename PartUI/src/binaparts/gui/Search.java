@@ -26,7 +26,11 @@ import javax.swing.GroupLayout.Alignment;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+
+
+
 import binaparts.dao.DBConnect;
+import binaparts.gui.BDLFrame.BDLMain;
 
 public class Search extends JFrame 
 {
@@ -37,6 +41,7 @@ public class Search extends JFrame
 	private String searchText;
 	
 	/**
+	 * 
 	 * @return the searchText
 	 */
 	public String getSearchText() {
@@ -70,9 +75,7 @@ public class Search extends JFrame
 			Searchframe.setIconImage(ImageIO.read(new File("res/bosalimage.png")));
 		}catch(Exception ex){ex.printStackTrace();}
 	}
-		
 	
-
 	class Searchpnl extends JPanel 
 	{	
 		private JLabel lblSearch;
@@ -103,7 +106,10 @@ public class Search extends JFrame
 				{
 					if (e.getSource() == btnSearch) 
 					{
-						setSearchText(txtSearch.getText());						
+						BDLFrame b = new BDLFrame();
+						setSearchText(txtSearch.getText());	
+						b.setSearchText(getSearchText());
+						
 						/*try{
 							JSONArray temp = (con.queryDatabase("parts list", "BosalPartNumber", search));							
 						}catch(Exception ex){
