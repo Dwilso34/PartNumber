@@ -27,6 +27,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.LineBorder;
@@ -145,6 +146,8 @@ public class BDLFrame extends JFrame
 		
 	//JTable	
 		private JTable myTable;
+		private JTable myTable2;
+		private JTable myTable3;
 		private JScrollPane scrollPane;
 		
 	//JCheckBoxes
@@ -462,7 +465,13 @@ public class BDLFrame extends JFrame
 							return false;
 						}
 					};
-					scrollPane = new JScrollPane();
+					myTable2 = new JTable();
+					myTable3 = new JTable();
+					JPanel panel = new JPanel();
+					panel.add(myTable);
+					panel.add(myTable2);
+					panel.add(myTable3);
+					scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 					scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
 					scrollPane.setViewportView(myTable);
 					myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
