@@ -31,6 +31,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
@@ -149,6 +151,31 @@ public class BDLFrame extends JFrame
 		private JTable myTable2;
 		private JTable myTable3;
 		private JScrollPane scrollPane;
+		
+		public TableModel populateTableModel(String table, String column, JSONArray temp, String bosalPartNumber){
+			 
+	        TableModel tableModel = null;
+	      				
+	        try{
+	            String[] temp1 = new String[8];
+	            String[] columnNames = {"JDE Part NR", "OLD Part NR", "Rev", "Drawing NR", "DWG Rev", "DWG Rev Date", "PROD Rel Date"};
+	            String[][] data = new String[1][8];	             	      
+	            
+	            for(int i = 0; i < 1; i++){
+	                for(int j = 0; j < 8; j++){
+	                	try{
+	                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
+	                    }catch(Exception ex){
+	                        data[i][j] = "";
+	                    }
+	                }
+	            }
+	            tableModel = (new DefaultTableModel(data, columnNames));	           
+				
+	        }catch(Exception ex){ex.printStackTrace();}	       
+	       
+	        return tableModel;
+	    }
 		
 	//JCheckBoxes
 		private JCheckBox cbxCustomer;
@@ -949,8 +976,8 @@ public class BDLFrame extends JFrame
 							cboCustomer.removeItemListener(cboGetInfo);
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboName.removeItemListener(cboGetInfo);
-							Search s = new Search();
-							s.displaySearch();
+							//Search s = new Search();
+							//s.displaySearch();
 						} catch (Exception ex) {ex.printStackTrace();}
 			            
 					}						

@@ -1514,7 +1514,7 @@ public class MainFrames extends JFrame
 	                for(int j = 0; j < columnNames.length; j++){
 	                	try{
 	                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
-	                    }catch(Exception ex){/*Ignore*/
+	                    }catch(Exception ex){
 	                        data[i][j] = "";
 	                    }
 	                }
@@ -1729,9 +1729,9 @@ public class MainFrames extends JFrame
 				}
 		});
 		
-	ImageIcon done1 = new ImageIcon(getClass().getResource("/images/back.jpg"));
-	btnBack = new JButton(done1);
-	btnBack.addActionListener(new ActionListener() {
+		ImageIcon done1 = new ImageIcon(getClass().getResource("/images/back.jpg"));
+		btnBack = new JButton(done1);
+		btnBack.addActionListener(new ActionListener() {
 		
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnBack)
@@ -1754,9 +1754,9 @@ public class MainFrames extends JFrame
 								
 			}}});
 
-	ImageIcon searchA = new ImageIcon(getClass().getResource("/images/searchAll.jpg"));
-	btnSearchAll = new JButton(searchA);
-	btnSearchAll.addActionListener(new ActionListener() {
+		ImageIcon searchA = new ImageIcon(getClass().getResource("/images/searchAll.jpg"));
+		btnSearchAll = new JButton(searchA);
+		btnSearchAll.addActionListener(new ActionListener() {
 		
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnSearchAll)
@@ -1790,16 +1790,14 @@ public class MainFrames extends JFrame
 			            column.setMinWidth(width);
 			            column.setPreferredWidth(width);
 			        }
-		}}});
-	
+		}}});	
 		ButtonGroup group = new ButtonGroup();
 		group.add(rbtnFindBosal);
 		group.add(rbtnFindCus);
 		group.add(rbtnFindSup);
 		group.add(rbtnFindPro);
 		group.add(rbtnFindEuro);
-		setupPanel();
-		
+		setupPanel();		
 	}
 	
 	private void setupPanel()
