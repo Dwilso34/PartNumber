@@ -505,7 +505,7 @@ public class DBConnect {
 			JSONArray json = new JSONArray();
 			try{
 				getDBConnection();
-				pst = con.prepareStatement("SELECT * FROM `parts list` ORDER BY `BosalPartNumber`");
+				pst = con.prepareStatement("SELECT * FROM `bosal parts` ORDER BY `BosalPartNumber`");
 				ResultSet rs = pst.executeQuery();
 				if (isResultSetEmpty(rs) == false ){    
 					json = converter.toJSONArray(rs);
@@ -723,36 +723,55 @@ public class DBConnect {
 		}
 	}
 	//inserts a new row into `parts list` to create a new part
-	public void insertNewPart(int partType, int mat, String BosalPartNumber, 
+	public void insertNewPart(int PartType, int Material, String BosalPartNumber, 
 			String CustomerPartNumber, String SupplierPartNumber, String Description,
-			String Program, int seq, String typeDescription, String DrawingNumber,
-			int Rev) throws Exception{	
+			String Program, int Seq, String TypeDescription, int Rev, String DrawingNumber,
+			int DrawingRev, String DrawingRevDate, String ProductionReleaseDate) throws Exception{	
 		try{
 			String usersname = getUsersName();
 			Timestamp timestamp = getTimestamp();
 			getDBConnection();
-			pst = con.prepareStatement("INSERT INTO `parts list` (PartType, Material, BosalPartNumber, CustPartNumber,"
-										+ " SupPartNumber, PartDescription, Program, SeqNumber, TypeDescription, "
-										+ "DrawingNumber, Rev, CreatedBy, Created, UpdatedBy, Updated ) "
-										+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			pst.setInt(1, partType);
-			pst.setInt(2, mat);
+			pst = con.prepareStatement("INSERT INTO `bosal parts` "
+					+ "(PartType, "
+					+ "Material, "
+					+ "BosalPartNumber, "
+					+ "CustPartNumber, "
+					+ "SupPartNumber, "
+					+ "PartDescription, "
+					+ "Program, "
+					+ "SeqNumber, "
+					+ "TypeDescription, "
+					+ "Rev, "
+					+ "DrawingNumber, "
+					+ "DrawingRev, "
+					+ "DrawingRevDate, "
+					+ "ProductionReleaseDate, "
+					+ "CreatedBy, "
+					+ "Created, "
+					+ "UpdatedBy, "
+					+ "Updated) "
+					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			pst.setInt(1, PartType);
+			pst.setInt(2, Material);
 			pst.setString(3, BosalPartNumber);
 			pst.setString(4, CustomerPartNumber);
 			pst.setString(5, SupplierPartNumber);
 			pst.setString(6, Description);
 			pst.setString(7, Program);
-			pst.setInt(8, seq);
-			pst.setString(9, typeDescription);
-			pst.setString(10, DrawingNumber);
-			pst.setInt(11, Rev);
-			pst.setString(12, usersname);
-			pst.setTimestamp(13, timestamp);
-			pst.setString(14, usersname);
-			pst.setTimestamp(15, timestamp);
+			pst.setInt(8, Seq);
+			pst.setString(9, TypeDescription);
+			pst.setInt(10, Rev);
+			pst.setString(11, DrawingNumber);
+			pst.setInt(12, DrawingRev);
+			pst.setString(13, DrawingRevDate);
+			pst.setString(14, ProductionReleaseDate);
+			pst.setString(15, usersname);
+			pst.setTimestamp(16, timestamp);
+			pst.setString(17, usersname);
+			pst.setTimestamp(18, timestamp);
 			pst.executeUpdate();
 			pst.close();
-			iterateNextSequenceNumber(partType);
+			iterateNextSequenceNumber(PartType);
 			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
@@ -861,7 +880,7 @@ public class DBConnect {
 			if(getUserRank().equals("admin")){
 				try{
 					getDBConnection();
-					pst = con.prepareStatement("DELETE FROM `parts list` WHERE `BosalPartNumber` = ?");
+					pst = con.prepareStatement("DELETE FROM `bosal parts` WHERE `BosalPartNumber` = ?");
 					pst.setString(1, BosalPartNumber);
 					pst.executeUpdate();
 					pst.close();	
@@ -879,31 +898,39 @@ public class DBConnect {
 		}
 	//updates a BosalPartNumber in parts list
 	public void update(String BosalPartNumber, String CusPartNumber, 
-			String SupPartNumber, String Description, String program, 
-			String DrawingNumber, int Rev) throws Exception{
+			String SupPartNumber, String Description, String Program, 
+			int Rev, String DrawingNumber, int DrawingRev, String DrawingRevDate,
+			String ProductionReleaseDate) throws Exception{
 			
 			try{
 				String usersname = getUsersName();
 				Timestamp timestamp = getTimestamp();
 				getDBConnection();
-				pst = con.prepareStatement("UPDATE `parts list` SET `PartDescription` = ?, " 
-						+ " `CustPartNumber` = ?, " 
-						+ " `SupPartNumber` = ?, "
-						+ " `Program` = ?, "
-						+ " `DrawingNumber` = ?, "
-						+ " `Rev` = ?, "
-						+ " `UpdatedBy` = ?, "
-						+ " `Updated` = ?"
+				pst = con.prepareStatement("UPDATE `bosal parts` SET "
+						+ "`PartDescription` = ?, " 
+						+ "`CustPartNumber` = ?, " 
+						+ "`SupPartNumber` = ?, "
+						+ "`Program` = ?, "
+						+ "`Rev` = ?, "
+						+ "`DrawingNumber` = ?, "
+						+ "`DrawingRev` = ?, "
+						+ "`DrawingRevDate` = ?, "
+						+ "`ProductionReleaseDate` = ?, "
+						+ "`UpdatedBy` = ?, "
+						+ "`Updated` = ?"
 						+ "WHERE `BosalPartNUmber`= ?");
 				pst.setString(1, Description);
 				pst.setString(2, CusPartNumber);
 				pst.setString(3, SupPartNumber);
-				pst.setString(4,  program);
-				pst.setString(5, DrawingNumber);
-				pst.setInt(6, Rev);
-				pst.setString(7, usersname);
-				pst.setTimestamp(8, timestamp);
-				pst.setString(9, BosalPartNumber);
+				pst.setString(4,  Program);
+				pst.setInt(5, Rev);
+				pst.setString(6, DrawingNumber);
+				pst.setInt(7, DrawingRev);
+				pst.setString(8, DrawingRevDate);
+				pst.setString(9, ProductionReleaseDate);
+				pst.setString(10, usersname);
+				pst.setTimestamp(11, timestamp);
+				pst.setString(12, BosalPartNumber);
 				pst.executeUpdate();
 				pst.close();
 				con.close();

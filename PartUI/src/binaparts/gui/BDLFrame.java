@@ -41,10 +41,8 @@ public class BDLFrame extends JFrame
 {
 	public BDLFrame(){}
 	private BDLMain pnlMain;
-	private JTextField txtBosalPartNum;
 	private String searchText;
-	JFrame BDLframe = new JFrame("BreakDown List Manager:");
-	
+	JFrame BDLframe = new JFrame("BreakDown List Manager:");	
 	DBConnect con = new DBConnect();
 	
 	public void displayBDL() 
@@ -72,14 +70,10 @@ public class BDLFrame extends JFrame
 	}
 
 	public void setSearchText(String searchText) {
-		this.searchText = searchText;
-		txtBosalPartNum.setText(searchText);
-		txtBosalPartNum = new JTextField();
-		txtBosalPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-		txtBosalPartNum.setForeground(Color.BLACK);
+		this.searchText = searchText;		
 	}
 		
-	class BDLMain extends JPanel 
+	public class BDLMain extends JPanel 
 	{		
 	//global variables
 		private String customer;
@@ -131,7 +125,7 @@ public class BDLFrame extends JFrame
 		private JTextField txtName;
 		private JTextField txtVolume;
 		private JTextField txtPower;
-		
+		private JTextField txtBosalPartNum;		
 		private JTextField txtCustomerPartNum;
 		private JTextField txtIMDS;
 		private JTextField txtDescription;
@@ -675,7 +669,9 @@ public class BDLFrame extends JFrame
 			txtPower = new JTextField();
 			txtPower.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPower.setForeground(Color.BLACK);
-			
+			txtBosalPartNum = new JTextField();
+			txtBosalPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			txtBosalPartNum.setForeground(Color.BLACK);
 			txtCustomerPartNum = new JTextField();
 			txtCustomerPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustomerPartNum.setForeground(Color.BLACK);
