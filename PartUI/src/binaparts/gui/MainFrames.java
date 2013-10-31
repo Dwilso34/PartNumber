@@ -371,8 +371,6 @@ public class MainFrames extends JFrame
 		private JTextField txtCPart;
 		private JTextField txtSPart;
 		private JTextField txtDrawingRev;
-		private JTextField txtDrawingRevDate;
-		private JTextField txtProductionReleaseDate;
 		
 	//JComboBox	
 		JPanel contentPane;	
@@ -944,8 +942,6 @@ public class MainFrames extends JFrame
 		private JTextField txtRev;
 		private JTextField txtDrawingNum;
 		private JTextField txtDrawingRev;
-		private JTextField txtDrawingRevDate;
-		private JTextField txtProductionReleaseDate;
 		
 	//JComboBoxes			
 		private JComboBox<String> cboProgram;
