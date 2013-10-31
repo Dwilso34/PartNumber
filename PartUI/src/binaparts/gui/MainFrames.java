@@ -362,6 +362,9 @@ public class MainFrames extends JFrame
 		private JLabel lblBosal;
 		private JLabel lblProgram;
 		private JLabel lblDrawingNum;
+		private JLabel lblDrawingRev;
+		private JLabel lblDrawingRevDate;
+		private JLabel lblProductionReleaseDate;
 	
 	//JTextField
 		private JTextField txtDescrip;
@@ -371,14 +374,11 @@ public class MainFrames extends JFrame
 		private JTextField txtBPart;
 		private JTextField txtCPart;
 		private JTextField txtSPart;
+		private JTextField txtDrawingRev;
 		
-		
-	//JComboBox
-		private JComboBox<String> cboProgram;
-		private JComboBox<String> cboDescrip;
-		private JComboBox<String> cboType;
-		private JComboBox<String> cboMat;
+	//JComboBox	
 		JPanel contentPane;	
+		private JComboBox<String> cboProgram;
 		private ComboBoxModel<String> resetProgramComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
@@ -395,6 +395,7 @@ public class MainFrames extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return programComboBoxDefault;
 		}
+		private JComboBox<String> cboType;
 		private ComboBoxModel<String> resetTypeComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
@@ -411,6 +412,7 @@ public class MainFrames extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return typeComboBoxDefault;
 		}
+		private JComboBox<String> cboDescrip;
 		private ComboBoxModel<String> resetDescripComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
@@ -427,12 +429,18 @@ public class MainFrames extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return descripComboBoxDefault;
 		}
+		private JComboBox<String> cboMat;
 		private ComboBoxModel<String> resetMatComboBox()
 		{
 			ComboBoxModel<String> matComboBoxDefault = new DefaultComboBoxModel<String>();
 			return matComboBoxDefault;
 		}
-		
+		private JComboBox<String> cboDrawingDay;
+		private JComboBox<String> cboDrawingMonth;
+		private JComboBox<String> cboDrawingYear;
+		private JComboBox<String> cboProductionDay;
+		private JComboBox<String> cboProductionMonth;
+		private JComboBox<String> cboProductionYear;
 	//JButtons
 		private JButton btnSave;
 		private JButton btnBack;
@@ -464,8 +472,7 @@ public class MainFrames extends JFrame
 		public CreatePanel(final JPanel create)
 		{
 		
-		//Labels
-		
+		//Labels		
 			lblType = new JLabel("Type");
 			lblMatterial = new JLabel("Material");
 			lblTypeDescription = new JLabel("Type Description");
@@ -478,6 +485,9 @@ public class MainFrames extends JFrame
 			lblCreateAPart = new JLabel("Create a Part Number");
 			lblProgram = new JLabel("Program");
 			lblDrawingNum = new JLabel("Drawing Number");
+			lblDrawingRev = new JLabel("Drawing Rev");
+			lblDrawingRevDate = new JLabel("Drawing Rev Date");
+			lblProductionReleaseDate= new JLabel("Production Release Date");
 			ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
 			lblBosal = new JLabel(bosal);
 			setBackground(new Color(105, 105, 105));
@@ -513,34 +523,78 @@ public class MainFrames extends JFrame
 			txtDrawingNum = new JTextField();
 			txtDrawingNum.setForeground(Color.BLACK);
 			txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
-				
+			txtDrawingRev = new JTextField();
+			txtDrawingRev.setForeground(Color.BLACK);
+			txtDrawingRev.addMouseListener(new ContextMenuMouseListener());
+			
 		//ComboBoxes
 				
 			cboType = new JComboBox<String>();
-			AutoCompleteDecorator.decorate(cboType);
-			cboType.setForeground(Color.BLACK);
-			cboType.setModel(resetTypeComboBox());
 			cboType.setEditable(true);
+			cboType.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboType);
+			cboType.setModel(resetTypeComboBox());
 			cboType.setSelectedIndex(-1);
 			cboType.addMouseListener(new ContextMenuMouseListener());
 			cboMat = new JComboBox<String>();
-			AutoCompleteDecorator.decorate(cboMat);
+			cboMat.setEditable(true);
 			cboMat.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboMat);
 			cboMat.setModel(resetMatComboBox());
 			cboMat.addMouseListener(new ContextMenuMouseListener());
 			cboDescrip = new JComboBox<String>();
 			cboDescrip.setEditable(true);
-			AutoCompleteDecorator.decorate(cboDescrip);
 			cboDescrip.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboDescrip);
 			cboDescrip.addMouseListener(new ContextMenuMouseListener());
 			cboDescrip.setModel(resetDescripComboBox());
 			cboDescrip.setSelectedIndex(-1);
 			cboProgram = new JComboBox<String>();
+			cboProgram.setEditable(true);
 			cboProgram.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboProgram);
 			cboProgram.addMouseListener(new ContextMenuMouseListener());
 			cboProgram.setModel(resetProgramComboBox());
-			AutoCompleteDecorator.decorate(cboProgram);
 			cboProgram.setSelectedIndex(-1);
+			String[] days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
+					"10", "11", "12", "13", "14", "15", "16", "17", "18",
+					"19", "20", "21", "22", "23", "24", "25", "26", "27",
+					"28", "29", "30", "31"};
+			cboDrawingDay = new JComboBox<String>(days);
+			cboDrawingDay.setForeground(Color.BLACK);
+			cboDrawingDay.setEditable(true);
+			AutoCompleteDecorator.decorate(cboDrawingDay);
+			cboDrawingDay.setSelectedIndex(-1);
+			cboProductionDay = new JComboBox<String>(days);
+			cboProductionDay.setForeground(Color.BLACK);
+			cboProductionDay.setEditable(true);
+			AutoCompleteDecorator.decorate(cboProductionDay);
+			cboProductionDay.setSelectedIndex(-1);
+			String[] months = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
+					"10", "11", "12"};
+			cboDrawingMonth = new JComboBox<String>(months);
+			cboDrawingMonth.setForeground(Color.BLACK);
+			cboDrawingMonth.setEditable(true);
+			AutoCompleteDecorator.decorate(cboDrawingMonth);
+			cboDrawingMonth.setSelectedIndex(-1);
+			cboProductionMonth = new JComboBox<String>(months);
+			cboProductionMonth.setForeground(Color.BLACK);
+			cboProductionMonth.setEditable(true);
+			AutoCompleteDecorator.decorate(cboProductionMonth);
+			cboProductionMonth.setSelectedIndex(-1);
+			String[] years = {"13", "14", "15", "16", "17", 
+					"18", "19", "20", "21", "22", "23", "24", "25", "26", 
+					"27", "28", "29", "30"};
+			cboDrawingYear = new JComboBox<String>(years);
+			cboDrawingYear.setForeground(Color.BLACK);
+			cboDrawingYear.setEditable(true);
+			AutoCompleteDecorator.decorate(cboDrawingYear);
+			cboDrawingYear.setSelectedIndex(-1);
+			cboProductionYear = new JComboBox<String>(years);
+			cboProductionYear.setForeground(Color.BLACK);
+			cboProductionYear.setEditable(true);
+			AutoCompleteDecorator.decorate(cboProductionYear);
+			cboProductionYear.setSelectedIndex(-1);
 			
 			ItemListener comboBoxSelectionListener = (new ItemListener(){	
 				public void itemStateChanged(ItemEvent e)
@@ -632,23 +686,30 @@ public class MainFrames extends JFrame
 								JOptionPane.WARNING_MESSAGE);
 						if(n == 0){
 							try {
-								int partType = Integer.valueOf((String) cboType.getSelectedItem());
-								int mat = 0;
+								int PartType = Integer.valueOf((String) cboType.getSelectedItem());
+								int Material = 0;
 								if(cboMat.getSelectedItem()!= null){
-									mat = Integer.valueOf((String) cboMat.getSelectedItem());
+									Material = Integer.valueOf((String) cboMat.getSelectedItem());
 								}
-								int seq = Integer.valueOf(txtSeq.getText());
-								String typeDescription = txtDescrip.getText();
-								String Description = (String) cboDescrip.getSelectedItem();
 								String BosalPartNumber = txtBPart.getText();
 								String CustomerPartNumber = txtCPart.getText();
 								String SupplierPartNumber = txtSPart.getText();
+								String Description = (String) cboDescrip.getSelectedItem();
 								String Program = (String) cboProgram.getSelectedItem();
-								String DrawingNumber = txtDrawingNum.getText();
+								int Seq = Integer.valueOf(txtSeq.getText());
+								String TypeDescription = txtDescrip.getText();
 								int Rev = 0;
-								con.insertNewPart(partType, mat, BosalPartNumber, CustomerPartNumber, 
-										SupplierPartNumber, Description, Program, seq, typeDescription,
-										DrawingNumber, Rev);
+								String DrawingNumber = txtDrawingNum.getText();
+								int DrawingRev = Integer.valueOf(txtDrawingRev.getText());
+								String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
+										+(String)cboDrawingDay.getSelectedItem()+"/"
+										+(String)cboDrawingYear.getSelectedItem();
+								String ProductionReleaseDate = (String)cboProductionMonth.getSelectedItem()+"/"
+										+(String)cboProductionDay.getSelectedItem()+"/"
+										+(String)cboProductionYear.getSelectedItem();	
+								con.insertNewPart(PartType, Material, BosalPartNumber, CustomerPartNumber, 
+										SupplierPartNumber, Description, Program, Seq, TypeDescription,
+										Rev, DrawingNumber, DrawingRev, DrawingRevDate, ProductionReleaseDate);
 								
 								setVisible(false);
 								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -868,6 +929,9 @@ public class MainFrames extends JFrame
 		private JLabel lblProgram;
 		private JLabel lblRev;
 		private JLabel lblDrawingNum;
+		private JLabel lblDrawingRev;
+		private JLabel lblDrawingRevDate;
+		private JLabel lblProductionReleaseDate;
 		
 	//JButtons
 		private JButton btnSave;
@@ -881,10 +945,10 @@ public class MainFrames extends JFrame
 		private JTextField txtSupDescrip;
 		private JTextField txtRev;
 		private JTextField txtDrawingNum;
+		private JTextField txtDrawingRev;
 		
-	//JComboBoxes
+	//JComboBoxes			
 		private JComboBox<String> cboProgram;
-		private JComboBox<String> cboDescrip;
 		private ComboBoxModel<String> resetProgramComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
@@ -901,6 +965,7 @@ public class MainFrames extends JFrame
 			}catch(Exception ex){/*Ignore*/}
 			return programComboBoxDefault;
 		}
+		private JComboBox<String> cboDescrip;
 		private ComboBoxModel<String> resetDescripComboBox()
 		{
 			JSONArray temp1 = new JSONArray();
@@ -917,6 +982,12 @@ public class MainFrames extends JFrame
 			}catch(Exception ex){/*Ignore*/}
 			return descripComboBoxDefault;
 		}
+		private JComboBox<String> cboDrawingDay;
+		private JComboBox<String> cboDrawingMonth;
+		private JComboBox<String> cboDrawingYear;
+		private JComboBox<String> cboProductionDay;
+		private JComboBox<String> cboProductionMonth;
+		private JComboBox<String> cboProductionYear;
 		
 	//Update Panel		
 		public UpdatePanel(final JPanel update) 
@@ -941,23 +1012,65 @@ public class MainFrames extends JFrame
 			txtDrawingNum = new JTextField();
 			txtDrawingNum.setForeground(Color.BLACK);
 			txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
-			
+			txtDrawingRev = new JTextField();
+			txtDrawingRev.setForeground(Color.BLACK);
+			txtDrawingRev.addMouseListener(new ContextMenuMouseListener());
+						
 	//JComboBoxes
 			
 			cboDescrip = new JComboBox<String>();
-			AutoCompleteDecorator.decorate(cboDescrip);
+			cboDescrip.setEditable(true);
 			cboDescrip.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboDescrip);			
 			cboDescrip.addMouseListener(new ContextMenuMouseListener());
 			cboDescrip.setModel(resetDescripComboBox());
-			cboDescrip.setEditable(true);
 			cboDescrip.setSelectedIndex(-1);
 			cboProgram = new JComboBox<String>();
-			AutoCompleteDecorator.decorate(cboProgram);
-			cboProgram.setForeground(Color.BLACK);
-			cboProgram.addMouseListener(new ContextMenuMouseListener());
-			cboProgram.setModel(resetProgramComboBox());
 			cboProgram.setEditable(true);
+			cboProgram.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboProgram);
+			cboProgram.addMouseListener(new ContextMenuMouseListener());
+			cboProgram.setModel(resetProgramComboBox());			
 			cboProgram.setSelectedIndex(-1);
+			String[] days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
+					"10", "11", "12", "13", "14", "15", "16", "17", "18",
+					"19", "20", "21", "22", "23", "24", "25", "26", "27",
+					"28", "29", "30", "31"};
+			cboDrawingDay = new JComboBox<String>(days);
+			cboDrawingDay.setForeground(Color.BLACK);
+			cboDrawingDay.setEditable(true);
+			AutoCompleteDecorator.decorate(cboDrawingDay);
+			cboDrawingDay.setSelectedIndex(-1);
+			cboProductionDay = new JComboBox<String>(days);
+			cboProductionDay.setForeground(Color.BLACK);
+			cboProductionDay.setEditable(true);
+			AutoCompleteDecorator.decorate(cboProductionDay);
+			cboProductionDay.setSelectedIndex(-1);
+			String[] months = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
+					"10", "11", "12"};
+			cboDrawingMonth = new JComboBox<String>(months);
+			cboDrawingMonth.setForeground(Color.BLACK);
+			cboDrawingMonth.setEditable(true);
+			AutoCompleteDecorator.decorate(cboDrawingMonth);
+			cboDrawingMonth.setSelectedIndex(-1);
+			cboProductionMonth = new JComboBox<String>(months);
+			cboProductionMonth.setForeground(Color.BLACK);
+			cboProductionMonth.setEditable(true);
+			AutoCompleteDecorator.decorate(cboProductionMonth);
+			cboProductionMonth.setSelectedIndex(-1);
+			String[] years = {"13", "14", "15", "16", "17", 
+					"18", "19", "20", "21", "22", "23", "24", "25", "26", 
+					"27", "28", "29", "30"};
+			cboDrawingYear = new JComboBox<String>(years);
+			cboDrawingYear.setForeground(Color.BLACK);
+			cboDrawingYear.setEditable(true);
+			AutoCompleteDecorator.decorate(cboDrawingYear);
+			cboDrawingYear.setSelectedIndex(-1);
+			cboProductionYear = new JComboBox<String>(years);
+			cboProductionYear.setForeground(Color.BLACK);
+			cboProductionYear.setEditable(true);
+			AutoCompleteDecorator.decorate(cboProductionYear);
+			cboProductionYear.setSelectedIndex(-1);
 			
 	//Labels		
 			
@@ -969,6 +1082,9 @@ public class MainFrames extends JFrame
 			lblProgram = new JLabel("Program");
 			lblRev = new JLabel("Rev Number");
 			lblDrawingNum = new JLabel("Drawing Number");
+			lblDrawingRev = new JLabel("Drawing Rev");
+			lblDrawingRevDate = new JLabel("Drawing Rev Date");
+			lblProductionReleaseDate= new JLabel("Production Release Date");
 			
 	//Images
 			
@@ -1053,30 +1169,38 @@ public class MainFrames extends JFrame
 						if(n == 0){
 							String BosalPartNumber = txtFindBosal.getText();
 							String CustomerPartNumber = null;
-							String SupplierPartNumber= null;
-							String DrawingNumber = null;
-							int Rev = 0;
-							
 							if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
 								CustomerPartNumber = null;
 							}else{CustomerPartNumber = txtCusDescrip.getText();}
+							String SupplierPartNumber= null;
 							if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
 								SupplierPartNumber = null;
 							}else{SupplierPartNumber = txtSupDescrip.getText();}
+							String Description = (String) cboDescrip.getSelectedItem();
+							String Program = (String) cboProgram.getSelectedItem();
+							int Rev = 0;
+							if(txtRev.getText().equals("-") || txtRev.getText().equals("")){
+								Rev = 0;
+							}else{Rev = Integer.valueOf(txtRev.getText());}							
+							String DrawingNumber = null;							
 							if(txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")){
 								DrawingNumber = null;
 							}else{DrawingNumber = txtDrawingNum.getText();}
-							if(txtRev.getText().equals("-") || txtRev.getText().equals("")){
-								Rev = 0;
-							}else{Rev = Integer.valueOf(txtRev.getText());}
-							
-							String Description = (String) cboDescrip.getSelectedItem();
-							
-							String Program = (String) cboProgram.getSelectedItem();							
+							int DrawingRev = 0;							
+							if(txtDrawingRev.getText().equals("-") || txtDrawingRev.getText().equals("")){
+								DrawingRev = 0;
+							}else{Rev = Integer.valueOf(txtDrawingRev.getText());}
+							String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
+									+(String)cboDrawingDay.getSelectedItem()+"/"
+									+(String)cboDrawingYear.getSelectedItem();
+							String ProductionReleaseDate = (String)cboProductionMonth.getSelectedItem()+"/"
+									+(String)cboProductionDay.getSelectedItem()+"/"
+									+(String)cboProductionYear.getSelectedItem();									
 							
 							try {
 								con.update(BosalPartNumber, CustomerPartNumber, SupplierPartNumber, 
-										Description, Program, DrawingNumber, Rev);
+										Description, Program, Rev, DrawingNumber, DrawingRev, 
+										DrawingRevDate, ProductionReleaseDate);
 								
 								setVisible(false);
 								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1113,7 +1237,7 @@ public class MainFrames extends JFrame
 						final String findBosalText = txtFindBosal.getText();
 						
 						try{
-							JSONObject temp = (con.queryDatabase("parts list", "BosalPartNumber", findBosalText)).getJSONObject(0);
+							JSONObject temp = (con.queryDatabase("bosal parts", "BosalPartNumber", findBosalText)).getJSONObject(0);
 							//set text for CustPartNumber JTextField
 							String cpartText= null;
 							//filter Description Combo Box by the PartType of checked Bosal #
@@ -1528,8 +1652,8 @@ public class MainFrames extends JFrame
 							//Searches using Bosal part number to fill table 
 							if(rbtnFindBosal.isSelected() == true){
 								try{
-									temp = (con.queryDatabase("parts list", "BosalPartNumber", searchText));
-									myTable.setModel(populateTableModel("parts list", "BosalPartNumber", temp, searchText));
+									temp = (con.queryDatabase("bosal parts", "BosalPartNumber", searchText));
+									myTable.setModel(populateTableModel("bosal parts", "BosalPartNumber", temp, searchText));
 									}catch(Exception ex){
 									JOptionPane.showMessageDialog(
 											    frame,
@@ -1554,8 +1678,8 @@ public class MainFrames extends JFrame
 							//Searches using supplier part number to fill table
 							if(rbtnFindSup.isSelected() == true){
 								try{
-									temp = (con.queryDatabase("parts list", "SupPartNumber", searchText));
-									myTable.setModel(populateTableModel("parts list", "SupPartNumber", temp, searchText));
+									temp = (con.queryDatabase("bosal parts", "SupPartNumber", searchText));
+									myTable.setModel(populateTableModel("bosal parts", "SupPartNumber", temp, searchText));
 									
 									}catch(Exception ex){
 									JOptionPane.showMessageDialog(
@@ -1567,8 +1691,8 @@ public class MainFrames extends JFrame
 							//Searches using customer number to fill table				
 							if(rbtnFindCus.isSelected() == true){
 								try{
-									temp = (con.queryDatabase("parts list", "CustPartNumber", searchText));
-									myTable.setModel(populateTableModel("parts list", "CustPartNumber", temp, searchText));
+									temp = (con.queryDatabase("bosal parts", "CustPartNumber", searchText));
+									myTable.setModel(populateTableModel("bosal parts", "CustPartNumber", temp, searchText));
 
 									}catch(Exception ex){
 									JOptionPane.showMessageDialog(
@@ -1579,8 +1703,8 @@ public class MainFrames extends JFrame
 							}}
 							if(rbtnFindPro.isSelected() == true){
 								try{
-									temp = (con.queryDatabase("parts list", "Program", searchText));
-									myTable.setModel(populateTableModel("parts list", "Program", temp, searchText));
+									temp = (con.queryDatabase("bosal parts", "Program", searchText));
+									myTable.setModel(populateTableModel("bosal parts", "Program", temp, searchText));
 
 									}catch(Exception ex){
 									JOptionPane.showMessageDialog(
@@ -1645,7 +1769,7 @@ public class MainFrames extends JFrame
 					//Searches using Bosal part number to fill table 
 					try{
 						temp = (con.queryAllParts(searchText));
-						myTable.setModel(populateTableModel("parts list", "All", temp, searchText));
+						myTable.setModel(populateTableModel("bosal parts", "All", temp, searchText));
 						
 						}catch(Exception ex){
 						JOptionPane.showMessageDialog(
@@ -3231,7 +3355,7 @@ public class MainFrames extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return custComboBoxDefault;
 		}
-		private JComboBox<?> cboYear;
+		private JComboBox<String> cboYear;
 		
 	//JButtons
 		private JButton btnSave;
@@ -3305,28 +3429,32 @@ public class MainFrames extends JFrame
 						
 		//JComboBoxes
 			cboProgram = new JComboBox<String>();
-			cboProgram.setModel(resetProgramComboBox());
-			AutoCompleteDecorator.decorate(cboProgram);
-			cboProgram.addMouseListener(new ContextMenuMouseListener());
+			cboProgram.setEditable(true);
 			cboProgram.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboProgram);
+			cboProgram.setModel(resetProgramComboBox());
+			cboProgram.addMouseListener(new ContextMenuMouseListener());
 			cboProgram.setSelectedIndex(-1);
 			cboPartDescrip = new JComboBox<String>();
-			cboPartDescrip.setModel(resetDescripComboBox());
-			AutoCompleteDecorator.decorate(cboPartDescrip);
+			cboPartDescrip.setEditable(true);
 			cboPartDescrip.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboPartDescrip);
+			cboPartDescrip.setModel(resetDescripComboBox());
 			cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
 			cboPartDescrip.setSelectedIndex(-1);
 			cboCustomer = new JComboBox<String>();
-			cboCustomer.setModel(resetCustomerComboBox());
-			AutoCompleteDecorator.decorate(cboCustomer);
-			cboCustomer.setSelectedIndex(-1);
-			cboCustomer.addMouseListener(new ContextMenuMouseListener());
+			cboCustomer.setEditable(true);
 			cboCustomer.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboCustomer);
+			cboCustomer.setModel(resetCustomerComboBox());
+			cboCustomer.addMouseListener(new ContextMenuMouseListener());
+			cboCustomer.setSelectedIndex(-1);
 			String[] years = {"13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
-			cboYear = new JComboBox<Object>(years);
-			cboYear.setSelectedIndex(-1);
-			cboYear.setEditable(false);
+			cboYear = new JComboBox<String>(years);
+			cboYear.setEditable(true);
 			cboYear.setForeground(Color.BLACK);
+			AutoCompleteDecorator.decorate(cboYear);
+			cboYear.setSelectedIndex(-1);
 			
 			ItemListener comboBoxSelectionListener = (new ItemListener(){	
 				public void itemStateChanged(ItemEvent e)

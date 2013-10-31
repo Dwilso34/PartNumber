@@ -106,9 +106,7 @@ public class Search extends JFrame
 				{
 					if (e.getSource() == btnSearch) 
 					{
-						BDLFrame b = new BDLFrame();
 						setSearchText(txtSearch.getText());	
-						b.setSearchText(getSearchText());
 						
 						/*try{
 							JSONArray temp = (con.queryDatabase("parts list", "BosalPartNumber", search));							
