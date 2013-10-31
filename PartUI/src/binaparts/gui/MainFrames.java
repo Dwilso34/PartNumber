@@ -240,7 +240,7 @@ public class MainFrames extends JFrame
 							if(con.verifyUser() == true){
 								setStatus();
 								setVisible(false);
-								frame.setSize(680,355);
+								frame.setSize(770,355);
 								frame.setTitle("Create Part:");
 								frame.setResizable(false);
 								frame.setLocationRelativeTo(main);
@@ -260,7 +260,7 @@ public class MainFrames extends JFrame
 							if(con.verifyUser() == true){
 								setStatus();
 								setVisible(false);
-								frame.setSize(590,400);
+								frame.setSize(790,410);
 								frame.setTitle("Update Part:");
 								frame.setResizable(false);
 								frame.setLocationRelativeTo(main);
@@ -349,788 +349,931 @@ public class MainFrames extends JFrame
 	class CreatePanel extends JPanel
 	{		
 	//JLabel
-		private JLabel lblSeq;
-		private JLabel lblDescription;
-		private JLabel lblMatterialDescription;
-		private JLabel lblTypeDescription;
-		private JLabel lblType;
-		private JLabel lblMatterial;
-		private JLabel lblBosalPartNumber;
-		private JLabel lblCustomerPartNumber;
-		private JLabel lblSupplierPartNumber;
-		private JLabel lblCreateAPart;
-		private JLabel lblBosal;
-		private JLabel lblProgram;
-		private JLabel lblDrawingNum;
-		private JLabel lblDrawingRev;
-		private JLabel lblDrawingRevDate;
-		private JLabel lblProductionReleaseDate;
+	private JLabel lblSeq;
+	private JLabel lblDescription;
+	private JLabel lblMatterialDescription;
+	private JLabel lblTypeDescription;
+	private JLabel lblType;
+	private JLabel lblMatterial;
+	private JLabel lblBosalPartNumber;
+	private JLabel lblCustomerPartNumber;
+	private JLabel lblSupplierPartNumber;
+	private JLabel lblCreateAPart;
+	private JLabel lblBosal;
+	private JLabel lblProgram;
+	private JLabel lblDrawingNum;
+	private JLabel lblDrawingRev;
+	private JLabel lblDrawingRevDate;
+	private JLabel lblProductionReleaseDate;
+
+//JTextField
+	private JTextField txtDescrip;
+	private JTextField txtMDescrip;
+	private JTextField txtDrawingNum;
+	private JTextField txtSeq;
+	private JTextField txtBPart;
+	private JTextField txtCPart;
+	private JTextField txtSPart;
+	private JTextField txtDrawingRev;
 	
-	//JTextField
-		private JTextField txtDescrip;
-		private JTextField txtMDescrip;
-		private JTextField txtDrawingNum;
-		private JTextField txtSeq;
-		private JTextField txtBPart;
-		private JTextField txtCPart;
-		private JTextField txtSPart;
-		private JTextField txtDrawingRev;
+//JComboBox	
+	JPanel contentPane;	
+	private JComboBox<String> cboProgram;
+	private ComboBoxModel<String> resetProgramComboBox()
+	{
+		JSONArray temp1 = new JSONArray();
+		ComboBoxModel<String> programComboBoxDefault = null;
+		String[] pros = null;
 		
-	//JComboBox	
-		JPanel contentPane;	
-		private JComboBox<String> cboProgram;
-		private ComboBoxModel<String> resetProgramComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> programComboBoxDefault = null;
-			String[] pros = null;
-			
-			try {
-				temp1 = con.queryReturnAllPrograms();
-				pros = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					pros[i] = temp1.getJSONObject(i).get("Program").toString();
-				}
-				programComboBoxDefault = (new DefaultComboBoxModel<String> (pros));
-			}catch(Exception ex){ex.printStackTrace();}
-			return programComboBoxDefault;
-		}
-		private JComboBox<String> cboType;
-		private ComboBoxModel<String> resetTypeComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> typeComboBoxDefault = null;
-			String[] types = null;
-			
-			try {
-				temp1 = con.queryReturnAllTypes();
-				types = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					types[i] = temp1.getJSONObject(i).get("PartType").toString();
-				}
-				typeComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();}
-			return typeComboBoxDefault;
-		}
-		private JComboBox<String> cboDescrip;
-		private ComboBoxModel<String> resetDescripComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> descripComboBoxDefault = null;
-			String[] types = null;
-			
-			try {
-				temp1 = con.queryReturnAllDescriptions();
-				types = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					types[i] = temp1.getJSONObject(i).get("Name").toString();
-				}
-				descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();}
-			return descripComboBoxDefault;
-		}
-		private JComboBox<String> cboMat;
-		private ComboBoxModel<String> resetMatComboBox()
-		{
-			ComboBoxModel<String> matComboBoxDefault = new DefaultComboBoxModel<String>();
-			return matComboBoxDefault;
-		}
-		private JComboBox<String> cboDrawingDay;
-		private JComboBox<String> cboDrawingMonth;
-		private JComboBox<String> cboDrawingYear;
-		private JComboBox<String> cboProductionDay;
-		private JComboBox<String> cboProductionMonth;
-		private JComboBox<String> cboProductionYear;
-	//JButtons
-		private JButton btnSave;
-		private JButton btnBack;
+		try {
+			temp1 = con.queryReturnAllPrograms();
+			pros = new String[temp1.length()];
+			for(int i = 0; i < temp1.length(); i++){
+				pros[i] = temp1.getJSONObject(i).get("Program").toString();
+			}
+			programComboBoxDefault = (new DefaultComboBoxModel<String> (pros));
+		}catch(Exception ex){ex.printStackTrace();}
+		return programComboBoxDefault;
+	}
+	private JComboBox<String> cboType;
+	private ComboBoxModel<String> resetTypeComboBox()
+	{
+		JSONArray temp1 = new JSONArray();
+		ComboBoxModel<String> typeComboBoxDefault = null;
+		String[] types = null;
 		
+		try {
+			temp1 = con.queryReturnAllTypes();
+			types = new String[temp1.length()];
+			for(int i = 0; i < temp1.length(); i++){
+				types[i] = temp1.getJSONObject(i).get("PartType").toString();
+			}
+			typeComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+		}catch(Exception ex){ex.printStackTrace();}
+		return typeComboBoxDefault;
+	}
+	private JComboBox<String> cboDescrip;
+	private ComboBoxModel<String> resetDescripComboBox()
+	{
+		JSONArray temp1 = new JSONArray();
+		ComboBoxModel<String> descripComboBoxDefault = null;
+		String[] types = null;
 		
-		public String generateBosalPartNumber(String partType, String material, String curSeq)
-		{
-			String BosalPartNumber = null;
-			if(partType.length() < 2){
-				for(int i = partType.length(); i < 2; i++){
-					partType = "0" + partType;
-				}
+		try {
+			temp1 = con.queryReturnAllDescriptions();
+			types = new String[temp1.length()];
+			for(int i = 0; i < temp1.length(); i++){
+				types[i] = temp1.getJSONObject(i).get("Name").toString();
 			}
-			if(material.length() < 3){
-				for(int i = material.length(); i < 3; i++){
-					material = "0" + material;
-				}
-			}
-			if(curSeq.length() < 5){
-				for(int i = curSeq.length(); i < 5; i++){
-					curSeq = "0" + curSeq;
-				}
-			}
-			BosalPartNumber = partType + material + curSeq;			
-			return BosalPartNumber;
-		}
+			descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+		}catch(Exception ex){ex.printStackTrace();}
+		return descripComboBoxDefault;
+	}
+	private JComboBox<String> cboMat;
+	private ComboBoxModel<String> resetMatComboBox()
+	{
+		ComboBoxModel<String> matComboBoxDefault = new DefaultComboBoxModel<String>();
+		return matComboBoxDefault;
+	}
+	private JComboBox<String> cboDrawingDay;
+	private JComboBox<String> cboDrawingMonth;
+	private JComboBox<String> cboDrawingYear;
+	private JComboBox<String> cboProductionDay;
+	private JComboBox<String> cboProductionMonth;
+	private JComboBox<String> cboProductionYear;
+//JButtons
+	private JButton btnSave;
+	private JButton btnBack;
 	
-	//StringPanel
-		public CreatePanel(final JPanel create)
-		{
+	
+	public String generateBosalPartNumber(String partType, String material, String curSeq)
+	{
+		String BosalPartNumber = null;
+		if(partType.length() < 2){
+			for(int i = partType.length(); i < 2; i++){
+				partType = "0" + partType;
+			}
+		}
+		if(material.length() < 3){
+			for(int i = material.length(); i < 3; i++){
+				material = "0" + material;
+			}
+		}
+		if(curSeq.length() < 5){
+			for(int i = curSeq.length(); i < 5; i++){
+				curSeq = "0" + curSeq;
+			}
+		}
+		BosalPartNumber = partType + material + curSeq;			
+		return BosalPartNumber;
+	}
+
+//StringPanel
+	public CreatePanel(final JPanel create)
+	{
+	
+	//Labels		
+		lblType = new JLabel("Type");
+		lblMatterial = new JLabel("Material");
+		lblTypeDescription = new JLabel("Type Description");
+		lblMatterialDescription = new JLabel("Material Description");
+		lblSeq = new JLabel("Seq");
+		lblDescription = new JLabel("Description");
+		lblBosalPartNumber = new JLabel("Bosal Part Number");
+		lblCustomerPartNumber = new JLabel("Customer Part Number");
+		lblSupplierPartNumber = new JLabel("Supplier Part Number");
+		lblCreateAPart = new JLabel("Create a Part Number");
+		lblProgram = new JLabel("Program");
+		lblDrawingNum = new JLabel("Drawing Number");
+		lblDrawingRev = new JLabel("Drawing Rev");
+		lblDrawingRev.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblDrawingRev.setForeground(Color.BLACK);
+		lblDrawingRevDate = new JLabel("Drawing Rev Date");
+		lblDrawingRevDate.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblDrawingRevDate.setForeground(Color.BLACK);
+		lblProductionReleaseDate= new JLabel("Production Release Date");
+		lblProductionReleaseDate.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblProductionReleaseDate.setForeground(Color.BLACK);
+		ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+		lblBosal = new JLabel(bosal);
+		setBackground(new Color(105, 105, 105));
 		
-		//Labels		
-			lblType = new JLabel("Type");
-			lblMatterial = new JLabel("Material");
-			lblTypeDescription = new JLabel("Type Description");
-			lblMatterialDescription = new JLabel("Material Description");
-			lblSeq = new JLabel("Seq");
-			lblDescription = new JLabel("Description");
-			lblBosalPartNumber = new JLabel("Bosal Part Number");
-			lblCustomerPartNumber = new JLabel("Customer Part Number");
-			lblSupplierPartNumber = new JLabel("Supplier Part Number");
-			lblCreateAPart = new JLabel("Create a Part Number");
-			lblProgram = new JLabel("Program");
-			lblDrawingNum = new JLabel("Drawing Number");
-			lblDrawingRev = new JLabel("Drawing Rev");
-			lblDrawingRevDate = new JLabel("Drawing Rev Date");
-			lblProductionReleaseDate= new JLabel("Production Release Date");
-			ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-			lblBosal = new JLabel(bosal);
-			setBackground(new Color(105, 105, 105));
+	//TextFields
 			
-		//TextFields
-				
-			txtDescrip = new JTextField();
-			txtDescrip.setBackground(new Color(190, 190, 190));
-			txtDescrip.setForeground(Color.BLACK);
-			txtDescrip.addMouseListener(new ContextMenuMouseListener());
-			txtDescrip.setEditable(false);
-			txtMDescrip = new JTextField();
-			txtMDescrip.setBackground(new Color(190, 190, 190));
-			txtMDescrip.setForeground(Color.BLACK);
-			txtMDescrip.addMouseListener(new ContextMenuMouseListener());
-			txtMDescrip.setEditable(false);
-			txtSeq = new JTextField();
-			txtSeq.setBackground(new Color(190, 190, 190));
-			txtSeq.setForeground(Color.BLACK);
-			txtSeq.addMouseListener(new ContextMenuMouseListener());
-			txtSeq.setEditable(false);
-			txtBPart = new JTextField();
-			txtBPart.setEditable(false);
-			txtBPart.setBackground(new Color(190, 190, 190));
-			txtBPart.setForeground(Color.BLACK);
-			txtBPart.addMouseListener(new ContextMenuMouseListener());			
-			txtCPart = new JTextField();
-			txtCPart.setForeground(Color.BLACK);
-			txtCPart.addMouseListener(new ContextMenuMouseListener());
-			txtSPart = new JTextField();
-			txtSPart.setForeground(Color.BLACK);
-			txtSPart.addMouseListener(new ContextMenuMouseListener());
-			txtDrawingNum = new JTextField();
-			txtDrawingNum.setForeground(Color.BLACK);
-			txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
-			txtDrawingRev = new JTextField();
-			txtDrawingRev.setForeground(Color.BLACK);
-			txtDrawingRev.addMouseListener(new ContextMenuMouseListener());
+		txtDescrip = new JTextField();
+		txtDescrip.setBackground(new Color(190, 190, 190));
+		txtDescrip.setForeground(Color.BLACK);
+		txtDescrip.addMouseListener(new ContextMenuMouseListener());
+		txtDescrip.setEditable(false);
+		txtMDescrip = new JTextField();
+		txtMDescrip.setBackground(new Color(190, 190, 190));
+		txtMDescrip.setForeground(Color.BLACK);
+		txtMDescrip.addMouseListener(new ContextMenuMouseListener());
+		txtMDescrip.setEditable(false);
+		txtSeq = new JTextField();
+		txtSeq.setBackground(new Color(190, 190, 190));
+		txtSeq.setForeground(Color.BLACK);
+		txtSeq.addMouseListener(new ContextMenuMouseListener());
+		txtSeq.setEditable(false);
+		txtBPart = new JTextField();
+		txtBPart.setEditable(false);
+		txtBPart.setBackground(new Color(190, 190, 190));
+		txtBPart.setForeground(Color.BLACK);
+		txtBPart.addMouseListener(new ContextMenuMouseListener());			
+		txtCPart = new JTextField();
+		txtCPart.setForeground(Color.BLACK);
+		txtCPart.addMouseListener(new ContextMenuMouseListener());
+		txtSPart = new JTextField();
+		txtSPart.setForeground(Color.BLACK);
+		txtSPart.addMouseListener(new ContextMenuMouseListener());
+		txtDrawingNum = new JTextField();
+		txtDrawingNum.setForeground(Color.BLACK);
+		txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
+		txtDrawingRev = new JTextField();
+		txtDrawingRev.setForeground(Color.BLACK);
+		txtDrawingRev.addMouseListener(new ContextMenuMouseListener());
+		
+	//ComboBoxes
 			
-		//ComboBoxes
-				
-			cboType = new JComboBox<String>();
-			cboType.setEditable(true);
-			cboType.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboType);
-			cboType.setModel(resetTypeComboBox());
-			cboType.setSelectedIndex(-1);
-			cboType.addMouseListener(new ContextMenuMouseListener());
-			cboMat = new JComboBox<String>();
-			cboMat.setEditable(true);
-			cboMat.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboMat);
-			cboMat.setModel(resetMatComboBox());
-			cboMat.addMouseListener(new ContextMenuMouseListener());
-			cboDescrip = new JComboBox<String>();
-			cboDescrip.setEditable(true);
-			cboDescrip.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboDescrip);
-			cboDescrip.addMouseListener(new ContextMenuMouseListener());
-			cboDescrip.setModel(resetDescripComboBox());
-			cboDescrip.setSelectedIndex(-1);
-			cboProgram = new JComboBox<String>();
-			cboProgram.setEditable(true);
-			cboProgram.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboProgram);
-			cboProgram.addMouseListener(new ContextMenuMouseListener());
-			cboProgram.setModel(resetProgramComboBox());
-			cboProgram.setSelectedIndex(-1);
-			String[] days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
-					"10", "11", "12", "13", "14", "15", "16", "17", "18",
-					"19", "20", "21", "22", "23", "24", "25", "26", "27",
-					"28", "29", "30", "31"};
-			cboDrawingDay = new JComboBox<String>(days);
-			cboDrawingDay.setForeground(Color.BLACK);
-			cboDrawingDay.setEditable(true);
-			AutoCompleteDecorator.decorate(cboDrawingDay);
-			cboDrawingDay.setSelectedIndex(-1);
-			cboProductionDay = new JComboBox<String>(days);
-			cboProductionDay.setForeground(Color.BLACK);
-			cboProductionDay.setEditable(true);
-			AutoCompleteDecorator.decorate(cboProductionDay);
-			cboProductionDay.setSelectedIndex(-1);
-			String[] months = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
-					"10", "11", "12"};
-			cboDrawingMonth = new JComboBox<String>(months);
-			cboDrawingMonth.setForeground(Color.BLACK);
-			cboDrawingMonth.setEditable(true);
-			AutoCompleteDecorator.decorate(cboDrawingMonth);
-			cboDrawingMonth.setSelectedIndex(-1);
-			cboProductionMonth = new JComboBox<String>(months);
-			cboProductionMonth.setForeground(Color.BLACK);
-			cboProductionMonth.setEditable(true);
-			AutoCompleteDecorator.decorate(cboProductionMonth);
-			cboProductionMonth.setSelectedIndex(-1);
-			String[] years = {"13", "14", "15", "16", "17", 
-					"18", "19", "20", "21", "22", "23", "24", "25", "26", 
-					"27", "28", "29", "30"};
-			cboDrawingYear = new JComboBox<String>(years);
-			cboDrawingYear.setForeground(Color.BLACK);
-			cboDrawingYear.setEditable(true);
-			AutoCompleteDecorator.decorate(cboDrawingYear);
-			cboDrawingYear.setSelectedIndex(-1);
-			cboProductionYear = new JComboBox<String>(years);
-			cboProductionYear.setForeground(Color.BLACK);
-			cboProductionYear.setEditable(true);
-			AutoCompleteDecorator.decorate(cboProductionYear);
-			cboProductionYear.setSelectedIndex(-1);
-			
-			ItemListener comboBoxSelectionListener = (new ItemListener(){	
-				public void itemStateChanged(ItemEvent e)
-				{
-					if(e.getSource().equals(cboType)){
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							int partType = Integer.valueOf((String) cboType.getSelectedItem());
-							JSONArray temp1 = new JSONArray();
-							JSONArray temp2 = new JSONArray();
-							JSONArray temp3 = new JSONArray();
-							String[] mats = null;
-							String[] descrip = null;
-							ComboBoxModel<String> matComboBoxModel = null;
-							ComboBoxModel<String> descripComboBoxModel = null;
+		cboType = new JComboBox<String>();
+		cboType.setEditable(true);
+		cboType.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboType);
+		cboType.setModel(resetTypeComboBox());
+		cboType.setSelectedIndex(-1);
+		cboType.addMouseListener(new ContextMenuMouseListener());
+		cboMat = new JComboBox<String>();
+		cboMat.setEditable(true);
+		cboMat.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboMat);
+		cboMat.setModel(resetMatComboBox());
+		cboMat.addMouseListener(new ContextMenuMouseListener());
+		cboDescrip = new JComboBox<String>();
+		cboDescrip.setEditable(true);
+		cboDescrip.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboDescrip);
+		cboDescrip.addMouseListener(new ContextMenuMouseListener());
+		cboDescrip.setModel(resetDescripComboBox());
+		cboDescrip.setSelectedIndex(-1);
+		cboProgram = new JComboBox<String>();
+		cboProgram.setEditable(true);
+		cboProgram.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboProgram);
+		cboProgram.addMouseListener(new ContextMenuMouseListener());
+		cboProgram.setModel(resetProgramComboBox());
+		cboProgram.setSelectedIndex(-1);
+		String[] days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
+				"10", "11", "12", "13", "14", "15", "16", "17", "18",
+				"19", "20", "21", "22", "23", "24", "25", "26", "27",
+				"28", "29", "30", "31"};
+		cboDrawingDay = new JComboBox<String>(days);
+		cboDrawingDay.setEditable(true);
+		cboDrawingDay.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboDrawingDay);
+		cboDrawingDay.setSelectedIndex(-1);
+		cboProductionDay = new JComboBox<String>(days);
+		cboProductionDay.setForeground(Color.BLACK);
+		cboProductionDay.setEditable(true);
+		AutoCompleteDecorator.decorate(cboProductionDay);
+		cboProductionDay.setSelectedIndex(-1);
+		String[] months = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
+				"10", "11", "12"};
+		cboDrawingMonth = new JComboBox<String>(months);
+		cboDrawingMonth.setForeground(Color.BLACK);
+		cboDrawingMonth.setEditable(true);
+		AutoCompleteDecorator.decorate(cboDrawingMonth);
+		cboDrawingMonth.setSelectedIndex(-1);
+		cboProductionMonth = new JComboBox<String>(months);
+		cboProductionMonth.setForeground(Color.BLACK);
+		cboProductionMonth.setEditable(true);
+		AutoCompleteDecorator.decorate(cboProductionMonth);
+		cboProductionMonth.setSelectedIndex(-1);
+		String[] years = {"13", "14", "15", "16", "17", 
+				"18", "19", "20", "21", "22", "23", "24", "25", "26", 
+				"27", "28", "29", "30"};
+		cboDrawingYear = new JComboBox<String>(years);
+		cboDrawingYear.setForeground(Color.BLACK);
+		cboDrawingYear.setEditable(true);
+		AutoCompleteDecorator.decorate(cboDrawingYear);
+		cboDrawingYear.setSelectedIndex(-1);
+		cboProductionYear = new JComboBox<String>(years);
+		cboProductionYear.setForeground(Color.BLACK);
+		cboProductionYear.setEditable(true);
+		AutoCompleteDecorator.decorate(cboProductionYear);
+		cboProductionYear.setSelectedIndex(-1);
+		
+		ItemListener comboBoxSelectionListener = (new ItemListener(){	
+			public void itemStateChanged(ItemEvent e)
+			{
+				if(e.getSource().equals(cboType)){
+					if(e.getStateChange() == ItemEvent.SELECTED){
+						int partType = Integer.valueOf((String)cboType.getSelectedItem());
+						JSONArray temp1 = new JSONArray();
+						JSONArray temp2 = new JSONArray();
+						JSONArray temp3 = new JSONArray();
+						String[] mats = null;
+						String[] descrip = null;
+						ComboBoxModel<String> matComboBoxModel = null;
+						ComboBoxModel<String> descripComboBoxModel = null;
+						
+						try{
+							temp1 = con.queryDatabase("type file", "PartType", partType);
+							temp2 = con.queryMaterialPartType(partType);
+							temp3 = con.queryDatabase("description list", "TypeNumber", partType);
+							mats = new String[temp2.length()];
+							descrip = new String[temp3.length()];
+							txtDescrip.setText(temp1.getJSONObject(0).get("TypeDescription").toString());
+							txtSeq.setText(temp1.getJSONObject(0).get("SeqNumber").toString());
 							
-							try{
-								temp1 = con.queryDatabase("type file", "PartType", partType);
-								temp2 = con.queryMaterialPartType(partType);
-								temp3 = con.queryDatabase("description list", "TypeNumber", partType);
-								mats = new String[temp2.length()];
-								descrip = new String[temp3.length()];
-								txtDescrip.setText(temp1.getJSONObject(0).get("TypeDescription").toString());
-								txtSeq.setText(temp1.getJSONObject(0).get("SeqNumber").toString());
-								
-								for(int i = 0; i < temp2.length(); i++){
-									mats[i] = temp2.getJSONObject(i).get("Material").toString();
-								}
-								for(int i = 0; i < temp3.length(); i++){
-									descrip[i] = temp3.getJSONObject(i).get("Name").toString();
-								}
-								matComboBoxModel =  (new DefaultComboBoxModel<String> (mats));
-								descripComboBoxModel = (new DefaultComboBoxModel<String> (descrip));
-							}catch(Exception ex){ex.printStackTrace();}
-							txtMDescrip.setText("");
-							txtBPart.setText("");
-							txtSPart.setText("");
-							txtCPart.setText("");
-							txtDrawingNum.setText("");
-							cboProgram.setSelectedIndex(-1);
-							cboMat.setModel(matComboBoxModel);
-							cboMat.setSelectedIndex(-1);
-							cboDescrip.setModel(descripComboBoxModel);
-							cboDescrip.setSelectedIndex(-1);
-						}
+							for(int i = 0; i < temp2.length(); i++){
+								mats[i] = temp2.getJSONObject(i).get("Material").toString();
+							}
+							for(int i = 0; i < temp3.length(); i++){
+								descrip[i] = temp3.getJSONObject(i).get("Name").toString();
+							}
+							matComboBoxModel =  (new DefaultComboBoxModel<String> (mats));
+							descripComboBoxModel = (new DefaultComboBoxModel<String> (descrip));
+						}catch(Exception ex){ex.printStackTrace();}
+						txtMDescrip.setText("");
+						txtBPart.setText("");
+						txtSPart.setText("");
+						txtCPart.setText("");
+						txtDrawingNum.setText("");
+						cboProgram.setSelectedIndex(-1);
+						cboMat.setModel(matComboBoxModel);
+						cboMat.setSelectedIndex(-1);
+						cboDescrip.setModel(descripComboBoxModel);
+						cboDescrip.setSelectedIndex(-1);
 					}
-					if(e.getSource().equals(cboMat)){
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							int partType = Integer.valueOf((String) cboType.getSelectedItem());
-							int matNumber = Integer.valueOf((String) cboMat.getSelectedItem());
-							JSONArray temp1 = new JSONArray();
-							
-							try{
-								temp1 = con.queryMaterialDescription(partType, matNumber);
-								txtMDescrip.setText(temp1.getJSONObject(0).getString("MaterialDescription").toString());
-							}catch(Exception ex){ex.printStackTrace();}
-						}
+				}
+				if(e.getSource().equals(cboMat)){
+					if(e.getStateChange() == ItemEvent.SELECTED){
+						int partType = Integer.valueOf((String) cboType.getSelectedItem());
+						int matNumber = Integer.valueOf((String) cboMat.getSelectedItem());
+						JSONArray temp1 = new JSONArray();
+						
+						try{
+							temp1 = con.queryMaterialDescription(partType, matNumber);
+							txtMDescrip.setText(temp1.getJSONObject(0).getString("MaterialDescription").toString());
+						}catch(Exception ex){ex.printStackTrace();}
 					}
-					if(cboType.getSelectedItem() != null){
-						if(cboMat.getSelectedItem() != null){
-							txtBPart.setText(generateBosalPartNumber(cboType.getSelectedItem().toString(), 
-									cboMat.getSelectedItem().toString(), 
-									txtSeq.getText()));
-						}else{
-							txtBPart.setText(generateBosalPartNumber(cboType.getSelectedItem().toString(), 
-								"", 
+				}
+				if(cboType.getSelectedItem() != null){
+					if(cboMat.getSelectedItem() != null){
+						txtBPart.setText(generateBosalPartNumber(cboType.getSelectedItem().toString(), 
+								cboMat.getSelectedItem().toString(), 
 								txtSeq.getText()));
-						}
 					}else{
-						txtBPart.setText(generateBosalPartNumber("", "", txtSeq.getText()));
+						txtBPart.setText(generateBosalPartNumber(cboType.getSelectedItem().toString(), 
+							"", 
+							txtSeq.getText()));
 					}
-				}});
-			cboType.addItemListener(comboBoxSelectionListener);
-			cboMat.addItemListener(comboBoxSelectionListener);
+				}else{
+					txtBPart.setText(generateBosalPartNumber("", "", txtSeq.getText()));
+				}
+			}});
+		cboType.addItemListener(comboBoxSelectionListener);
+		cboMat.addItemListener(comboBoxSelectionListener);
+		
+	//Buttons
 			
-		//Buttons
-				
-			ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
-			btnSave = new JButton(save);
-			btnSave.addActionListener(new ActionListener() {
+		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
+		btnSave = new JButton(save);
+		btnSave.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) 
+			{
+				if (e.getSource() == btnSave){
+					int n = JOptionPane.showConfirmDialog(
+						    frame,
+						    "Are you sure you want to save part data?",
+						    "Save:",
+						    JOptionPane.YES_NO_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+					if(n == 0){
+						try {
+							int PartType = Integer.valueOf((String) cboType.getSelectedItem());
+							int Material = 0;
+							if(cboMat.getSelectedItem()!= null){
+								Material = Integer.valueOf((String) cboMat.getSelectedItem());
+							}
+							String BosalPartNumber = txtBPart.getText();
+							String CustomerPartNumber = txtCPart.getText();
+							String SupplierPartNumber = txtSPart.getText();
+							String Description = (String) cboDescrip.getSelectedItem();
+							String Program = (String) cboProgram.getSelectedItem();
+							int Seq = Integer.valueOf(txtSeq.getText());
+							String TypeDescription = txtDescrip.getText();
+							int Rev = 0;
+							String DrawingNumber = txtDrawingNum.getText();
+							int DrawingRev = Integer.valueOf(txtDrawingRev.getText());
+							String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
+									+(String)cboDrawingDay.getSelectedItem()+"/"
+									+(String)cboDrawingYear.getSelectedItem();
+							String ProductionReleaseDate = (String)cboProductionMonth.getSelectedItem()+"/"
+									+(String)cboProductionDay.getSelectedItem()+"/"
+									+(String)cboProductionYear.getSelectedItem();	
+							con.insertNewPart(PartType, Material, BosalPartNumber, CustomerPartNumber, 
+									SupplierPartNumber, Description, Program, Seq, TypeDescription,
+									Rev, DrawingNumber, DrawingRev, DrawingRevDate, ProductionReleaseDate);
+							
+							setVisible(false);
+							Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+							int height = screenSize.height;
+							int width = screenSize.width;
+							frame.setResizable(false);
+							frame.setSize(width/2, height/2);
+							frame.setLocationRelativeTo(null);
+							frame.setSize(645, 545);
+							frame.setTitle("Main Menu:");
+							main.setVisible(true);
+							cboType.setModel(resetTypeComboBox());
+							cboType.setSelectedIndex(-1);
+							cboMat.setModel(resetMatComboBox());
+							cboDescrip.setModel(resetDescripComboBox());
+							cboDescrip.setSelectedIndex(-1);
+							txtCPart.setText("");
+							txtSPart.setText("");
+							txtBPart.setText("");
+							txtMDescrip.setText("");
+							txtDescrip.setText("");
+							cboProgram.setSelectedIndex(-1);
+							txtSeq.setText("");	
+							txtDrawingNum.setText("");
+						}catch(Exception ex){/*Ignore*/};
+		}}}});
+		
+		ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
+		btnBack = new JButton(back);
+		btnBack.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) 
+			{
+				if (e.getSource() == btnBack)
+				{
+					setVisible(false);
+					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+					int height = screenSize.height;
+					int width = screenSize.width;
+					frame.setResizable(false);
+					frame.setSize(width/2, height/2);
+					frame.setLocationRelativeTo(null);
+					frame.setSize(645, 545);
+					frame.setTitle("Main Menu:");
+					main.setVisible(true);
+					cboType.setModel(resetTypeComboBox());
+					cboType.setSelectedIndex(-1);
+					cboMat.setModel(resetMatComboBox());
+					cboDescrip.setModel(resetDescripComboBox());
+					cboDescrip.setSelectedIndex(-1);
+					txtCPart.setText("");
+					txtSPart.setText("");
+					txtBPart.setText("");
+					txtMDescrip.setText("");
+					txtDescrip.setText("");
+					txtSeq.setText("");
+					cboProgram.setSelectedIndex(-1);
+					txtDrawingNum.setText("");
+		}}});
+		setupPanel();	
+	}
 	
-				public void actionPerformed(ActionEvent e) 
-				{
-					if (e.getSource() == btnSave){
-						int n = JOptionPane.showConfirmDialog(
-							    frame,
-							    "Are you sure you want to save part data?",
-							    "Save:",
-							    JOptionPane.YES_NO_OPTION,
-								JOptionPane.WARNING_MESSAGE);
-						if(n == 0){
-							try {
-								int PartType = Integer.valueOf((String) cboType.getSelectedItem());
-								int Material = 0;
-								if(cboMat.getSelectedItem()!= null){
-									Material = Integer.valueOf((String) cboMat.getSelectedItem());
-								}
-								String BosalPartNumber = txtBPart.getText();
-								String CustomerPartNumber = txtCPart.getText();
-								String SupplierPartNumber = txtSPart.getText();
-								String Description = (String) cboDescrip.getSelectedItem();
-								String Program = (String) cboProgram.getSelectedItem();
-								int Seq = Integer.valueOf(txtSeq.getText());
-								String TypeDescription = txtDescrip.getText();
-								int Rev = 0;
-								String DrawingNumber = txtDrawingNum.getText();
-								int DrawingRev = Integer.valueOf(txtDrawingRev.getText());
-								String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
-										+(String)cboDrawingDay.getSelectedItem()+"/"
-										+(String)cboDrawingYear.getSelectedItem();
-								String ProductionReleaseDate = (String)cboProductionMonth.getSelectedItem()+"/"
-										+(String)cboProductionDay.getSelectedItem()+"/"
-										+(String)cboProductionYear.getSelectedItem();	
-								con.insertNewPart(PartType, Material, BosalPartNumber, CustomerPartNumber, 
-										SupplierPartNumber, Description, Program, Seq, TypeDescription,
-										Rev, DrawingNumber, DrawingRev, DrawingRevDate, ProductionReleaseDate);
-								
-								setVisible(false);
-								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-								int height = screenSize.height;
-								int width = screenSize.width;
-								frame.setResizable(false);
-								frame.setSize(width/2, height/2);
-								frame.setLocationRelativeTo(null);
-								frame.setSize(645, 545);
-								frame.setTitle("Main Menu:");
-								main.setVisible(true);
-								cboType.setModel(resetTypeComboBox());
-								cboType.setSelectedIndex(-1);
-								cboMat.setModel(resetMatComboBox());
-								cboDescrip.setModel(resetDescripComboBox());
-								cboDescrip.setSelectedIndex(-1);
-								txtCPart.setText("");
-								txtSPart.setText("");
-								txtBPart.setText("");
-								txtMDescrip.setText("");
-								txtDescrip.setText("");
-								cboProgram.setSelectedIndex(-1);
-								txtSeq.setText("");	
-								txtDrawingNum.setText("");
-							}catch(Exception ex){/*Ignore*/};
-			}}}});
-			
-			ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
-			btnBack = new JButton(back);
-			btnBack.addActionListener(new ActionListener() {
+	private void setupPanel() 
+	{
+	//Label Fonts
+		
+		lblType.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblType.setForeground(Color.BLACK);
+		lblMatterial.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblMatterial.setForeground(Color.BLACK);
+		lblTypeDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTypeDescription.setForeground(Color.BLACK);
+		lblMatterialDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblMatterialDescription.setForeground(Color.BLACK);
+		lblDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblDescription.setForeground(Color.BLACK);
+		lblSeq.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblSeq.setForeground(Color.BLACK);
+		lblSupplierPartNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblSupplierPartNumber.setForeground(Color.BLACK);
+		lblCreateAPart.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+		lblCreateAPart.setForeground(Color.BLACK);
+		lblCustomerPartNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblCustomerPartNumber.setForeground(Color.BLACK);
+		lblBosalPartNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblBosalPartNumber.setForeground(Color.BLACK);
+		lblProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblProgram.setForeground(Color.BLACK);
+		lblDrawingNum.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblDrawingNum.setForeground(Color.BLACK);
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(24)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblBosal, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
+							.addGap(6)
+							.addComponent(lblCreateAPart, GroupLayout.PREFERRED_SIZE, 415, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblType)
+							.addGap(79)
+							.addComponent(lblTypeDescription)
+							.addGap(120)
+							.addComponent(lblBosalPartNumber)
+							.addGap(49)
+							.addComponent(lblProductionReleaseDate, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(cboType, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+							.addGap(34)
+							.addComponent(txtDescrip, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
+							.addGap(24)
+							.addComponent(txtBPart, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+							.addGap(23)
+							.addComponent(cboProductionMonth, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addGap(14)
+							.addComponent(cboProductionDay, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addGap(14)
+							.addComponent(cboProductionYear, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblMatterial)
+							.addGap(59)
+							.addComponent(lblMatterialDescription)
+							.addGap(100)
+							.addComponent(lblCustomerPartNumber)
+							.addGap(18)
+							.addComponent(lblDrawingRevDate, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(cboMat, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+							.addGap(34)
+							.addComponent(txtMDescrip, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
+							.addGap(24)
+							.addComponent(txtCPart, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+							.addGap(23)
+							.addComponent(cboDrawingMonth, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addGap(14)
+							.addComponent(cboDrawingDay, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addGap(14)
+							.addComponent(cboDrawingYear, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblSeq)
+								.addComponent(txtSeq, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+							.addGap(34)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblDescription)
+								.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE))
+							.addGap(24)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblSupplierPartNumber)
+								.addComponent(txtSPart, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
+							.addGap(108)
+							.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE))
+							.addGap(39)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
+							.addGap(38)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblDrawingRev, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtDrawingRev, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
+							.addGap(108)
+							.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(32)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblBosal, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblCreateAPart, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE))
+					.addGap(4)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(lblType))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(lblTypeDescription))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(lblBosalPartNumber))
+						.addComponent(lblProductionReleaseDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addGap(8)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(cboType, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(txtDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(txtBPart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(cboProductionMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(cboProductionDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(cboProductionYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGap(1)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(lblMatterial))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(lblMatterialDescription))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(lblCustomerPartNumber))
+						.addComponent(lblDrawingRevDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addGap(5)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(cboMat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtMDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtCPart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cboDrawingMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cboDrawingDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cboDrawingYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(9)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblSeq)
+							.addGap(6)
+							.addComponent(txtSeq, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblDescription)
+							.addGap(6)
+							.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblSupplierPartNumber)
+							.addGap(6)
+							.addComponent(txtSPart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(8)
+							.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
+					.addGap(6)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+							.addGap(4)
+							.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+							.addGap(6)
+							.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(lblDrawingRev, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+							.addGap(6)
+							.addComponent(txtDrawingRev, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(12)
+							.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))))
+		);
+		setLayout(groupLayout);
+		
+	}
+}
+class UpdatePanel extends JPanel
+{
+//JLabels
+private JLabel lblBosal;
+private JLabel lblUpdatePart;
+private JLabel lblBosalPartNum;
+private JLabel lblCustomerPartNum;
+private JLabel lblSupplierPartNum;
+private JLabel lblDescription;
+private JLabel lblProgram;
+private JLabel lblRev;
+private JLabel lblDrawingNum;
+private JLabel lblDrawingRev;
+private JLabel lblDrawingRevDate;
+private JLabel lblProductionReleaseDate;
+
+//JButtons
+private JButton btnSave;
+private JButton btnBack;
+private JButton btnCheck;
+private JButton btnDelete;
+
+//JTextFields
+private JTextField txtFindBosal;
+private JTextField txtCusDescrip;
+private JTextField txtSupDescrip;
+private JTextField txtRev;
+private JTextField txtDrawingNum;
+private JTextField txtDrawingRev;
+
+//JComboBoxes			
+private JComboBox<String> cboProgram;
+private ComboBoxModel<String> resetProgramComboBox()
+{
+	JSONArray temp1 = new JSONArray();
+	ComboBoxModel<String> programComboBoxDefault = null;
+	String[] pros = null;
+	
+	try {
+		temp1 = con.queryReturnAllPrograms();
+		pros = new String[temp1.length()];
+		for(int i = 0; i < temp1.length(); i++){
+			pros[i] = temp1.getJSONObject(i).get("Program").toString();
+		}
+		programComboBoxDefault = (new DefaultComboBoxModel<String> (pros));
+	}catch(Exception ex){/*Ignore*/}
+	return programComboBoxDefault;
+}
+private JComboBox<String> cboDescrip;
+private ComboBoxModel<String> resetDescripComboBox()
+{
+	JSONArray temp1 = new JSONArray();
+	ComboBoxModel<String> descripComboBoxDefault = null;
+	String[] types = null;
+	
+	try {
+		temp1 = con.queryReturnAllDescriptions();
+		types = new String[temp1.length()];
+		for(int i = 0; i < temp1.length(); i++){
+			types[i] = temp1.getJSONObject(i).get("Name").toString();
+		}
+		descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+	}catch(Exception ex){/*Ignore*/}
+	return descripComboBoxDefault;
+}
+private JComboBox<String> cboDrawingDay;
+private JComboBox<String> cboDrawingMonth;
+private JComboBox<String> cboDrawingYear;
+private JComboBox<String> cboProductionDay;
+private JComboBox<String> cboProductionMonth;
+private JComboBox<String> cboProductionYear;
+
+//Update Panel		
+public UpdatePanel(final JPanel update) 
+{
+	setBackground(new Color(105, 105, 105));
+
+//TextFields		
+	
+	txtFindBosal = new JTextField();
+	txtFindBosal.setForeground(Color.BLACK);
+	txtFindBosal.addMouseListener(new ContextMenuMouseListener());
+	txtCusDescrip = new JTextField();
+	txtCusDescrip.setForeground(Color.BLACK);
+	txtCusDescrip.addMouseListener(new ContextMenuMouseListener());
+	txtSupDescrip = new JTextField();
+	txtSupDescrip.setForeground(Color.BLACK);
+	txtSupDescrip.addMouseListener(new ContextMenuMouseListener());
+	txtRev = new JTextField();
+	txtRev.setEditable(true);
+	txtRev.setForeground(Color.BLACK);
+	txtRev.addMouseListener(new ContextMenuMouseListener());
+	txtDrawingNum = new JTextField();
+	txtDrawingNum.setForeground(Color.BLACK);
+	txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
+	txtDrawingRev = new JTextField();
+	txtDrawingRev.setForeground(Color.BLACK);
+	txtDrawingRev.addMouseListener(new ContextMenuMouseListener());
 				
-				public void actionPerformed(ActionEvent e) 
-				{
-					if (e.getSource() == btnBack)
-					{
-						setVisible(false);
-						Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-						int height = screenSize.height;
-						int width = screenSize.width;
-						frame.setResizable(false);
-						frame.setSize(width/2, height/2);
-						frame.setLocationRelativeTo(null);
-						frame.setSize(645, 545);
-						frame.setTitle("Main Menu:");
-						main.setVisible(true);
-						cboType.setModel(resetTypeComboBox());
-						cboType.setSelectedIndex(-1);
-						cboMat.setModel(resetMatComboBox());
+//JComboBoxes
+	
+	cboDescrip = new JComboBox<String>();
+	cboDescrip.setEditable(true);
+	cboDescrip.setForeground(Color.BLACK);
+	AutoCompleteDecorator.decorate(cboDescrip);			
+	cboDescrip.addMouseListener(new ContextMenuMouseListener());
+	cboDescrip.setModel(resetDescripComboBox());
+	cboDescrip.setSelectedIndex(-1);
+	cboProgram = new JComboBox<String>();
+	cboProgram.setEditable(true);
+	cboProgram.setForeground(Color.BLACK);
+	AutoCompleteDecorator.decorate(cboProgram);
+	cboProgram.addMouseListener(new ContextMenuMouseListener());
+	cboProgram.setModel(resetProgramComboBox());			
+	cboProgram.setSelectedIndex(-1);
+	String[] days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
+			"10", "11", "12", "13", "14", "15", "16", "17", "18",
+			"19", "20", "21", "22", "23", "24", "25", "26", "27",
+			"28", "29", "30", "31"};
+	cboDrawingDay = new JComboBox<String>(days);
+	cboDrawingDay.setForeground(Color.BLACK);
+	cboDrawingDay.setEditable(true);
+	AutoCompleteDecorator.decorate(cboDrawingDay);
+	cboDrawingDay.setSelectedIndex(-1);
+	cboProductionDay = new JComboBox<String>(days);
+	cboProductionDay.setForeground(Color.BLACK);
+	cboProductionDay.setEditable(true);
+	AutoCompleteDecorator.decorate(cboProductionDay);
+	cboProductionDay.setSelectedIndex(-1);
+	String[] months = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
+			"10", "11", "12"};
+	cboDrawingMonth = new JComboBox<String>(months);
+	cboDrawingMonth.setForeground(Color.BLACK);
+	cboDrawingMonth.setEditable(true);
+	AutoCompleteDecorator.decorate(cboDrawingMonth);
+	cboDrawingMonth.setSelectedIndex(-1);
+	cboProductionMonth = new JComboBox<String>(months);
+	cboProductionMonth.setForeground(Color.BLACK);
+	cboProductionMonth.setEditable(true);
+	AutoCompleteDecorator.decorate(cboProductionMonth);
+	cboProductionMonth.setSelectedIndex(-1);
+	String[] years = {"13", "14", "15", "16", "17", 
+			"18", "19", "20", "21", "22", "23", "24", "25", "26", 
+			"27", "28", "29", "30"};
+	cboDrawingYear = new JComboBox<String>(years);
+	cboDrawingYear.setForeground(Color.BLACK);
+	cboDrawingYear.setEditable(true);
+	AutoCompleteDecorator.decorate(cboDrawingYear);
+	cboDrawingYear.setSelectedIndex(-1);
+	cboProductionYear = new JComboBox<String>(years);
+	cboProductionYear.setForeground(Color.BLACK);
+	cboProductionYear.setEditable(true);
+	AutoCompleteDecorator.decorate(cboProductionYear);
+	cboProductionYear.setSelectedIndex(-1);
+	
+//Labels		
+	
+	lblBosalPartNum = new JLabel("Bosal Part Number");
+	lblDescription = new JLabel("Description");
+	lblCustomerPartNum = new JLabel("Customer Part Number");
+	lblSupplierPartNum = new JLabel("Supplier Part Number");
+	lblUpdatePart = new JLabel("Update Part");
+	lblProgram = new JLabel("Program");
+	lblRev = new JLabel("Rev Number");
+	lblDrawingNum = new JLabel("Drawing Number");
+	lblDrawingRev = new JLabel("Drawing Rev");
+	lblDrawingRev.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblDrawingRev.setForeground(Color.BLACK);
+	lblDrawingRevDate = new JLabel("Drawing Rev Date");
+	lblDrawingRevDate.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblDrawingRevDate.setForeground(Color.BLACK);
+	lblProductionReleaseDate= new JLabel("Production Release Date");
+	lblProductionReleaseDate.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblProductionReleaseDate.setForeground(Color.BLACK);
+	
+//Images
+	
+	ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+	lblBosal = new JLabel(bosal);
+	
+//Buttons		
+
+	ImageIcon delete = new ImageIcon(getClass().getResource("/images/delete.jpg"));
+	btnDelete = new JButton(delete);
+	btnDelete.addActionListener(new ActionListener() {
+		
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == btnDelete)
+			{
+				int n = JOptionPane.showConfirmDialog(
+					    frame,
+					    "Are you sure you want to delete part data?",
+					    "Delete:",
+					    JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE
+						);
+				if(n == 0){
+					try {
+						con.deletePart(txtFindBosal.getText());
+						cboProgram.setSelectedIndex(-1);
+						txtSupDescrip.setText("");
+						txtCusDescrip.setText("");
+						txtFindBosal.setText("");
 						cboDescrip.setModel(resetDescripComboBox());
 						cboDescrip.setSelectedIndex(-1);
-						txtCPart.setText("");
-						txtSPart.setText("");
-						txtBPart.setText("");
-						txtMDescrip.setText("");
-						txtDescrip.setText("");
-						txtSeq.setText("");
-						cboProgram.setSelectedIndex(-1);
+						txtRev.setText("");
 						txtDrawingNum.setText("");
+					}catch(Exception ex){
+						ex.printStackTrace();
+					}
+				}
 			}}});
-			setupPanel();	
-		}
-		
-		private void setupPanel() 
-		{
-		//Label Fonts
-			
-			lblType.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblType.setForeground(Color.BLACK);
-			lblMatterial.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblMatterial.setForeground(Color.BLACK);
-			lblTypeDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblTypeDescription.setForeground(Color.BLACK);
-			lblMatterialDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblMatterialDescription.setForeground(Color.BLACK);
-			lblDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblDescription.setForeground(Color.BLACK);
-			lblSeq.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblSeq.setForeground(Color.BLACK);
-			lblSupplierPartNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblSupplierPartNumber.setForeground(Color.BLACK);
-			lblCreateAPart.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
-			lblCreateAPart.setForeground(Color.BLACK);
-			lblCustomerPartNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblCustomerPartNumber.setForeground(Color.BLACK);
-			lblBosalPartNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblBosalPartNumber.setForeground(Color.BLACK);
-			lblProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblProgram.setForeground(Color.BLACK);
-			lblDrawingNum.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblDrawingNum.setForeground(Color.BLACK);
-			GroupLayout groupLayout = new GroupLayout(this);
-			groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(24)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblBosal, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
-								.addGap(6)
-								.addComponent(lblCreateAPart, GroupLayout.PREFERRED_SIZE, 415, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblType)
-								.addGap(132)
-								.addComponent(lblTypeDescription)
-								.addGap(178)
-								.addComponent(lblBosalPartNumber))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(cboType, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-								.addGap(87)
-								.addComponent(txtDescrip, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
-								.addGap(82)
-								.addComponent(txtBPart, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblMatterial)
-								.addGap(112)
-								.addComponent(lblMatterialDescription)
-								.addGap(158)
-								.addComponent(lblCustomerPartNumber))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(cboMat, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-								.addGap(87)
-								.addComponent(txtMDescrip, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
-								.addGap(82)
-								.addComponent(txtCPart, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblSeq)
-								.addGap(140)
-								.addComponent(lblDescription)
-								.addGap(216)
-								.addComponent(lblSupplierPartNumber))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(txtSeq, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-								.addGap(87)
-								.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
-								.addGap(82)
-								.addComponent(txtSPart, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-								.addGap(36)
-								.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-								.addGap(20)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-									.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
-								.addGap(35)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)))))
-			);
-			groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(32)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblBosal, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblCreateAPart, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE))
-						.addGap(6)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblType)
-							.addComponent(lblTypeDescription)
-							.addComponent(lblBosalPartNumber))
-						.addGap(9)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(cboType, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-							.addComponent(txtDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(txtBPart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(3)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblMatterial)
-							.addComponent(lblMatterialDescription)
-							.addComponent(lblCustomerPartNumber))
-						.addGap(6)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(cboMat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(txtMDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(txtCPart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(9)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblSeq)
-							.addComponent(lblDescription)
-							.addComponent(lblSupplierPartNumber))
-						.addGap(6)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(txtSeq, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(txtSPart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(6)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(16)
-								.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(16)
-								.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addGap(4)
-								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(1)
-								.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-								.addGap(6)
-								.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-			);
-			setLayout(groupLayout);
-		}
-	}
-	class UpdatePanel extends JPanel
-	{
-	//JLabels
-		private JLabel lblBosal;
-		private JLabel lblUpdatePart;
-		private JLabel lblBosalPartNum;
-		private JLabel lblCustomerPartNum;
-		private JLabel lblSupplierPartNum;
-		private JLabel lblDescription;
-		private JLabel lblProgram;
-		private JLabel lblRev;
-		private JLabel lblDrawingNum;
-		private JLabel lblDrawingRev;
-		private JLabel lblDrawingRevDate;
-		private JLabel lblProductionReleaseDate;
-		
-	//JButtons
-		private JButton btnSave;
-		private JButton btnBack;
-		private JButton btnCheck;
-		private JButton btnDelete;
-		
-	//JTextFields
-		private JTextField txtFindBosal;
-		private JTextField txtCusDescrip;
-		private JTextField txtSupDescrip;
-		private JTextField txtRev;
-		private JTextField txtDrawingNum;
-		private JTextField txtDrawingRev;
-		
-	//JComboBoxes			
-		private JComboBox<String> cboProgram;
-		private ComboBoxModel<String> resetProgramComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> programComboBoxDefault = null;
-			String[] pros = null;
-			
-			try {
-				temp1 = con.queryReturnAllPrograms();
-				pros = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					pros[i] = temp1.getJSONObject(i).get("Program").toString();
-				}
-				programComboBoxDefault = (new DefaultComboBoxModel<String> (pros));
-			}catch(Exception ex){/*Ignore*/}
-			return programComboBoxDefault;
-		}
-		private JComboBox<String> cboDescrip;
-		private ComboBoxModel<String> resetDescripComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> descripComboBoxDefault = null;
-			String[] types = null;
-			
-			try {
-				temp1 = con.queryReturnAllDescriptions();
-				types = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					types[i] = temp1.getJSONObject(i).get("Name").toString();
-				}
-				descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){/*Ignore*/}
-			return descripComboBoxDefault;
-		}
-		private JComboBox<String> cboDrawingDay;
-		private JComboBox<String> cboDrawingMonth;
-		private JComboBox<String> cboDrawingYear;
-		private JComboBox<String> cboProductionDay;
-		private JComboBox<String> cboProductionMonth;
-		private JComboBox<String> cboProductionYear;
-		
-	//Update Panel		
-		public UpdatePanel(final JPanel update) 
-		{
-			setBackground(new Color(105, 105, 105));
-		
-	//TextFields		
-			
-			txtFindBosal = new JTextField();
-			txtFindBosal.setForeground(Color.BLACK);
-			txtFindBosal.addMouseListener(new ContextMenuMouseListener());
-			txtCusDescrip = new JTextField();
-			txtCusDescrip.setForeground(Color.BLACK);
-			txtCusDescrip.addMouseListener(new ContextMenuMouseListener());
-			txtSupDescrip = new JTextField();
-			txtSupDescrip.setForeground(Color.BLACK);
-			txtSupDescrip.addMouseListener(new ContextMenuMouseListener());
-			txtRev = new JTextField();
-			txtRev.setEditable(true);
-			txtRev.setForeground(Color.BLACK);
-			txtRev.addMouseListener(new ContextMenuMouseListener());
-			txtDrawingNum = new JTextField();
-			txtDrawingNum.setForeground(Color.BLACK);
-			txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
-			txtDrawingRev = new JTextField();
-			txtDrawingRev.setForeground(Color.BLACK);
-			txtDrawingRev.addMouseListener(new ContextMenuMouseListener());
-						
-	//JComboBoxes
-			
-			cboDescrip = new JComboBox<String>();
-			cboDescrip.setEditable(true);
-			cboDescrip.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboDescrip);			
-			cboDescrip.addMouseListener(new ContextMenuMouseListener());
-			cboDescrip.setModel(resetDescripComboBox());
-			cboDescrip.setSelectedIndex(-1);
-			cboProgram = new JComboBox<String>();
-			cboProgram.setEditable(true);
-			cboProgram.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboProgram);
-			cboProgram.addMouseListener(new ContextMenuMouseListener());
-			cboProgram.setModel(resetProgramComboBox());			
-			cboProgram.setSelectedIndex(-1);
-			String[] days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
-					"10", "11", "12", "13", "14", "15", "16", "17", "18",
-					"19", "20", "21", "22", "23", "24", "25", "26", "27",
-					"28", "29", "30", "31"};
-			cboDrawingDay = new JComboBox<String>(days);
-			cboDrawingDay.setForeground(Color.BLACK);
-			cboDrawingDay.setEditable(true);
-			AutoCompleteDecorator.decorate(cboDrawingDay);
-			cboDrawingDay.setSelectedIndex(-1);
-			cboProductionDay = new JComboBox<String>(days);
-			cboProductionDay.setForeground(Color.BLACK);
-			cboProductionDay.setEditable(true);
-			AutoCompleteDecorator.decorate(cboProductionDay);
-			cboProductionDay.setSelectedIndex(-1);
-			String[] months = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
-					"10", "11", "12"};
-			cboDrawingMonth = new JComboBox<String>(months);
-			cboDrawingMonth.setForeground(Color.BLACK);
-			cboDrawingMonth.setEditable(true);
-			AutoCompleteDecorator.decorate(cboDrawingMonth);
-			cboDrawingMonth.setSelectedIndex(-1);
-			cboProductionMonth = new JComboBox<String>(months);
-			cboProductionMonth.setForeground(Color.BLACK);
-			cboProductionMonth.setEditable(true);
-			AutoCompleteDecorator.decorate(cboProductionMonth);
-			cboProductionMonth.setSelectedIndex(-1);
-			String[] years = {"13", "14", "15", "16", "17", 
-					"18", "19", "20", "21", "22", "23", "24", "25", "26", 
-					"27", "28", "29", "30"};
-			cboDrawingYear = new JComboBox<String>(years);
-			cboDrawingYear.setForeground(Color.BLACK);
-			cboDrawingYear.setEditable(true);
-			AutoCompleteDecorator.decorate(cboDrawingYear);
-			cboDrawingYear.setSelectedIndex(-1);
-			cboProductionYear = new JComboBox<String>(years);
-			cboProductionYear.setForeground(Color.BLACK);
-			cboProductionYear.setEditable(true);
-			AutoCompleteDecorator.decorate(cboProductionYear);
-			cboProductionYear.setSelectedIndex(-1);
-			
-	//Labels		
-			
-			lblBosalPartNum = new JLabel("Bosal Part Number");
-			lblDescription = new JLabel("Description");
-			lblCustomerPartNum = new JLabel("Customer Part Number");
-			lblSupplierPartNum = new JLabel("Supplier Part Number");
-			lblUpdatePart = new JLabel("Update Part");
-			lblProgram = new JLabel("Program");
-			lblRev = new JLabel("Rev Number");
-			lblDrawingNum = new JLabel("Drawing Number");
-			lblDrawingRev = new JLabel("Drawing Rev");
-			lblDrawingRevDate = new JLabel("Drawing Rev Date");
-			lblProductionReleaseDate= new JLabel("Production Release Date");
-			
-	//Images
-			
-			ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-			lblBosal = new JLabel(bosal);
-			
-	//Buttons		
 	
-			ImageIcon delete = new ImageIcon(getClass().getResource("/images/delete.jpg"));
-			btnDelete = new JButton(delete);
-			btnDelete.addActionListener(new ActionListener() {
-				
-				public void actionPerformed(ActionEvent e) {
-					if (e.getSource() == btnDelete)
-					{
-						int n = JOptionPane.showConfirmDialog(
-							    frame,
-							    "Are you sure you want to delete part data?",
-							    "Delete:",
-							    JOptionPane.YES_NO_OPTION,
-								JOptionPane.WARNING_MESSAGE
-								);
-						if(n == 0){
-							try {
-								con.deletePart(txtFindBosal.getText());
-								cboProgram.setSelectedIndex(-1);
-								txtSupDescrip.setText("");
-								txtCusDescrip.setText("");
-								txtFindBosal.setText("");
-								cboDescrip.setModel(resetDescripComboBox());
-								cboDescrip.setSelectedIndex(-1);
-								txtRev.setText("");
-								txtDrawingNum.setText("");
-							}catch(Exception ex){
-								ex.printStackTrace();
-							}
-						}
-					}}});
+	ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
+	btnBack = new JButton(back);
+	btnBack.addActionListener(new ActionListener() {
+		
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == btnBack)
+			{
+				setVisible(false);
+				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+				int height = screenSize.height;
+				int width = screenSize.width;
+				frame.setResizable(false);
+				frame.setSize(width/2, height/2);
+				frame.setLocationRelativeTo(null);
+				frame.setSize(645, 545);
+				frame.setTitle("Main Menu:");
+				main.setVisible(true);
+				txtFindBosal.setText("");
+				txtCusDescrip.setText("");
+				txtSupDescrip.setText("");
+				cboProgram.setSelectedIndex(-1);
+				cboDescrip.setModel(resetDescripComboBox());
+				cboDescrip.setSelectedIndex(-1);
+				txtRev.setText("");
+				txtDrawingNum.setText("");
+			}}});
+	
+	ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
+	btnSave = new JButton(save);
+	btnSave.addActionListener(new ActionListener() {
+		
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == btnSave)
+			{
 			
-			ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
-			btnBack = new JButton(back);
-			btnBack.addActionListener(new ActionListener() {
-				
-				public void actionPerformed(ActionEvent e) {
-					if (e.getSource() == btnBack)
-					{
+				int n = JOptionPane.showConfirmDialog(
+					    frame,
+					    "Are you sure you want to save part data?",
+					    "Save:",
+					    JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE
+						);
+				if(n == 0){
+					String BosalPartNumber = txtFindBosal.getText();
+					String CustomerPartNumber = null;
+					if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
+						CustomerPartNumber = null;
+					}else{CustomerPartNumber = txtCusDescrip.getText();}
+					String SupplierPartNumber= null;
+					if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
+						SupplierPartNumber = null;
+					}else{SupplierPartNumber = txtSupDescrip.getText();}
+					String Description = (String) cboDescrip.getSelectedItem();
+					String Program = (String) cboProgram.getSelectedItem();
+					int Rev = 0;
+					if(txtRev.getText().equals("-") || txtRev.getText().equals("")){
+						Rev = 0;
+					}else{Rev = Integer.valueOf(txtRev.getText());}							
+					String DrawingNumber = null;							
+					if(txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")){
+						DrawingNumber = null;
+					}else{DrawingNumber = txtDrawingNum.getText();}
+					int DrawingRev = 0;							
+					if(txtDrawingRev.getText().equals("-") || txtDrawingRev.getText().equals("")){
+						DrawingRev = 0;
+					}else{Rev = Integer.valueOf(txtDrawingRev.getText());}
+					String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
+							+(String)cboDrawingDay.getSelectedItem()+"/"
+							+(String)cboDrawingYear.getSelectedItem();
+					String ProductionReleaseDate = (String)cboProductionMonth.getSelectedItem()+"/"
+							+(String)cboProductionDay.getSelectedItem()+"/"
+							+(String)cboProductionYear.getSelectedItem();									
+					
+					try {
+						con.update(BosalPartNumber, CustomerPartNumber, SupplierPartNumber, 
+								Description, Program, Rev, DrawingNumber, DrawingRev, 
+								DrawingRevDate, ProductionReleaseDate);
+						
 						setVisible(false);
 						Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 						int height = screenSize.height;
@@ -1147,322 +1290,287 @@ public class MainFrames extends JFrame
 						cboProgram.setSelectedIndex(-1);
 						cboDescrip.setModel(resetDescripComboBox());
 						cboDescrip.setSelectedIndex(-1);
-						txtRev.setText("");
 						txtDrawingNum.setText("");
-					}}});
-			
-			ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
-			btnSave = new JButton(save);
-			btnSave.addActionListener(new ActionListener() {
-				
-				public void actionPerformed(ActionEvent e) {
-					if (e.getSource() == btnSave)
-					{
-					
-						int n = JOptionPane.showConfirmDialog(
-							    frame,
-							    "Are you sure you want to save part data?",
-							    "Save:",
-							    JOptionPane.YES_NO_OPTION,
-								JOptionPane.WARNING_MESSAGE
-								);
-						if(n == 0){
-							String BosalPartNumber = txtFindBosal.getText();
-							String CustomerPartNumber = null;
-							if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
-								CustomerPartNumber = null;
-							}else{CustomerPartNumber = txtCusDescrip.getText();}
-							String SupplierPartNumber= null;
-							if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
-								SupplierPartNumber = null;
-							}else{SupplierPartNumber = txtSupDescrip.getText();}
-							String Description = (String) cboDescrip.getSelectedItem();
-							String Program = (String) cboProgram.getSelectedItem();
-							int Rev = 0;
-							if(txtRev.getText().equals("-") || txtRev.getText().equals("")){
-								Rev = 0;
-							}else{Rev = Integer.valueOf(txtRev.getText());}							
-							String DrawingNumber = null;							
-							if(txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")){
-								DrawingNumber = null;
-							}else{DrawingNumber = txtDrawingNum.getText();}
-							int DrawingRev = 0;							
-							if(txtDrawingRev.getText().equals("-") || txtDrawingRev.getText().equals("")){
-								DrawingRev = 0;
-							}else{Rev = Integer.valueOf(txtDrawingRev.getText());}
-							String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
-									+(String)cboDrawingDay.getSelectedItem()+"/"
-									+(String)cboDrawingYear.getSelectedItem();
-							String ProductionReleaseDate = (String)cboProductionMonth.getSelectedItem()+"/"
-									+(String)cboProductionDay.getSelectedItem()+"/"
-									+(String)cboProductionYear.getSelectedItem();									
-							
-							try {
-								con.update(BosalPartNumber, CustomerPartNumber, SupplierPartNumber, 
-										Description, Program, Rev, DrawingNumber, DrawingRev, 
-										DrawingRevDate, ProductionReleaseDate);
-								
-								setVisible(false);
-								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-								int height = screenSize.height;
-								int width = screenSize.width;
-								frame.setResizable(false);
-								frame.setSize(width/2, height/2);
-								frame.setLocationRelativeTo(null);
-								frame.setSize(645, 545);
-								frame.setTitle("Main Menu:");
-								main.setVisible(true);
-								txtFindBosal.setText("");
-								txtCusDescrip.setText("");
-								txtSupDescrip.setText("");
-								cboProgram.setSelectedIndex(-1);
-								cboDescrip.setModel(resetDescripComboBox());
-								cboDescrip.setSelectedIndex(-1);
-								txtDrawingNum.setText("");
-								txtRev.setText("");
-							}catch(Exception ex){
-								ex.printStackTrace();
-							}
-						}
-					}}});
-			
-			ImageIcon check = new ImageIcon(getClass().getResource("/images/check.jpg"));
-			btnCheck = new JButton(check);
-			btnCheck.addActionListener(new ActionListener() {
-				
-				public void actionPerformed(ActionEvent e) {
-					if (e.getSource() == btnCheck)
-					{
-						//con = new DBConnect();
-						final String findBosalText = txtFindBosal.getText();
-						
-						try{
-							JSONObject temp = (con.queryDatabase("bosal parts", "BosalPartNumber", findBosalText)).getJSONObject(0);
-							//set text for CustPartNumber JTextField
-							String cpartText= null;
-							//filter Description Combo Box by the PartType of checked Bosal #
-							int partType = Integer.valueOf(txtFindBosal.getText(0, 2));
-							JSONArray temp1 = new JSONArray();
-							String[] descrip = null;
-							ComboBoxModel<String> descripComboBoxModel = null;
-							try{
-								temp1 = con.queryDatabase("description list", "TypeNumber", partType);
-								descrip = new String[temp1.length()];
-								for(int i = 0; i < temp1.length(); i++){
-									descrip[i] = temp1.getJSONObject(i).get("Name").toString();
-								}
-								descripComboBoxModel = (new DefaultComboBoxModel<String>(descrip));
-								cboDescrip.setModel(descripComboBoxModel);
-							}catch(Exception ex){ex.printStackTrace();}
-							//set text for CustPartNumber JTextField
-							try{
-								cpartText = temp.get("CustPartNumber").toString();
-							}catch(Exception ex){cpartText = "-";}
-							txtCusDescrip.setText(cpartText);
-							
-							//set text for SupPartNumber JTextField
-							String spartText= null;
-							try{
-								spartText = temp.get("SupPartNumber").toString();
-							}catch(Exception ex){spartText = "-";}
-							txtSupDescrip.setText(spartText);
-							
-							//set text for Description JComboBox
-							String descripText= null;
-							try{
-								descripText = temp.get("PartDescription").toString();
-							}catch(Exception ex){descripText = "-";}
-							cboDescrip.setSelectedItem(descripText);
-							
-							//set text for Program JComboBox
-							String programText = null;
-							try{
-								programText = temp.get("Program").toString();
-							}catch(Exception ex){programText = "-";}
-							cboProgram.setSelectedItem(programText);
-							
-							//set text for DrawingNumber JTextField
-							String DrawingNumber = null;
-							try{
-								DrawingNumber = temp.get("DrawingNumber").toString();
-							}catch(Exception ex){DrawingNumber = "-";}
-							txtDrawingNum.setText(DrawingNumber);
-							
-							//set text for REV JTextField
-							int Rev = 0;
-							try{
-								Rev = Integer.valueOf(temp.get("Rev").toString());
-							}catch(Exception ex){Rev = 0;}
-							txtRev.setText(Integer.toString(Rev));
-							
-						}catch(Exception ex){
-							JOptionPane.showMessageDialog(
-									    frame,
-									    "Bosal Part Number: " + findBosalText + " does not exist",
-									    "Missing Part Number",
-										JOptionPane.ERROR_MESSAGE);
-							txtCusDescrip.setText("");
-							txtSupDescrip.setText("");
-							cboProgram.setSelectedIndex(-1);
-							cboDescrip.setModel(resetDescripComboBox());
-							cboDescrip.setSelectedIndex(-1);
-							txtDrawingNum.setText("");
-							txtRev.setText("");
-						}
+						txtRev.setText("");
+					}catch(Exception ex){
+						ex.printStackTrace();
+					}
+				}
 			}}});
-			
-			setupPanel();
-		}
-		private void setupPanel()
+	
+	ImageIcon check = new ImageIcon(getClass().getResource("/images/check.jpg"));
+	btnCheck = new JButton(check);
+	btnCheck.addActionListener(new ActionListener() {
+		
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == btnCheck)
 			{
-					
-	//Label Fonts
+				//con = new DBConnect();
+				final String findBosalText = txtFindBosal.getText();
 				
-			lblBosalPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblBosalPartNum.setForeground(Color.BLACK);
-			lblDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblDescription.setForeground(Color.BLACK);
-			lblCustomerPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblCustomerPartNum.setForeground(Color.BLACK);
-			lblSupplierPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblSupplierPartNum.setForeground(Color.BLACK);
-			lblUpdatePart.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
-			lblUpdatePart.setForeground(Color.BLACK);
-			lblProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblProgram.setForeground(Color.BLACK);
-			lblRev.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblRev.setForeground(Color.BLACK);
-			lblDrawingNum.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblDrawingNum.setForeground(Color.BLACK);
+				try{
+					JSONObject temp = (con.queryDatabase("bosal parts", "BosalPartNumber", findBosalText)).getJSONObject(0);
+					//set text for CustPartNumber JTextField
+					String cpartText= null;
+					//filter Description Combo Box by the PartType of checked Bosal #
+					int partType = Integer.valueOf(txtFindBosal.getText(0, 2));
+					JSONArray temp1 = new JSONArray();
+					String[] descrip = null;
+					ComboBoxModel<String> descripComboBoxModel = null;
+					try{
+						temp1 = con.queryDatabase("description list", "TypeNumber", partType);
+						descrip = new String[temp1.length()];
+						for(int i = 0; i < temp1.length(); i++){
+							descrip[i] = temp1.getJSONObject(i).get("Name").toString();
+						}
+						descripComboBoxModel = (new DefaultComboBoxModel<String>(descrip));
+						cboDescrip.setModel(descripComboBoxModel);
+					}catch(Exception ex){ex.printStackTrace();}
+					//set text for CustPartNumber JTextField
+					try{
+						cpartText = temp.get("CustPartNumber").toString();
+					}catch(Exception ex){cpartText = "-";}
+					txtCusDescrip.setText(cpartText);
+					
+					//set text for SupPartNumber JTextField
+					String spartText= null;
+					try{
+						spartText = temp.get("SupPartNumber").toString();
+					}catch(Exception ex){spartText = "-";}
+					txtSupDescrip.setText(spartText);
+					
+					//set text for Description JComboBox
+					String descripText= null;
+					try{
+						descripText = temp.get("PartDescription").toString();
+					}catch(Exception ex){descripText = "-";}
+					cboDescrip.setSelectedItem(descripText);
+					
+					//set text for Program JComboBox
+					String programText = null;
+					try{
+						programText = temp.get("Program").toString();
+					}catch(Exception ex){programText = "-";}
+					cboProgram.setSelectedItem(programText);
+					
+					//set text for DrawingNumber JTextField
+					String DrawingNumber = null;
+					try{
+						DrawingNumber = temp.get("DrawingNumber").toString();
+					}catch(Exception ex){DrawingNumber = "-";}
+					txtDrawingNum.setText(DrawingNumber);
+					
+					//set text for REV JTextField
+					int Rev = 0;
+					try{
+						Rev = Integer.valueOf(temp.get("Rev").toString());
+					}catch(Exception ex){Rev = 0;}
+					txtRev.setText(Integer.toString(Rev));
+					
+				}catch(Exception ex){
+					JOptionPane.showMessageDialog(
+							    frame,
+							    "Bosal Part Number: " + findBosalText + " does not exist",
+							    "Missing Part Number",
+								JOptionPane.ERROR_MESSAGE);
+					txtCusDescrip.setText("");
+					txtSupDescrip.setText("");
+					cboProgram.setSelectedIndex(-1);
+					cboDescrip.setModel(resetDescripComboBox());
+					cboDescrip.setSelectedIndex(-1);
+					txtDrawingNum.setText("");
+					txtRev.setText("");
+				}
+	}}});
+	
+	setupPanel();
+}
+private void setupPanel()
+	{
 			
-	//Group Layout
-			
-			txtCusDescrip.setColumns(10);
-			txtSupDescrip.setColumns(10);
-			txtCusDescrip.setColumns(10);
-			txtSupDescrip.setColumns(10);
-			GroupLayout groupLayout = new GroupLayout(this);
-			groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
+//Label Fonts
+		
+	lblBosalPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblBosalPartNum.setForeground(Color.BLACK);
+	lblDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblDescription.setForeground(Color.BLACK);
+	lblCustomerPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblCustomerPartNum.setForeground(Color.BLACK);
+	lblSupplierPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblSupplierPartNum.setForeground(Color.BLACK);
+	lblUpdatePart.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+	lblUpdatePart.setForeground(Color.BLACK);
+	lblProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblProgram.setForeground(Color.BLACK);
+	lblRev.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblRev.setForeground(Color.BLACK);
+	lblDrawingNum.setFont(new Font("Tahoma", Font.BOLD, 14));
+	lblDrawingNum.setForeground(Color.BLACK);
+	
+//Group Layout
+	
+	txtCusDescrip.setColumns(10);
+	txtSupDescrip.setColumns(10);
+	txtCusDescrip.setColumns(10);
+	txtSupDescrip.setColumns(10);
+	GroupLayout groupLayout = new GroupLayout(this);
+	groupLayout.setHorizontalGroup(
+		groupLayout.createParallelGroup(Alignment.LEADING)
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(10)
+				.addComponent(lblBosal)
+				.addGap(10)
+				.addComponent(lblUpdatePart))
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(28)
+				.addComponent(lblBosalPartNum))
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(28)
+				.addComponent(txtFindBosal, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+				.addGap(12)
+				.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(28)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(10)
-						.addComponent(lblBosal)
-						.addGap(10)
-						.addComponent(lblUpdatePart))
+						.addGap(409)
+						.addComponent(lblDrawingRevDate, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
 					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(28)
-						.addComponent(lblBosalPartNum))
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(28)
-						.addComponent(txtFindBosal, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
-						.addGap(12)
-						.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(28)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblDescription)
-									.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
-								.addGap(36)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(209)
-										.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))))
-							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(210)
-								.addComponent(txtSupDescrip, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblSupplierPartNum))
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(419)
-								.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+								.addGap(2)
+								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+								.addGap(34)
+								.addComponent(txtSupDescrip, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(210)
 								.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
+						.addGap(25)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(210)
-								.addComponent(lblSupplierPartNum))
-							.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
+								.addComponent(cboDrawingMonth, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+								.addGap(14)
+								.addComponent(cboDrawingDay, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+								.addGap(15)
+								.addComponent(cboDrawingYear, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblProductionReleaseDate, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(2)
-								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(cboProductionMonth, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+								.addGap(14)
+								.addComponent(cboProductionDay, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+								.addGap(15)
+								.addComponent(cboProductionYear, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))))
+					.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+					.addComponent(lblDescription)
 					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(28)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblRev, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
-							.addComponent(txtRev, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
-						.addGap(36)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblCustomerPartNum)
-							.addComponent(txtCusDescrip, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
-						.addGap(35)
-						.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
-			);
-			groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGap(210)
+						.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)))
+				.addGap(21)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)))
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(28)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addComponent(lblRev, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+					.addComponent(txtRev, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
+				.addGap(36)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addComponent(lblCustomerPartNum)
+					.addComponent(txtCusDescrip, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
+				.addGap(25)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addComponent(lblDrawingRev, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+					.addComponent(txtDrawingRev, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE))
+				.addGap(21)
+				.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+	);
+	groupLayout.setVerticalGroup(
+		groupLayout.createParallelGroup(Alignment.LEADING)
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(27)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addComponent(lblBosal)
 					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(27)
+						.addGap(10)
+						.addComponent(lblUpdatePart)))
+				.addGap(34)
+				.addComponent(lblBosalPartNum)
+				.addGap(5)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(6)
+						.addComponent(txtFindBosal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+				.addGap(8)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(9)
+						.addComponent(lblDrawingRevDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+						.addGap(7)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblBosal)
 							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(27)
+								.addComponent(lblSupplierPartNum)
 								.addGap(10)
-								.addComponent(lblUpdatePart)))
-						.addGap(34)
-						.addComponent(lblBosalPartNum)
-						.addGap(5)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(txtSupDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(6)
-								.addComponent(txtFindBosal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-						.addGap(8)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(11)
-								.addComponent(lblDescription)
-								.addGap(8)
-								.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-								.addGap(36)
-								.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(90)
-								.addComponent(txtSupDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(21)
-								.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(36)
-								.addComponent(txtDrawingNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(63)
-								.addComponent(lblSupplierPartNum))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(52)
+								.addGap(16)
 								.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(90)
-								.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGap(5)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblRev, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
-								.addGap(8)
-								.addComponent(txtRev, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(3)
-								.addComponent(lblCustomerPartNum)
-								.addGap(10)
-								.addComponent(txtCusDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(15)
-								.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))))
-			);
-			setLayout(groupLayout);
-			}
-			
-		}
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(cboDrawingMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(cboDrawingDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(cboDrawingYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(5)
+								.addComponent(lblProductionReleaseDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+								.addGap(9)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(cboProductionMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(cboProductionDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(cboProductionYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(36)
+						.addComponent(cboDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(11)
+						.addComponent(lblDescription))
+					.addComponent(lblDrawingNum, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(21)
+						.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+						.addGap(19)
+						.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
+				.addGap(5)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addComponent(lblRev, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+						.addGap(8)
+						.addComponent(txtRev, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(3)
+						.addComponent(lblCustomerPartNum)
+						.addGap(10)
+						.addComponent(txtCusDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(1)
+						.addComponent(lblDrawingRev, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+						.addGap(9)
+						.addComponent(txtDrawingRev, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(15)
+						.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))))
+	);
+	setLayout(groupLayout);
+	}
+}
 	class FindPanel extends JPanel
 	{
 	//JLabels
