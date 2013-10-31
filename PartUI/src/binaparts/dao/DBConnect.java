@@ -773,6 +773,7 @@ public class DBConnect {
 			pst.close();
 			iterateNextSequenceNumber(PartType);
 			con.close();
+			System.out.println("New Part Created Successfully");
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
