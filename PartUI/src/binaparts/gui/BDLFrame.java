@@ -82,8 +82,7 @@ public class BDLFrame extends JFrame
 		private String type;
 		private String volume;
 		private String power;
-		private String searchText;
-		
+		private String searchText;		
 		
 	//temp arrays to hold comboBox info 
 		private JSONArray temp1;
@@ -220,7 +219,6 @@ public class BDLFrame extends JFrame
 		public String getSearchText() {
 			return searchText;
 		}
-
 		public void setSearchText(String searchText) {
 			this.searchText = searchText;
 			txtBosalPartNum.setText(searchText);
