@@ -536,14 +536,14 @@ public class MainFrames extends JFrame
 	//ComboBoxes
 			
 		cboType = new JComboBox<String>();
-		cboType.setEditable(true);
+		cboType.setEditable(false);
 		cboType.setForeground(Color.BLACK);
 		AutoCompleteDecorator.decorate(cboType);
 		cboType.setModel(resetTypeComboBox());
 		cboType.setSelectedIndex(-1);
 		cboType.addMouseListener(new ContextMenuMouseListener());
 		cboMat = new JComboBox<String>();
-		cboMat.setEditable(true);
+		cboMat.setEditable(false);
 		cboMat.setForeground(Color.BLACK);
 		AutoCompleteDecorator.decorate(cboMat);
 		cboMat.setModel(resetMatComboBox());
@@ -983,7 +983,7 @@ public class MainFrames extends JFrame
 		
 	}
 }
-class UpdatePanel extends JPanel
+	class UpdatePanel extends JPanel
 {
 //JLabels
 private JLabel lblBosal;
