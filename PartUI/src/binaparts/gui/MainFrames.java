@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.sql.*;
+
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -32,11 +33,14 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+
 import org.json.*;
 import org.jdesktop.swingx.autocomplete.*;
+
 import binaparts.dao.*;
 import binaparts.properties.ConfigurationManager;
 
@@ -278,7 +282,7 @@ public class MainFrames extends JFrame
 								setVisible(false);
 								frame.setSize(875,385);
 								frame.setTitle("Find Part Info:");
-								frame.setResizable(false);
+								frame.setResizable(true);
 								frame.setLocationRelativeTo(main);
 								main.add(find);
 								find.setVisible(true);
@@ -1440,9 +1444,12 @@ public class MainFrames extends JFrame
 				return false;
 			}
 		};
-		scrollPane = new JScrollPane(myTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		/*scrollPane = new JScrollPane(myTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);*/
+		scrollPane = new JScrollPane();
+		scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
+		scrollPane.setViewportView(myTable);
 		myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
 		
 	//Image		
 		ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));

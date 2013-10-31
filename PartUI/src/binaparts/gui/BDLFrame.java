@@ -41,8 +41,6 @@ public class BDLFrame extends JFrame
 {
 	public BDLFrame(){}
 	private BDLMain pnlMain;
-	private JTextField txtBosalPartNum;
-	private String searchText;
 	JFrame BDLframe = new JFrame("BreakDown List Manager:");
 	
 	DBConnect con = new DBConnect();
@@ -59,7 +57,6 @@ public class BDLFrame extends JFrame
 		int width = screenSize.width;
 		BDLframe.setResizable(true);
 		BDLframe.setSize(width/2, height/2);
-		BDLframe.setLocationRelativeTo(null);
 		BDLframe.setSize(1100, 660);
 		BDLframe.setContentPane(contentPane);
 		BDLframe.setVisible(true);	
@@ -67,17 +64,7 @@ public class BDLFrame extends JFrame
 			BDLframe.setIconImage(ImageIO.read(new File("res/bosalimage.png")));
 		}catch(Exception ex){ex.printStackTrace();}
 	}
-	public String getSearchText() {
-		return searchText;
-	}
-
-	public void setSearchText(String searchText) {
-		this.searchText = searchText;
-		txtBosalPartNum.setText(searchText);
-		txtBosalPartNum = new JTextField();
-		txtBosalPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-		txtBosalPartNum.setForeground(Color.BLACK);
-	}
+	
 		
 	class BDLMain extends JPanel 
 	{		
@@ -88,7 +75,7 @@ public class BDLFrame extends JFrame
 		private String type;
 		private String volume;
 		private String power;
-		
+		private String searchText;
 		
 		
 		//temp arrays to hold comboBox info 
@@ -134,7 +121,7 @@ public class BDLFrame extends JFrame
 		private JTextField txtName;
 		private JTextField txtVolume;
 		private JTextField txtPower;
-		
+		private JTextField txtBosalPartNum;
 		private JTextField txtCustomerPartNum;
 		private JTextField txtIMDS;
 		private JTextField txtDescription;
@@ -252,7 +239,14 @@ public class BDLFrame extends JFrame
 		}*/
 				
 		
-		
+		public String getSearchText() {
+			return searchText;
+		}
+
+		public void setSearchText(String searchText) {
+			this.searchText = searchText;
+			txtBosalPartNum.setText(searchText);
+		}
 		
 		public String getCustomer() {
 			return customer;
@@ -495,8 +489,9 @@ public class BDLFrame extends JFrame
 							return false;
 						}
 					};
-					scrollPane = new JScrollPane(myTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+					scrollPane = new JScrollPane();
 					scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
+					scrollPane.setViewportView(myTable);
 					myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 					
 		//JComboBoxes
@@ -748,7 +743,9 @@ public class BDLFrame extends JFrame
 			txtPower = new JTextField();
 			txtPower.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPower.setForeground(Color.BLACK);
-			
+			txtBosalPartNum = new JTextField();
+			txtBosalPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			txtBosalPartNum.setForeground(Color.BLACK);
 			txtCustomerPartNum = new JTextField();
 			txtCustomerPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustomerPartNum.setForeground(Color.BLACK);
