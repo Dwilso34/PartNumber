@@ -1168,6 +1168,7 @@ public class BDLFrame extends JFrame
 										.addGap(91)
 										.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
+<<<<<<< HEAD
 										.addGap(110)
 										.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addComponent(txtCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
@@ -1176,6 +1177,13 @@ public class BDLFrame extends JFrame
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 									.addComponent(txtVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+=======
+										.addGap(57)
+										.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(19)
+										.addComponent(cboName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+>>>>>>> f5640d0e4767592fdc588feec36bae78a0861be9
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(19)
 										.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
@@ -1187,13 +1195,24 @@ public class BDLFrame extends JFrame
 								.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(91)
+<<<<<<< HEAD
 								.addComponent(lblPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+=======
+								.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+							.addComponent(txtCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+>>>>>>> f5640d0e4767592fdc588feec36bae78a0861be9
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(129)
 								.addComponent(lblName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
+<<<<<<< HEAD
 								.addGap(129)
 								.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+=======
+								.addGap(110)
+								.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
+							.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+>>>>>>> f5640d0e4767592fdc588feec36bae78a0861be9
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(129)
 								.addComponent(cboName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
