@@ -148,31 +148,16 @@ public class BDLFrame extends JFrame
 		
 	//JTable	
 		private JTable myTable1;
-		private JTable myTable2;
-		private JTable myTable3;
+		private TableModel table1;
 		private JScrollPane scrollPane;
-		public TableModel bdlHeaders(){			 
-	        TableModel tableModel = null;	      				
+		public void bdlHeaders(){			       				
 	        try{
-	            String[] temp1 = new String[8];
 	            String[] columnNames = {"ITEM", "QTY", "  ", "Description"};
 	            String[][] data = new String[0][0];	             	      
-	            
-	            for(int i = 0; i < data.length; i++){
-	                for(int j = 0; j < data[i].length; j++){
-	                	try{
-	                		data[i][j] = "";
-	                    }catch(Exception ex){
-	                        data[i][j] = "";
-	                    }
-	                }
-	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));					
-	        }catch(Exception ex){ex.printStackTrace();}	  	       
-	        return tableModel;
+	            table1 = (new DefaultTableModel(data, columnNames));					
+	        }catch(Exception ex){ex.printStackTrace();}	  	
 	    }
-		public TableModel bdlHeaders(String table, String column, JSONArray temp, String bosalPartNumber){			 
-	        TableModel tableModel = null;	      				
+		public void addRowToTable(String table, String column, JSONArray temp, String bosalPartNumber){	
 	        try{
 	            String[] temp1 = new String[8];
 	            String[] columnNames = {"ITEM", "QTY", "  ", "Description"};
@@ -187,92 +172,10 @@ public class BDLFrame extends JFrame
 	                    }
 	                }
 	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));					
-	        }catch(Exception ex){ex.printStackTrace();}	  	       
-	        return tableModel;
+	            table1 = (new DefaultTableModel(data, columnNames));					
+	        }catch(Exception ex){ex.printStackTrace();}	  	    
 	    }
-		public TableModel bosalHeaders(){			 
-	        TableModel tableModel = null;	      				
-	        try{
-	            String[] temp1 = new String[8];
-	            String[] columnNames = {"JDE Part NR", "OLD Part NR", "Rev", "Drawing NR", "DWG Rev", "DWG Rev Date", "PROD Rel Date"};
-	            String[][] data = new String[0][0];	             	      
-	            
-	            for(int i = 0; i < data.length; i++){
-	                for(int j = 0; j < data[i].length; j++){
-	                	try{
-	                		data[i][j] = "";
-	                   // data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
-	                    }catch(Exception ex){
-	                        data[i][j] = "";
-	                    }
-	                }
-	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));					
-	        }catch(Exception ex){ex.printStackTrace();}	  	       
-	        return tableModel;
-	    }
-		public TableModel bosalHeaders(String table, String column, JSONArray temp, String bosalPartNumber){			 
-	        TableModel tableModel = null;	      				
-	        try{
-	            String[] temp1 = new String[8];
-	            String[] columnNames = {"JDE Part NR", "OLD Part NR", "Rev", "Drawing NR", "DWG Rev", "DWG Rev Date", "PROD Rel Date"};
-	            String[][] data = new String[1][8];	             	      
-	            
-	            for(int i = 0; i < 1; i++){
-	                for(int j = 0; j < 8; j++){
-	                	try{
-	                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
-	                    }catch(Exception ex){
-	                        data[i][j] = "";
-	                    }
-	                }
-	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));					
-	        }catch(Exception ex){ex.printStackTrace();}	  	       
-	        return tableModel;
-	    }
-		public TableModel customerHeaders(){			 
-	        TableModel tableModel = null;	      				
-	        try{
-	            String[] temp1 = new String[8];
-	            String[] columnNames = {"Part NR", "Drawing NR", "Rev", "Rev Date"};
-	            String[][] data = new String[0][0];	             	      
-	            
-	            for(int i = 0; i < data.length; i++){
-	                for(int j = 0; j < data[i].length; j++){
-	                	try{
-	                		data[i][j] = "";
-	                    }catch(Exception ex){
-	                        data[i][j] = "";
-	                    }
-	                }
-	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));					
-	        }catch(Exception ex){ex.printStackTrace();}	  	       
-	        return tableModel;
-	    }
-		public TableModel customerHeaders(String table, String column, JSONArray temp, String bosalPartNumber){			 
-	        TableModel tableModel = null;	      				
-	        try{
-	            String[] temp1 = new String[8];
-	            String[] columnNames = {"Part NR", "Drawing NR", "Rev", "Rev Date"};
-	            String[][] data = new String[1][8];	             	      
-	            
-	            for(int i = 0; i < 1; i++){
-	                for(int j = 0; j < 8; j++){
-	                	try{
-	                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
-	                    }catch(Exception ex){
-	                        data[i][j] = "";
-	                    }
-	                }
-	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));					
-	        }catch(Exception ex){ex.printStackTrace();}	  	       
-	        return tableModel;
-	    }
-		
+			
 	//Method for adding line to table
 		/*public void addRow(String lastName, String firstName) {
 		      Object[] row = new Object[2];
@@ -575,26 +478,18 @@ public class BDLFrame extends JFrame
 			lblCUSTOMER.setForeground(Color.BLACK);
 
 			//JTable
-					myTable1 = new JTable(){	
+					bdlHeaders();
+					myTable1 = new JTable(table1){	
 						public boolean isCellEditable(int row, int column){
 							return false;
 						}
 					};
-					myTable2 = new JTable();
-					myTable3 = new JTable();
 					JPanel panel = new JPanel();
 					panel.add(myTable1);
-					panel.add(myTable2);
-					panel.add(myTable3);
 					scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 					scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
 					scrollPane.setViewportView(myTable1);
 					myTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-					myTable2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-					myTable3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-					myTable1.setModel(bdlHeaders());
-					myTable2.setModel(bosalHeaders());
-					myTable3.setModel(customerHeaders());
 					
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
@@ -1069,8 +964,6 @@ public class BDLFrame extends JFrame
 							cboCustomer.removeItemListener(cboGetInfo);
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboName.removeItemListener(cboGetInfo);
-							myTable1.setModel(bdlHeaders());
-							myTable1.setModel(bosalHeaders());
 						} catch (Exception ex) {ex.printStackTrace();}
 			            
 					}						
