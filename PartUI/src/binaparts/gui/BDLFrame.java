@@ -147,9 +147,7 @@ public class BDLFrame extends JFrame
 		private JTextField txtRelSupplier;
 		
 	//JTable	
-		private JTable myTable1;
-		private JTable myTable2;
-		private JTable myTable3;
+		private JTable myTable;
 		private JScrollPane scrollPane;
 		public TableModel bdlHeaders(){			 
 	        TableModel tableModel = null;	      				
@@ -575,26 +573,19 @@ public class BDLFrame extends JFrame
 			lblCUSTOMER.setForeground(Color.BLACK);
 
 			//JTable
-					myTable1 = new JTable(){	
+					myTable = new JTable(){	
 						public boolean isCellEditable(int row, int column){
 							return false;
 						}
 					};
-					myTable2 = new JTable();
-					myTable3 = new JTable();
-					JPanel panel = new JPanel();
-					panel.add(myTable1);
-					panel.add(myTable2);
-					panel.add(myTable3);
-					scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+					scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 					scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
-					scrollPane.setViewportView(myTable1);
-					myTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-					myTable2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-					myTable3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-					myTable1.setModel(bdlHeaders());
-					myTable2.setModel(bosalHeaders());
-					myTable3.setModel(customerHeaders());
+					scrollPane.setViewportView(myTable);
+					myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					myTable.setModel(bdlHeaders());
+					
 					
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
@@ -1069,8 +1060,8 @@ public class BDLFrame extends JFrame
 							cboCustomer.removeItemListener(cboGetInfo);
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboName.removeItemListener(cboGetInfo);
-							myTable1.setModel(bdlHeaders());
-							myTable1.setModel(bosalHeaders());
+							myTable.setModel(bdlHeaders());
+							
 						} catch (Exception ex) {ex.printStackTrace();}
 			            
 					}						
