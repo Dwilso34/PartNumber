@@ -147,15 +147,73 @@ public class BDLFrame extends JFrame
 		private JTextField txtRelSupplier;
 		
 	//JTable	
-		private JTable myTable;
+		private JTable myTable1;
 		private JTable myTable2;
 		private JTable myTable3;
 		private JScrollPane scrollPane;
-		
-		public TableModel populateTableModel(String table, String column, JSONArray temp, String bosalPartNumber){
-			 
-	        TableModel tableModel = null;
-	      				
+		public TableModel bdlHeaders(){			 
+	        TableModel tableModel = null;	      				
+	        try{
+	            String[] temp1 = new String[8];
+	            String[] columnNames = {"ITEM", "QTY", "  ", "Description"};
+	            String[][] data = new String[0][0];	             	      
+	            
+	            for(int i = 0; i < data.length; i++){
+	                for(int j = 0; j < data[i].length; j++){
+	                	try{
+	                		data[i][j] = "";
+	                    }catch(Exception ex){
+	                        data[i][j] = "";
+	                    }
+	                }
+	            }
+	            tableModel = (new DefaultTableModel(data, columnNames));					
+	        }catch(Exception ex){ex.printStackTrace();}	  	       
+	        return tableModel;
+	    }
+		public TableModel bdlHeaders(String table, String column, JSONArray temp, String bosalPartNumber){			 
+	        TableModel tableModel = null;	      				
+	        try{
+	            String[] temp1 = new String[8];
+	            String[] columnNames = {"ITEM", "QTY", "  ", "Description"};
+	            String[][] data = new String[1][8];	             	      
+	            
+	            for(int i = 0; i < 1; i++){
+	                for(int j = 0; j < 8; j++){
+	                	try{
+	                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
+	                    }catch(Exception ex){
+	                        data[i][j] = "";
+	                    }
+	                }
+	            }
+	            tableModel = (new DefaultTableModel(data, columnNames));					
+	        }catch(Exception ex){ex.printStackTrace();}	  	       
+	        return tableModel;
+	    }
+		public TableModel bosalHeaders(){			 
+	        TableModel tableModel = null;	      				
+	        try{
+	            String[] temp1 = new String[8];
+	            String[] columnNames = {"JDE Part NR", "OLD Part NR", "Rev", "Drawing NR", "DWG Rev", "DWG Rev Date", "PROD Rel Date"};
+	            String[][] data = new String[0][0];	             	      
+	            
+	            for(int i = 0; i < data.length; i++){
+	                for(int j = 0; j < data[i].length; j++){
+	                	try{
+	                		data[i][j] = "";
+	                   // data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
+	                    }catch(Exception ex){
+	                        data[i][j] = "";
+	                    }
+	                }
+	            }
+	            tableModel = (new DefaultTableModel(data, columnNames));					
+	        }catch(Exception ex){ex.printStackTrace();}	  	       
+	        return tableModel;
+	    }
+		public TableModel bosalHeaders(String table, String column, JSONArray temp, String bosalPartNumber){			 
+	        TableModel tableModel = null;	      				
 	        try{
 	            String[] temp1 = new String[8];
 	            String[] columnNames = {"JDE Part NR", "OLD Part NR", "Rev", "Drawing NR", "DWG Rev", "DWG Rev Date", "PROD Rel Date"};
@@ -170,10 +228,48 @@ public class BDLFrame extends JFrame
 	                    }
 	                }
 	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));	           
-				
-	        }catch(Exception ex){ex.printStackTrace();}	       
-	       
+	            tableModel = (new DefaultTableModel(data, columnNames));					
+	        }catch(Exception ex){ex.printStackTrace();}	  	       
+	        return tableModel;
+	    }
+		public TableModel customerHeaders(){			 
+	        TableModel tableModel = null;	      				
+	        try{
+	            String[] temp1 = new String[8];
+	            String[] columnNames = {"Part NR", "Drawing NR", "Rev", "Rev Date"};
+	            String[][] data = new String[0][0];	             	      
+	            
+	            for(int i = 0; i < data.length; i++){
+	                for(int j = 0; j < data[i].length; j++){
+	                	try{
+	                		data[i][j] = "";
+	                    }catch(Exception ex){
+	                        data[i][j] = "";
+	                    }
+	                }
+	            }
+	            tableModel = (new DefaultTableModel(data, columnNames));					
+	        }catch(Exception ex){ex.printStackTrace();}	  	       
+	        return tableModel;
+	    }
+		public TableModel customerHeaders(String table, String column, JSONArray temp, String bosalPartNumber){			 
+	        TableModel tableModel = null;	      				
+	        try{
+	            String[] temp1 = new String[8];
+	            String[] columnNames = {"Part NR", "Drawing NR", "Rev", "Rev Date"};
+	            String[][] data = new String[1][8];	             	      
+	            
+	            for(int i = 0; i < 1; i++){
+	                for(int j = 0; j < 8; j++){
+	                	try{
+	                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
+	                    }catch(Exception ex){
+	                        data[i][j] = "";
+	                    }
+	                }
+	            }
+	            tableModel = (new DefaultTableModel(data, columnNames));					
+	        }catch(Exception ex){ex.printStackTrace();}	  	       
 	        return tableModel;
 	    }
 		
@@ -234,22 +330,6 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return engineComboBoxDefault;
 		}
-		/*private ComboBoxModel<String> resetEngineComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> engineComboBoxDefault = null;
-			String[] types = null;
-			try {
-				temp1 = con.queryReturnAllEngines();
-				types = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					types[i] = temp1.getJSONObject(i).getString("Engine").toString();
-				}	
-				engineComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();}
-			return engineComboBoxDefault;
-		}*/
-				
 		
 		public String getSearchText() {
 			return searchText;
@@ -495,7 +575,7 @@ public class BDLFrame extends JFrame
 			lblCUSTOMER.setForeground(Color.BLACK);
 
 			//JTable
-					myTable = new JTable(){	
+					myTable1 = new JTable(){	
 						public boolean isCellEditable(int row, int column){
 							return false;
 						}
@@ -503,13 +583,18 @@ public class BDLFrame extends JFrame
 					myTable2 = new JTable();
 					myTable3 = new JTable();
 					JPanel panel = new JPanel();
-					panel.add(myTable);
+					panel.add(myTable1);
 					panel.add(myTable2);
 					panel.add(myTable3);
 					scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 					scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
-					scrollPane.setViewportView(myTable);
-					myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					scrollPane.setViewportView(myTable1);
+					myTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					myTable2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					myTable3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					myTable1.setModel(bdlHeaders());
+					myTable2.setModel(bosalHeaders());
+					myTable3.setModel(customerHeaders());
 					
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
@@ -984,8 +1069,8 @@ public class BDLFrame extends JFrame
 							cboCustomer.removeItemListener(cboGetInfo);
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboName.removeItemListener(cboGetInfo);
-							//Search s = new Search();
-							//s.displaySearch();
+							myTable1.setModel(bdlHeaders());
+							myTable1.setModel(bosalHeaders());
 						} catch (Exception ex) {ex.printStackTrace();}
 			            
 					}						
