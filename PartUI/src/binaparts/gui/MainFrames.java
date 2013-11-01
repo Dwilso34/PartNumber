@@ -3488,541 +3488,542 @@ public class MainFrames extends JFrame
 	class ExperimentalPanel extends JPanel
 	{
 	//JLabels
-		private JLabel lblCreated;
-		private JLabel lblCreatedBy;
-		private JLabel lblProgram;
-		private JLabel lblPartDescrip;
-		private JLabel lblCustomerPartNum;
-		private JLabel lblCustomer;
-		private JLabel lblYear;
-		private JLabel lblSearchPart;
-		private JLabel lblBosal;
-		private JLabel lblExperimental;
+	private JLabel lblCreated;
+	private JLabel lblCreatedBy;
+	private JLabel lblProgram;
+	private JLabel lblPartDescrip;
+	private JLabel lblCustomerPartNum;
+	private JLabel lblCustomer;
+	private JLabel lblYear;
+	private JLabel lblSearchPart;
+	private JLabel lblBosal;
+	private JLabel lblExperimental;
+
+//JTextFields
+	private JTextField txtCreated;
+	private JTextField txtCreatedBy;
+	private JTextField txtCustomerPartNum;
+	private JTextField txtPartNum;
+	private JTextField txtSearchPart;
 	
-	//JTextFields
-		private JTextField txtCreated;
-		private JTextField txtCreatedBy;
-		private JTextField txtCustomerPartNum;
-		private JTextField txtPartNum;
-		private JTextField txtSearchPart;
+//JComboBoxes
+	private JComboBox<String> cboProgram;
+	private ComboBoxModel<String> resetProgramComboBox()
+	{
+		JSONArray temp1 = new JSONArray();
+		ComboBoxModel<String> proComboBoxDefault = null;
+		String[] types = null;
+		try {
+			temp1 = con.queryReturnAllPrograms();
+			types = new String[temp1.length()];
+					for(int i = 0; i < temp1.length(); i++){
+						types[i] = temp1.getJSONObject(i).getString("Program").toString();
+					}	
+			proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+		}catch(Exception ex){ex.printStackTrace();}
+		return proComboBoxDefault;
+	}
+	private JComboBox<String> cboPartDescrip;
+	private ComboBoxModel<String> resetDescripComboBox()
+	{
+		JSONArray temp1 = new JSONArray();
+		ComboBoxModel<String> descripComboBoxDefault = null;
+		String[] types = null;
 		
+		try {
+			temp1 = con.queryReturnAllDescriptions();
+			types = new String[temp1.length()];
+			for(int i = 0; i < temp1.length(); i++){
+				types[i] = temp1.getJSONObject(i).get("Name").toString();
+			}
+			descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+		}catch(Exception ex){ex.printStackTrace();}
+		return descripComboBoxDefault;
+	}
+	private JComboBox<String> cboCustomer;
+	private ComboBoxModel<String> resetCustomerComboBox()
+	{
+		JSONArray temp1 = new JSONArray();
+		ComboBoxModel<String> custComboBoxDefault = null;
+		String[] types = null;
+		try {
+			temp1 = con.queryReturnAllCustomers();
+			types = new String[temp1.length()];
+					for(int i = 0; i < temp1.length(); i++){
+						types[i] = temp1.getJSONObject(i).getString("Cust").toString();
+			}
+			custComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+		}catch(Exception ex){ex.printStackTrace();}
+		return custComboBoxDefault;
+	}
+	private JComboBox<String> cboYear;
+	
+//JButtons
+	private JButton btnSave;
+	private JButton btnBack;
+	private JButton btnCheck;
+	
+//JRadioButtons
+	private JRadioButton rbtnSearch;
+	private JRadioButton rbtnCreate;
+	
+	public String generatePartNumber(String Customer, String Year, String curSeq)
+	{
+		String PartNumber = null;
+		if(Year.length() < 2){
+			for(int i = Year.length(); i < 2; i++){
+				Year = "0" + Year;
+			}
+		}
+		if(curSeq.length() < 4){
+			for(int i = curSeq.length(); i < 4; i++){
+				curSeq = "0" + curSeq;
+			}
+		}
+		PartNumber = Customer + Year + "-" + curSeq;			
+		return PartNumber;
+	}
+	
+	public ExperimentalPanel(final JPanel experimental)
+	{
+		setBackground(new Color(105, 105, 105));
+		try {
+			config = new ConfigurationManager(configFilePath);
+		}catch(Exception ex){ex.printStackTrace();}
+	
+	//JLabels
+		lblCreated = new JLabel("Created");
+		lblCreatedBy = new JLabel("Created By");
+		lblProgram = new JLabel("Program");
+		lblPartDescrip = new JLabel("Part Description");
+		lblCustomerPartNum = new JLabel("Customer Part Number");
+		lblCustomer = new JLabel("Customer");
+		lblYear = new JLabel("Year Code");
+		lblSearchPart = new JLabel("Part Number");
+		ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+		lblBosal = new JLabel(bosal);
+		lblExperimental = new JLabel("Experimental Part Number");
+		
+	//JTextFields
+		txtCreated = new JTextField();
+		txtCreated.setBackground(new Color(190, 190, 190));
+		txtCreated.setForeground(Color.BLACK);
+		txtCreated.addMouseListener(new ContextMenuMouseListener());
+		txtCreated.setEditable(false);
+		txtCreatedBy = new JTextField();
+		txtCreatedBy.setBackground(new Color(190, 190, 190));
+		txtCreatedBy.setForeground(Color.BLACK);
+		txtCreatedBy.addMouseListener(new ContextMenuMouseListener());
+		txtCreatedBy.setEditable(false);
+		txtCustomerPartNum = new JTextField();
+		txtCustomerPartNum.setForeground(Color.BLACK);
+		txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
+		txtPartNum = new JTextField();
+		txtPartNum.setBackground(new Color(190, 190, 190));
+		txtPartNum.setForeground(Color.BLACK);
+		txtPartNum.addMouseListener(new ContextMenuMouseListener());
+		txtPartNum.setEditable(false);
+		txtSearchPart = new JTextField();
+		txtSearchPart.setForeground(Color.BLACK);
+		txtSearchPart.addMouseListener(new ContextMenuMouseListener());
+		txtSearchPart.setEditable(false);
+					
 	//JComboBoxes
-		private JComboBox<String> cboProgram;
-		private ComboBoxModel<String> resetProgramComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> proComboBoxDefault = null;
-			String[] types = null;
-			try {
-				temp1 = con.queryReturnAllPrograms();
-				types = new String[temp1.length()];
-						for(int i = 0; i < temp1.length(); i++){
-							types[i] = temp1.getJSONObject(i).getString("Program").toString();
-						}	
-				proComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();}
-			return proComboBoxDefault;
-		}
-		private JComboBox<String> cboPartDescrip;
-		private ComboBoxModel<String> resetDescripComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> descripComboBoxDefault = null;
-			String[] types = null;
+		cboProgram = new JComboBox<String>();
+		cboProgram.setEditable(true);
+		cboProgram.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboProgram);
+		cboProgram.setModel(resetProgramComboBox());
+		cboProgram.addMouseListener(new ContextMenuMouseListener());
+		cboProgram.setSelectedIndex(-1);
+		cboPartDescrip = new JComboBox<String>();
+		cboPartDescrip.setEditable(true);
+		cboPartDescrip.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboPartDescrip);
+		cboPartDescrip.setModel(resetDescripComboBox());
+		cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
+		cboPartDescrip.setSelectedIndex(-1);
+		cboCustomer = new JComboBox<String>();
+		cboCustomer.setEditable(true);
+		cboCustomer.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboCustomer);
+		cboCustomer.setModel(resetCustomerComboBox());
+		cboCustomer.addMouseListener(new ContextMenuMouseListener());
+		cboCustomer.setSelectedIndex(-1);
+		/*String[] years = {"13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};*/
+		cboYear = new JComboBox<String>(/*years*/);
+		cboYear.setEditable(true);
+		cboYear.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboYear);
+		cboYear.setSelectedIndex(-1);
+		
+		ItemListener comboBoxSelectionListener = (new ItemListener(){	
+			public void itemStateChanged(ItemEvent e)
+			{
+				if(cboCustomer.getSelectedItem() != null){
+					if(cboYear.getSelectedItem() != null){
+						txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
+								cboYear.getSelectedItem().toString(), ""));
+					}else{
+						txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
+								"", ""));
+					}
+				}else{
+					txtPartNum.setText(generatePartNumber("", "", ""));
+				}
+			}});
+		cboCustomer.addItemListener(comboBoxSelectionListener);
+		cboYear.addItemListener(comboBoxSelectionListener);
+	//JRadioButtons
+		rbtnSearch = new JRadioButton("Search Part");
+		rbtnSearch.setFont(new Font("Tahoma", Font.BOLD, 14));
+		rbtnSearch.setForeground(Color.BLACK);
+		rbtnSearch.setBackground(new Color(105, 105, 105));
+		rbtnCreate = new JRadioButton("Create Part");
+		rbtnCreate.setFont(new Font("Tahoma", Font.BOLD, 14));
+		rbtnCreate.setForeground(Color.BLACK);
+		rbtnCreate.setBackground(new Color(105, 105, 105));
+		
+	//RadioButton Logic
+		rbtnCreate.addActionListener(new ActionListener(){
 			
-			try {
-				temp1 = con.queryReturnAllDescriptions();
-				types = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					types[i] = temp1.getJSONObject(i).get("Name").toString();
-				}
-				descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();}
-			return descripComboBoxDefault;
-		}
-		private JComboBox<String> cboCustomer;
-		private ComboBoxModel<String> resetCustomerComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> custComboBoxDefault = null;
-			String[] types = null;
-			try {
-				temp1 = con.queryReturnAllCustomers();
-				types = new String[temp1.length()];
-						for(int i = 0; i < temp1.length(); i++){
-							types[i] = temp1.getJSONObject(i).getString("Cust").toString();
-				}
-				custComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();}
-			return custComboBoxDefault;
-		}
-		private JComboBox<String> cboYear;
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == rbtnCreate){
+		            
+		            txtSearchPart.setText("");
+		            txtSearchPart.setEditable(false);
+		            txtCreated.setText("");
+		            txtCreatedBy.setText("");
+		            txtCustomerPartNum.setText("");
+		            txtPartNum.setText("");
+		            cboYear.setSelectedIndex(-1);
+		            cboProgram.setModel(resetProgramComboBox());
+		            cboProgram.setSelectedIndex(-1);
+		            cboCustomer.setModel(resetCustomerComboBox());
+		            cboCustomer.setSelectedIndex(-1);
+		            cboPartDescrip.setSelectedIndex(-1);
+            }
+		}});
+		rbtnCreate.doClick();
+							
+		rbtnSearch.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == rbtnSearch){
+					
+		            txtSearchPart.setText("");
+		            txtSearchPart.setEditable(true);
+		            txtSearchPart.requestFocusInWindow();
+		            txtCreated.setText("");
+		            txtCreatedBy.setText("");
+		            txtCustomerPartNum.setText("");
+		            txtPartNum.setText("");
+		            cboYear.setSelectedIndex(-1);
+		            cboProgram.setModel(resetProgramComboBox());
+		            cboProgram.setSelectedIndex(-1);
+		            cboCustomer.setModel(resetCustomerComboBox());
+		            cboCustomer.setSelectedIndex(-1);
+		            cboPartDescrip.setSelectedIndex(-1);
+		            }
+		}});
 		
 	//JButtons
-		private JButton btnSave;
-		private JButton btnBack;
-		private JButton btnCheck;
-		
-	//JRadioButtons
-		private JRadioButton rbtnSearch;
-		private JRadioButton rbtnCreate;
-		
-		public String generatePartNumber(String Customer, String Year, String curSeq)
-		{
-			String PartNumber = null;
-			if(Year.length() < 2){
-				for(int i = Year.length(); i < 2; i++){
-					Year = "0" + Year;
+		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
+		btnSave = new JButton(save);
+		btnSave.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) 
+			{
+				if (e.getSource() == btnSave) {
+					txtCreated.setText(con.getDate().toString());
+					txtCreatedBy.setText(config.getProperty("appUser"));
+					int n = JOptionPane.showConfirmDialog(
+						    frame,
+						    "Are you sure you want to save part data?",
+						    "Save:",
+						    JOptionPane.YES_NO_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+					if(n == 0){
+						try {
+							String Program = null;
+							String PartDescription = null;
+							String CustPartNumber =  null;
+							String Customer = null;
+							String Year = null;
+							String EPart = null;
+							
+							Program = (String) cboProgram.getSelectedItem();
+							PartDescription = (String) cboPartDescrip.getSelectedItem();
+							CustPartNumber = txtCustomerPartNum.getText();
+							Customer = (String) cboCustomer.getSelectedItem();
+							Year = (String) cboYear.getSelectedItem();
+							con.insertExperimentalPart(Program, PartDescription, CustPartNumber, Customer, Year);		
+							JSONArray temp = con.queryReturnExpPart();
+							EPart = temp.getJSONObject(0).get("PartNumber").toString();
+							txtPartNum.setText(generatePartNumber(Customer, Year, EPart));
+						}catch(Exception ex){/*Ignore*/};
+					}
 				}
-			}
-			if(curSeq.length() < 4){
-				for(int i = curSeq.length(); i < 4; i++){
-					curSeq = "0" + curSeq;
+			}					
+		});
+					
+		ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
+		btnBack = new JButton(back);
+		btnBack.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) 
+			{
+				if (e.getSource() == btnBack) {
+					setVisible(false);
+					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+					int height = screenSize.height;
+					int width = screenSize.width;
+					frame.setResizable(false);
+					frame.setSize(width/2, height/2);
+					frame.setLocationRelativeTo(null);
+					frame.setSize(645, 545);
+					frame.setTitle("Main Menu:");
+					main.setVisible(true);
+					cboPartDescrip.setSelectedIndex(-1);
+					cboYear.setSelectedIndex(-1);
+					txtCreated.setText("");
+					txtCreatedBy.setText("");
+					txtCustomerPartNum.setText("");
+					txtPartNum.setText("");
+					txtSearchPart.setText("");
+					cboCustomer.setSelectedIndex(-1);
+					cboProgram.setSelectedIndex(-1);
+					rbtnCreate.setSelected(true);
 				}
-			}
-			PartNumber = Customer + Year + "-" + curSeq;			
-			return PartNumber;
-		}
-		
-		public ExperimentalPanel(final JPanel experimental)
-		{
-			setBackground(new Color(105, 105, 105));
-			try {
-				config = new ConfigurationManager(configFilePath);
-			}catch(Exception ex){ex.printStackTrace();}
-		
-		//JLabels
-			lblCreated = new JLabel("Created");
-			lblCreatedBy = new JLabel("Created By");
-			lblProgram = new JLabel("Program");
-			lblPartDescrip = new JLabel("Part Description");
-			lblCustomerPartNum = new JLabel("Customer Part Number");
-			lblCustomer = new JLabel("Customer");
-			lblYear = new JLabel("Year Code");
-			lblSearchPart = new JLabel("Part Number");
-			ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-			lblBosal = new JLabel(bosal);
-			lblExperimental = new JLabel("Experimental Part Number");
+			}					
+		});
+					
+		ImageIcon check= new ImageIcon(getClass().getResource("/images/check.jpg"));
+		btnCheck = new JButton(check);
+		btnCheck.addActionListener(new ActionListener() {
 			
-		//JTextFields
-			txtCreated = new JTextField();
-			txtCreated.setBackground(new Color(190, 190, 190));
-			txtCreated.setForeground(Color.BLACK);
-			txtCreated.addMouseListener(new ContextMenuMouseListener());
-			txtCreated.setEditable(false);
-			txtCreatedBy = new JTextField();
-			txtCreatedBy.setBackground(new Color(190, 190, 190));
-			txtCreatedBy.setForeground(Color.BLACK);
-			txtCreatedBy.addMouseListener(new ContextMenuMouseListener());
-			txtCreatedBy.setEditable(false);
-			txtCustomerPartNum = new JTextField();
-			txtCustomerPartNum.setForeground(Color.BLACK);
-			txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
-			txtPartNum = new JTextField();
-			txtPartNum.setBackground(new Color(190, 190, 190));
-			txtPartNum.setForeground(Color.BLACK);
-			txtPartNum.addMouseListener(new ContextMenuMouseListener());
-			txtPartNum.setEditable(false);
-			txtSearchPart = new JTextField();
-			txtSearchPart.setForeground(Color.BLACK);
-			txtSearchPart.addMouseListener(new ContextMenuMouseListener());
-			txtSearchPart.setEditable(false);
-						
-		//JComboBoxes
-			cboProgram = new JComboBox<String>();
-			cboProgram.setEditable(true);
-			cboProgram.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboProgram);
-			cboProgram.setModel(resetProgramComboBox());
-			cboProgram.addMouseListener(new ContextMenuMouseListener());
-			cboProgram.setSelectedIndex(-1);
-			cboPartDescrip = new JComboBox<String>();
-			cboPartDescrip.setEditable(true);
-			cboPartDescrip.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboPartDescrip);
-			cboPartDescrip.setModel(resetDescripComboBox());
-			cboPartDescrip.addMouseListener(new ContextMenuMouseListener());
-			cboPartDescrip.setSelectedIndex(-1);
-			cboCustomer = new JComboBox<String>();
-			cboCustomer.setEditable(true);
-			cboCustomer.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboCustomer);
-			cboCustomer.setModel(resetCustomerComboBox());
-			cboCustomer.addMouseListener(new ContextMenuMouseListener());
-			cboCustomer.setSelectedIndex(-1);
-			String[] years = {"13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
-			cboYear = new JComboBox<String>(years);
-			cboYear.setEditable(true);
-			cboYear.setForeground(Color.BLACK);
-			AutoCompleteDecorator.decorate(cboYear);
-			cboYear.setSelectedIndex(-1);
-			
-			ItemListener comboBoxSelectionListener = (new ItemListener(){	
-				public void itemStateChanged(ItemEvent e)
-				{
-					if(cboCustomer.getSelectedItem() != null){
-						if(cboYear.getSelectedItem() != null){
-							txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
-									cboYear.getSelectedItem().toString(), ""));
-						}else{
-							txtPartNum.setText(generatePartNumber(cboCustomer.getSelectedItem().toString(), 
-									"", ""));
-						}
-					}else{
-						txtPartNum.setText(generatePartNumber("", "", ""));
-					}
-				}});
-			cboCustomer.addItemListener(comboBoxSelectionListener);
-			cboYear.addItemListener(comboBoxSelectionListener);
-		//JRadioButtons
-			rbtnSearch = new JRadioButton("Search Part");
-			rbtnSearch.setFont(new Font("Tahoma", Font.BOLD, 14));
-			rbtnSearch.setForeground(Color.BLACK);
-			rbtnSearch.setBackground(new Color(105, 105, 105));
-			rbtnCreate = new JRadioButton("Create Part");
-			rbtnCreate.setFont(new Font("Tahoma", Font.BOLD, 14));
-			rbtnCreate.setForeground(Color.BLACK);
-			rbtnCreate.setBackground(new Color(105, 105, 105));
-			
-		//RadioButton Logic
-			rbtnCreate.addActionListener(new ActionListener(){
-				
-				public void actionPerformed(ActionEvent e)
-				{
-					if (e.getSource() == rbtnCreate){
-			            
-			            txtSearchPart.setText("");
-			            txtSearchPart.setEditable(false);
-			            txtCreated.setText("");
-			            txtCreatedBy.setText("");
-			            txtCustomerPartNum.setText("");
-			            txtPartNum.setText("");
-			            cboYear.setSelectedIndex(-1);
-			            cboProgram.setModel(resetProgramComboBox());
-			            cboProgram.setSelectedIndex(-1);
-			            cboCustomer.setModel(resetCustomerComboBox());
-			            cboCustomer.setSelectedIndex(-1);
-			            cboPartDescrip.setSelectedIndex(-1);
-	            }
-			}});
-			rbtnCreate.doClick();
-								
-			rbtnSearch.addActionListener(new ActionListener(){
-				
-				public void actionPerformed(ActionEvent e)
-				{
-					if (e.getSource() == rbtnSearch){
-						
-			            txtSearchPart.setText("");
-			            txtSearchPart.setEditable(true);
-			            txtSearchPart.requestFocusInWindow();
-			            txtCreated.setText("");
-			            txtCreatedBy.setText("");
-			            txtCustomerPartNum.setText("");
-			            txtPartNum.setText("");
-			            cboYear.setSelectedIndex(-1);
-			            cboProgram.setModel(resetProgramComboBox());
-			            cboProgram.setSelectedIndex(-1);
-			            cboCustomer.setModel(resetCustomerComboBox());
-			            cboCustomer.setSelectedIndex(-1);
-			            cboPartDescrip.setSelectedIndex(-1);
-			            }
-			}});
-			
-		//JButtons
-			ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
-			btnSave = new JButton(save);
-			btnSave.addActionListener(new ActionListener() {
-				
-				public void actionPerformed(ActionEvent e) 
-				{
-					if (e.getSource() == btnSave) {
-						txtCreated.setText(con.getDate().toString());
-						txtCreatedBy.setText(config.getProperty("appUser"));
-						int n = JOptionPane.showConfirmDialog(
-							    frame,
-							    "Are you sure you want to save part data?",
-							    "Save:",
-							    JOptionPane.YES_NO_OPTION,
-								JOptionPane.WARNING_MESSAGE);
-						if(n == 0){
-							try {
-								String Program = null;
-								String PartDescription = null;
-								String CustPartNumber =  null;
-								String Customer = null;
-								String Year = null;
-								String EPart = null;
-								
-								Program = (String) cboProgram.getSelectedItem();
-								PartDescription = (String) cboPartDescrip.getSelectedItem();
-								CustPartNumber = txtCustomerPartNum.getText();
-								Customer = (String) cboCustomer.getSelectedItem();
-								Year = (String) cboYear.getSelectedItem();
-								con.insertExperimentalPart(Program, PartDescription, CustPartNumber, Customer, Year);		
-								JSONArray temp = con.queryReturnExpPart();
-								EPart = temp.getJSONObject(0).get("PartNumber").toString();
-								txtPartNum.setText(generatePartNumber(Customer, Year, EPart));
-							}catch(Exception ex){/*Ignore*/};
-						}
-					}
-				}					
-			});
-						
-			ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
-			btnBack = new JButton(back);
-			btnBack.addActionListener(new ActionListener() {
-				
-				public void actionPerformed(ActionEvent e) 
-				{
-					if (e.getSource() == btnBack) {
-						setVisible(false);
-						Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-						int height = screenSize.height;
-						int width = screenSize.width;
-						frame.setResizable(false);
-						frame.setSize(width/2, height/2);
-						frame.setLocationRelativeTo(null);
-						frame.setSize(645, 545);
-						frame.setTitle("Main Menu:");
-						main.setVisible(true);
-						cboPartDescrip.setSelectedIndex(-1);
-						cboYear.setSelectedIndex(-1);
-						txtCreated.setText("");
-						txtCreatedBy.setText("");
-						txtCustomerPartNum.setText("");
-						txtPartNum.setText("");
-						txtSearchPart.setText("");
-						cboCustomer.setSelectedIndex(-1);
-						cboProgram.setSelectedIndex(-1);
-						rbtnCreate.setSelected(true);
-					}
-				}					
-			});
-						
-			ImageIcon check= new ImageIcon(getClass().getResource("/images/check.jpg"));
-			btnCheck = new JButton(check);
-			btnCheck.addActionListener(new ActionListener() {
-				
-				public void actionPerformed(ActionEvent e) 
-				{
-					if (e.getSource() == btnCheck) {
-						con = new DBConnect();
-						final String findBosalText = txtSearchPart.getText();
-						
+			public void actionPerformed(ActionEvent e) 
+			{
+				if (e.getSource() == btnCheck) {
+					con = new DBConnect();
+					final String findBosalText = txtSearchPart.getText();
+					
+					try{
+						JSONObject temp = (con.queryDatabase("experimental parts", "PartNumber", findBosalText)).getJSONObject(0);
+						String cpartText = null;
+					
+						//set text for CustPartNumber JTextField
 						try{
-							JSONObject temp = (con.queryDatabase("experimental parts", "PartNumber", findBosalText)).getJSONObject(0);
-							String cpartText = null;
+							cpartText = temp.get("CustPartNumber").toString();
+						}catch(Exception ex){cpartText = "-";}
+						txtCustomerPartNum.setText(cpartText);
 						
-							//set text for CustPartNumber JTextField
-							try{
-								cpartText = temp.get("CustPartNumber").toString();
-							}catch(Exception ex){cpartText = "-";}
-							txtCustomerPartNum.setText(cpartText);
-							
-							//set text for Description JComboBox
-							String descrip = null;
-							try{
-								descrip = temp.get("PartDescription").toString();
-							}catch(Exception ex){descrip = "-";}
-							cboPartDescrip.setSelectedItem(descrip);
-							
-							//set text for Program JComboBox
-							String program = null;
-							try{
-								program = temp.get("Program").toString();
-							}catch(Exception ex){program = "-";}
-							cboProgram.setSelectedItem(program);
-							
-							//set text for Customer JComboBox
-							String cust = null;
-							try{
-								cust = temp.get("Customer").toString();
-							}catch(Exception ex){cust = "-";}
-							cboCustomer.setSelectedItem(cust);
-							
-							//set text for Year JComboBox
-							String year = null;
-							try{
-								year = temp.getString("YearCode").toString();
-							}catch(Exception ex){year = "-";}
-							cboYear.setSelectedItem(year);
-							
-							//set text for Created JTextField
-							String created = null;
-							try{
-								created = temp.get("Date").toString();
-							}catch(Exception ex){created = "-";}
-							txtCreated.setText(created);
-							
-							//set text for CreatedBy JTextField
-							String createdBy = null;
-							try{
-								createdBy = temp.get("Engineer").toString();
-							}catch(Exception ex){createdBy = "-";}
-							txtCreatedBy.setText(createdBy);
-							
-							//set text for Part Number JTextField
-							String part = null;
-							try{
-								part = temp.get("PartNumber").toString();
-							}catch(Exception ex){part = "-";}
-							txtPartNum.setText(generatePartNumber(cust, year, part));
-							
-						}catch(Exception ex){
-							JOptionPane.showMessageDialog(
-									    frame,
-									    "Bosal Part Number: " + findBosalText + " does not exist",
-									    "Missing Part Number",
-										JOptionPane.ERROR_MESSAGE);
-							
-						}
+						//set text for Description JComboBox
+						String descrip = null;
+						try{
+							descrip = temp.get("PartDescription").toString();
+						}catch(Exception ex){descrip = "-";}
+						cboPartDescrip.setSelectedItem(descrip);
+						
+						//set text for Program JComboBox
+						String program = null;
+						try{
+							program = temp.get("Program").toString();
+						}catch(Exception ex){program = "-";}
+						cboProgram.setSelectedItem(program);
+						
+						//set text for Customer JComboBox
+						String cust = null;
+						try{
+							cust = temp.get("Customer").toString();
+						}catch(Exception ex){cust = "-";}
+						cboCustomer.setSelectedItem(cust);
+						
+						//set text for Year JComboBox
+						String year = null;
+						try{
+							year = temp.getString("YearCode").toString();
+						}catch(Exception ex){year = "-";}
+						cboYear.setSelectedItem(year);
+						
+						//set text for Created JTextField
+						String created = null;
+						try{
+							created = temp.get("Date").toString();
+						}catch(Exception ex){created = "-";}
+						txtCreated.setText(created);
+						
+						//set text for CreatedBy JTextField
+						String createdBy = null;
+						try{
+							createdBy = temp.get("Engineer").toString();
+						}catch(Exception ex){createdBy = "-";}
+						txtCreatedBy.setText(createdBy);
+						
+						//set text for Part Number JTextField
+						String part = null;
+						try{
+							part = temp.get("PartNumber").toString();
+						}catch(Exception ex){part = "-";}
+						txtPartNum.setText(generatePartNumber(cust, year, part));
+						
+					}catch(Exception ex){
+						JOptionPane.showMessageDialog(
+								    frame,
+								    "Bosal Part Number: " + findBosalText + " does not exist",
+								    "Missing Part Number",
+									JOptionPane.ERROR_MESSAGE);
+						
 					}
-				}					
-			});			
-			setupPanel();
-		}
-		
-			private void setupPanel()
-						{
-							lblCreated.setFont(new Font("Tahoma", Font.BOLD, 14));
-							lblCreated.setForeground(Color.BLACK);
-							lblCreatedBy.setFont(new Font("Tahoma", Font.BOLD, 14));
-							lblCreatedBy.setForeground(Color.BLACK);
-							lblProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
-							lblProgram.setForeground(Color.BLACK);
-							lblPartDescrip.setFont(new Font("Tahoma", Font.BOLD, 14));
-							lblPartDescrip.setForeground(Color.BLACK);
-							lblCustomerPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
-							lblCustomerPartNum.setForeground(Color.BLACK);
-							lblCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
-							lblCustomer.setForeground(Color.BLACK);
-							lblYear.setFont(new Font("Tahoma", Font.BOLD, 14));
-							lblYear.setForeground(Color.BLACK);
-							lblSearchPart.setFont(new Font("Tahoma", Font.BOLD, 14));
-							lblSearchPart.setForeground(Color.BLACK);
-							lblExperimental.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
-							lblExperimental.setForeground(Color.BLACK);
-							ButtonGroup group = new ButtonGroup();
-							group.add(rbtnCreate);
-							group.add(rbtnSearch);
-							GroupLayout groupLayout = new GroupLayout(this);
-							groupLayout.setHorizontalGroup(
-								groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(10)
-										.addComponent(lblBosal, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE)
-										.addGap(6)
-										.addComponent(lblExperimental))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(61)
-										.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-										.addGap(20)
-										.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-										.addGap(5)
-										.addComponent(lblPartDescrip, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-										.addGap(140)
-										.addComponent(lblYear, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-										.addGap(14)
-										.addComponent(lblSearchPart, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(61)
-										.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-										.addGap(23)
-										.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-										.addGap(21)
-										.addComponent(cboPartDescrip, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
-										.addGap(19)
-										.addComponent(cboYear, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-										.addGap(14)
-										.addComponent(txtPartNum, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(61)
-										.addComponent(lblCreated, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-										.addGap(12)
-										.addComponent(lblCreatedBy, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
-										.addGap(201)
-										.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(61)
-										.addComponent(txtCreated, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-										.addGap(35)
-										.addComponent(txtCreatedBy, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-										.addGap(254)
-										.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(61)
-										.addComponent(rbtnSearch, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(61)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(rbtnCreate, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(108)
-												.addComponent(txtSearchPart, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)))
-										.addGap(10)
-										.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-										.addGap(91)
-										.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-										.addGap(22)
-										.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
-							);
-							groupLayout.setVerticalGroup(
-								groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(11)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblBosal, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(15)
-												.addComponent(lblExperimental, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
-										.addGap(11)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(3)
-												.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
-											.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblPartDescrip, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(3)
-												.addComponent(lblYear, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(3)
-												.addComponent(lblSearchPart, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
-										.addGap(5)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(cboPartDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(cboYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(txtPartNum, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-										.addGap(13)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblCreated, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblCreatedBy, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(5)
-												.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
-										.addGap(6)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(txtCreated, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(txtCreatedBy, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addGap(16)
-										.addComponent(rbtnSearch)
-										.addGap(3)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(5)
-												.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-													.addComponent(rbtnCreate)
-													.addGroup(groupLayout.createSequentialGroup()
-														.addGap(2)
-														.addComponent(txtSearchPart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-											.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-											.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-											.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
-							);
-							setLayout(groupLayout);
-						}}//End of Class Experimental Parts Panel	
+				}
+			}					
+		});			
+		setupPanel();
+	}
+	
+		private void setupPanel()
+					{
+						lblCreated.setFont(new Font("Tahoma", Font.BOLD, 14));
+						lblCreated.setForeground(Color.BLACK);
+						lblCreatedBy.setFont(new Font("Tahoma", Font.BOLD, 14));
+						lblCreatedBy.setForeground(Color.BLACK);
+						lblProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
+						lblProgram.setForeground(Color.BLACK);
+						lblPartDescrip.setFont(new Font("Tahoma", Font.BOLD, 14));
+						lblPartDescrip.setForeground(Color.BLACK);
+						lblCustomerPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
+						lblCustomerPartNum.setForeground(Color.BLACK);
+						lblCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
+						lblCustomer.setForeground(Color.BLACK);
+						lblYear.setFont(new Font("Tahoma", Font.BOLD, 14));
+						lblYear.setForeground(Color.BLACK);
+						lblSearchPart.setFont(new Font("Tahoma", Font.BOLD, 14));
+						lblSearchPart.setForeground(Color.BLACK);
+						lblExperimental.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+						lblExperimental.setForeground(Color.BLACK);
+						ButtonGroup group = new ButtonGroup();
+						group.add(rbtnCreate);
+						group.add(rbtnSearch);
+						GroupLayout groupLayout = new GroupLayout(this);
+						groupLayout.setHorizontalGroup(
+							groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(10)
+									.addComponent(lblBosal, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE)
+									.addGap(6)
+									.addComponent(lblExperimental))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(61)
+									.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+									.addGap(20)
+									.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+									.addGap(5)
+									.addComponent(lblPartDescrip, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+									.addGap(140)
+									.addComponent(lblYear, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+									.addGap(14)
+									.addComponent(lblSearchPart, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(61)
+									.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+									.addGap(23)
+									.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+									.addGap(21)
+									.addComponent(cboPartDescrip, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+									.addGap(19)
+									.addComponent(cboYear, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+									.addGap(14)
+									.addComponent(txtPartNum, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(61)
+									.addComponent(lblCreated, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+									.addGap(12)
+									.addComponent(lblCreatedBy, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
+									.addGap(201)
+									.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(61)
+									.addComponent(txtCreated, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+									.addGap(35)
+									.addComponent(txtCreatedBy, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+									.addGap(254)
+									.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(61)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(rbtnCreate, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+										.addComponent(rbtnSearch, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(108)
+											.addComponent(txtSearchPart, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)))
+									.addGap(10)
+									.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+									.addGap(91)
+									.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+									.addGap(22)
+									.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+						);
+						groupLayout.setVerticalGroup(
+							groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(11)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblBosal, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(15)
+											.addComponent(lblExperimental, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
+									.addGap(11)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(3)
+											.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblProgram, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblPartDescrip, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(3)
+											.addComponent(lblYear, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(3)
+											.addComponent(lblSearchPart, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
+									.addGap(5)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(cboProgram, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(cboPartDescrip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(cboYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtPartNum, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+									.addGap(13)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblCreated, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblCreatedBy, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(5)
+											.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
+									.addGap(6)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(txtCreated, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtCreatedBy, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addGap(20)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addComponent(rbtnCreate)
+											.addGap(9)
+											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(rbtnSearch)
+												.addComponent(txtSearchPart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(24)
+											.addComponent(btnCheck, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(24)
+											.addComponent(btnBack, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(24)
+											.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))))
+						);
+						setLayout(groupLayout);
+					}}//End of Class Experimental Parts Panel	
 }//End of MainFrames
