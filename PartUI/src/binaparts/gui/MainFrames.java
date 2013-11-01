@@ -1694,12 +1694,9 @@ public class MainFrames extends JFrame
 		
 	//JTable	
 		private JTable myTable;
-		private JScrollPane scrollPane;
-		
-		public TableModel populateTableModel(String table, String column, JSONArray temp, String queryValue){
-			 
-	        TableModel tableModel = null;
-	      				
+		private JScrollPane scrollPane;		
+		public TableModel populateTableModel(String table, String column, JSONArray temp, String queryValue){			 
+	        TableModel tableModel = null;	      				
 	        try{
 	            int columnCount = con.getColumnNames(table, column, queryValue).length;
 	            int rowCount = con.getRowCount(table, column, queryValue);
@@ -1716,8 +1713,7 @@ public class MainFrames extends JFrame
 	            	if(temp1[i].equals("TypeDescription")){i++;}
 	            	columnNames[index] = temp1[i];
 	            	index++;
-	            }
-	            
+	            }            
 	            for(int i = 0; i < rowCount; i++){
 	                for(int j = 0; j < columnNames.length; j++){
 	                	try{
@@ -1727,15 +1723,10 @@ public class MainFrames extends JFrame
 	                    }
 	                }
 	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));
-	           
-				
-	        }catch(Exception ex){ex.printStackTrace();}
-	       
-	       
+	            tableModel = (new DefaultTableModel(data, columnNames));				
+	        }catch(Exception ex){ex.printStackTrace();}	       
 	        return tableModel;
-	    }
-		
+	    }		
 		public FindPanel(final JPanel find)
 		{
 	//JTextFields
@@ -2003,9 +1994,8 @@ public class MainFrames extends JFrame
 		setupPanel();		
 	}
 	
-	private void setupPanel()
-	
-	{
+		private void setupPanel()
+		{
 		
 //Label Fonts		
 		
@@ -2064,11 +2054,9 @@ public class MainFrames extends JFrame
 							.addGap(6)
 							.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addGap(11)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
-		);
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)));
 		setLayout(groupLayout);
-}	
-
+		}	
 }
 	class SettingsPanel extends JPanel
 	{
