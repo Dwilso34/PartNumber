@@ -148,11 +148,11 @@ public class BDLFrame extends JFrame
 		
 	//JTable	
 		private JTable myTable;
-		private TableModel table1;
+		private DefaultTableModel table1;
 		private JScrollPane scrollPane;
 		public void bdlHeaders(){			       				
 	        try{
-	            String[] columnNames = {"ITEM", "QTY", " ", "Description", 
+	            String[] columnNames = {" ", "ITEM", "QTY", " ", "Description", 
 	            		"JDE Part-NR", "OLD Part-NR", "Rev", "DWG NR", 
 	            		"DWG Rev", "DWG Rev Date", "Prod Rel Date", "FRM",
 	            		"Part-NR", "DWG-NR", "DWG Rev", "DWG Rev Date"};
@@ -162,8 +162,12 @@ public class BDLFrame extends JFrame
 	    }
 		public void addRowToTable(String table, String column, JSONArray temp, String bosalPartNumber){	
 	        try{
+	        	int rowCount = table1.getRowCount();
 	            String[] temp1 = new String[8];
-	            String[] columnNames = {"ITEM", "QTY", "  ", "Description"};
+	            String[] columnNames = {" ", "ITEM", "QTY", " ", "Description", 
+	            		"JDE Part-NR", "OLD Part-NR", "Rev", "DWG NR", 
+	            		"DWG Rev", "DWG Rev Date", "Prod Rel Date", "FRM",
+	            		"Part-NR", "DWG-NR", "DWG Rev", "DWG Rev Date"};
 	            String[][] data = new String[1][8];	             	      
 	            
 	            for(int i = 0; i < 1; i++){
@@ -175,7 +179,7 @@ public class BDLFrame extends JFrame
 	                    }
 	                }
 	            }
-	            table1 = (new DefaultTableModel(data, columnNames));					
+	            table1.insertRow(rowCount, data);				
 	        }catch(Exception ex){ex.printStackTrace();}	  	    
 	    }
 			
@@ -481,7 +485,8 @@ public class BDLFrame extends JFrame
 			lblCUSTOMER.setForeground(Color.BLACK);
 
 			//JTable
-					bdlHeaders();	
+					table1 = new DefaultTableModel();
+					bdlHeaders();						
 					myTable = new JTable(table1){	
 						public boolean isCellEditable(int row, int column){
 							return false;
