@@ -75,7 +75,7 @@ public class BDLFrame extends JFrame
 		this.searchText = searchText;		
 	}
 		
-	public class BDLMain extends JPanel 
+	class BDLMain extends JPanel 
 	{		
 	//global variables
 		private String customer;
@@ -176,6 +176,14 @@ public class BDLFrame extends JFrame
 	       
 	        return tableModel;
 	    }
+		
+	//Method for adding line to table
+		/*public void addRow(String lastName, String firstName) {
+		      Object[] row = new Object[2];
+		      row[0] = lastName;
+		      row[1] = firstName;
+		      tableModel.addRow(row);
+		   }*/
 		
 	//JCheckBoxes
 		private JCheckBox cbxCustomer;
