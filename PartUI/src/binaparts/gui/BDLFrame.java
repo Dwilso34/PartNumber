@@ -152,10 +152,8 @@ public class BDLFrame extends JFrame
 		private JTable myTable3;
 		private JScrollPane scrollPane;
 		
-		public TableModel populateTableModel(String table, String column, JSONArray temp, String bosalPartNumber){
-			 
-	        TableModel tableModel = null;
-	      				
+		public TableModel populateTableModel(String table, String column, JSONArray temp, String bosalPartNumber){			 
+	        TableModel tableModel = null;	      				
 	        try{
 	            String[] temp1 = new String[8];
 	            String[] columnNames = {"JDE Part NR", "OLD Part NR", "Rev", "Drawing NR", "DWG Rev", "DWG Rev Date", "PROD Rel Date"};
@@ -170,10 +168,8 @@ public class BDLFrame extends JFrame
 	                    }
 	                }
 	            }
-	            tableModel = (new DefaultTableModel(data, columnNames));	           
-				
-	        }catch(Exception ex){ex.printStackTrace();}	       
-	       
+	            tableModel = (new DefaultTableModel(data, columnNames));					
+	        }catch(Exception ex){ex.printStackTrace();}	  	       
 	        return tableModel;
 	    }
 		
@@ -226,22 +222,6 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return engineComboBoxDefault;
 		}
-		/*private ComboBoxModel<String> resetEngineComboBox()
-		{
-			JSONArray temp1 = new JSONArray();
-			ComboBoxModel<String> engineComboBoxDefault = null;
-			String[] types = null;
-			try {
-				temp1 = con.queryReturnAllEngines();
-				types = new String[temp1.length()];
-				for(int i = 0; i < temp1.length(); i++){
-					types[i] = temp1.getJSONObject(i).getString("Engine").toString();
-				}	
-				engineComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-			}catch(Exception ex){ex.printStackTrace();}
-			return engineComboBoxDefault;
-		}*/
-				
 		
 		public String getSearchText() {
 			return searchText;
