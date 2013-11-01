@@ -18,6 +18,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -76,8 +77,7 @@ public class BDLFrame extends JFrame
 	}
 		
 	class BDLMain extends JPanel 
-	{		
-	//global variables
+	{//global variables
 		private String customer;
 		private String platform;
 		private String name;
@@ -146,13 +146,17 @@ public class BDLFrame extends JFrame
 		private JTextField txtRelPlant2;
 		private JTextField txtRelSupplier;
 		
+	//JButton
+		private JButton btnAdd;
+		private JButton btnDelete;
+		
 	//JTable	
 		private JTable myTable;
-		private DefaultTableModel table1;
+		private TableModel table1;
 		private JScrollPane scrollPane;
 		public void bdlHeaders(){			       				
 	        try{
-	            String[] columnNames = {" ", "ITEM", "QTY", " ", "Description", 
+	            String[] columnNames = {"ITEM", "QTY", " ", "Description", 
 	            		"JDE Part-NR", "OLD Part-NR", "Rev", "DWG NR", 
 	            		"DWG Rev", "DWG Rev Date", "Prod Rel Date", "FRM",
 	            		"Part-NR", "DWG-NR", "DWG Rev", "DWG Rev Date"};
@@ -162,12 +166,8 @@ public class BDLFrame extends JFrame
 	    }
 		public void addRowToTable(String table, String column, JSONArray temp, String bosalPartNumber){	
 	        try{
-	        	int rowCount = table1.getRowCount();
 	            String[] temp1 = new String[8];
-	            String[] columnNames = {" ", "ITEM", "QTY", " ", "Description", 
-	            		"JDE Part-NR", "OLD Part-NR", "Rev", "DWG NR", 
-	            		"DWG Rev", "DWG Rev Date", "Prod Rel Date", "FRM",
-	            		"Part-NR", "DWG-NR", "DWG Rev", "DWG Rev Date"};
+	            String[] columnNames = {"ITEM", "QTY", "  ", "Description"};
 	            String[][] data = new String[1][8];	             	      
 	            
 	            for(int i = 0; i < 1; i++){
@@ -179,7 +179,7 @@ public class BDLFrame extends JFrame
 	                    }
 	                }
 	            }
-	            table1.insertRow(rowCount, data);				
+	            table1 = (new DefaultTableModel(data, columnNames));					
 	        }catch(Exception ex){ex.printStackTrace();}	  	    
 	    }
 			
@@ -482,21 +482,23 @@ public class BDLFrame extends JFrame
 			lblCUSTOMER.setOpaque(true);
 			lblCUSTOMER.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCUSTOMER.setForeground(Color.BLACK);
-
+			
+		//JButtons
+			btnAdd = new JButton("Add");
+			btnDelete = new JButton("Delete");
+			
 		//JTable
-			table1 = new DefaultTableModel();
-			bdlHeaders();						
-			myTable = new JTable(table1){	
-				public boolean isCellEditable(int row, int column){
-					return false;
-				}
-			};
-			scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-			scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
-			scrollPane.setViewportView(myTable);
-			myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+				myTable = new JTable(){	
+					public boolean isCellEditable(int row, int column){
+						return false;
+					}
+				};
+				scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+				scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
+				scrollPane.setViewportView(myTable);
+				myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+				myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+				myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);						
 						
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
@@ -997,48 +999,47 @@ public class BDLFrame extends JFrame
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(30)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(cboName, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+								.addGap(46)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(81)
+										.addComponent(txtType, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(81)
+										.addComponent(txtVolume, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+									.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(81)
+										.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(81)
+										.addComponent(cboName, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(81)
+										.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+									.addComponent(lblPower, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(127)
 								.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(127)
-								.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtType, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblPlatform, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(46)
-								.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(46)
-								.addComponent(lblPower, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtVolume, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
 								.addComponent(txtCustomer, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(46)
 								.addComponent(lblName, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(46)
-								.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtPlatform, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
 							.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(127)
-								.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(46)
+								.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblPlatform, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(127)
+								.addComponent(txtPlatform, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)))
 						.addGap(5)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addComponent(cbxCustomer, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
@@ -1057,90 +1058,95 @@ public class BDLFrame extends JFrame
 										.addGap(81)
 										.addComponent(txtIssuedBy, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))))
 							.addGroup(groupLayout.createSequentialGroup()
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(txtBosalPartNum, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(65)
+										.addComponent(lblSection, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)))
+								.addGap(164)
+								.addComponent(lblIMDS, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(306)
+								.addComponent(txtIMDS, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblDescription, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(141)
+								.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
+							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(65)
 								.addComponent(lblVolume2, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(141)
 								.addComponent(txtLength, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(306)
-								.addComponent(txtIMDS, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblBosalPartNum, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(141)
-								.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(141)
-								.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
+								.addGap(65)
+								.addComponent(lblLength, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
 							.addComponent(lblSilencer, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(141)
-								.addComponent(txtSection, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblDescription, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(306)
-								.addComponent(lblIMDS, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(65)
-								.addComponent(lblSection, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
+								.addComponent(txtVolume2, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblBosalPartNum, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(141)
-								.addComponent(txtVolume2, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
+								.addComponent(txtSection, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(141)
 								.addComponent(txtDescription, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
-							.addComponent(txtBosalPartNum, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(65)
-								.addComponent(lblLength, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)))
+								.addGap(141)
+								.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE)))
 						.addGap(101)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(14)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblPage, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(76)
-										.addComponent(txtREV, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblRelDate, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblPage, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtRelDate, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(76)
 										.addComponent(txtPage, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(76)
-										.addComponent(txtRelDate, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblREV, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblREVDate, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtREV, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
+									.addComponent(lblRelDate, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(76)
-										.addComponent(txtREVDate, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))))
+										.addComponent(txtREVDate, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
+									.addComponent(lblREVDate, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+									.addComponent(lblREV, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(27)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(txtProduction, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblProduction, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
+									.addComponent(lblProduction, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
+									.addComponent(txtProduction, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(90)
+								.addComponent(txtRelPlant1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblRelPlant1, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(90)
 								.addComponent(txtRelSupplier, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(90)
-								.addComponent(txtRelPlant1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+								.addComponent(txtRelPlant2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
 							.addComponent(lblRelSupplier, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblRelPlant2, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblRelPlant1, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(90)
-								.addComponent(txtRelPlant2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(lblRelPlant2, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGap(356)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblBOSAL, GroupLayout.PREFERRED_SIZE, 430, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(428)
-								.addComponent(lblCUSTOMER, GroupLayout.PREFERRED_SIZE, 355, GroupLayout.PREFERRED_SIZE))))
+								.addGap(476)
+								.addComponent(lblCUSTOMER, GroupLayout.PREFERRED_SIZE, 378, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblBOSAL, GroupLayout.PREFERRED_SIZE, 477, GroupLayout.PREFERRED_SIZE)))
 					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(30)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 1109, GroupLayout.PREFERRED_SIZE))
+						.addGap(5)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
+						.addGap(4)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 1126, GroupLayout.PREFERRED_SIZE))
 			);
 			groupLayout.setVerticalGroup(
 				groupLayout.createParallelGroup(Alignment.LEADING)
@@ -1154,48 +1160,48 @@ public class BDLFrame extends JFrame
 						.addGap(15)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+								.addGap(18)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(txtType, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(129)
+										.addGap(38)
+										.addComponent(txtVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(38)
+										.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(57)
+										.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(19)
 										.addComponent(cboName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(91)
-										.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-									.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+										.addGap(19)
+										.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(110)
-										.addComponent(txtType, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(91)
-										.addComponent(lblPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(110)
-										.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
-								.addGap(18)
-								.addComponent(lblPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+										.addGap(57)
+										.addComponent(lblPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(148)
-								.addComponent(txtVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+								.addGap(91)
+								.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addComponent(txtCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(167)
-								.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(129)
 								.addComponent(lblName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(148)
-								.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+								.addGap(110)
+								.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
+							.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(110)
+								.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(91)
+								.addComponent(lblPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(91)
 								.addComponent(txtPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(110)
-								.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(129)
-								.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(3)
 								.addComponent(cbxCustomer, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
@@ -1213,95 +1219,100 @@ public class BDLFrame extends JFrame
 								.addGap(11)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(19)
+										.addComponent(txtBosalPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+										.addGap(56)
+										.addComponent(lblSection, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addComponent(lblIMDS, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(19)
+										.addComponent(txtIMDS, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(38)
+										.addComponent(lblDescription, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(19)
+										.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(57)
 										.addComponent(lblVolume2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(76)
 										.addComponent(txtLength, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtIMDS, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblBosalPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+										.addGap(76)
+										.addComponent(lblLength, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(57)
 										.addComponent(lblSilencer, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(57)
+										.addComponent(txtVolume2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addComponent(lblBosalPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(95)
 										.addComponent(txtSection, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(38)
-										.addComponent(lblDescription, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblIMDS, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(95)
-										.addComponent(lblSection, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(57)
-										.addComponent(txtVolume2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(38)
 										.addComponent(txtDescription, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtBosalPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(76)
-										.addComponent(lblLength, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
+									.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblPage, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(38)
+										.addComponent(txtRelDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+									.addComponent(txtPage, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(19)
 										.addComponent(txtREV, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(38)
 										.addComponent(lblRelDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblPage, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtPage, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(38)
-										.addComponent(txtRelDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(lblREV, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+										.addGap(57)
+										.addComponent(txtREVDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(57)
 										.addComponent(lblREVDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(57)
-										.addComponent(txtREVDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
+										.addGap(19)
+										.addComponent(lblREV, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
 								.addGap(11)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblProduction, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(19)
-										.addComponent(txtProduction, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblProduction, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+										.addComponent(txtProduction, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
 								.addGap(11)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(txtRelPlant1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+									.addComponent(lblRelPlant1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(38)
 										.addComponent(txtRelSupplier, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(txtRelPlant1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(19)
+										.addComponent(txtRelPlant2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(38)
 										.addComponent(lblRelSupplier, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(19)
-										.addComponent(lblRelPlant2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblRelPlant1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtRelPlant2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))))
+										.addComponent(lblRelPlant2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))))
 						.addGap(22)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblBOSAL, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblCUSTOMER, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblCUSTOMER, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblBOSAL, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(3)
+								.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+								.addGap(8)
+								.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)))
 			);
 			setLayout(groupLayout);
+			}
 		}
-	}
 }
