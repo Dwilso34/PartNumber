@@ -1,5 +1,6 @@
 package binaparts.gui;
 
+import java.awt.Adjustable;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -71,7 +72,6 @@ public class BDLFrame extends JFrame
 	public String getSearchText() {
 		return searchText;
 	}
-
 	public void setSearchText(String searchText) {
 		this.searchText = searchText;		
 	}
@@ -154,7 +154,7 @@ public class BDLFrame extends JFrame
 		
 	//JTable	
 		private JTable myTable;
-		private TableModel table1;
+		private DefaultTableModel table1;
 		private JScrollPane scrollPane;
 		public void bdlHeaders(){			       				
 	        try{
@@ -165,24 +165,6 @@ public class BDLFrame extends JFrame
 	            String[][] data = new String[0][0];	             	      
 	            table1 = (new DefaultTableModel(data, columnNames));					
 	        }catch(Exception ex){ex.printStackTrace();}	  	
-	    }
-		public void addRowToTable(String table, String column, JSONArray temp, String bosalPartNumber){	
-	        try{
-	            String[] temp1 = new String[8];
-	            String[] columnNames = {"ITEM", "QTY", "  ", "Description"};
-	            String[][] data = new String[1][8];	             	      
-	            
-	            for(int i = 0; i < 1; i++){
-	                for(int j = 0; j < 8; j++){
-	                	try{
-	                    data[i][j] = temp.getJSONObject(i).get(columnNames[j]).toString();
-	                    }catch(Exception ex){
-	                        data[i][j] = "";
-	                    }
-	                }
-	            }
-	            table1 = (new DefaultTableModel(data, columnNames));					
-	        }catch(Exception ex){ex.printStackTrace();}	  	    
 	    }
 			
 	//Method for adding line to table
@@ -487,20 +469,47 @@ public class BDLFrame extends JFrame
 			
 		//JButtons
 			btnAdd = new JButton("ADD");
-			btnDelete = new JButton("DELETE");
-			
-		//JTable
-				myTable = new JTable(){	
-					public boolean isCellEditable(int row, int column){
-						return false;
+			btnAdd.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					if (e.getSource() == btnAdd)
+					{				
+						//System.out.println(table1.getRowCount());
+						String[] data = new String[0];
+						table1.addRow(data);
+						//System.out.println(table1.getRowCount());
 					}
-				};
-				scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-				scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
-				scrollPane.setViewportView(myTable);
-				myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-				myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-				myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);						
+				}				
+			});
+			btnDelete = new JButton("DELETE");
+			btnDelete.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					if (e.getSource() == btnDelete)
+					{
+						//System.out.println(table1.getRowCount());
+						int[] rows = myTable.getSelectedRows();
+						//System.out.println(rows.length);
+						for(int i = rows.length-1; i >= 0; i--){
+							//System.out.println(rows[i]);
+							//System.out.println("deleting row "+rows[i]);
+							table1.removeRow(rows[i]);
+						}						
+						//System.out.println(table1.getRowCount());
+					}
+				}				
+			});
+		//JTable
+			bdlHeaders();
+			myTable = new JTable(table1){	
+				public boolean isCellEditable(int row, int column){
+					return true;
+				}
+			};
+			scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+			scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
+			scrollPane.setViewportView(myTable);
+			myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);					
 						
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
@@ -1166,9 +1175,8 @@ public class BDLFrame extends JFrame
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(91)
-										.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
-<<<<<<< HEAD
 										.addGap(110)
 										.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addComponent(txtCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
@@ -1177,13 +1185,6 @@ public class BDLFrame extends JFrame
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 									.addComponent(txtVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-=======
-										.addGap(57)
-										.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(cboName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
->>>>>>> f5640d0e4767592fdc588feec36bae78a0861be9
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(19)
 										.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
@@ -1195,34 +1196,23 @@ public class BDLFrame extends JFrame
 								.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(91)
-<<<<<<< HEAD
 								.addComponent(lblPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-=======
-								.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-							.addComponent(txtCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
->>>>>>> f5640d0e4767592fdc588feec36bae78a0861be9
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(129)
 								.addComponent(lblName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
-<<<<<<< HEAD
 								.addGap(129)
 								.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-=======
-								.addGap(110)
-								.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
-							.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
->>>>>>> f5640d0e4767592fdc588feec36bae78a0861be9
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(129)
-								.addComponent(cboName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(cboName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(167)
 								.addComponent(lblPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(91)
 								.addComponent(txtPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-							.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(3)
 								.addComponent(cbxCustomer, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
