@@ -147,12 +147,15 @@ public class BDLFrame extends JFrame
 		private JTextField txtRelSupplier;
 		
 	//JTable	
-		private JTable myTable1;
+		private JTable myTable;
 		private TableModel table1;
 		private JScrollPane scrollPane;
 		public void bdlHeaders(){			       				
 	        try{
-	            String[] columnNames = {"ITEM", "QTY", "  ", "Description"};
+	            String[] columnNames = {"ITEM", "QTY", " ", "Description", 
+	            		"JDE Part-NR", "OLD Part-NR", "Rev", "DWG NR", 
+	            		"DWG Rev", "DWG Rev Date", "Prod Rel Date", "FRM",
+	            		"Part-NR", "DWG-NR", "DWG Rev", "DWG Rev Date"};
 	            String[][] data = new String[0][0];	             	      
 	            table1 = (new DefaultTableModel(data, columnNames));					
 	        }catch(Exception ex){ex.printStackTrace();}	  	
@@ -478,18 +481,18 @@ public class BDLFrame extends JFrame
 			lblCUSTOMER.setForeground(Color.BLACK);
 
 			//JTable
-					bdlHeaders();
-					myTable1 = new JTable(table1){	
+					bdlHeaders();	
+					myTable = new JTable(table1){	
 						public boolean isCellEditable(int row, int column){
 							return false;
 						}
 					};
-					JPanel panel = new JPanel();
-					panel.add(myTable1);
-					scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+					scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 					scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
-					scrollPane.setViewportView(myTable1);
-					myTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					scrollPane.setViewportView(myTable);
+					myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 					
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
