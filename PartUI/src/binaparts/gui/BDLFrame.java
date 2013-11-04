@@ -24,6 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -167,14 +168,6 @@ public class BDLFrame extends JFrame
 	        }catch(Exception ex){ex.printStackTrace();}	  	
 	    }
 			
-	//Method for adding line to table
-		/*public void addRow(String lastName, String firstName) {
-		      Object[] row = new Object[2];
-		      row[0] = lastName;
-		      row[1] = firstName;
-		      tableModel.addRow(row);
-		   }*/
-		
 	//JCheckBoxes
 		private JCheckBox cbxCustomer;
 		private JCheckBox cbxPlatform;
@@ -487,18 +480,34 @@ public class BDLFrame extends JFrame
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnDelete)
 					{
-						//System.out.println(table1.getRowCount());
+						int n = -1;
 						int[] rows = myTable.getSelectedRows();
-						//System.out.println(rows.length);
-						for(int i = rows.length-1; i >= 0; i--){
-							//System.out.println(rows[i]);
-							//System.out.println("deleting row "+rows[i]);
-							table1.removeRow(rows[i]);
+						if(rows.length == 0){
+							JOptionPane.showMessageDialog(
+								    BDLframe,
+								    rows.length + " rows were selected!",
+								    "Invalid Selection",
+									JOptionPane.ERROR_MESSAGE);
+						}else{
+							n = JOptionPane.showConfirmDialog(
+								    BDLframe,
+								    "Are you sure you want to delete selected rows?",
+								    "Save:",
+								    JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE
+									);
+						}
+						if (n == 0) {
+							for (int i = rows.length - 1; i >= 0; i--) {
+								//System.out.println(rows[i]);
+								//System.out.println("deleting row "+rows[i]);
+								table1.removeRow(rows[i]);
+							}
 						}						
-						//System.out.println(table1.getRowCount());
 					}
 				}				
 			});
+		
 		//JTable
 			bdlHeaders();
 			myTable = new JTable(table1){	
