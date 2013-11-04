@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -34,6 +37,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.LineBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -170,7 +175,13 @@ public class BDLFrame extends JFrame
 	           
 	        }catch(Exception ex){ex.printStackTrace();}	  	
 	    }
-			
+		public void setItemColumnIndex(){
+			int rows = table1.getRowCount();
+			for(int i = 0; i < rows; i++){
+				table1.setValueAt(i+1, i, 0);
+			}
+		}	
+	
 	//JCheckBoxes
 		private JCheckBox cbxCustomer;
 		private JCheckBox cbxPlatform;
@@ -225,7 +236,6 @@ public class BDLFrame extends JFrame
 		}
 		public void setSearchText(String searchText) {
 			this.searchText = searchText;
-			txtBosalPartNum.setText(searchText);
 		}		
 		public String getCustomer() {
 			return customer;
@@ -471,10 +481,9 @@ public class BDLFrame extends JFrame
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnAdd)
 					{				
-						//System.out.println(table1.getRowCount());
 						String[] data = new String[0];
 						table1.addRow(data);
-						//System.out.println(table1.getRowCount());
+						setItemColumnIndex();
 					}
 				}				
 			});
@@ -503,37 +512,146 @@ public class BDLFrame extends JFrame
 						}
 						if (n == 0) {
 							for (int i = rows.length - 1; i >= 0; i--) {
-								//System.out.println(rows[i]);
-								//System.out.println("deleting row "+rows[i]);
 								table1.removeRow(rows[i]);
+								setItemColumnIndex();
 							}
 						}						
 					}
 				}				
 			});
 		
-		//JTable
+		//JTable			
+			MouseAdapter cellListener = new MouseAdapter(){
+				public void mouseClicked(MouseEvent e) {
+					if(e.getClickCount() == 2){
+						JTable table = ((JTable)e.getSource());
+						int row = table.getSelectedRow();
+						int column = table.getSelectedColumn();
+						System.out.println("row:"+row+" column: "+column);
+						if(column == 4){
+							String s = (String)JOptionPane.showInputDialog(
+				                    BDLframe,
+				                    "Enter a Bosal Part Number:",
+				                    "Search Dialog",
+				                    JOptionPane.PLAIN_MESSAGE,
+				                    bosal,
+				                    null,
+				                    "");
+							//If a string was returned, say so.
+							if ((s != null) && (s.length() > 0)) {
+							    setSearchText(s);
+							}
+							table.setValueAt(getSearchText(), row, column);
+						}
+					}					
+				}
+			};
+			TableModelListener columnListener = new TableModelListener(){
+				public void tableChanged(TableModelEvent e) {
+					if(e.getColumn() == 4){
+						int row = e.getLastRow();
+						String description = null;
+						int rev = -1;
+						String drawingNumber = null;
+						int drawingRev = -1;
+						String drawingRevDate = null;
+						String productionReleaseDate = null;
+						String customer = null;
+						try {
+							System.out.println("Trying to Collect Data from Database");
+							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+							for(int i = 0; i < temp.length(); i++){
+								try{
+									description = temp.getJSONObject(i).getString("PartDescription").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain PartDescription");
+								}
+								try{
+									rev = (int)temp.getJSONObject(i).getInt("Rev");
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain Rev");
+								}
+								try{
+									drawingNumber = temp.getJSONObject(i).get("DrawingNumber").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain DrawingNumber");
+								}
+								try{
+								drawingRev = (int)temp.getJSONObject(i).getInt("DrawingRev");
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain DrawingRev");
+								}
+								try{
+									drawingRevDate = temp.getJSONObject(i).get("DrawingRevDate").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain DrawingRevDate");
+								}
+								try{
+									productionReleaseDate = temp.getJSONObject(i).get("ProductionReleaseDate").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain ProductionReleaseDate");
+								}
+								try{
+									customer = temp.getJSONObject(i).get("CustPartNumber").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
+								}
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						if(description != null){
+							table1.setValueAt(description, row, 3);
+						}
+						if(rev != -1){
+							table1.setValueAt(rev, row, 6);
+						}
+						if(drawingNumber != null){
+							table1.setValueAt(drawingNumber, row, 7);
+						}
+						if(drawingRev != -1){
+							table1.setValueAt(drawingRev, row, 8);
+						}
+						if(drawingRevDate != null){
+							table1.setValueAt(drawingRevDate, row, 9);
+						}
+						if(productionReleaseDate != null){
+							table1.setValueAt(productionReleaseDate, row, 10);	
+						}
+						if(customer != null){
+							table1.setValueAt(customer, row, 12);	
+						}
+					}					
+				}				
+			};
 			bdlHeaders();
 			myTable = new JTable(table1){	
 				public boolean isCellEditable(int row, int column){
-					return true;
+					if(column == 1){
+						return true;
+					}else{						
+						return false;
+					}
 				}
 			};
+			myTable.getModel().addTableModelListener(columnListener);
+			myTable.addMouseListener(cellListener);
 			scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 			scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
 			scrollPane.setViewportView(myTable);
 			myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);	
-			 int[] columnsWidth = {
+			int[] columnsWidth = {
 				     //  1   2   3   4    5    6    7   8   9  10  11  12  13  14  15  16  (Column Numbers)
 		                40, 50, 25, 127, 100, 100, 55, 80, 70, 90, 90, 35, 89, 80, 70, 90
 		        };
-				 int i = 0;
-			        for (int width : columnsWidth) {
+			int i = 0;
+			for (int width : columnsWidth) {
 			            TableColumn column = myTable.getColumnModel().getColumn(i++);
 			            column.setMinWidth(width);
 			            column.setPreferredWidth(width);
-			        }
+			}
 						
+			
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
 			cboCustomer.setEditable(true);
