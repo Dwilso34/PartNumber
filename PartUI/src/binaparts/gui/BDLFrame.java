@@ -547,7 +547,78 @@ public class BDLFrame extends JFrame
 			TableModelListener columnListener = new TableModelListener(){
 				public void tableChanged(TableModelEvent e) {
 					if(e.getColumn() == 4){
-						System.out.println("BOSAL PART COLUMN CHANGED!");
+						int row = e.getLastRow();
+						String description = null;
+						int rev = -1;
+						String drawingNumber = null;
+						int drawingRev = -1;
+						String drawingRevDate = null;
+						String productionReleaseDate = null;
+						String customer = null;
+						try {
+							System.out.println("Trying to Collect Data from Database");
+							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+							for(int i = 0; i < temp.length(); i++){
+								try{
+									description = temp.getJSONObject(i).getString("PartDescription").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain PartDescription");
+								}
+								try{
+									rev = (int)temp.getJSONObject(i).getInt("Rev");
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain Rev");
+								}
+								try{
+									drawingNumber = temp.getJSONObject(i).get("DrawingNumber").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain DrawingNumber");
+								}
+								try{
+								drawingRev = (int)temp.getJSONObject(i).getInt("DrawingRev");
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain DrawingRev");
+								}
+								try{
+									drawingRevDate = temp.getJSONObject(i).get("DrawingRevDate").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain DrawingRevDate");
+								}
+								try{
+									productionReleaseDate = temp.getJSONObject(i).get("ProductionReleaseDate").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain ProductionReleaseDate");
+								}
+								try{
+									customer = temp.getJSONObject(i).get("CustPartNumber").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
+								}
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						if(description != null){
+							table1.setValueAt(description, row, 3);
+						}
+						if(rev != -1){
+							table1.setValueAt(rev, row, 6);
+						}
+						if(drawingNumber != null){
+							table1.setValueAt(drawingNumber, row, 7);
+						}
+						if(drawingRev != -1){
+							table1.setValueAt(drawingRev, row, 8);
+						}
+						if(drawingRevDate != null){
+							table1.setValueAt(drawingRevDate, row, 9);
+						}
+						if(productionReleaseDate != null){
+							table1.setValueAt(productionReleaseDate, row, 10);	
+						}
+						if(customer != null){
+							table1.setValueAt(customer, row, 12);	
+						}
 					}					
 				}				
 			};
