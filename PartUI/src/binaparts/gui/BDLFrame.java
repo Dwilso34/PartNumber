@@ -289,7 +289,7 @@ public class BDLFrame extends JFrame
 			setVisible(true);
 							
 		//Images
-			ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+			final ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
 			lblBosal = new JLabel(bosal);
 			
 		//JLabels
@@ -576,11 +576,13 @@ public class BDLFrame extends JFrame
 						else if(e.getSource().equals(cboName)){							
 							if(e.getStateChange() == ItemEvent.SELECTED){
 								System.out.println(cboName.getSelectedItem().toString());
-								setName(cboName.getSelectedItem().toString());
-								System.out.println("See I put "+getName()+" into Name like you said!");
-								System.out.println(cboName.getSelectedItem().toString());
-								System.out.println("I Grabbed the Text from the Name ComboBox!");
-								System.out.println("I am about to Click the Name CheckBox!");
+								if(cboName.getSelectedItem().toString() != null){
+									setName(cboName.getSelectedItem().toString());
+									System.out.println("See I put "+getName()+" into Name like you said!");
+									System.out.println(cboName.getSelectedItem().toString());
+									System.out.println("I Grabbed the Text from the Name ComboBox!");
+									System.out.println("I am about to Click the Name CheckBox!");
+								}
 								cbxName.doClick();
 							}
 						}				
@@ -1005,6 +1007,21 @@ public class BDLFrame extends JFrame
 							cboCustomer.removeItemListener(cboGetInfo);
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboName.removeItemListener(cboGetInfo);
+							
+							String s = (String)JOptionPane.showInputDialog(
+				                    BDLframe,
+				                    "Enter a Bosal Part Number:",
+				                    "Search Dialog",
+				                    JOptionPane.PLAIN_MESSAGE,
+				                    bosal,
+				                    null,
+				                    "");
+							//If a string was returned, say so.
+							if ((s != null) && (s.length() > 0)) {
+							    setSearchText(s);
+							    return;
+							}
+							txtBosalPartNum.setText(getSearchText());
 						} catch (Exception ex) {ex.printStackTrace();}
 			            
 					}						
@@ -1204,7 +1221,7 @@ public class BDLFrame extends JFrame
 									.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(91)
-										.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(91)
 										.addComponent(txtPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
@@ -1225,7 +1242,7 @@ public class BDLFrame extends JFrame
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(110)
 								.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
-							.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(110)
 								.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
@@ -1234,7 +1251,7 @@ public class BDLFrame extends JFrame
 								.addComponent(txtVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(129)
-								.addComponent(cboName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(cboName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGap(3)
 								.addComponent(cbxCustomer, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
