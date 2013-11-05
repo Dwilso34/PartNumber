@@ -1,6 +1,5 @@
 package binaparts.gui;
 
-import java.awt.Adjustable;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,7 +11,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -37,17 +35,23 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.text.Document;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
-import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 
 import binaparts.dao.DBConnect;
+import binaparts.util.ToJSON;
 
 @SuppressWarnings("serial")
 public class BDLFrame extends JFrame 
@@ -96,6 +100,61 @@ public class BDLFrame extends JFrame
 		private String power;
 		private String searchText;		
 		
+		public String getSearchText() {
+			return searchText;
+		}
+		public void setSearchText(String searchText) {
+			this.searchText = searchText;
+		}		
+		public String getCustomer() {
+			return customer;
+		}
+		public void setCustomer(String customer) {
+			System.out.println(customer+" is being put into the customer variable");
+			this.customer = customer;
+			System.out.println(this.customer+" was put into the customer variable");
+		}
+		public String getPlatform() {
+			return platform;
+		}
+		public void setPlatform(String platform) {
+			System.out.println(platform+" is being put into the platform variable");
+			this.platform = platform;
+			System.out.println(this.platform+" was put into the platform variable");
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			System.out.println(name+" is being put into the name variable");
+			this.name = name;
+			System.out.println(this.name+" was put into the name variable");
+		}
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			System.out.println(type+" is being put into the type variable");
+			this.type = type;
+			System.out.println(this.type+" was put into the type variable");
+		}
+		public String getVolume() {
+			return volume;
+		}
+		public void setVolume(String volume) {
+			System.out.println(volume+" is being put into the volume variable");
+			this.volume = volume;
+			System.out.println(this.volume+" was put into the volume variable");
+		}
+		public String getPower() {
+			return power;
+		}
+		public void setPower(String power) {
+			System.out.println(power+" is being put into the power variable");
+			this.power = power;
+			System.out.println(this.power+" was put into the power variable");
+		}
+			
 	//temp arrays to hold comboBox info 
 		private JSONArray temp1;
 		private JSONArray temp2;
@@ -161,11 +220,13 @@ public class BDLFrame extends JFrame
 		private JButton btnDelete;
 		
 	//JTable	
+		private JSONArray bdlItems;
+		private String bdlContent;
 		private JTable myTable;
 		private DefaultTableModel table1;
 		private JScrollPane scrollPane;
-		public void bdlHeaders(){			       				
-	        try{
+		public void bdlHeaders(){
+			try{
 	            String[] columnNames = {"ITEM", "QTY", " ", "Description", 
 	            		"JDE Part-NR", "OLD Part-NR", "Rev", "DWG NR", 
 	            		"DWG Rev", "DWG Rev Date", "Prod Rel Date", "FRM",
@@ -230,62 +291,7 @@ public class BDLFrame extends JFrame
 			}catch(Exception ex){ex.printStackTrace();}
 			return engineComboBoxDefault;
 		}
-		
-		public String getSearchText() {
-			return searchText;
-		}
-		public void setSearchText(String searchText) {
-			this.searchText = searchText;
-		}		
-		public String getCustomer() {
-			return customer;
-		}
-		public void setCustomer(String customer) {
-			System.out.println(customer+" is being put into the customer variable");
-			this.customer = customer;
-			System.out.println(this.customer+" was put into the customer variable");
-		}
-		public String getPlatform() {
-			return platform;
-		}
-		public void setPlatform(String platform) {
-			System.out.println(platform+" is being put into the platform variable");
-			this.platform = platform;
-			System.out.println(this.platform+" was put into the platform variable");
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			System.out.println(name+" is being put into the name variable");
-			this.name = name;
-			System.out.println(this.name+" was put into the name variable");
-		}
-		public String getType() {
-			return type;
-		}
-		public void setType(String type) {
-			System.out.println(type+" is being put into the type variable");
-			this.type = type;
-			System.out.println(this.type+" was put into the type variable");
-		}
-		public String getVolume() {
-			return volume;
-		}
-		public void setVolume(String volume) {
-			System.out.println(volume+" is being put into the volume variable");
-			this.volume = volume;
-			System.out.println(this.volume+" was put into the volume variable");
-		}
-		public String getPower() {
-			return power;
-		}
-		public void setPower(String power) {
-			System.out.println(power+" is being put into the power variable");
-			this.power = power;
-			System.out.println(this.power+" was put into the power variable");
-		}
-			
+				
 	//JRadioButtons
 		private JRadioButton rbtnCreateBDL;
 		private JRadioButton rbtnSearchBDL;
@@ -521,14 +527,10 @@ public class BDLFrame extends JFrame
 			});
 		
 		//JTable			
-			MouseAdapter cellListener = new MouseAdapter(){
+			final MouseAdapter mouseClickListener = new MouseAdapter(){
 				public void mouseClicked(MouseEvent e) {
 					if(e.getClickCount() == 2){
-						JTable table = ((JTable)e.getSource());
-						int row = table.getSelectedRow();
-						int column = table.getSelectedColumn();
-						System.out.println("row:"+row+" column: "+column);
-						if(column == 4){
+						if(e.getSource() == txtBosalPartNum){
 							String s = (String)JOptionPane.showInputDialog(
 				                    BDLframe,
 				                    "Enter a Bosal Part Number:",
@@ -540,13 +542,33 @@ public class BDLFrame extends JFrame
 							//If a string was returned, say so.
 							if ((s != null) && (s.length() > 0)) {
 							    setSearchText(s);
+							}	
+							txtBosalPartNum.setText(getSearchText());
+						}else if(e.getSource() == myTable){
+							JTable table = ((JTable)e.getSource());
+							int row = table.getSelectedRow();
+							int column = table.getSelectedColumn();
+							System.out.println("row:"+row+" column: "+column);
+							if(column == 4){
+								String s = (String)JOptionPane.showInputDialog(
+					                    BDLframe,
+					                    "Enter a Bosal Part Number:",
+					                    "Search Dialog",
+					                    JOptionPane.PLAIN_MESSAGE,
+					                    bosal,
+					                    null,
+					                    "");
+								//If a string was returned, say so.
+								if ((s != null) && (s.length() > 0)) {
+								    setSearchText(s);
+								}
+								table.setValueAt(getSearchText(), row, column);
 							}
-							table.setValueAt(getSearchText(), row, column);
 						}
 					}					
 				}
 			};
-			TableModelListener columnListener = new TableModelListener(){
+			final TableModelListener columnListener = new TableModelListener(){
 				public void tableChanged(TableModelEvent e) {
 					if(e.getColumn() == 4){
 						int row = e.getLastRow();
@@ -634,8 +656,6 @@ public class BDLFrame extends JFrame
 					}
 				}
 			};
-			myTable.getModel().addTableModelListener(columnListener);
-			myTable.addMouseListener(cellListener);
 			scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 			scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
 			scrollPane.setViewportView(myTable);
@@ -864,6 +884,86 @@ public class BDLFrame extends JFrame
 			});		
 			
 		//JTextFields
+			DocumentListener documentListener = new DocumentListener() {
+			      public void changedUpdate(DocumentEvent documentEvent) {
+			        printIt(documentEvent);
+			      }
+			      public void insertUpdate(DocumentEvent documentEvent) {
+			        printIt(documentEvent);
+			        String customer = null;
+					String platform = null;
+					String custPartNum = null;
+					String description = null;
+			        try {
+			        	JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+			        	for(int i = 0; i < temp.length(); i++){
+			        		try{
+								platform = temp.getJSONObject(i).getString("Program").toString();								
+								JSONArray temp2 = con.queryDatabase("programs", "Program", platform);
+								for(int j = 0; j < temp2.length(); j++){
+					        		try{
+					        			customer = temp.getJSONObject(j).get("Customer").toString();
+					        		}catch(Exception ex){
+					        			System.out.println("Program " + platform + " does not contain Customer");
+					        		}
+					        	}
+							}catch(Exception ex){
+								System.out.println("Part " + getSearchText() + " does not contain Program");
+							}
+			        		try{
+								custPartNum = temp.getJSONObject(i).getString("CustPartNumber").toString();
+							}catch(Exception ex){
+								System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
+							}
+			        		try{
+								description = temp.getJSONObject(i).getString("PartDescription").toString();
+							}catch(Exception ex){
+								System.out.println("Part " + getSearchText() + " does not contain PartDescription");
+							}
+						}						
+					} catch (Exception ex) {ex.printStackTrace();}
+			        if(custPartNum != null){
+						txtCustomerPartNum.setText(custPartNum);
+					}
+			        if(description != null){
+						txtDescription.setText(description);
+					}
+			        if(rbtnCreateBDL.isSelected() == true || rbtnUpdateBDL.isSelected() == true){
+				        if(customer != null){
+							cboCustomer.setSelectedItem(customer);
+						}
+				        if(platform != null){
+							cboPlatform.setSelectedItem(platform);
+						}
+			        }else if(rbtnSearchBDL.isSelected() == true){
+			        	if(customer != null){
+							txtCustomer.setText(customer);
+						}	
+			        	if(platform != null){
+							txtPlatform.setText(platform);
+						}	
+			        }
+			        
+			      }
+			      public void removeUpdate(DocumentEvent documentEvent) {
+			        printIt(documentEvent);
+			      }
+			      private void printIt(DocumentEvent documentEvent) {
+			        DocumentEvent.EventType type = documentEvent.getType();
+			        String typeString = null;
+			        if (type.equals(DocumentEvent.EventType.CHANGE)) {
+			          typeString = "Change";
+			        }  else if (type.equals(DocumentEvent.EventType.INSERT)) {
+			          typeString = "Insert";
+			        }  else if (type.equals(DocumentEvent.EventType.REMOVE)) {
+			          typeString = "Remove";
+			        }
+			        System.out.print("Type : " + typeString);
+			        Document source = documentEvent.getDocument();
+			        int length = source.getLength();
+			        System.out.println("Length: " + length);
+			     }
+			};
 			txtCustomer = new JTextField();
 			txtCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustomer.setForeground(Color.BLACK);
@@ -885,6 +985,8 @@ public class BDLFrame extends JFrame
 			txtBosalPartNum = new JTextField();
 			txtBosalPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtBosalPartNum.setForeground(Color.BLACK);
+			txtBosalPartNum.addMouseListener(mouseClickListener);
+			txtBosalPartNum.getDocument().addDocumentListener(documentListener);
 			txtCustomerPartNum = new JTextField();
 			txtCustomerPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustomerPartNum.setForeground(Color.BLACK);
@@ -1028,8 +1130,7 @@ public class BDLFrame extends JFrame
 			rbtnCreateBDL.setBackground(new Color(105, 105, 105));
 			rbtnCreateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnCreateBDL.setForeground(Color.BLACK);
-			rbtnCreateBDL.addActionListener(new ActionListener(){
-				
+			rbtnCreateBDL.addActionListener(new ActionListener(){				
 				public void actionPerformed(ActionEvent e)
 				{		
 					if (e.getSource() == rbtnCreateBDL){
@@ -1062,6 +1163,8 @@ public class BDLFrame extends JFrame
 							cboCustomer.setVisible(true);
 							cboCustomer.setModel(resetCustomerComboBox());
 							cboCustomer.setSelectedIndex(-1);
+							btnAdd.setVisible(true);
+							btnDelete.setVisible(true);
 							txtPlatform.setText("");
 							txtPlatform.setVisible(false);
 							cbxPlatform.setVisible(true);
@@ -1077,6 +1180,8 @@ public class BDLFrame extends JFrame
 							cboCustomer.addItemListener(cboGetInfo);
 							cboPlatform.addItemListener(cboGetInfo);
 							cboName.addItemListener(cboGetInfo);
+							myTable.getModel().addTableModelListener(columnListener);
+							myTable.addMouseListener(mouseClickListener);
 						}catch (Exception ex){ex.printStackTrace();}
 			            
 					}						
@@ -1129,8 +1234,10 @@ public class BDLFrame extends JFrame
 							cboCustomer.removeItemListener(cboGetInfo);
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboName.removeItemListener(cboGetInfo);
+							myTable.getModel().removeTableModelListener(columnListener);
+							myTable.removeMouseListener(mouseClickListener);
 							
-							String s = (String)JOptionPane.showInputDialog(
+							/*String s = (String)JOptionPane.showInputDialog(
 				                    BDLframe,
 				                    "Enter a Bosal Part Number:",
 				                    "Search Dialog",
@@ -1144,7 +1251,7 @@ public class BDLFrame extends JFrame
 							    final String findBosalText = txtBosalPartNum.getText();
 							   
 								txtBosalPartNum.setText(getSearchText());
-								JSONObject temp = (con.queryDatabase("bosal parts", "BosalPartNumber", findBosalText)).getJSONObject(0);
+								JSONArray temp = (con.queryDatabase("bosal parts", "BosalPartNumber", findBosalText));
 								
 							//Sets Customer Part Number When Bosal Number is Searched
 								String cpartText= null;
@@ -1178,7 +1285,7 @@ public class BDLFrame extends JFrame
 								txtCustomer.setText(customerText);
 								
 							    return;
-							}
+							}*/
 							
 						} catch (Exception ex) {ex.printStackTrace();}
 			            
@@ -1194,6 +1301,19 @@ public class BDLFrame extends JFrame
 				public void actionPerformed(ActionEvent e)
 				{		
 					if (e.getSource() == rbtnUpdateBDL){
+						TableModel table = myTable.getModel();
+						int rowCount = table.getRowCount();
+						String[] itm = new String[rowCount];
+						String[] qty = new String[rowCount];
+						String s = null;
+						for(int i = 0; i < rowCount; i++){
+							itm[i] = table.getValueAt(i, 4).toString();
+							qty[i] = table.getValueAt(i, 1).toString();
+						}
+						for(int i = 0; i < rowCount; i++){
+							s = "{Item"+(i+1)+":"+itm[i]+","+"Qty"+(i+1)+":"+qty[i]+"}";
+							System.out.println(s);
+						}
 						
 					}
 				}

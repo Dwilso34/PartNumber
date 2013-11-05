@@ -820,6 +820,77 @@ public class DBConnect {
 			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
+	//inserts a new row into `breakdown lists info` to create a BDL
+	public void insertBDLInfo(String bdlNumber, int Rev, String RevDate, String ReleaseDate) throws Exception{	
+		try{
+			String usersname = getUsersName();
+			Timestamp timestamp = getTimestamp();
+			getDBConnection();
+			pst = con.prepareStatement("INSERT INTO `breakdown lists info` "
+					+ "(BreakdownListNumber, "
+					+ "Rev, "
+					+ "RevDate, "
+					+ "ReleaseDate, "
+					+ "CreatedBy, "
+					+ "Created, "
+					+ "UpdatedBy, "
+					+ "Updated) "
+					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+			pst.setString(1, bdlNumber);
+			pst.setInt(2, Rev);
+			pst.setString(3, RevDate);
+			pst.setString(4, ReleaseDate);
+			pst.setString(5, usersname);
+			pst.setTimestamp(6, timestamp);
+			pst.setString(7, usersname);
+			pst.setTimestamp(8, timestamp);
+			pst.executeUpdate();
+			pst.close();
+			con.close();
+			System.out.println("New BDL Info Created Successfully");
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
+	}
+	//inserts a new row into `breakdown lists info` to create a BDL
+	public void insertNewBDL(String bdlNumber, JSONArray bdl) throws Exception{	
+		try{
+			String[]item;
+			String[] qty;
+			String usersname = getUsersName();
+			Timestamp timestamp = getTimestamp();
+			getDBConnection();
+			pst = con.prepareStatement("INSERT INTO `breakdown lists info` "
+					+ "(BreakdownListNumber, "
+					+ "Rev, "
+					+ "RevDate, "
+					+ "ReleaseDate, "
+					+ "CreatedBy, "
+					+ "Created, "
+					+ "UpdatedBy, "
+					+ "Updated) "
+					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+			pst.setString(1, bdlNumber);
+			pst.setString(5, usersname);
+			pst.setTimestamp(6, timestamp);
+			pst.setString(7, usersname);
+			pst.setTimestamp(8, timestamp);
+			pst.executeUpdate();
+			pst.close();
+			con.close();
+			System.out.println("New BDL Info Created Successfully");
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
+	}
 	//Returns JSONArray of Experimental Part Numbers (to be used prior to Auto-Increment for conversion)
 	public JSONArray queryReturnAllExpParts() throws Exception{
 		
