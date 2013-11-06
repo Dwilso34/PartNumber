@@ -2,8 +2,11 @@ package binaparts.gui;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +14,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -151,6 +159,120 @@ public class BDLFrame extends JFrame
 			this.power = power;
 			System.out.println(this.power+" was put into the power variable");
 		}
+		
+		
+
+	    public void printComponent(Component comp) {
+	        PrinterJob pj = PrinterJob.getPrinterJob();
+	        pj.setJobName(" Print Component ");
+
+	        pj.setPrintable(new ComponentPrintable(comp));
+
+	        if (!pj.printDialog()) {
+	            return;
+	        }
+	        try {
+	            pj.print();
+	        } catch (PrinterException ex) {
+	            System.out.println(ex);
+	        }
+	    }
+
+	    public class ComponentPrintable implements Printable {
+
+	        private Component comp;
+
+	        private ComponentPrintable(Component comp) {
+	            this.comp = comp;
+	        }
+
+	        @Override
+	        public int print(Graphics g, PageFormat pf, int pageNumber)
+	                throws PrinterException {
+	            // TODO Auto-generated method stub
+	            if (pageNumber > 0) {
+	                return Printable.NO_SUCH_PAGE;
+	            }
+
+	            // Get the preferred size ofthe component...
+	            Dimension compSize = comp.getPreferredSize();
+	            // Make sure we size to the preferred size
+	            comp.setSize(compSize);
+	            // Get the the print size
+	            Dimension printSize = new Dimension();
+	            printSize.setSize(pf.getImageableWidth(), pf.getImageableHeight());
+
+	            // Calculate the scale factor
+	            double scaleFactor = getScaleFactorToFit(compSize, printSize);
+	            // Don't want to scale up, only want to scale down
+	            if (scaleFactor > 1d) {
+	                scaleFactor = 1d;
+	            }
+
+	            // Calculate the scaled size...
+	            double scaleWidth = compSize.width * scaleFactor;
+	            double scaleHeight = compSize.height * scaleFactor;
+
+	            // Create a clone of the graphics context.  This allows us to manipulate
+	            // the graphics context without begin worried about what effects
+	            // it might have once we're finished
+	            Graphics2D g2 = (Graphics2D) g.create();
+	            // Calculate the x/y position of the component, this will center
+	            // the result on the page if it can
+	            double x = ((pf.getImageableWidth() - scaleWidth) / 2d) + pf.getImageableX();
+	            double y = ((pf.getImageableHeight() - scaleHeight) / 2d) + pf.getImageableY();
+	            // Create a new AffineTransformation
+	            AffineTransform at = new AffineTransform();
+	            // Translate the offset to out "center" of page
+	            at.translate(x, y);
+	            // Set the scaling
+	            at.scale(scaleFactor, scaleFactor);
+	            // Apply the transformation
+	            g2.transform(at);
+	            // Print the component
+	            comp.printAll(g2);
+	            // Dispose of the graphics context, freeing up memory and discarding
+	            // our changes
+	            g2.dispose();
+
+	            comp.revalidate();
+	            return Printable.PAGE_EXISTS;
+	        }
+	    }
+
+	    public double getScaleFactorToFit(Dimension original, Dimension toFit) {
+
+	        double dScale = 1d;
+
+	        if (original != null && toFit != null) {
+
+	            double dScaleWidth = getScaleFactor(original.width, toFit.width);
+	            double dScaleHeight = getScaleFactor(original.height, toFit.height);
+
+	            dScale = Math.min(dScaleHeight, dScaleWidth);
+
+	        }
+
+	        return dScale;
+
+	    }
+
+	    public double getScaleFactor(int iMasterSize, int iTargetSize) {
+
+	        double dScale = 1;
+	        if (iMasterSize > iTargetSize) {
+
+	            dScale = (double) iTargetSize / (double) iMasterSize;
+
+	        } else {
+
+	            dScale = (double) iTargetSize / (double) iMasterSize;
+
+	        }
+
+	        return dScale;
+
+	    }
 			
 	//temp arrays to hold comboBox info 
 		private JSONArray temp1;
@@ -216,6 +338,7 @@ public class BDLFrame extends JFrame
 		private JButton btnAdd;
 		private JButton btnDelete;
 		private JButton btnSave;
+		private JButton btnPrint;
 		
 	//JTable	
 		private JSONArray bdlItems;
@@ -297,7 +420,7 @@ public class BDLFrame extends JFrame
 		
 		JPanel contentPane;
 		
-		public BDLMain(JPanel pnlMain) 	
+		public BDLMain(final JPanel pnlMain) 	
 		{	
 			setBackground(new Color(105, 105, 105));
 			contentPane = pnlMain;
@@ -563,6 +686,19 @@ public class BDLFrame extends JFrame
 				if (e.getSource() == btnSave)
 				{
 
+				}
+			}
+		});
+		
+		ImageIcon print = new ImageIcon(getClass().getResource("/images/print.jpg"));
+		btnPrint = new JButton(print);
+		btnPrint.setBounds(900, 30, 103, 34);
+		btnPrint.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() == btnPrint)
+				{
+					printComponent(pnlMain);
 				}
 			}
 		});
@@ -1365,7 +1501,7 @@ public class BDLFrame extends JFrame
 				}});
 			
 			rbtnUpdateBDL = new JRadioButton("Update BDL");
-			rbtnUpdateBDL.setBounds(444, 73, 111, 27);
+			rbtnUpdateBDL.setBounds(350, 95, 111, 27);
 			rbtnUpdateBDL.setBackground(new Color(105, 105, 105));
 			rbtnUpdateBDL.setForeground(Color.BLACK);
 			rbtnUpdateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -1467,6 +1603,7 @@ public class BDLFrame extends JFrame
 			add(lblBOSAL);
 			add(scrollPane);
 			add(btnSave);
+			add(btnPrint);
 			}
 		
 }
