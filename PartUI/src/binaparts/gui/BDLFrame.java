@@ -310,7 +310,7 @@ public class BDLFrame extends JFrame
 			lblBosal.setBounds(10, 11, 194, 56);
 			
 		//JLabels
-			lblBDL = new JLabel("Breakdown List Manager");
+			lblBDL = new JLabel("Breakdown List");
 			lblBDL.setBounds(214, 26, 482, 40);
 			lblBDL.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
 			lblBDL.setForeground(Color.BLACK);
@@ -507,7 +507,7 @@ public class BDLFrame extends JFrame
 			lblCUSTOMER.setForeground(Color.BLACK);
 			
 		//JButtons
-			btnAdd = new JButton("ADD");
+			btnAdd = new JButton("Add");
 			btnAdd.setBounds(30, 289, 75, 20);
 			btnAdd.addActionListener(new ActionListener() {
 
@@ -520,7 +520,7 @@ public class BDLFrame extends JFrame
 					}
 				}				
 			});
-			btnDelete = new JButton("DELETE");
+			btnDelete = new JButton("Delete");
 			btnDelete.setBounds(115, 289, 75, 20);
 			btnDelete.addActionListener(new ActionListener() {
 
@@ -566,8 +566,6 @@ public class BDLFrame extends JFrame
 				}
 			}
 		});
-				
-				
 		
 		//JTable			
 			final MouseAdapter mouseClickListener = new MouseAdapter(){
