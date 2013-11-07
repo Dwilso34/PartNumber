@@ -16,6 +16,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.print.PageFormat;
+import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
@@ -198,6 +199,7 @@ public class BDLFrame extends JFrame
 	                throws PrinterException {
 	            // TODO Auto-generated method stub
 	            if (pageNumber > 0) {
+	            	pf.setOrientation(PageFormat.PORTRAIT);
 	                return Printable.NO_SUCH_PAGE;
 	            }
 
@@ -208,7 +210,7 @@ public class BDLFrame extends JFrame
 	            // Get the the print size
 	            Dimension printSize = new Dimension();
 	            printSize.setSize(pf.getImageableWidth(), pf.getImageableHeight());
-
+                System.out.println(pf.getImageableWidth() + " " + pf.getImageableHeight());
 	            // Calculate the scale factor
 	            double scaleFactor = getScaleFactorToFit(compSize, printSize);
 	            // Don't want to scale up, only want to scale down
@@ -219,15 +221,16 @@ public class BDLFrame extends JFrame
 	            // Calculate the scaled size...
 	            double scaleWidth = compSize.width * scaleFactor;
 	            double scaleHeight = compSize.height * scaleFactor;
-
+	            
 	            // Create a clone of the graphics context.  This allows us to manipulate
 	            // the graphics context without begin worried about what effects
 	            // it might have once we're finished
 	            Graphics2D g2 = (Graphics2D) g.create();
 	            // Calculate the x/y position of the component, this will center
 	            // the result on the page if it can
-	            double x = ((pf.getImageableWidth() - scaleWidth) / 2d) + pf.getImageableX();
-	            double y = ((pf.getImageableHeight() - scaleHeight) / 2d) + pf.getImageableY();
+	            double x = ((pf.getImageableWidth() - scaleWidth) / 128d) + pf.getImageableX();
+	            double y = ((pf.getImageableHeight() - scaleHeight) / 32d) + pf.getImageableY();
+	            System.out.println(x + " " + y);
 	            // Create a new AffineTransformation
 	            AffineTransform at = new AffineTransform();
 	            // Translate the offset to out "center" of page
@@ -747,10 +750,10 @@ public class BDLFrame extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnPrint)
 				{
-					printComponent(pnlMain);
-				}
-			}
-		});
+					//printComponent(pnlMain);
+					
+					
+		}}});
 		
 		//JTable			
 			final MouseAdapter mouseClickListener = new MouseAdapter(){
@@ -1500,7 +1503,7 @@ public class BDLFrame extends JFrame
 				}});
 			
 			rbtnUpdateBDL = new JRadioButton("Update BDL");
-			rbtnUpdateBDL.setBounds(350, 95, 111, 27);
+			rbtnUpdateBDL.setBounds(330, 95, 111, 27);
 			rbtnUpdateBDL.setBackground(new Color(105, 105, 105));
 			rbtnUpdateBDL.setForeground(Color.BLACK);
 			rbtnUpdateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
