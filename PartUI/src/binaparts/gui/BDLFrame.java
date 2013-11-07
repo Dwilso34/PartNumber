@@ -54,6 +54,13 @@ import javax.swing.text.Document;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.w3c.dom.UserDataHandler;
+
+import com.fasterxml.jackson.*;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import binaparts.dao.DBConnect;
 import binaparts.util.ToJSON;
@@ -361,9 +368,10 @@ public class BDLFrame extends JFrame
 			int rows = table1.getRowCount();
 			for(int i = 0; i < rows; i++){
 				table1.setValueAt(i+1, i, 0);
+				table1.setValueAt(0, i, 1);
 			}
 		}	
-	
+		
 	//JCheckBoxes
 		private JCheckBox cbxCustomer;
 		private JCheckBox cbxPlatform;
@@ -685,7 +693,48 @@ public class BDLFrame extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnSave)
 				{
-
+					if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
+						JOptionPane.showMessageDialog(BDLframe,
+							    "Please Enter a Bosal Part Number",
+							    "Invalid Entry",
+							    JOptionPane.ERROR_MESSAGE);					
+					} else {
+						TableModel table = myTable.getModel();
+						int rowCount = table.getRowCount();
+						if(rowCount == 0){
+							JOptionPane.showMessageDialog(BDLframe,
+								    "No Items were added to this breakdown list",
+								    "Invalid Entry",
+								    JOptionPane.ERROR_MESSAGE);	
+						} else {
+							String[] itm = new String[rowCount];
+							String[] qty = new String[rowCount];
+							String s = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\",";
+							for(int i = 0; i < rowCount; i++){
+								itm[i] = table.getValueAt(i, 4).toString();
+								if(table.getValueAt(i,1).toString().equals("")){
+									qty[i] = "0";
+								} else {
+									qty[i] = table.getValueAt(i, 1).toString();
+								}
+							}
+							for(int i = 0; i < rowCount; i++){
+								s = s+"\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i];
+								if (i < (rowCount - 1)){
+									s = s + ",";
+								}
+							}
+							s = s + "}]";
+							System.out.println(s);	
+							JSONArray temp;
+							try {
+								temp = new JSONArray(s);
+								System.out.println(temp);
+							} catch (JSONException ex) {
+								ex.printStackTrace();
+							}
+						}
+					}
 				}
 			}
 		});
@@ -759,6 +808,7 @@ public class BDLFrame extends JFrame
 						try {
 							System.out.println("Trying to Collect Data from Database");
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+							System.out.println(temp);
 							for(int i = 0; i < temp.length(); i++){
 								try{
 									description = temp.getJSONObject(i).getString("PartDescription").toString();
@@ -1458,23 +1508,7 @@ public class BDLFrame extends JFrame
 				
 				public void actionPerformed(ActionEvent e)
 				{		
-					if (e.getSource() == rbtnUpdateBDL){
-						TableModel table = myTable.getModel();
-						int rowCount = table.getRowCount();
-						String[] itm = new String[rowCount];
-						String[] qty = new String[rowCount];
-						String s = "[";
-						for(int i = 0; i < rowCount; i++){
-							itm[i] = table.getValueAt(i, 4).toString();
-							qty[i] = table.getValueAt(i, 1).toString();
-						}
-						for(int i = 0; i < rowCount; i++){
-							s = s+"{Item"+(i+1)+":"+itm[i]+","+"Qty"+(i+1)+":"+qty[i]+"}";
-							System.out.println(s);
-						}
-						s = s + "]";
-						System.out.println(s);
-					}
+					
 				}
 			});
 			
