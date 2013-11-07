@@ -2,8 +2,11 @@ package binaparts.gui;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +14,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -71,7 +79,7 @@ public class BDLFrame extends JFrame
 		int width = screenSize.width;
 		BDLframe.setResizable(true);
 		BDLframe.setSize(width/2, height/2);
-		BDLframe.setSize(1300, 630);
+		BDLframe.setSize(1285, 610);
 		BDLframe.setContentPane(contentPane);
 		BDLframe.setVisible(true);	
 		try{
@@ -151,6 +159,120 @@ public class BDLFrame extends JFrame
 			this.power = power;
 			System.out.println(this.power+" was put into the power variable");
 		}
+		
+		
+
+	    public void printComponent(Component comp) {
+	        PrinterJob pj = PrinterJob.getPrinterJob();
+	        pj.setJobName(" Print Component ");
+
+	        pj.setPrintable(new ComponentPrintable(comp));
+
+	        if (!pj.printDialog()) {
+	            return;
+	        }
+	        try {
+	            pj.print();
+	        } catch (PrinterException ex) {
+	            System.out.println(ex);
+	        }
+	    }
+
+	    public class ComponentPrintable implements Printable {
+
+	        private Component comp;
+
+	        private ComponentPrintable(Component comp) {
+	            this.comp = comp;
+	        }
+
+	        @Override
+	        public int print(Graphics g, PageFormat pf, int pageNumber)
+	                throws PrinterException {
+	            // TODO Auto-generated method stub
+	            if (pageNumber > 0) {
+	                return Printable.NO_SUCH_PAGE;
+	            }
+
+	            // Get the preferred size ofthe component...
+	            Dimension compSize = comp.getPreferredSize();
+	            // Make sure we size to the preferred size
+	            comp.setSize(compSize);
+	            // Get the the print size
+	            Dimension printSize = new Dimension();
+	            printSize.setSize(pf.getImageableWidth(), pf.getImageableHeight());
+
+	            // Calculate the scale factor
+	            double scaleFactor = getScaleFactorToFit(compSize, printSize);
+	            // Don't want to scale up, only want to scale down
+	            if (scaleFactor > 1d) {
+	                scaleFactor = 1d;
+	            }
+
+	            // Calculate the scaled size...
+	            double scaleWidth = compSize.width * scaleFactor;
+	            double scaleHeight = compSize.height * scaleFactor;
+
+	            // Create a clone of the graphics context.  This allows us to manipulate
+	            // the graphics context without begin worried about what effects
+	            // it might have once we're finished
+	            Graphics2D g2 = (Graphics2D) g.create();
+	            // Calculate the x/y position of the component, this will center
+	            // the result on the page if it can
+	            double x = ((pf.getImageableWidth() - scaleWidth) / 2d) + pf.getImageableX();
+	            double y = ((pf.getImageableHeight() - scaleHeight) / 2d) + pf.getImageableY();
+	            // Create a new AffineTransformation
+	            AffineTransform at = new AffineTransform();
+	            // Translate the offset to out "center" of page
+	            at.translate(x, y);
+	            // Set the scaling
+	            at.scale(scaleFactor, scaleFactor);
+	            // Apply the transformation
+	            g2.transform(at);
+	            // Print the component
+	            comp.printAll(g2);
+	            // Dispose of the graphics context, freeing up memory and discarding
+	            // our changes
+	            g2.dispose();
+
+	            comp.revalidate();
+	            return Printable.PAGE_EXISTS;
+	        }
+	    }
+
+	    public double getScaleFactorToFit(Dimension original, Dimension toFit) {
+
+	        double dScale = 1d;
+
+	        if (original != null && toFit != null) {
+
+	            double dScaleWidth = getScaleFactor(original.width, toFit.width);
+	            double dScaleHeight = getScaleFactor(original.height, toFit.height);
+
+	            dScale = Math.min(dScaleHeight, dScaleWidth);
+
+	        }
+
+	        return dScale;
+
+	    }
+
+	    public double getScaleFactor(int iMasterSize, int iTargetSize) {
+
+	        double dScale = 1;
+	        if (iMasterSize > iTargetSize) {
+
+	            dScale = (double) iTargetSize / (double) iMasterSize;
+
+	        } else {
+
+	            dScale = (double) iTargetSize / (double) iMasterSize;
+
+	        }
+
+	        return dScale;
+
+	    }
 			
 	//temp arrays to hold comboBox info 
 		private JSONArray temp1;
@@ -215,6 +337,8 @@ public class BDLFrame extends JFrame
 	//JButton
 		private JButton btnAdd;
 		private JButton btnDelete;
+		private JButton btnSave;
+		private JButton btnPrint;
 		
 	//JTable	
 		private JSONArray bdlItems;
@@ -296,7 +420,7 @@ public class BDLFrame extends JFrame
 		
 		JPanel contentPane;
 		
-		public BDLMain(JPanel pnlMain) 	
+		public BDLMain(final JPanel pnlMain) 	
 		{	
 			setBackground(new Color(105, 105, 105));
 			contentPane = pnlMain;
@@ -306,12 +430,15 @@ public class BDLFrame extends JFrame
 		//Images
 			final ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
 			lblBosal = new JLabel(bosal);
+			lblBosal.setBounds(10, 11, 194, 56);
 			
 		//JLabels
-			lblBDL = new JLabel("Breakdown List Manager");
+			lblBDL = new JLabel("Breakdown List");
+			lblBDL.setBounds(214, 26, 482, 40);
 			lblBDL.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
 			lblBDL.setForeground(Color.BLACK);
 			lblCustomer = new JLabel("Customer");
+			lblCustomer.setBounds(30, 82, 128, 92);
 			lblCustomer.setHorizontalAlignment(SwingConstants.CENTER);
 			lblCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblCustomer.setBackground(new Color(150, 150, 150));
@@ -319,6 +446,7 @@ public class BDLFrame extends JFrame
 			lblCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCustomer.setForeground(Color.BLACK);
 			lblPlatform = new JLabel("Platform");
+			lblPlatform.setBounds(30, 173, 128, 20);
 			lblPlatform.setHorizontalAlignment(SwingConstants.CENTER);
 			lblPlatform.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblPlatform.setBackground(new Color(150, 150, 150));
@@ -326,30 +454,35 @@ public class BDLFrame extends JFrame
 			lblPlatform.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblPlatform.setForeground(Color.BLACK);
 			lblType = new JLabel("Type:");
+			lblType.setBounds(76, 192, 82, 20);
 			lblType.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblType.setBackground(new Color(150, 150, 150));
 			lblType.setOpaque(true);
 			lblType.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblType.setForeground(Color.BLACK);
 			lblName = new JLabel("Name:");
+			lblName.setBounds(76, 211, 82, 20);
 			lblName.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblName.setBackground(new Color(150, 150, 150));
 			lblName.setOpaque(true);
 			lblName.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblName.setForeground(Color.BLACK);
 			lblVolume = new JLabel("Volume (L):");
+			lblVolume.setBounds(76, 230, 82, 20);
 			lblVolume.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblVolume.setBackground(new Color(150, 150, 150));
 			lblVolume.setOpaque(true);
 			lblVolume.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblVolume.setForeground(Color.BLACK);
 			lblPower = new JLabel("Power (kW):");
+			lblPower.setBounds(76, 249, 82, 20);
 			lblPower.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblPower.setBackground(new Color(150, 150, 150));
 			lblPower.setOpaque(true);
 			lblPower.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblPower.setForeground(Color.BLACK);
 			lblEngine = new JLabel("Engine");
+			lblEngine.setBounds(30, 192, 47, 77);
 			lblEngine.setHorizontalAlignment(SwingConstants.CENTER);
 			lblEngine.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblEngine.setBackground(new Color(150, 150, 150));
@@ -357,6 +490,7 @@ public class BDLFrame extends JFrame
 			lblEngine.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblEngine.setForeground(Color.BLACK);
 			lblBosalPartNum = new JLabel("BOSAL PART NR");
+			lblBosalPartNum.setBounds(444, 133, 142, 20);
 			lblBosalPartNum.setHorizontalAlignment(SwingConstants.CENTER);
 			lblBosalPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblBosalPartNum.setBackground(new Color(150, 150, 150));
@@ -364,6 +498,7 @@ public class BDLFrame extends JFrame
 			lblBosalPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblBosalPartNum.setForeground(Color.BLACK);
 			lblCustomerPartNum = new JLabel("CUSTOMER PART NR");
+			lblCustomerPartNum.setBounds(585, 133, 166, 20);
 			lblCustomerPartNum.setHorizontalAlignment(SwingConstants.CENTER);
 			lblCustomerPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblCustomerPartNum.setBackground(new Color(150, 150, 150));
@@ -371,6 +506,7 @@ public class BDLFrame extends JFrame
 			lblCustomerPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCustomerPartNum.setForeground(Color.BLACK);
 			lblIMDS = new JLabel("IMDS");
+			lblIMDS.setBounds(750, 133, 98, 20);
 			lblIMDS.setHorizontalAlignment(SwingConstants.CENTER);
 			lblIMDS.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblIMDS.setBackground(new Color(150, 150, 150));
@@ -378,6 +514,7 @@ public class BDLFrame extends JFrame
 			lblIMDS.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblIMDS.setForeground(Color.BLACK);
 			lblDescription = new JLabel("DESCRIPTION");
+			lblDescription.setBounds(444, 171, 142, 20);
 			lblDescription.setHorizontalAlignment(SwingConstants.CENTER);
 			lblDescription.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblDescription.setBackground(new Color(150, 150, 150));
@@ -385,6 +522,7 @@ public class BDLFrame extends JFrame
 			lblDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblDescription.setForeground(Color.BLACK);
 			lblSilencer = new JLabel("Silencer");
+			lblSilencer.setBounds(444, 190, 66, 58);
 			lblSilencer.setHorizontalAlignment(SwingConstants.CENTER);
 			lblSilencer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblSilencer.setBackground(new Color(150, 150, 150));
@@ -392,24 +530,28 @@ public class BDLFrame extends JFrame
 			lblSilencer.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblSilencer.setForeground(Color.BLACK);
 			lblVolume2 = new JLabel("Volume (L):");
+			lblVolume2.setBounds(509, 190, 77, 20);
 			lblVolume2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblVolume2.setBackground(new Color(150, 150, 150));
 			lblVolume2.setOpaque(true);
 			lblVolume2.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblVolume2.setForeground(Color.BLACK);
 			lblLength = new JLabel("Length:");
+			lblLength.setBounds(509, 209, 77, 20);
 			lblLength.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblLength.setBackground(new Color(150, 150, 150));
 			lblLength.setOpaque(true);
 			lblLength.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblLength.setForeground(Color.BLACK);
 			lblSection = new JLabel("Section:");
+			lblSection.setBounds(509, 228, 77, 20);
 			lblSection.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblSection.setBackground(new Color(150, 150, 150));
 			lblSection.setOpaque(true);
 			lblSection.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblSection.setForeground(Color.BLACK);
 			lblIssuedBy = new JLabel("Issued By:");
+			lblIssuedBy.setBounds(669, 95, 82, 20);
 			lblIssuedBy.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblIssuedBy.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblIssuedBy.setBackground(new Color(150, 150, 150));
@@ -417,60 +559,70 @@ public class BDLFrame extends JFrame
 			lblIssuedBy.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblIssuedBy.setForeground(Color.BLACK);
 			lblPage = new JLabel("Page:");
+			lblPage.setBounds(1064, 82, 77, 20);
 			lblPage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblPage.setBackground(new Color(150, 150, 150));
 			lblPage.setOpaque(true);
 			lblPage.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblPage.setForeground(Color.BLACK);
 			lblREV = new JLabel("REV:");
+			lblREV.setBounds(1064, 101, 77, 20);
 			lblREV.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblREV.setBackground(new Color(150, 150, 150));
 			lblREV.setOpaque(true);
 			lblREV.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblREV.setForeground(Color.BLACK);
 			lblRelDate = new JLabel("Rel Date:");
+			lblRelDate.setBounds(1064, 120, 77, 20);
 			lblRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelDate.setBackground(new Color(150, 150, 150));
 			lblRelDate.setOpaque(true);
 			lblRelDate.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelDate.setForeground(Color.BLACK);
 			lblREVDate = new JLabel("REV Date:");
+			lblREVDate.setBounds(1064, 139, 77, 20);
 			lblREVDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblREVDate.setBackground(new Color(150, 150, 150));
 			lblREVDate.setOpaque(true);
 			lblREVDate.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblREVDate.setForeground(Color.BLACK);
 			lblProduction = new JLabel("Production:");
+			lblProduction.setBounds(1077, 170, 163, 20);
 			lblProduction.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblProduction.setBackground(new Color(150, 150, 150));
 			lblProduction.setOpaque(true);
 			lblProduction.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblProduction.setForeground(Color.BLACK);
 			lblRelPlant1 = new JLabel("Rel Plant 1:");
+			lblRelPlant1.setBounds(1050, 220, 91, 20);
 			lblRelPlant1.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelPlant1.setBackground(new Color(150, 150, 150));
 			lblRelPlant1.setOpaque(true);
 			lblRelPlant1.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelPlant1.setForeground(Color.BLACK);
 			lblRelPlant2 = new JLabel("Rel Plant 2:");
+			lblRelPlant2.setBounds(1050, 239, 91, 20);
 			lblRelPlant2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelPlant2.setBackground(new Color(150, 150, 150));
 			lblRelPlant2.setOpaque(true);
 			lblRelPlant2.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelPlant2.setForeground(Color.BLACK);
 			lblRelSupplier = new JLabel("Rel Supplier:");
+			lblRelSupplier.setBounds(1050, 258, 91, 20);
 			lblRelSupplier.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelSupplier.setBackground(new Color(150, 150, 150));
 			lblRelSupplier.setOpaque(true);
 			lblRelSupplier.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelSupplier.setForeground(Color.BLACK);
 			lblBOSAL = new JLabel("BOSAL");
+			lblBOSAL.setBounds(271, 300, 620, 20);
 			lblBOSAL.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblBOSAL.setBackground(new Color(150, 150, 150));
 			lblBOSAL.setOpaque(true);
 			lblBOSAL.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblBOSAL.setForeground(Color.BLACK);
 			lblCUSTOMER = new JLabel("CUSTOMER");
+			lblCUSTOMER.setBounds(890, 300, 350, 20);
 			lblCUSTOMER.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblCUSTOMER.setBackground(new Color(150, 150, 150));
 			lblCUSTOMER.setOpaque(true);
@@ -478,7 +630,8 @@ public class BDLFrame extends JFrame
 			lblCUSTOMER.setForeground(Color.BLACK);
 			
 		//JButtons
-			btnAdd = new JButton("ADD");
+			btnAdd = new JButton("Add");
+			btnAdd.setBounds(30, 289, 75, 20);
 			btnAdd.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -490,7 +643,8 @@ public class BDLFrame extends JFrame
 					}
 				}				
 			});
-			btnDelete = new JButton("DELETE");
+			btnDelete = new JButton("Delete");
+			btnDelete.setBounds(115, 289, 75, 20);
 			btnDelete.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -522,6 +676,32 @@ public class BDLFrame extends JFrame
 					}
 				}				
 			});
+		
+		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
+		btnSave = new JButton(save);
+		btnSave.setBounds(1138, 30, 103, 34);
+		btnSave.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() == btnSave)
+				{
+
+				}
+			}
+		});
+		
+		ImageIcon print = new ImageIcon(getClass().getResource("/images/print.jpg"));
+		btnPrint = new JButton(print);
+		btnPrint.setBounds(900, 30, 103, 34);
+		btnPrint.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() == btnPrint)
+				{
+					printComponent(pnlMain);
+				}
+			}
+		});
 		
 		//JTable			
 			final MouseAdapter mouseClickListener = new MouseAdapter(){
@@ -654,6 +834,7 @@ public class BDLFrame extends JFrame
 				}
 			};
 			scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+			scrollPane.setBounds(30, 320, 1210, 229);
 			scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
 			scrollPane.setViewportView(myTable);
 			myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);	
@@ -671,16 +852,19 @@ public class BDLFrame extends JFrame
 			
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
+			cboCustomer.setBounds(157, 82, 128, 20);
 			cboCustomer.setEditable(true);
 			AutoCompleteDecorator.decorate(cboCustomer);
 			cboCustomer.addMouseListener(new ContextMenuMouseListener());
 			cboCustomer.setForeground(Color.BLACK);
 			cboPlatform = new JComboBox<String>();
+			cboPlatform.setBounds(157, 173, 128, 20);
 			cboPlatform.setEditable(true);
 			AutoCompleteDecorator.decorate(cboPlatform);
 			cboPlatform.addMouseListener(new ContextMenuMouseListener());
 			cboPlatform.setForeground(Color.BLACK);
 			cboName = new JComboBox<String>();
+			cboName.setBounds(157, 211, 128, 20);
 			cboName.setEditable(true);
 			AutoCompleteDecorator.decorate(cboName);
 			cboName.addMouseListener(new ContextMenuMouseListener());
@@ -962,83 +1146,108 @@ public class BDLFrame extends JFrame
 			     }
 			};
 			txtCustomer = new JTextField();
+			txtCustomer.setBounds(157, 82, 128, 20);
 			txtCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustomer.setForeground(Color.BLACK);
 			txtPlatform = new JTextField();
+			txtPlatform.setBounds(157, 173, 128, 20);
 			txtPlatform.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPlatform.setForeground(Color.BLACK);
 			txtType = new JTextField();
+			txtType.setBounds(157, 192, 128, 20);
 			txtType.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtType.setForeground(Color.BLACK);
 			txtName = new JTextField();
+			txtName.setBounds(157, 211, 128, 20);
 			txtName.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtName.setForeground(Color.BLACK);
 			txtVolume = new JTextField();
+			txtVolume.setBounds(157, 230, 128, 20);
 			txtVolume.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtVolume.setForeground(Color.BLACK);
 			txtPower = new JTextField();
+			txtPower.setBounds(157, 249, 128, 20);
 			txtPower.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPower.setForeground(Color.BLACK);
 			txtBosalPartNum = new JTextField();
+			txtBosalPartNum.setBounds(444, 152, 142, 20);
 			txtBosalPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtBosalPartNum.setForeground(Color.BLACK);
 			txtBosalPartNum.addMouseListener(mouseClickListener);
 			txtBosalPartNum.getDocument().addDocumentListener(documentListener);
 			txtCustomerPartNum = new JTextField();
+			txtCustomerPartNum.setBounds(585, 152, 166, 20);
 			txtCustomerPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustomerPartNum.setForeground(Color.BLACK);
 			txtIMDS = new JTextField();
+			txtIMDS.setBounds(750, 152, 98, 20);
 			txtIMDS.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtIMDS.setForeground(Color.BLACK);
 			txtDescription = new JTextField();
+			txtDescription.setBounds(585, 171, 263, 20);
 			txtDescription.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtDescription.setForeground(Color.BLACK);
 			txtVolume2 = new JTextField();
+			txtVolume2.setBounds(585, 190, 263, 20);
 			txtVolume2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtVolume2.setForeground(Color.BLACK);
 			txtLength = new JTextField();
+			txtLength.setBounds(585, 209, 263, 20);
 			txtLength.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtLength.setForeground(Color.BLACK);
 			txtSection = new JTextField();
+			txtSection.setBounds(585, 228, 263, 20);
 			txtSection.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtSection.setForeground(Color.BLACK);
 			txtIssuedBy = new JTextField();
+			txtIssuedBy.setBounds(750, 95, 98, 20);
 			txtIssuedBy.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtIssuedBy.setForeground(Color.BLACK);
 			txtIssuedBy.setEditable(false);
 			txtPage = new JTextField();
+			txtPage.setBounds(1140, 82, 101, 20);
 			txtPage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPage.setForeground(Color.BLACK);
 			txtREV = new JTextField();
+			txtREV.setBounds(1140, 101, 101, 20);
 			txtREV.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREV.setForeground(Color.BLACK);
 			txtRelDate = new JTextField();
+			txtRelDate.setBounds(1140, 120, 101, 20);
 			txtRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelDate.setForeground(Color.BLACK);
 			txtREVDate = new JTextField();
+			txtREVDate.setBounds(1140, 139, 101, 20);
 			txtREVDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREVDate.setForeground(Color.BLACK);
 			txtProduction = new JTextField();
+			txtProduction.setBounds(1077, 189, 163, 20);
 			txtProduction.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtProduction.setForeground(Color.BLACK);
 			txtRelPlant1 = new JTextField();
+			txtRelPlant1.setBounds(1140, 220, 100, 20);
 			txtRelPlant1.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelPlant1.setForeground(Color.BLACK);
 			txtRelPlant2 = new JTextField();
+			txtRelPlant2.setBounds(1140, 239, 100, 20);
 			txtRelPlant2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelPlant2.setForeground(Color.BLACK);
 			txtRelSupplier = new JTextField();
+			txtRelSupplier.setBounds(1140, 258, 100, 20);
 			txtRelSupplier.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelSupplier.setForeground(Color.BLACK);
 		
 		//JCheckBoxes
 			cbxCustomer = new JCheckBox();
+			cbxCustomer.setBounds(290, 85, 13, 13);
 			cbxCustomer.setBackground(new Color(105, 105, 105));
 			cbxCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			cbxPlatform = new JCheckBox();
+			cbxPlatform.setBounds(290, 177, 13, 13);
 			cbxPlatform.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			cbxPlatform.setBackground(new Color(105, 105, 105));
 			cbxName = new JCheckBox();
+			cbxName.setBounds(290, 214, 13, 13);
 			cbxName.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			cbxName.setBackground(new Color(105, 105, 105));
 			
@@ -1124,6 +1333,7 @@ public class BDLFrame extends JFrame
 			
 		//JRadioButtons
 			rbtnCreateBDL = new JRadioButton("Create BDL");
+			rbtnCreateBDL.setBounds(444, 95, 103, 27);
 			rbtnCreateBDL.setBackground(new Color(105, 105, 105));
 			rbtnCreateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnCreateBDL.setForeground(Color.BLACK);
@@ -1186,6 +1396,7 @@ public class BDLFrame extends JFrame
 			rbtnCreateBDL.doClick();
 			
 			rbtnSearchBDL = new JRadioButton("Search BDL");
+			rbtnSearchBDL.setBounds(552, 95, 111, 27);
 			rbtnSearchBDL.setBackground(new Color(105, 105, 105));
 			rbtnSearchBDL.setForeground(Color.BLACK);
 			rbtnSearchBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -1239,6 +1450,7 @@ public class BDLFrame extends JFrame
 				}});
 			
 			rbtnUpdateBDL = new JRadioButton("Update BDL");
+			rbtnUpdateBDL.setBounds(350, 95, 111, 27);
 			rbtnUpdateBDL.setBackground(new Color(105, 105, 105));
 			rbtnUpdateBDL.setForeground(Color.BLACK);
 			rbtnUpdateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -1277,340 +1489,74 @@ public class BDLFrame extends JFrame
 		}
 		private void setupPanel() 
 		{
-			GroupLayout groupLayout = new GroupLayout(this);
-			groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(10)
-						.addComponent(lblBosal)
-						.addGap(10)
-						.addComponent(lblBDL, GroupLayout.PREFERRED_SIZE, 482, GroupLayout.PREFERRED_SIZE))
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(30)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(46)
-								.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtVolume, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(46)
-								.addComponent(lblName, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(cboName, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtType, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(46)
-								.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtCustomer, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(46)
-								.addComponent(lblPower, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(txtPlatform, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblPlatform, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(127)
-								.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)))
-						.addGap(5)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(cbxCustomer, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
-							.addComponent(cbxPlatform, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
-							.addComponent(cbxName, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE))
-						.addGap(141)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(rbtnUpdateBDL, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(108)
-										.addComponent(rbtnSearchBDL, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
-									.addComponent(rbtnCreateBDL))
-								.addGap(6)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(81)
-										.addComponent(txtIssuedBy, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblIssuedBy, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblSilencer, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-								.addGap(75)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(165)
-										.addComponent(txtIMDS, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
-									.addComponent(txtLength, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtSection, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtVolume2, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE)))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(141)
-								.addComponent(txtDescription, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(65)
-								.addComponent(lblLength, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
-							.addComponent(txtBosalPartNum, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblBosalPartNum, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(306)
-								.addComponent(lblIMDS, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(141)
-								.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(141)
-								.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblDescription, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(65)
-								.addComponent(lblVolume2, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(65)
-								.addComponent(lblSection, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)))
-						.addGap(202)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(14)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblREVDate, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblREV, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblPage, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(76)
-										.addComponent(txtPage, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(76)
-										.addComponent(txtRelDate, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(76)
-										.addComponent(txtREV, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblRelDate, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(76)
-										.addComponent(txtREVDate, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(27)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(txtProduction, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblProduction, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(90)
-								.addComponent(txtRelPlant1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblRelPlant2, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblRelPlant1, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(90)
-								.addComponent(txtRelPlant2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(90)
-								.addComponent(txtRelSupplier, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblRelSupplier, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)))
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(30)
-						.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-						.addGap(10)
-						.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-						.addGap(81)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(619)
-								.addComponent(lblCUSTOMER, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE))
-							.addComponent(lblBOSAL, GroupLayout.PREFERRED_SIZE, 620, GroupLayout.PREFERRED_SIZE)))
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(30)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 1210, GroupLayout.PREFERRED_SIZE))
-			);
-			groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGap(11)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblBosal)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(15)
-								.addComponent(lblBDL, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)))
-						.addGap(6)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(9)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(cboCustomer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblCustomer, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblEngine, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(38)
-												.addComponent(txtVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(19)
-												.addComponent(lblName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(19)
-												.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(57)
-												.addComponent(txtPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(19)
-												.addComponent(cboName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-											.addComponent(txtType, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(38)
-												.addComponent(lblVolume, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
-									.addComponent(txtCustomer, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(167)
-										.addComponent(lblPower, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(91)
-										.addComponent(txtPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(91)
-										.addComponent(lblPlatform, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(91)
-										.addComponent(cboPlatform, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(12)
-								.addComponent(cbxCustomer, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
-								.addGap(79)
-								.addComponent(cbxPlatform, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
-								.addGap(24)
-								.addComponent(cbxName, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(rbtnUpdateBDL, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(22)
-										.addComponent(rbtnSearchBDL, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(22)
-										.addComponent(rbtnCreateBDL, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(22)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(txtIssuedBy, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblIssuedBy, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
-								.addGap(11)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(57)
-										.addComponent(lblSilencer, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtIMDS, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(19)
-												.addComponent(txtLength, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-											.addGroup(groupLayout.createSequentialGroup()
-												.addGap(38)
-												.addComponent(txtSection, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-											.addComponent(txtVolume2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(38)
-										.addComponent(txtDescription, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(76)
-										.addComponent(lblLength, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtBosalPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblBosalPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblIMDS, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtCustomerPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblCustomerPartNum, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(38)
-										.addComponent(lblDescription, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(57)
-										.addComponent(lblVolume2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(95)
-										.addComponent(lblSection, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(9)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(57)
-										.addComponent(lblREVDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(lblREV, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblPage, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtPage, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(38)
-										.addComponent(txtRelDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtREV, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(38)
-										.addComponent(lblRelDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(57)
-										.addComponent(txtREVDate, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
-								.addGap(11)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtProduction, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblProduction, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-								.addGap(11)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(txtRelPlant1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(lblRelPlant2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblRelPlant1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(19)
-										.addComponent(txtRelPlant2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(38)
-										.addComponent(txtRelSupplier, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(38)
-										.addComponent(lblRelSupplier, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))))
-						.addGap(11)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(11)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblCUSTOMER, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblBOSAL, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))))
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE))
-			);
-			setLayout(groupLayout);
+			setLayout(null);
+			add(lblBosal);
+			add(lblBDL);
+			add(cboCustomer);
+			add(lblCustomer);
+			add(lblType);
+			add(lblEngine);
+			add(txtVolume);
+			add(lblName);
+			add(txtName);
+			add(txtPower);
+			add(cboName);
+			add(txtType);
+			add(lblVolume);
+			add(txtCustomer);
+			add(lblPower);
+			add(txtPlatform);
+			add(lblPlatform);
+			add(cboPlatform);
+			add(cbxCustomer);
+			add(cbxPlatform);
+			add(cbxName);
+			add(rbtnUpdateBDL);
+			add(rbtnSearchBDL);
+			add(rbtnCreateBDL);
+			add(txtIssuedBy);
+			add(lblIssuedBy);
+			add(lblSilencer);
+			add(txtIMDS);
+			add(txtLength);
+			add(txtSection);
+			add(txtVolume2);
+			add(txtDescription);
+			add(lblLength);
+			add(txtBosalPartNum);
+			add(lblBosalPartNum);
+			add(lblIMDS);
+			add(txtCustomerPartNum);
+			add(lblCustomerPartNum);
+			add(lblDescription);
+			add(lblVolume2);
+			add(lblSection);
+			add(lblREVDate);
+			add(lblREV);
+			add(lblPage);
+			add(txtPage);
+			add(txtRelDate);
+			add(txtREV);
+			add(lblRelDate);
+			add(txtREVDate);
+			add(txtProduction);
+			add(lblProduction);
+			add(txtRelPlant1);
+			add(lblRelPlant2);
+			add(lblRelPlant1);
+			add(txtRelPlant2);
+			add(txtRelSupplier);
+			add(lblRelSupplier);
+			add(btnAdd);
+			add(btnDelete);
+			add(lblCUSTOMER);
+			add(lblBOSAL);
+			add(scrollPane);
+			add(btnSave);
+			add(btnPrint);
 			}
 		
 }
-	}
+}
+
+

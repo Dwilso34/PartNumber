@@ -304,7 +304,7 @@ public class DBConnect {
 			System.out.println(appUser+" does not have permission to do that!");
 		}
 	}
-	//changes a users password in database (Requires admin)
+	//changes a users password in database 
 	public void changeUserPassword(String username, String password) throws Exception{
 		try{
 			getDBConnection();				
@@ -378,7 +378,7 @@ public class DBConnect {
 			System.out.println(appUser+" does not have permission to do that!");
 		}
 	}
-	//create a customer and add it to the database (Requires admin)
+	//create a customer and add it to the database
 	public void createCustomer(String newCustomer, String newCust) throws Exception{
 		try{
 			Timestamp Created = getTimestamp();
