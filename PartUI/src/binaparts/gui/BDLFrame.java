@@ -1446,58 +1446,7 @@ public class BDLFrame extends JFrame
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboName.removeItemListener(cboGetInfo);
 							myTable.getModel().removeTableModelListener(columnListener);
-							myTable.removeMouseListener(mouseClickListener);
-							
-							/*String s = (String)JOptionPane.showInputDialog(
-				                    BDLframe,
-				                    "Enter a Bosal Part Number:",
-				                    "Search Dialog",
-				                    JOptionPane.PLAIN_MESSAGE,
-				                    bosal,
-				                    null,
-				                    "");
-							//If a string was returned, say so.
-							if ((s != null) && (s.length() > 0)) {
-							    setSearchText(s);
-							    final String findBosalText = txtBosalPartNum.getText();
-							   
-								txtBosalPartNum.setText(getSearchText());
-								JSONArray temp = (con.queryDatabase("bosal parts", "BosalPartNumber", findBosalText));
-								
-							//Sets Customer Part Number When Bosal Number is Searched
-								String cpartText= null;
-								try{
-									cpartText = temp.get("CustPartNumber").toString();
-								}catch(Exception ex){cpartText = "-";}
-								txtCustomerPartNum.setText(cpartText);
-								
-							//Sets Part Description When Bosal Number is Searched
-								String descripText= null;
-								try{
-									descripText = temp.get("PartDescription").toString();
-								}catch(Exception ex){descripText = "-";}
-								txtDescription.setText(descripText);
-								
-							//Sets Platform When Bosal Number is Searched
-								String programText = null;
-								try{
-									programText = temp.get("Program").toString();
-								}catch(Exception ex){programText = "-";}
-								txtPlatform.setText(programText);
-								
-							//Sets Customer When Bosal Number is Searched
-								final String findCustomer = txtPlatform.getText();
-								JSONObject temp2 = (con.queryDatabase("programs", "Program", findCustomer)).getJSONObject(0);
-								 
-								String customerText = null;
-								try{
-									customerText = temp2.get("Customer").toString();
-								}catch(Exception ex){customerText = "-";}
-								txtCustomer.setText(customerText);
-								
-							    return;
-							}*/
-							
+							myTable.removeMouseListener(mouseClickListener);							
 						} catch (Exception ex) {ex.printStackTrace();}
 			            
 					}						
@@ -1517,16 +1466,17 @@ public class BDLFrame extends JFrame
 						int rowCount = table.getRowCount();
 						String[] itm = new String[rowCount];
 						String[] qty = new String[rowCount];
-						String s = null;
+						String s = "[";
 						for(int i = 0; i < rowCount; i++){
 							itm[i] = table.getValueAt(i, 4).toString();
 							qty[i] = table.getValueAt(i, 1).toString();
 						}
 						for(int i = 0; i < rowCount; i++){
-							s = "{Item"+(i+1)+":"+itm[i]+","+"Qty"+(i+1)+":"+qty[i]+"}";
+							s = s+"{Item"+(i+1)+":"+itm[i]+","+"Qty"+(i+1)+":"+qty[i]+"}";
 							System.out.println(s);
 						}
-						
+						s = s + "]";
+						System.out.println(s);
 					}
 				}
 			});
