@@ -702,39 +702,50 @@ public class BDLFrame extends JFrame
 							    "Invalid Entry",
 							    JOptionPane.ERROR_MESSAGE);					
 					} else {
-						TableModel table = myTable.getModel();
-						int rowCount = table.getRowCount();
-						if(rowCount == 0){
-							JOptionPane.showMessageDialog(BDLframe,
-								    "No Items were added to this breakdown list",
-								    "Invalid Entry",
-								    JOptionPane.ERROR_MESSAGE);	
-						} else {
-							String[] itm = new String[rowCount];
-							String[] qty = new String[rowCount];
-							String s = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\",";
-							for(int i = 0; i < rowCount; i++){
-								itm[i] = table.getValueAt(i, 4).toString();
-								if(table.getValueAt(i,1).toString().equals("")){
-									qty[i] = "0";
-								} else {
-									qty[i] = table.getValueAt(i, 1).toString();
+						int n = JOptionPane.showConfirmDialog(
+							    BDLframe,
+							    "Are you sure you want to save part data?",
+							    "Save:",
+							    JOptionPane.YES_NO_OPTION,
+								JOptionPane.WARNING_MESSAGE);
+						if(n == 0){
+							TableModel table = myTable.getModel();
+							int rowCount = table.getRowCount();
+							if(rowCount == 0){
+								JOptionPane.showMessageDialog(BDLframe,
+									    "No Items were added to this breakdown list",
+									    "Invalid Entry",
+									    JOptionPane.ERROR_MESSAGE);	
+							} else {
+								String[] itm = new String[rowCount];
+								String[] qty = new String[rowCount];
+								String s = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
+								for(int i = 0; i < rowCount; i++){
+									itm[i] = table.getValueAt(i, 4).toString();
+									if(table.getValueAt(i,1).toString().equals("")){
+										qty[i] = "0";
+									} else {
+										qty[i] = table.getValueAt(i, 1).toString();
+									}
 								}
-							}
-							for(int i = 0; i < rowCount; i++){
-								s = s+"\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i];
-								if (i < (rowCount - 1)){
-									s = s + ",";
+								for(int i = 0; i < rowCount; i++){
+									s = s+"{\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i]+"}";
+									if (i < (rowCount - 1)){
+										s = s + ",";
+									}
 								}
-							}
-							s = s + "}]";
-							System.out.println(s);	
-							JSONArray temp;
-							try {
-								temp = new JSONArray(s);
-								System.out.println(temp);
-							} catch (JSONException ex) {
-								ex.printStackTrace();
+								s = s + "]";
+								System.out.println(s);	
+								JSONArray temp;
+								try {
+									temp = new JSONArray(s);
+									con.insertNewBDL(temp);
+									System.out.println(temp);
+								} catch (JSONException ex) {
+									ex.printStackTrace();
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
 							}
 						}
 					}
