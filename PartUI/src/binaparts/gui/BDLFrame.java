@@ -360,7 +360,42 @@ public class BDLFrame extends JFrame
 				table1.setValueAt(i+1, i, 0);
 				table1.setValueAt(0, i, 1);
 			}
-		}	
+		}
+		public String getItemsFromTable(){
+			String jsonString = null;
+			TableModel table = myTable.getModel();
+			int rowCount = table.getRowCount();
+			//checks to see if the BDL table has any rows in it
+			if(rowCount == 0){
+				JOptionPane.showMessageDialog(BDLframe,
+					    "No Items were added to this breakdown list",
+					    "Invalid Entry",
+					    JOptionPane.ERROR_MESSAGE);	
+			} else {
+				String[] itm = new String[rowCount];
+				String[] qty = new String[rowCount];
+				jsonString = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
+				//loop to dynamically grab the values from the table
+				for(int i = 0; i < rowCount; i++){
+					itm[i] = table.getValueAt(i, 4).toString();
+					if(table.getValueAt(i,1).toString().equals("")){
+						qty[i] = "0";
+					} else {
+						qty[i] = table.getValueAt(i, 1).toString();
+					}
+				}
+				//loop to dynamically construct a JSON String of the BDL Items 
+				for(int i = 0; i < rowCount; i++){
+					jsonString = jsonString+"{\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i]+"}";
+					if (i < (rowCount - 1)){
+						jsonString = jsonString + ",";
+					}
+				}
+				jsonString = jsonString + "]";
+				System.out.println(jsonString);					
+			}
+			return jsonString;
+		}
 		
 	//JCheckBoxes
 		private JCheckBox cbxCustomer;
@@ -679,60 +714,66 @@ public class BDLFrame extends JFrame
 		btnSave = new JButton(save);
 		btnSave.setBounds(1138, 30, 103, 34);
 		btnSave.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnSave)
 				{
-					if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
-						JOptionPane.showMessageDialog(BDLframe,
-							    "Please Enter a Bosal Part Number",
-							    "Invalid Entry",
-							    JOptionPane.ERROR_MESSAGE);					
-					} else {
-						int n = JOptionPane.showConfirmDialog(
-							    BDLframe,
-							    "Are you sure you want to save part data?",
-							    "Save:",
-							    JOptionPane.YES_NO_OPTION,
-								JOptionPane.WARNING_MESSAGE);
-						if(n == 0){
-							TableModel table = myTable.getModel();
-							int rowCount = table.getRowCount();
-							if(rowCount == 0){
-								JOptionPane.showMessageDialog(BDLframe,
-									    "No Items were added to this breakdown list",
-									    "Invalid Entry",
-									    JOptionPane.ERROR_MESSAGE);	
-							} else {
-								String[] itm = new String[rowCount];
-								String[] qty = new String[rowCount];
-								String s = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
-								for(int i = 0; i < rowCount; i++){
-									itm[i] = table.getValueAt(i, 4).toString();
-									if(table.getValueAt(i,1).toString().equals("")){
-										qty[i] = "0";
-									} else {
-										qty[i] = table.getValueAt(i, 1).toString();
+					if (rbtnCreateBDL.isSelected() == true){
+						//Checks to see if the BDL has a Bosal Part Number
+						if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
+							JOptionPane.showMessageDialog(BDLframe,
+								    "Please Enter a Bosal Part Number",
+								    "Invalid Entry",
+								    JOptionPane.ERROR_MESSAGE);					
+						} else {
+							//Double checks to see if you want save data
+							int n = JOptionPane.showConfirmDialog(
+								    BDLframe,
+								    "Are you sure you want to save part data?",
+								    "Save:",
+								    JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE);
+							if(n == 0){							
+									JSONArray temp;
+									//convert JSON String to a JSONArray and insert to database
+									try {
+										temp = new JSONArray(getItemsFromTable());
+										con.insertNewBDL(temp);
+										System.out.println(temp);
+									} catch (JSONException ex) {
+										ex.printStackTrace();
+									} catch (Exception ex) {
+										ex.printStackTrace();
 									}
-								}
-								for(int i = 0; i < rowCount; i++){
-									s = s+"{\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i]+"}";
-									if (i < (rowCount - 1)){
-										s = s + ",";
+							}
+						}
+					}
+					if (rbtnUpdateBDL.isSelected() == true){
+						//Checks to see if the BDL has a Bosal Part Number
+						if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
+							JOptionPane.showMessageDialog(BDLframe,
+								    "Please Enter a Bosal Part Number",
+								    "Invalid Entry",
+								    JOptionPane.ERROR_MESSAGE);					
+						} else {
+							//Double checks to see if you want save data
+							int n = JOptionPane.showConfirmDialog(
+								    BDLframe,
+								    "Are you sure you want to save part data?",
+								    "Save:",
+								    JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE);
+							if(n == 0){							
+									JSONArray temp;
+									//convert JSON String to a JSONArray and insert to database
+									try {
+										temp = new JSONArray(getItemsFromTable());
+										//con.updateBDL(temp);
+										System.out.println(temp);
+									} catch (JSONException ex) {
+										ex.printStackTrace();
+									} catch (Exception ex) {
+										ex.printStackTrace();
 									}
-								}
-								s = s + "]";
-								System.out.println(s);	
-								JSONArray temp;
-								try {
-									temp = new JSONArray(s);
-									con.insertNewBDL(temp);
-									System.out.println(temp);
-								} catch (JSONException ex) {
-									ex.printStackTrace();
-								} catch (Exception ex) {
-									ex.printStackTrace();
-								}
 							}
 						}
 					}
