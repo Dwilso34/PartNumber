@@ -75,12 +75,6 @@ public class BDLFrame extends JFrame
 		contentPane.setLayout(new CardLayout());
 		pnlMain = new BDLMain(contentPane);
 		contentPane.add(pnlMain, "Main Menu");
-		Toolkit tk = Toolkit.getDefaultToolkit();
-	    Dimension screenSize = tk.getScreenSize();
-	    int screenHeight = screenSize.height;
-	    int screenWidth = screenSize.width;
-	    BDLframe.setSize(screenWidth / 2, screenHeight / 2);
-	    BDLframe.setLocation(screenWidth / 8, screenHeight / 4);
 		BDLframe.setResizable(true);
 		BDLframe.setSize(1285, 610);
 		BDLframe.setContentPane(contentPane);
@@ -214,8 +208,8 @@ public class BDLFrame extends JFrame
 	            }
 
 	            // Calculate the scaled size...
-	            double scaleWidth = compSize.width * scaleFactor;
-	            double scaleHeight = compSize.height * scaleFactor;
+	            double scaleWidth = compSize.width / scaleFactor;
+	            double scaleHeight = compSize.height / scaleFactor;
 	            
 	            // Create a clone of the graphics context.  This allows us to manipulate
 	            // the graphics context without begin worried about what effects
@@ -223,8 +217,8 @@ public class BDLFrame extends JFrame
 	            Graphics2D g2 = (Graphics2D) g.create();
 	            // Calculate the x/y position of the component, this will center
 	            // the result on the page if it can
-	            double x = ((pf.getImageableWidth() - scaleWidth) / 1000d) + pf.getImageableX();
-	            double y = ((pf.getImageableHeight() - scaleHeight) / 128d) + pf.getImageableY();
+	            double x = ((pf.getImageableWidth() - scaleWidth) / 2d) + pf.getImageableX();
+	            double y = ((pf.getImageableHeight() - scaleHeight) / 2d) + pf.getImageableY();
 	            System.out.println(x + " " + y);
 	            // Create a new AffineTransformation
 	            AffineTransform at = new AffineTransform();
