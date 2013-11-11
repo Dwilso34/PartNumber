@@ -75,11 +75,13 @@ public class BDLFrame extends JFrame
 		contentPane.setLayout(new CardLayout());
 		pnlMain = new BDLMain(contentPane);
 		contentPane.add(pnlMain, "Main Menu");
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int height = screenSize.height;
-		int width = screenSize.width;
+		Toolkit tk = Toolkit.getDefaultToolkit();
+	    Dimension screenSize = tk.getScreenSize();
+	    int screenHeight = screenSize.height;
+	    int screenWidth = screenSize.width;
+	    BDLframe.setSize(screenWidth / 2, screenHeight / 2);
+	    BDLframe.setLocation(screenWidth / 8, screenHeight / 4);
 		BDLframe.setResizable(true);
-		BDLframe.setSize(width/2, height/2);
 		BDLframe.setSize(1285, 610);
 		BDLframe.setContentPane(contentPane);
 		BDLframe.setVisible(true);	
@@ -94,7 +96,7 @@ public class BDLFrame extends JFrame
 		this.searchText = searchText;		
 	}
 		
-	class BDLMain extends JPanel 
+	public class BDLMain extends JPanel 
 	{
 		
 		//global variables
@@ -221,8 +223,8 @@ public class BDLFrame extends JFrame
 	            Graphics2D g2 = (Graphics2D) g.create();
 	            // Calculate the x/y position of the component, this will center
 	            // the result on the page if it can
-	            double x = ((pf.getImageableWidth() - scaleWidth) / 128d) + pf.getImageableX();
-	            double y = ((pf.getImageableHeight() - scaleHeight) / 32d) + pf.getImageableY();
+	            double x = ((pf.getImageableWidth() - scaleWidth) / 1000d) + pf.getImageableX();
+	            double y = ((pf.getImageableHeight() - scaleHeight) / 128d) + pf.getImageableY();
 	            System.out.println(x + " " + y);
 	            // Create a new AffineTransformation
 	            AffineTransform at = new AffineTransform();
@@ -793,7 +795,7 @@ public class BDLFrame extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnPrint)
 				{
-					//printComponent(pnlMain);
+					printComponent(pnlMain);
 					
 					
 		}}});
@@ -802,6 +804,7 @@ public class BDLFrame extends JFrame
 			final MouseAdapter mouseClickListener = new MouseAdapter(){
 				public void mouseClicked(MouseEvent e) {
 					if(e.getClickCount() == 2){
+						
 						if(e.getSource() == txtBosalPartNum){
 							String s = (String)JOptionPane.showInputDialog(
 				                    BDLframe,
