@@ -857,30 +857,72 @@ public class DBConnect {
 		}
 	}
 	//inserts a new row into `breakdown lists info` to create a BDL
-	public void insertNewBDL(String bdlNumber, JSONArray bdl) throws Exception{	
+	public void insertNewBDL(JSONArray bdl) throws Exception{	
 		try{
-			String[]item;
-			String[] qty;
 			String usersname = getUsersName();
 			Timestamp timestamp = getTimestamp();
 			getDBConnection();
-			pst = con.prepareStatement("INSERT INTO `breakdown lists info` "
-					+ "(BreakdownListNumber, "
-					+ "Rev, "
-					+ "RevDate, "
-					+ "ReleaseDate, "
-					+ "CreatedBy, "
-					+ "Created, "
-					+ "UpdatedBy, "
-					+ "Updated) "
-					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
-			pst.setString(1, bdlNumber);
-			pst.setString(5, usersname);
-			pst.setTimestamp(6, timestamp);
-			pst.setString(7, usersname);
-			pst.setTimestamp(8, timestamp);
-			pst.executeUpdate();
-			pst.close();
+			String BosalPartNumber = bdl.getJSONObject(0).get("BreakdownListNumber").toString();
+			for (double x = (((double)bdl.length())-1)/10; x > 0; x--) {
+				int count;
+				if (x >= 1) {
+					count = (2*10);
+				} else {
+					count = (int)(2*(x*10));
+				}				
+				int index = 0; //index through the JSONArray
+				String[] values = new String[count];
+				String statement = "INSERT INTO `breakdown lists` (";
+				//loop to grab Column names going into Database
+				for (int i = -1; i < count; i++){
+					if (i == -1){
+						statement = statement + "BreakdownListNumber";
+						index++;
+					}
+					//if i is even then an Item is added to the statement
+					else if (i%2 == 0){
+						statement = statement + ", Item" + index;
+						values[i] = bdl.getJSONObject(index).get("Item"+index).toString();
+					}
+					//if i is odd then a Qty is added to the statement
+					else if (i%2 != 0){
+						statement = statement + ", Qty"+index;
+						values[i] = bdl.getJSONObject(index).get("Qty"+index).toString();
+						index++;
+					}
+				}
+				statement = statement + ", CreatedBy, Created, UpdatedBy, Updated) VALUES(";
+				//loop to add a parameter for each column value going into Database
+				for (int i = 0; i < count+5; i++){
+					if (i == 0){
+						statement = statement + "?";
+					} else {
+						statement = statement + ", ?";
+					}				
+				}
+				statement = statement + ")";
+				pst = con.prepareStatement(statement);
+				//loop to set the values of the parameters going into the Database
+				for (int i = -1; i < count; i++){
+					if (i == -1){
+						pst.setString(i+2, BosalPartNumber);
+					} 
+					//if i is even then an Item is added to the parameters
+					else if (i%2 == 0){
+						pst.setString(i+2, values[i]);
+					} 
+					//if i is odd then a Qty is added to the parameters
+					else if (i%2 != 0){
+						pst.setInt(i+2, Integer.valueOf(values[i]));
+					}
+				}				
+				pst.setString((count+2), usersname);
+				pst.setTimestamp((count+3), timestamp);
+				pst.setString((count+4), usersname);
+				pst.setTimestamp((count+5), timestamp);
+				pst.executeUpdate();
+				pst.close();
+			}
 			con.close();
 			System.out.println("New BDL Info Created Successfully");
 		}catch(SQLException SQLex){

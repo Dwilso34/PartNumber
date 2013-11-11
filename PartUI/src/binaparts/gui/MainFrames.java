@@ -785,7 +785,7 @@ public class MainFrames extends JFrame
 							int DrawingRev;
 							try{
 								DrawingRev = Integer.valueOf(txtDrawingRev.getText());
-							}catch(Exception ex){/*ex.printStackTrace();Ignore*/DrawingRev = 0;}
+							}catch(Exception ex){DrawingRev = 0;}
 							System.out.println(DrawingRev);
 							String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
 									+(String)cboDrawingDay.getSelectedItem()+"/"

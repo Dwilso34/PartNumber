@@ -27,7 +27,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -42,7 +41,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -56,15 +54,10 @@ import javax.swing.text.Document;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.w3c.dom.UserDataHandler;
 
-import com.fasterxml.jackson.*;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import binaparts.dao.DBConnect;
-import binaparts.util.ToJSON;
 
 @SuppressWarnings("serial")
 public class BDLFrame extends JFrame 
@@ -353,8 +346,6 @@ public class BDLFrame extends JFrame
 		private JButton btnPrint;
 		
 	//JTable	
-		private JSONArray bdlItems;
-		private String bdlContent;
 		private JTable myTable;
 		private DefaultTableModel table1;
 		private JScrollPane scrollPane;
@@ -704,39 +695,50 @@ public class BDLFrame extends JFrame
 							    "Invalid Entry",
 							    JOptionPane.ERROR_MESSAGE);					
 					} else {
-						TableModel table = myTable.getModel();
-						int rowCount = table.getRowCount();
-						if(rowCount == 0){
-							JOptionPane.showMessageDialog(BDLframe,
-								    "No Items were added to this breakdown list",
-								    "Invalid Entry",
-								    JOptionPane.ERROR_MESSAGE);	
-						} else {
-							String[] itm = new String[rowCount];
-							String[] qty = new String[rowCount];
-							String s = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\",";
-							for(int i = 0; i < rowCount; i++){
-								itm[i] = table.getValueAt(i, 4).toString();
-								if(table.getValueAt(i,1).toString().equals("")){
-									qty[i] = "0";
-								} else {
-									qty[i] = table.getValueAt(i, 1).toString();
+						int n = JOptionPane.showConfirmDialog(
+							    BDLframe,
+							    "Are you sure you want to save part data?",
+							    "Save:",
+							    JOptionPane.YES_NO_OPTION,
+								JOptionPane.WARNING_MESSAGE);
+						if(n == 0){
+							TableModel table = myTable.getModel();
+							int rowCount = table.getRowCount();
+							if(rowCount == 0){
+								JOptionPane.showMessageDialog(BDLframe,
+									    "No Items were added to this breakdown list",
+									    "Invalid Entry",
+									    JOptionPane.ERROR_MESSAGE);	
+							} else {
+								String[] itm = new String[rowCount];
+								String[] qty = new String[rowCount];
+								String s = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
+								for(int i = 0; i < rowCount; i++){
+									itm[i] = table.getValueAt(i, 4).toString();
+									if(table.getValueAt(i,1).toString().equals("")){
+										qty[i] = "0";
+									} else {
+										qty[i] = table.getValueAt(i, 1).toString();
+									}
 								}
-							}
-							for(int i = 0; i < rowCount; i++){
-								s = s+"\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i];
-								if (i < (rowCount - 1)){
-									s = s + ",";
+								for(int i = 0; i < rowCount; i++){
+									s = s+"{\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i]+"}";
+									if (i < (rowCount - 1)){
+										s = s + ",";
+									}
 								}
-							}
-							s = s + "}]";
-							System.out.println(s);	
-							JSONArray temp;
-							try {
-								temp = new JSONArray(s);
-								System.out.println(temp);
-							} catch (JSONException ex) {
-								ex.printStackTrace();
+								s = s + "]";
+								System.out.println(s);	
+								JSONArray temp;
+								try {
+									temp = new JSONArray(s);
+									con.insertNewBDL(temp);
+									System.out.println(temp);
+								} catch (JSONException ex) {
+									ex.printStackTrace();
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
 							}
 						}
 					}
@@ -1131,56 +1133,66 @@ public class BDLFrame extends JFrame
 					String platform = null;
 					String custPartNum = null;
 					String description = null;
-			        try {
-			        	JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
-			        	for(int i = 0; i < temp.length(); i++){
-			        		try{
-								platform = temp.getJSONObject(i).getString("Program").toString();								
-								JSONArray temp2 = con.queryDatabase("programs", "Program", platform);
-								for(int j = 0; j < temp2.length(); j++){
-					        		try{
-					        			customer = temp.getJSONObject(j).get("Customer").toString();
-					        		}catch(Exception ex){
-					        			System.out.println("Program " + platform + " does not contain Customer");
-					        		}
-					        	}
-							}catch(Exception ex){
-								System.out.println("Part " + getSearchText() + " does not contain Program");
-							}
-			        		try{
-								custPartNum = temp.getJSONObject(i).getString("CustPartNumber").toString();
-							}catch(Exception ex){
-								System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
-							}
-			        		try{
-								description = temp.getJSONObject(i).getString("PartDescription").toString();
-							}catch(Exception ex){
-								System.out.println("Part " + getSearchText() + " does not contain PartDescription");
-							}
-						}						
-					} catch (Exception ex) {ex.printStackTrace();}
-			        if(custPartNum != null){
-						txtCustomerPartNum.setText(custPartNum);
-					}
-			        if(description != null){
-						txtDescription.setText(description);
-					}
-			        if(rbtnCreateBDL.isSelected() == true || rbtnUpdateBDL.isSelected() == true){
-				        if(customer != null){
-							cboCustomer.setSelectedItem(customer);
+					
+					if (rbtnSearchBDL.isSelected() == true){
+						try {
+							JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
+							System.out.println(temp);
+						} catch (Exception ex) {
+							ex.printStackTrace();
 						}
-				        if(platform != null){
-							cboPlatform.setSelectedItem(platform);
+					}
+					if (rbtnCreateBDL.isSelected() == true){
+						try {						
+				        	JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+				        	for(int i = 0; i < temp.length(); i++){
+				        		try{
+									platform = temp.getJSONObject(i).getString("Program").toString();								
+									JSONArray temp2 = con.queryDatabase("programs", "Program", platform);
+									for(int j = 0; j < temp2.length(); j++){
+						        		try{
+						        			customer = temp.getJSONObject(j).get("Customer").toString();
+						        		}catch(Exception ex){
+						        			System.out.println("Program " + platform + " does not contain Customer");
+						        		}
+						        	}
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain Program");
+								}
+				        		try{
+									custPartNum = temp.getJSONObject(i).getString("CustPartNumber").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
+								}
+				        		try{
+									description = temp.getJSONObject(i).getString("PartDescription").toString();
+								}catch(Exception ex){
+									System.out.println("Part " + getSearchText() + " does not contain PartDescription");
+								}
+							}						
+						} catch (Exception ex) {ex.printStackTrace();}
+				        if(custPartNum != null){
+							txtCustomerPartNum.setText(custPartNum);
 						}
-			        }else if(rbtnSearchBDL.isSelected() == true){
-			        	if(customer != null){
-							txtCustomer.setText(customer);
-						}	
-			        	if(platform != null){
-							txtPlatform.setText(platform);
-						}	
-			        }
-			        
+				        if(description != null){
+							txtDescription.setText(description);
+						}
+				        if(rbtnCreateBDL.isSelected() == true || rbtnUpdateBDL.isSelected() == true){
+					        if(customer != null){
+								cboCustomer.setSelectedItem(customer);
+							}
+					        if(platform != null){
+								cboPlatform.setSelectedItem(platform);
+							}
+				        }else if(rbtnSearchBDL.isSelected() == true){
+				        	if(customer != null){
+								txtCustomer.setText(customer);
+							}	
+				        	if(platform != null){
+								txtPlatform.setText(platform);
+							}	
+				        }				        
+				      }
 			      }
 			      public void removeUpdate(DocumentEvent documentEvent) {
 			        printIt(documentEvent);
@@ -1500,8 +1512,7 @@ public class BDLFrame extends JFrame
 							cboName.removeItemListener(cboGetInfo);
 							myTable.getModel().removeTableModelListener(columnListener);
 							myTable.removeMouseListener(mouseClickListener);							
-						} catch (Exception ex) {ex.printStackTrace();}
-			            
+						} catch (Exception ex) {ex.printStackTrace();}			            
 					}						
 				}});
 			
