@@ -15,6 +15,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
@@ -56,10 +58,8 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-
-
-
 import binaparts.dao.DBConnect;
+import binaparts.util.ComponentResizer;
 
 @SuppressWarnings("serial")
 public class BDLFrame extends JFrame 
@@ -77,15 +77,12 @@ public class BDLFrame extends JFrame
 		contentPane.setLayout(new CardLayout());
 		pnlMain = new BDLMain(contentPane);
 		contentPane.add(pnlMain, "Main Menu");
-		Toolkit tk = Toolkit.getDefaultToolkit();
-	    Dimension screenSize = tk.getScreenSize();
-	    int screenHeight = screenSize.height;
-	    int screenWidth = screenSize.width;
-	    BDLframe.setSize(screenWidth / 2, screenHeight / 2);
-	    BDLframe.setLocation(screenWidth / 8, screenHeight / 4);
 		BDLframe.setResizable(true);
-		BDLframe.setSize(1285, 610);
+		BDLframe.setPreferredSize(new Dimension(1285, 610));
+		BDLframe.setMinimumSize(new Dimension(1285, 610));
+		BDLframe.setMaximumSize(new Dimension(1285, Integer.MAX_VALUE));
 		BDLframe.setContentPane(contentPane);
+		pack();
 		BDLframe.setVisible(true);	
 		try{
 			BDLframe.setIconImage(ImageIO.read(new File("res/bosalimage.png")));
@@ -165,8 +162,6 @@ public class BDLFrame extends JFrame
 			System.out.println(this.power+" was put into the power variable");
 		}
 		
-		
-
 	    public void printComponent(Component comp) {
 	        PrinterJob pj = PrinterJob.getPrinterJob();
 	        pj.setJobName(" Print Component ");
@@ -194,7 +189,6 @@ public class BDLFrame extends JFrame
 	        @Override
 	        public int print(Graphics g, PageFormat pf, int pageNumber)
 	                throws PrinterException {
-	            // TODO Auto-generated method stub
 	            if (pageNumber > 0) {
 	            	pf.setOrientation(PageFormat.PORTRAIT);
 	                return Printable.NO_SUCH_PAGE;
@@ -212,12 +206,12 @@ public class BDLFrame extends JFrame
 	            double scaleFactor = getScaleFactorToFit(compSize, printSize);
 	            // Don't want to scale up, only want to scale down
 	            if (scaleFactor > 1d) {
-	                scaleFactor = 1d;
+	                scaleFactor = 0.62d;
 	            }
 
 	            // Calculate the scaled size...
-	            double scaleWidth = compSize.width * scaleFactor;
-	            double scaleHeight = compSize.height * scaleFactor;
+	            double scaleWidth = compSize.width / scaleFactor;
+	            double scaleHeight = compSize.height / scaleFactor;
 	            
 	            // Create a clone of the graphics context.  This allows us to manipulate
 	            // the graphics context without begin worried about what effects
@@ -225,13 +219,13 @@ public class BDLFrame extends JFrame
 	            Graphics2D g2 = (Graphics2D) g.create();
 	            // Calculate the x/y position of the component, this will center
 	            // the result on the page if it can
-	            double x = ((pf.getImageableWidth() - scaleWidth) / 1000d) + pf.getImageableX();
-	            double y = ((pf.getImageableHeight() - scaleHeight) / 128d) + pf.getImageableY();
-	            System.out.println(x + " " + y);
+	            /*double x = ((pf.getImageableWidth() - scaleWidth) / 2d) + pf.getImageableX();
+	            double y = ((pf.getImageableHeight() - scaleHeight) / 2d) + pf.getImageableY();
+	            System.out.println(x + " " + y);*/
 	            // Create a new AffineTransformation
 	            AffineTransform at = new AffineTransform();
 	            // Translate the offset to out "center" of page
-	            at.translate(x, y);
+	           // at.translate(x, y);
 	            // Set the scaling
 	            at.scale(scaleFactor, scaleFactor);
 	            // Apply the transformation
@@ -780,66 +774,60 @@ public class BDLFrame extends JFrame
 		btnSave = new JButton(save);
 		btnSave.setBounds(1138, 30, 103, 34);
 		btnSave.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnSave)
 				{
-					if (rbtnCreateBDL.isSelected() == true){
-						//Checks to see if the BDL has a Bosal Part Number
-						if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
-							JOptionPane.showMessageDialog(BDLframe,
-								    "Please Enter a Bosal Part Number",
-								    "Invalid Entry",
-								    JOptionPane.ERROR_MESSAGE);					
-						} else {
-							//Double checks to see if you want save data
-							int n = JOptionPane.showConfirmDialog(
-								    BDLframe,
-								    "Are you sure you want to save part data?",
-								    "Save:",
-								    JOptionPane.YES_NO_OPTION,
-									JOptionPane.WARNING_MESSAGE);
-							if(n == 0){							
-									JSONArray temp;
-									//convert JSON String to a JSONArray and insert to database
-									try {
-										temp = new JSONArray(getItemsFromTable());
-										con.insertNewBDL(temp);
-										System.out.println(temp);
-									} catch (JSONException ex) {
-										ex.printStackTrace();
-									} catch (Exception ex) {
-										ex.printStackTrace();
+					if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
+						JOptionPane.showMessageDialog(BDLframe,
+							    "Please Enter a Bosal Part Number",
+							    "Invalid Entry",
+							    JOptionPane.ERROR_MESSAGE);					
+					} else {
+						int n = JOptionPane.showConfirmDialog(
+							    BDLframe,
+							    "Are you sure you want to save part data?",
+							    "Save:",
+							    JOptionPane.YES_NO_OPTION,
+								JOptionPane.WARNING_MESSAGE);
+						if(n == 0){
+							TableModel table = myTable.getModel();
+							int rowCount = table.getRowCount();
+							if(rowCount == 0){
+								JOptionPane.showMessageDialog(BDLframe,
+									    "No Items were added to this breakdown list",
+									    "Invalid Entry",
+									    JOptionPane.ERROR_MESSAGE);	
+							} else {
+								String[] itm = new String[rowCount];
+								String[] qty = new String[rowCount];
+								String s = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
+								for(int i = 0; i < rowCount; i++){
+									itm[i] = table.getValueAt(i, 4).toString();
+									if(table.getValueAt(i,1).toString().equals("")){
+										qty[i] = "0";
+									} else {
+										qty[i] = table.getValueAt(i, 1).toString();
 									}
-							}
-						}
-					}
-					if (rbtnUpdateBDL.isSelected() == true){
-						//Checks to see if the BDL has a Bosal Part Number
-						if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
-							JOptionPane.showMessageDialog(BDLframe,
-								    "Please Enter a Bosal Part Number",
-								    "Invalid Entry",
-								    JOptionPane.ERROR_MESSAGE);					
-						} else {
-							//Double checks to see if you want save data
-							int n = JOptionPane.showConfirmDialog(
-								    BDLframe,
-								    "Are you sure you want to save part data?",
-								    "Save:",
-								    JOptionPane.YES_NO_OPTION,
-									JOptionPane.WARNING_MESSAGE);
-							if(n == 0){							
-									JSONArray temp;
-									//convert JSON String to a JSONArray and insert to database
-									try {
-										temp = new JSONArray(getItemsFromTable());
-										//con.updateBDL(temp);
-										System.out.println(temp);
-									} catch (JSONException ex) {
-										ex.printStackTrace();
-									} catch (Exception ex) {
-										ex.printStackTrace();
+								}
+								for(int i = 0; i < rowCount; i++){
+									s = s+"{\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i]+"}";
+									if (i < (rowCount - 1)){
+										s = s + ",";
 									}
+								}
+								s = s + "]";
+								System.out.println(s);	
+								JSONArray temp;
+								try {
+									temp = new JSONArray(s);
+									con.insertNewBDL(temp);
+									System.out.println(temp);
+								} catch (JSONException ex) {
+									ex.printStackTrace();
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
 							}
 						}
 					}
@@ -992,11 +980,12 @@ public class BDLFrame extends JFrame
 					}
 				}
 			};
+			
 			scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 			scrollPane.setBounds(30, 320, 1210, 229);
 			scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
 			scrollPane.setViewportView(myTable);
-			myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);	
+			//myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);	
 			int[] columnsWidth = {
 				     //  1   2   3   4    5    6    7   8   9  10  11  12  13  14  15  16  (Column Numbers)
 		                40, 50, 25, 127, 100, 100, 55, 80, 70, 90, 90, 35, 89, 80, 70, 90
@@ -1007,7 +996,10 @@ public class BDLFrame extends JFrame
 			            column.setMinWidth(width);
 			            column.setPreferredWidth(width);
 			}
-						
+			ComponentResizer cr = new  ComponentResizer();
+			cr.setSnapSize(new Dimension(0, 10));
+			cr.registerComponent(myTable);
+			cr.registerComponent(scrollPane);		
 			
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
