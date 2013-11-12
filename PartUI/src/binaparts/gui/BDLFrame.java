@@ -393,8 +393,7 @@ public class BDLFrame extends JFrame
 						jsonString = jsonString + ",";
 					}
 				}
-				jsonString = jsonString + "]";
-				System.out.println(jsonString);					
+				jsonString = jsonString + "]";			
 			}
 			return jsonString;
 		}
@@ -404,8 +403,6 @@ public class BDLFrame extends JFrame
 			int tempRowCount = 0;
 			try {
 				JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
-				System.out.println(temp);
-				System.out.println(temp.length());			
 				
 				//checks to see if any info was returned from the Database
 				if(temp.length() == 0){
@@ -417,7 +414,6 @@ public class BDLFrame extends JFrame
 					for (int i = 0; i < temp.length(); i++) {
 						for (int j = 0; j < (temp.getJSONObject(i).length()-5); j++) {
 							rowCount++;
-							System.out.println(rowCount);
 						}
 					}
 					String[] itm = new String[rowCount];
@@ -425,19 +421,12 @@ public class BDLFrame extends JFrame
 					//loop to dynamically grab the values from the returned JSONArray
 					for (int i = 0; i < temp.length(); i++) {
 						if (i == (temp.length()-1)) {
-							System.out.println("Grabbing tempRowRount from length");
-							System.out.println("i equals "+i);
-							System.out.println(temp.getJSONObject(i).toString());
 							tempRowCount = (temp.getJSONObject(i).length()-5);
-							System.out.println("tempRowCount equals "+tempRowCount);
 						} else {	
-							System.out.println("setting tempRowRount to 20");
 							tempRowCount = 20;
 						}
 						for (int j = 0; j < (tempRowCount/2); j++) {
-							System.out.println(temp.getJSONObject(i).get("Item"+(j+1)).toString());
 							itm[(i*10)+j] = temp.getJSONObject(i).get("Item"+(j+1)).toString();
-							System.out.println(temp.getJSONObject(i).get("Qty"+(j+1)).toString());
 							qty[(i*10)+j] = temp.getJSONObject(i).get("Qty"+(j+1)).toString();
 						}
 					}			
@@ -817,7 +806,6 @@ public class BDLFrame extends JFrame
 									}
 								}
 								s = s + "]";
-								System.out.println(s);	
 								JSONArray temp;
 								try {
 									temp = new JSONArray(s);
@@ -843,9 +831,7 @@ public class BDLFrame extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnPrint)
 				{
-					printComponent(pnlMain);
-					
-					
+					printComponent(pnlMain);					
 		}}});
 		
 		//JTable			
@@ -871,7 +857,6 @@ public class BDLFrame extends JFrame
 							JTable table = ((JTable)e.getSource());
 							int row = table.getSelectedRow();
 							int column = table.getSelectedColumn();
-							System.out.println("row:"+row+" column: "+column);
 							if(column == 4){
 								String s = (String)JOptionPane.showInputDialog(
 					                    BDLframe,
@@ -903,44 +888,42 @@ public class BDLFrame extends JFrame
 						String productionReleaseDate = null;
 						String customer = null;
 						try {
-							System.out.println("Trying to Collect Data from Database");
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
-							System.out.println(temp);
 							for(int i = 0; i < temp.length(); i++){
 								try{
 									description = temp.getJSONObject(i).getString("PartDescription").toString();
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain PartDescription");
+									//System.out.println("Part " + getSearchText() + " does not contain PartDescription");
 								}
 								try{
 									rev = (int)temp.getJSONObject(i).getInt("Rev");
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain Rev");
+									//System.out.println("Part " + getSearchText() + " does not contain Rev");
 								}
 								try{
 									drawingNumber = temp.getJSONObject(i).get("DrawingNumber").toString();
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain DrawingNumber");
+									//System.out.println("Part " + getSearchText() + " does not contain DrawingNumber");
 								}
 								try{
 								drawingRev = (int)temp.getJSONObject(i).getInt("DrawingRev");
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain DrawingRev");
+									//System.out.println("Part " + getSearchText() + " does not contain DrawingRev");
 								}
 								try{
 									drawingRevDate = temp.getJSONObject(i).get("DrawingRevDate").toString();
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain DrawingRevDate");
+									//System.out.println("Part " + getSearchText() + " does not contain DrawingRevDate");
 								}
 								try{
 									productionReleaseDate = temp.getJSONObject(i).get("ProductionReleaseDate").toString();
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain ProductionReleaseDate");
+									//System.out.println("Part " + getSearchText() + " does not contain ProductionReleaseDate");
 								}
 								try{
 									customer = temp.getJSONObject(i).get("CustPartNumber").toString();
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
+									//System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
 								}
 							}
 						} catch (Exception ex) {
@@ -1230,7 +1213,6 @@ public class BDLFrame extends JFrame
 					if (rbtnSearchBDL.isSelected() == true){
 						try {
 							JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
-							System.out.println(temp);
 							setItemsForTable();							
 							
 						} catch (Exception ex) {
@@ -1248,21 +1230,21 @@ public class BDLFrame extends JFrame
 						        		try{
 						        			customer = temp.getJSONObject(j).get("Customer").toString();
 						        		}catch(Exception ex){
-						        			System.out.println("Program " + platform + " does not contain Customer");
+						        			//System.out.println("Program " + platform + " does not contain Customer");
 						        		}
 						        	}
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain Program");
+									//System.out.println("Part " + getSearchText() + " does not contain Program");
 								}
 				        		try{
 									custPartNum = temp.getJSONObject(i).getString("CustPartNumber").toString();
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
+									//System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
 								}
 				        		try{
 									description = temp.getJSONObject(i).getString("PartDescription").toString();
 								}catch(Exception ex){
-									System.out.println("Part " + getSearchText() + " does not contain PartDescription");
+									//System.out.println("Part " + getSearchText() + " does not contain PartDescription");
 								}
 							}						
 						} catch (Exception ex) {ex.printStackTrace();}
@@ -1700,9 +1682,6 @@ public class BDLFrame extends JFrame
 			add(scrollPane);
 			add(btnSave);
 			add(btnPrint);
-			}
-		
+		}
+	}
 }
-}
-
-
