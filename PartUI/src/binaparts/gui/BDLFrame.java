@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,6 +55,7 @@ import javax.swing.text.Document;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
 import org.json.JSONException;
+
 
 
 
@@ -401,6 +403,64 @@ public class BDLFrame extends JFrame
 				System.out.println(jsonString);					
 			}
 			return jsonString;
+		}
+		public void setItemsForTable(){
+			TableModel table = myTable.getModel();
+			int rowCount = 0;
+			int tempRowCount = 0;
+			try {
+				JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
+				System.out.println(temp);
+				System.out.println(temp.length());			
+				
+				//checks to see if any info was returned from the Database
+				if(temp.length() == 0){
+					JOptionPane.showMessageDialog(BDLframe,
+						    "No Items were added to this breakdown list",
+						    "Invalid Entry",
+						    JOptionPane.ERROR_MESSAGE);	
+				} else {
+					for (int i = 0; i < temp.length(); i++) {
+						for (int j = 0; j < (temp.getJSONObject(i).length()-5); j++) {
+							rowCount++;
+							System.out.println(rowCount);
+						}
+					}
+					String[] itm = new String[rowCount];
+					String[] qty = new String[rowCount];
+					//loop to dynamically grab the values from the returned JSONArray
+					for (int i = 0; i < temp.length(); i++) {
+						if (i == (temp.length()-1)) {
+							System.out.println("Grabbing tempRowRount from length");
+							System.out.println("i equals "+i);
+							System.out.println(temp.getJSONObject(i).toString());
+							tempRowCount = (temp.getJSONObject(i).length()-5);
+							System.out.println("tempRowCount equals "+tempRowCount);
+						} else {	
+							System.out.println("setting tempRowRount to 20");
+							tempRowCount = 20;
+						}
+						for (int j = 0; j < (tempRowCount/2); j++) {
+							System.out.println(temp.getJSONObject(i).get("Item"+(j+1)).toString());
+							itm[(i*10)+j] = temp.getJSONObject(i).get("Item"+(j+1)).toString();
+							System.out.println(temp.getJSONObject(i).get("Qty"+(j+1)).toString());
+							qty[(i*10)+j] = temp.getJSONObject(i).get("Qty"+(j+1)).toString();
+						}
+					}			
+					//loop to dynamically add items from Database to table 			
+					for (int i = 0; i < (rowCount/2); i++) {
+						btnAdd.doClick();
+						table.setValueAt(itm[i], i, 4);
+						table.setValueAt(qty[i], i, 1);
+					}
+				}
+			} catch (HeadlessException ex) {
+				ex.printStackTrace();
+			} catch (JSONException ex) {
+				ex.printStackTrace();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 		
 	//JCheckBoxes
@@ -1179,6 +1239,8 @@ public class BDLFrame extends JFrame
 						try {
 							JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
 							System.out.println(temp);
+							setItemsForTable();							
+							
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
