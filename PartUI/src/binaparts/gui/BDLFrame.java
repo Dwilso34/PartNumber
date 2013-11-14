@@ -8,23 +8,18 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.print.PageFormat;
-import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -41,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -53,11 +49,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.text.Document;
-
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import binaparts.dao.DBConnect;
 import binaparts.util.ComponentResizer;
 
@@ -78,8 +72,8 @@ public class BDLFrame extends JFrame
 		pnlMain = new BDLMain(contentPane);
 		contentPane.add(pnlMain, "Main Menu");
 		BDLframe.setResizable(true);
-		BDLframe.setPreferredSize(new Dimension(1285, 610));
-		BDLframe.setMinimumSize(new Dimension(1285, 610));
+		BDLframe.setPreferredSize(new Dimension(1285, 632));
+		BDLframe.setMinimumSize(new Dimension(1285, 632));
 		BDLframe.setMaximumSize(new Dimension(1285, Integer.MAX_VALUE));
 		BDLframe.setContentPane(contentPane);
 		pack();
@@ -96,9 +90,7 @@ public class BDLFrame extends JFrame
 	}
 		
 	public class BDLMain extends JPanel 
-	{
-		
-		//global variables
+	{//global variables
 		private String customer;
 		private String platform;
 		private String name;
@@ -201,7 +193,7 @@ public class BDLFrame extends JFrame
 	            // Get the the print size
 	            Dimension printSize = new Dimension();
 	            printSize.setSize(pf.getImageableWidth(), pf.getImageableHeight());
-                System.out.println(pf.getImageableWidth() + " " + pf.getImageableHeight());
+	            System.out.println(pf.getImageableWidth() + " " + pf.getImageableHeight());
 	            // Calculate the scale factor
 	            double scaleFactor = getScaleFactorToFit(compSize, printSize);
 	            // Don't want to scale up, only want to scale down
@@ -210,8 +202,8 @@ public class BDLFrame extends JFrame
 	            }
 
 	            // Calculate the scaled size...
-	            double scaleWidth = compSize.width / scaleFactor;
-	            double scaleHeight = compSize.height / scaleFactor;
+	            // double scaleWidth = compSize.width / scaleFactor;
+	            // double scaleHeight = compSize.height / scaleFactor;
 	            
 	            // Create a clone of the graphics context.  This allows us to manipulate
 	            // the graphics context without begin worried about what effects
@@ -225,7 +217,7 @@ public class BDLFrame extends JFrame
 	            // Create a new AffineTransformation
 	            AffineTransform at = new AffineTransform();
 	            // Translate the offset to out "center" of page
-	           // at.translate(x, y);
+	            // at.translate(x, y);
 	            // Set the scaling
 	            at.scale(scaleFactor, scaleFactor);
 	            // Apply the transformation
@@ -310,6 +302,8 @@ public class BDLFrame extends JFrame
 		private JLabel lblRelSupplier;
 		private JLabel lblBOSAL;
 		private JLabel lblCUSTOMER;
+		private JLabel lblNote;
+		private JLabel lblRemark;
 
 	//JTextFields
 		private JTextField txtCustomer;
@@ -334,6 +328,10 @@ public class BDLFrame extends JFrame
 		private JTextField txtRelPlant1;
 		private JTextField txtRelPlant2;
 		private JTextField txtRelSupplier;
+		
+	//JTextArea	
+		private JTextArea txtaRemark;
+		private JTextArea txtaNote;
 		
 	//JButton
 		private JButton btnAdd;
@@ -512,15 +510,15 @@ public class BDLFrame extends JFrame
 		//Images
 			final ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
 			lblBosal = new JLabel(bosal);
-			lblBosal.setBounds(10, 11, 194, 56);
+			lblBosal.setBounds(406, 28, 184, 46);
 			
 		//JLabels
 			lblBDL = new JLabel("Breakdown List");
-			lblBDL.setBounds(214, 26, 482, 40);
+			lblBDL.setBounds(600, 34, 291, 40);
 			lblBDL.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
 			lblBDL.setForeground(Color.BLACK);
 			lblCustomer = new JLabel("Customer");
-			lblCustomer.setBounds(30, 82, 128, 92);
+			lblCustomer.setBounds(30, 28, 128, 92);
 			lblCustomer.setHorizontalAlignment(SwingConstants.CENTER);
 			lblCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblCustomer.setBackground(new Color(150, 150, 150));
@@ -528,7 +526,7 @@ public class BDLFrame extends JFrame
 			lblCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCustomer.setForeground(Color.BLACK);
 			lblPlatform = new JLabel("Platform");
-			lblPlatform.setBounds(30, 173, 128, 20);
+			lblPlatform.setBounds(30, 119, 128, 20);
 			lblPlatform.setHorizontalAlignment(SwingConstants.CENTER);
 			lblPlatform.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblPlatform.setBackground(new Color(150, 150, 150));
@@ -536,35 +534,35 @@ public class BDLFrame extends JFrame
 			lblPlatform.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblPlatform.setForeground(Color.BLACK);
 			lblType = new JLabel("Type:");
-			lblType.setBounds(76, 192, 82, 20);
+			lblType.setBounds(76, 138, 82, 20);
 			lblType.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblType.setBackground(new Color(150, 150, 150));
 			lblType.setOpaque(true);
 			lblType.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblType.setForeground(Color.BLACK);
 			lblName = new JLabel("Name:");
-			lblName.setBounds(76, 211, 82, 20);
+			lblName.setBounds(76, 157, 82, 20);
 			lblName.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblName.setBackground(new Color(150, 150, 150));
 			lblName.setOpaque(true);
 			lblName.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblName.setForeground(Color.BLACK);
 			lblVolume = new JLabel("Volume (L):");
-			lblVolume.setBounds(76, 230, 82, 20);
+			lblVolume.setBounds(76, 176, 82, 20);
 			lblVolume.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblVolume.setBackground(new Color(150, 150, 150));
 			lblVolume.setOpaque(true);
 			lblVolume.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblVolume.setForeground(Color.BLACK);
 			lblPower = new JLabel("Power (kW):");
-			lblPower.setBounds(76, 249, 82, 20);
+			lblPower.setBounds(76, 195, 82, 20);
 			lblPower.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblPower.setBackground(new Color(150, 150, 150));
 			lblPower.setOpaque(true);
 			lblPower.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblPower.setForeground(Color.BLACK);
 			lblEngine = new JLabel("Engine");
-			lblEngine.setBounds(30, 192, 47, 77);
+			lblEngine.setBounds(30, 138, 47, 77);
 			lblEngine.setHorizontalAlignment(SwingConstants.CENTER);
 			lblEngine.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblEngine.setBackground(new Color(150, 150, 150));
@@ -641,79 +639,93 @@ public class BDLFrame extends JFrame
 			lblIssuedBy.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblIssuedBy.setForeground(Color.BLACK);
 			lblPage = new JLabel("Page:");
-			lblPage.setBounds(1064, 82, 77, 20);
+			lblPage.setBounds(1064, 28, 77, 20);
 			lblPage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblPage.setBackground(new Color(150, 150, 150));
 			lblPage.setOpaque(true);
 			lblPage.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblPage.setForeground(Color.BLACK);
 			lblREV = new JLabel("REV:");
-			lblREV.setBounds(1064, 101, 77, 20);
+			lblREV.setBounds(1064, 47, 77, 20);
 			lblREV.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblREV.setBackground(new Color(150, 150, 150));
 			lblREV.setOpaque(true);
 			lblREV.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblREV.setForeground(Color.BLACK);
 			lblRelDate = new JLabel("Rel Date:");
-			lblRelDate.setBounds(1064, 120, 77, 20);
+			lblRelDate.setBounds(1064, 66, 77, 20);
 			lblRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelDate.setBackground(new Color(150, 150, 150));
 			lblRelDate.setOpaque(true);
 			lblRelDate.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelDate.setForeground(Color.BLACK);
 			lblREVDate = new JLabel("REV Date:");
-			lblREVDate.setBounds(1064, 139, 77, 20);
+			lblREVDate.setBounds(1064, 85, 77, 20);
 			lblREVDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblREVDate.setBackground(new Color(150, 150, 150));
 			lblREVDate.setOpaque(true);
 			lblREVDate.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblREVDate.setForeground(Color.BLACK);
 			lblProduction = new JLabel("Production:");
-			lblProduction.setBounds(1077, 170, 163, 20);
+			lblProduction.setBounds(1041, 110, 200, 20);
 			lblProduction.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblProduction.setBackground(new Color(150, 150, 150));
 			lblProduction.setOpaque(true);
 			lblProduction.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblProduction.setForeground(Color.BLACK);
 			lblRelPlant1 = new JLabel("Rel Plant 1:");
-			lblRelPlant1.setBounds(1050, 220, 91, 20);
+			lblRelPlant1.setBounds(1050, 159, 91, 20);
 			lblRelPlant1.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelPlant1.setBackground(new Color(150, 150, 150));
 			lblRelPlant1.setOpaque(true);
 			lblRelPlant1.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelPlant1.setForeground(Color.BLACK);
 			lblRelPlant2 = new JLabel("Rel Plant 2:");
-			lblRelPlant2.setBounds(1050, 239, 91, 20);
+			lblRelPlant2.setBounds(1050, 178, 91, 20);
 			lblRelPlant2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelPlant2.setBackground(new Color(150, 150, 150));
 			lblRelPlant2.setOpaque(true);
 			lblRelPlant2.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelPlant2.setForeground(Color.BLACK);
 			lblRelSupplier = new JLabel("Rel Supplier:");
-			lblRelSupplier.setBounds(1050, 258, 91, 20);
+			lblRelSupplier.setBounds(1050, 197, 91, 20);
 			lblRelSupplier.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelSupplier.setBackground(new Color(150, 150, 150));
 			lblRelSupplier.setOpaque(true);
 			lblRelSupplier.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelSupplier.setForeground(Color.BLACK);
 			lblBOSAL = new JLabel("BOSAL");
-			lblBOSAL.setBounds(271, 300, 620, 20);
+			lblBOSAL.setBounds(271, 320, 620, 20);
 			lblBOSAL.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblBOSAL.setBackground(new Color(150, 150, 150));
 			lblBOSAL.setOpaque(true);
 			lblBOSAL.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblBOSAL.setForeground(Color.BLACK);
 			lblCUSTOMER = new JLabel("CUSTOMER");
-			lblCUSTOMER.setBounds(890, 300, 350, 20);
+			lblCUSTOMER.setBounds(890, 320, 350, 20);
 			lblCUSTOMER.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblCUSTOMER.setBackground(new Color(150, 150, 150));
 			lblCUSTOMER.setOpaque(true);
 			lblCUSTOMER.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCUSTOMER.setForeground(Color.BLACK);
+			lblNote = new JLabel("Note");
+			lblNote.setBounds(30, 255, 128, 20);
+			lblNote.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			lblNote.setBackground(new Color(150, 150, 150));
+			lblNote.setOpaque(true);
+			lblNote.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblNote.setForeground(Color.BLACK);
+			lblRemark = new JLabel("Remark");
+			lblRemark.setBounds(290, 255, 753, 20);
+			lblRemark.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			lblRemark.setBackground(new Color(150, 150, 150));
+			lblRemark.setOpaque(true);
+			lblRemark.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblRemark.setForeground(Color.BLACK);
 			
 		//JButtons
 			btnAdd = new JButton("Add");
-			btnAdd.setBounds(30, 289, 75, 20);
+			btnAdd.setBounds(30, 316, 75, 20);
 			btnAdd.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -726,7 +738,7 @@ public class BDLFrame extends JFrame
 				}				
 			});
 			btnDelete = new JButton("Delete");
-			btnDelete.setBounds(115, 289, 75, 20);
+			btnDelete.setBounds(115, 316, 75, 20);
 			btnDelete.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -761,7 +773,7 @@ public class BDLFrame extends JFrame
 		
 		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
 		btnSave = new JButton(save);
-		btnSave.setBounds(1138, 30, 103, 34);
+		btnSave.setBounds(871, 214, 103, 34);
 		btnSave.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -825,12 +837,19 @@ public class BDLFrame extends JFrame
 		
 		ImageIcon print = new ImageIcon(getClass().getResource("/images/print.jpg"));
 		btnPrint = new JButton(print);
-		btnPrint.setBounds(900, 30, 103, 34);
+		btnPrint.setBounds(319, 214, 103, 34);
 		btnPrint.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnPrint)
 				{
+					rbtnUpdateBDL.setVisible(false);
+					rbtnCreateBDL.setVisible(false);
+					rbtnSearchBDL.setVisible(false);
+					btnAdd.setVisible(false);
+					btnDelete.setVisible(false);
+					btnPrint.setVisible(false);
+					btnSave.setVisible(false);
 					printComponent(pnlMain);					
 		}}});
 		
@@ -965,7 +984,7 @@ public class BDLFrame extends JFrame
 			};
 			
 			scrollPane = new JScrollPane(myTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-			scrollPane.setBounds(30, 320, 1210, 229);
+			scrollPane.setBounds(30, 339, 1210, 229);
 			scrollPane.setViewportBorder(new LineBorder(new Color(0, 0, 0)));
 			scrollPane.setViewportView(myTable);
 			//myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);	
@@ -986,19 +1005,19 @@ public class BDLFrame extends JFrame
 			
 		//JComboBoxes
 			cboCustomer = new JComboBox<String>();
-			cboCustomer.setBounds(157, 82, 128, 20);
+			cboCustomer.setBounds(157, 28, 128, 20);
 			cboCustomer.setEditable(true);
 			AutoCompleteDecorator.decorate(cboCustomer);
 			cboCustomer.addMouseListener(new ContextMenuMouseListener());
 			cboCustomer.setForeground(Color.BLACK);
 			cboPlatform = new JComboBox<String>();
-			cboPlatform.setBounds(157, 173, 128, 20);
+			cboPlatform.setBounds(157, 119, 128, 20);
 			cboPlatform.setEditable(true);
 			AutoCompleteDecorator.decorate(cboPlatform);
 			cboPlatform.addMouseListener(new ContextMenuMouseListener());
 			cboPlatform.setForeground(Color.BLACK);
 			cboName = new JComboBox<String>();
-			cboName.setBounds(157, 211, 128, 20);
+			cboName.setBounds(157, 157, 128, 20);
 			cboName.setEditable(true);
 			AutoCompleteDecorator.decorate(cboName);
 			cboName.addMouseListener(new ContextMenuMouseListener());
@@ -1291,27 +1310,27 @@ public class BDLFrame extends JFrame
 			     }
 			};
 			txtCustomer = new JTextField();
-			txtCustomer.setBounds(157, 82, 128, 20);
+			txtCustomer.setBounds(157, 28, 128, 20);
 			txtCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustomer.setForeground(Color.BLACK);
 			txtPlatform = new JTextField();
-			txtPlatform.setBounds(157, 173, 128, 20);
+			txtPlatform.setBounds(157, 119, 128, 20);
 			txtPlatform.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPlatform.setForeground(Color.BLACK);
 			txtType = new JTextField();
-			txtType.setBounds(157, 192, 128, 20);
+			txtType.setBounds(157, 138, 128, 20);
 			txtType.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtType.setForeground(Color.BLACK);
 			txtName = new JTextField();
-			txtName.setBounds(157, 211, 128, 20);
+			txtName.setBounds(157, 157, 128, 20);
 			txtName.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtName.setForeground(Color.BLACK);
 			txtVolume = new JTextField();
-			txtVolume.setBounds(157, 230, 128, 20);
+			txtVolume.setBounds(157, 176, 128, 20);
 			txtVolume.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtVolume.setForeground(Color.BLACK);
 			txtPower = new JTextField();
-			txtPower.setBounds(157, 249, 128, 20);
+			txtPower.setBounds(157, 195, 128, 20);
 			txtPower.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPower.setForeground(Color.BLACK);
 			txtBosalPartNum = new JTextField();
@@ -1350,49 +1369,57 @@ public class BDLFrame extends JFrame
 			txtIssuedBy.setForeground(Color.BLACK);
 			txtIssuedBy.setEditable(false);
 			txtPage = new JTextField();
-			txtPage.setBounds(1140, 82, 101, 20);
+			txtPage.setBounds(1140, 28, 101, 20);
 			txtPage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPage.setForeground(Color.BLACK);
 			txtREV = new JTextField();
-			txtREV.setBounds(1140, 101, 101, 20);
+			txtREV.setBounds(1140, 47, 101, 20);
 			txtREV.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREV.setForeground(Color.BLACK);
 			txtRelDate = new JTextField();
-			txtRelDate.setBounds(1140, 120, 101, 20);
+			txtRelDate.setBounds(1140, 66, 101, 20);
 			txtRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelDate.setForeground(Color.BLACK);
 			txtREVDate = new JTextField();
-			txtREVDate.setBounds(1140, 139, 101, 20);
+			txtREVDate.setBounds(1140, 85, 101, 20);
 			txtREVDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREVDate.setForeground(Color.BLACK);
 			txtProduction = new JTextField();
-			txtProduction.setBounds(1077, 189, 163, 20);
+			txtProduction.setBounds(1041, 129, 200, 20);
 			txtProduction.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtProduction.setForeground(Color.BLACK);
 			txtRelPlant1 = new JTextField();
-			txtRelPlant1.setBounds(1140, 220, 100, 20);
+			txtRelPlant1.setBounds(1140, 159, 100, 20);
 			txtRelPlant1.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelPlant1.setForeground(Color.BLACK);
 			txtRelPlant2 = new JTextField();
-			txtRelPlant2.setBounds(1140, 239, 100, 20);
+			txtRelPlant2.setBounds(1140, 178, 100, 20);
 			txtRelPlant2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelPlant2.setForeground(Color.BLACK);
 			txtRelSupplier = new JTextField();
-			txtRelSupplier.setBounds(1140, 258, 100, 20);
+			txtRelSupplier.setBounds(1140, 197, 100, 20);
 			txtRelSupplier.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelSupplier.setForeground(Color.BLACK);
+			txtaRemark = new JTextArea();
+			txtaRemark.setBounds(290, 274, 753, 35);
+			txtaRemark.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			txtaRemark.setForeground(Color.BLACK);
+			txtaNote = new JTextArea();
+			txtaNote.setBounds(30, 274, 128, 35);
+			txtaNote.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			txtaNote.setForeground(Color.BLACK);
 		
 		//JCheckBoxes
 			cbxCustomer = new JCheckBox();
-			cbxCustomer.setBounds(290, 85, 13, 13);
+			cbxCustomer.setBounds(290, 33, 13, 13);
 			cbxCustomer.setBackground(new Color(105, 105, 105));
 			cbxCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			cbxPlatform = new JCheckBox();
-			cbxPlatform.setBounds(290, 177, 13, 13);
+			cbxPlatform.setBounds(290, 123, 13, 13);
 			cbxPlatform.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			cbxPlatform.setBackground(new Color(105, 105, 105));
 			cbxName = new JCheckBox();
-			cbxName.setBounds(290, 214, 13, 13);
+			cbxName.setBounds(290, 161, 13, 13);
 			cbxName.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			cbxName.setBackground(new Color(105, 105, 105));
 			
@@ -1682,6 +1709,10 @@ public class BDLFrame extends JFrame
 			add(scrollPane);
 			add(btnSave);
 			add(btnPrint);
+			add(txtaNote);
+			add(txtaRemark);
+			add(lblNote);
+			add(lblRemark);
 		}
 	}
 }
