@@ -397,6 +397,17 @@ public class BDLFrame extends JFrame
 			}
 			return jsonString;
 		}
+		public boolean containsBDL(){
+			try {
+				JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
+				if (temp.length() > 0) {
+					return true;
+				}
+			} catch (Exception ex) {				
+				ex.printStackTrace();
+			}
+			return false;
+		}
 		public void setItemsForTable(){
 			TableModel table = myTable.getModel();
 			int rowCount = 0;
@@ -435,6 +446,63 @@ public class BDLFrame extends JFrame
 						btnAdd.doClick();
 						table.setValueAt(itm[i], i, 4);
 						table.setValueAt(qty[i], i, 1);
+						//checks to see if there is a sub BDL
+						if (containsBDL() == true) {
+							table.setValueAt("#", i, 2);
+							//setSubItemsForTable(itm[i]);
+						}
+					}
+				}
+			} catch (HeadlessException ex) {
+				ex.printStackTrace();
+			} catch (JSONException ex) {
+				ex.printStackTrace();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		public void setSubItemsForTable(String BDLNumber){
+			TableModel table = myTable.getModel();
+			int rowCount = 0;
+			int tempRowCount = 0;
+			try {
+				JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", BDLNumber);
+				
+				//checks to see if any info was returned from the Database
+				if(temp.length() == 0){
+					JOptionPane.showMessageDialog(BDLframe,
+						    "No Items were added to this breakdown list",
+						    "Invalid Entry",
+						    JOptionPane.ERROR_MESSAGE);	
+				} else {
+					for (int i = 0; i < temp.length(); i++) {
+						for (int j = 0; j < (temp.getJSONObject(i).length()-5); j++) {
+							rowCount++;
+						}
+					}
+					String[] itm = new String[rowCount];
+					String[] qty = new String[rowCount];
+					//loop to dynamically grab the values from the returned JSONArray
+					for (int i = 0; i < temp.length(); i++) {
+						if (i == (temp.length()-1)) {
+							tempRowCount = (temp.getJSONObject(i).length()-5);
+						} else {	
+							tempRowCount = 20;
+						}
+						for (int j = 0; j < (tempRowCount/2); j++) {
+							itm[(i*10)+j] = temp.getJSONObject(i).get("Item"+(j+1)).toString();
+							qty[(i*10)+j] = temp.getJSONObject(i).get("Qty"+(j+1)).toString();
+						}
+					}			
+					//loop to dynamically add items from Database to table 			
+					for (int i = 0; i < (rowCount/2); i++) {
+						btnAdd.doClick();
+						table.setValueAt(itm[i], i, 4);
+						table.setValueAt(qty[i], i, 1);
+						//checks to see if there is a sub BDL
+						if (containsBDL() == true) {
+							table.setValueAt("#", i, 2);
+						}
 					}
 				}
 			} catch (HeadlessException ex) {
@@ -887,6 +955,7 @@ public class BDLFrame extends JFrame
 						String drawingRevDate = null;
 						String productionReleaseDate = null;
 						String customer = null;
+						
 						try {
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
 							for(int i = 0; i < temp.length(); i++){
@@ -981,7 +1050,7 @@ public class BDLFrame extends JFrame
 			}
 			ComponentResizer cr = new  ComponentResizer();
 			cr.setSnapSize(new Dimension(0, 10));
-			cr.registerComponent(myTable);
+			//cr.registerComponent(myTable);
 			cr.registerComponent(scrollPane);		
 			
 		//JComboBoxes
@@ -1212,7 +1281,10 @@ public class BDLFrame extends JFrame
 					
 					if (rbtnSearchBDL.isSelected() == true){
 						try {
-							JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
+							//JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
+							for (int i = table1.getRowCount(); i > 0; i--) {
+								table1.removeRow(i-1);
+							}
 							setItemsForTable();							
 							
 						} catch (Exception ex) {
