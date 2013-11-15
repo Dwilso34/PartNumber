@@ -821,29 +821,118 @@ public class DBConnect {
 		}
 	}
 	//inserts a new row into `breakdown lists info` to create a BDL
-	public void insertBDLInfo(String bdlNumber, int Rev, String RevDate, String ReleaseDate) throws Exception{	
+	public void insertBDLInfo(JSONArray bdlInfo) throws Exception{	
 		try{
 			String usersname = getUsersName();
 			Timestamp timestamp = getTimestamp();
 			getDBConnection();
-			pst = con.prepareStatement("INSERT INTO `breakdown lists info` "
-					+ "(BreakdownListNumber, "
-					+ "Rev, "
-					+ "RevDate, "
-					+ "ReleaseDate, "
-					+ "CreatedBy, "
-					+ "Created, "
-					+ "UpdatedBy, "
-					+ "Updated) "
-					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
-			pst.setString(1, bdlNumber);
-			pst.setInt(2, Rev);
-			pst.setString(3, RevDate);
-			pst.setString(4, ReleaseDate);
-			pst.setString(5, usersname);
-			pst.setTimestamp(6, timestamp);
-			pst.setString(7, usersname);
-			pst.setTimestamp(8, timestamp);
+			String BosalPartNumber = bdlInfo.getJSONObject(0).get("BreakdownListNumber").toString();
+			System.out.println("json array length is "+bdlInfo.length());
+			int count = (bdlInfo.length()-1);			
+			System.out.println("The count is "+count);
+			String[] values = new String[count];
+			System.out.println(values.length);
+			int i = 0;
+			String statement = "INSERT INTO `breakdown lists info` (BreakdownListNumber";
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("Rev").toString();
+				System.out.println(values[i]);
+				statement = statement + ", Rev";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("RevDate").toString();
+				System.out.println(values[i]);
+				statement = statement + ", RevDate";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("ReleaseDate").toString();
+				System.out.println(values[i]);
+				statement = statement + ", ReleaseDate";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("Production").toString();
+				System.out.println(values[i]);
+				statement = statement + ", Production";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant1").toString();
+				System.out.println(values[i]);
+				statement = statement + ", RelPlant1";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant2").toString();
+				System.out.println(values[i]);
+				statement = statement + ", RelPlant2";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("RelSupplier").toString();
+				System.out.println(values[i]);
+				statement = statement + ", RelSupplier";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("Volume").toString();
+				System.out.println(values[i]);
+				statement = statement + ", Volume";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("Length").toString();
+				System.out.println(values[i]);
+				statement = statement + ", Length";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+			
+			try {
+				values[i] = bdlInfo.getJSONObject(i+1).get("Section").toString();
+				System.out.println(values[i]);
+				statement = statement + ", Section";
+				i++;
+			} catch (Exception ex) {ex.printStackTrace();}
+				
+			statement = statement + ", CreatedBy, Created, UpdatedBy, Updated) VALUES(";
+			
+			//loop to add a parameter for each column value going into Database
+			for (i = 0; i < count+5; i++){
+				if (i == 0){
+					statement = statement + "?";
+				} else {
+					statement = statement + ", ?";
+				}				
+			}
+			statement = statement + ")";
+			System.out.println(statement);
+			pst = con.prepareStatement(statement);
+			//loop to set the values of the parameters going into the Database
+			for (i = -1; i < count; i++){
+				if (i == -1){
+					pst.setString(i+2, BosalPartNumber);
+				} 
+				//if i is even then an Item is added to the parameters
+				else {
+					pst.setString(i+2, values[i]);
+					System.out.println(values[i]);
+				} 
+			}				
+			pst.setString((count+2), usersname);
+			pst.setTimestamp((count+3), timestamp);
+			pst.setString((count+4), usersname);
+			pst.setTimestamp((count+5), timestamp);
 			pst.executeUpdate();
 			pst.close();
 			con.close();
@@ -932,7 +1021,7 @@ public class DBConnect {
 		}finally{
 			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
-	}
+	}	
 	//Returns JSONArray of Experimental Part Numbers (to be used prior to Auto-Increment for conversion)
 	public JSONArray queryReturnAllExpParts() throws Exception{
 		
