@@ -40,6 +40,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
@@ -349,7 +350,7 @@ public class BDLFrame extends JFrame
 		public void bdlHeaders(){
 			try{
 	            String[] columnNames = {"ITEM", "QTY", " ", "Description", 
-	            		"JDE Part-NR", "OLD Part-NR", "Rev", "DWG NR", 
+	            		"Bosal Part-NR", "OLD Part-NR", "Rev", "DWG NR", 
 	            		"DWG Rev", "DWG Rev Date", "Prod Rel Date", "FRM",
 	            		"Part-NR", "DWG-NR", "DWG Rev", "DWG Rev Date"};
 	            String[][] data = new String[0][0];	             	      
@@ -1126,7 +1127,6 @@ public class BDLFrame extends JFrame
 			}
 			ComponentResizer cr = new  ComponentResizer();
 			cr.setSnapSize(new Dimension(0, 10));
-			//cr.registerComponent(myTable);
 			cr.registerComponent(scrollPane);		
 			
 		//JComboBoxes
