@@ -858,7 +858,7 @@ public class BDLFrame extends JFrame
 							} else {
 								String[] itm = new String[rowCount];
 								String[] qty = new String[rowCount];
-								String s = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
+								String s1 = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
 								for(int i = 0; i < rowCount; i++){
 									itm[i] = table.getValueAt(i, 4).toString();
 									if(table.getValueAt(i,1).toString().equals("")){
@@ -868,17 +868,55 @@ public class BDLFrame extends JFrame
 									}
 								}
 								for(int i = 0; i < rowCount; i++){
-									s = s+"{\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i]+"}";
+									s1 = s1+"{\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i]+"}";
 									if (i < (rowCount - 1)){
-										s = s + ",";
+										s1 = s1 + ",";
 									}
 								}
-								s = s + "]";
-								JSONArray temp;
+								s1 = s1 + "]";
+
+								String s2 = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"}";
+								if (!(txtREV.getText().equals("")) || !(txtREV.getText() == null)) {
+									s2 = s2+", {\"Rev\":\""+txtREV.getText()+"\"}";
+								}
+								if (!(txtREVDate.getText().equals("")) || !(txtREVDate.getText() == null)) {
+									s2 = s2+", {\"RevDate\":\""+txtREVDate.getText()+"\"}";
+								}
+								if (!(txtRelDate.getText().equals("")) || !(txtRelDate.getText() == null)) {
+									s2 = s2+", {\"ReleaseDate\":\""+txtRelDate.getText()+"\"}";
+								}
+								if (!(txtProduction.getText().equals("")) || !(txtProduction.getText() == null)) {
+									s2 = s2+", {\"Production\":\""+txtProduction.getText()+"\"}";
+								}
+								if (!(txtRelPlant1.getText().equals("")) || !(txtRelPlant1.getText() == null)) {
+									s2 = s2+", {\"RelPlant1\":\""+txtRelPlant1.getText()+"\"}";
+								}
+								if (!(txtRelPlant2.getText().equals("")) || !(txtRelPlant2.getText() == null)) {
+									s2 = s2+", {\"RelPlant2\":\""+txtRelPlant2.getText()+"\"}";
+								}
+								if (!(txtRelSupplier.getText().equals("")) || !(txtRelSupplier.getText() == null)) {
+									s2 = s2+", {\"RelSupplier\":\""+txtRelSupplier.getText()+"\"}";
+								}
+								if (!(txtVolume2.getText().equals("")) || !(txtVolume2.getText() == null)) {
+									s2 = s2+", {\"Volume\":\""+txtVolume2.getText()+"\"}";
+								}
+								if (!(txtLength.getText().equals("")) || !(txtLength.getText() == null)) {
+									s2 = s2+", {\"Length\":\""+txtLength.getText()+"\"}";
+								}
+								if (!(txtSection.getText().equals("")) || !(txtSection.getText() == null)) {
+									s2 = s2+", {\"Section\":\""+txtSection.getText()+"\"}";
+								}
+								s2 = s2 + "]";
+								System.out.print(s2);
+								JSONArray temp1;
+								JSONArray temp2;
 								try {
-									temp = new JSONArray(s);
-									con.insertNewBDL(temp);
-									System.out.println(temp);
+									temp1 = new JSONArray(s1);
+									temp2 = new JSONArray(s2);
+									con.insertNewBDL(temp1);
+									con.insertBDLInfo(temp2);
+									System.out.println(temp1);
+									System.out.println(temp2);
 								} catch (JSONException ex) {
 									ex.printStackTrace();
 								} catch (Exception ex) {
