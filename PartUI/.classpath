@@ -12,5 +12,14 @@
 	<classpathentry kind="lib" path="lib/jackson-databind-2.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/smartjpdfwriter.jar"/>
 	<classpathentry kind="lib" path="lib/smartjcommon.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/itext-pdfa-5.4.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/itext-pdfa-5.4.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/itext-pdfa-5.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/itext-xtra-5.4.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/itext-xtra-5.4.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/itext-xtra-5.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.4.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.4.4-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

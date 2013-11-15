@@ -20,6 +20,14 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
+import java.io.FileOutputStream;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -50,8 +58,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
-import javax.swing.text.Document;
-
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -976,7 +982,32 @@ public class BDLFrame extends JFrame
 					btnDelete.setVisible(false);
 					btnPrint.setVisible(false);
 					btnSave.setVisible(false);
-					printComponent(pnlMain);					
+					
+					try {
+			            Document document = new Document(PageSize.A4.rotate(), 50, 50, 50, 50);
+			            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:/Users/shawg/Desktop/test1.pdf"));
+			            document.open();
+			            PdfContentByte cb = writer.getDirectContent();
+			            PdfTemplate tp = cb.createTemplate(pnlMain.getWidth(), pnlMain.getHeight());
+			            @SuppressWarnings("deprecation")
+						Graphics2D g2 = tp.createGraphics(pnlMain.getWidth(), pnlMain.getHeight());
+			            AffineTransform at = new AffineTransform();
+			            // Translate the offset to out "center" of page
+			            // at.translate(x, y);
+			            // Set the scaling
+			            at.scale(0.63, 0.63);
+			            // Apply the transformation
+			            g2.transform(at);
+			            //g2.scale(0.65, 1.0);
+			            pnlMain.print(g2);
+			            g2.dispose();
+			            cb.addTemplate(tp, 7, 0);
+			            document.close();
+					} catch (Exception e1) {
+					    e1.printStackTrace();
+					}
+					
+					//printComponent(pnlMain);					
 		}}});
 		
 		//JTable			
@@ -1547,8 +1578,8 @@ public class BDLFrame extends JFrame
 			          typeString = "Remove";
 			        }
 			        System.out.print("Type : " + typeString);
-			        Document source = documentEvent.getDocument();
-			        int length = source.getLength();
+			        Document source = (com.itextpdf.text.Document) documentEvent.getDocument();
+			        int length = ((DocumentEvent) source).getLength();
 			        System.out.println("Length: " + length);
 			     }
 			};
