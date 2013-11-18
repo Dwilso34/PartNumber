@@ -995,11 +995,13 @@ public class BDLFrame extends JFrame
 			            	int y = getY();
 			            	System.out.println(pnlMain.getHeight());
 			            at.translate(x + 20, y + 20);}
-			            if(pnlMain.getHeight() > 877){
+			        
+			       //Attemp to create second page in PDF(Didn't work though)
+			            /*if(pnlMain.getHeight() > 877){
 			            	document.newPage();
 			            	cb.addTemplate(tp, 0, 0);
 			            	
-			            }
+			            }*/
 			            
 			            g2.transform(at);
 			            g2.scale(0.63, 0.63);
