@@ -84,8 +84,8 @@ public class BDLFrame extends JFrame
 		pnlMain = new BDLMain(contentPane);
 		contentPane.add(pnlMain, "Main Menu");
 		BDLframe.setResizable(true);
-		BDLframe.setPreferredSize(new Dimension(1285, 632));
-		BDLframe.setMinimumSize(new Dimension(1285, 632));
+		BDLframe.setPreferredSize(new Dimension(1285, 915));
+		BDLframe.setMinimumSize(new Dimension(1285, 915));
 		BDLframe.setMaximumSize(new Dimension(1285, Integer.MAX_VALUE));
 		BDLframe.setContentPane(contentPane);
 		pack();
@@ -585,7 +585,7 @@ public class BDLFrame extends JFrame
 		//JLabels
 			lblBDL = new JLabel("Breakdown List");
 			lblBDL.setBounds(600, 34, 291, 40);
-			lblBDL.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+			lblBDL.setFont(new Font("Tahoma", Font.BOLD, 32));
 			lblBDL.setForeground(Color.BLACK);
 			lblCustomer = new JLabel("Customer");
 			lblCustomer.setBounds(30, 28, 128, 92);
@@ -967,6 +967,7 @@ public class BDLFrame extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnPrint)
 				{
+					setBackground(Color.WHITE);
 					rbtnUpdateBDL.setVisible(false);
 					rbtnCreateBDL.setVisible(false);
 					rbtnSearchBDL.setVisible(false);
@@ -986,9 +987,20 @@ public class BDLFrame extends JFrame
 			            AffineTransform at = new AffineTransform();
 			            if(pnlMain.getHeight() > 594){
 			            	int x = getX(); 
-			            	int y = getY() + (pnlMain.getHeight() - 594);
+			            	int y = getY() + (pnlMain.getHeight() - 574);
 			            	System.out.println(pnlMain.getHeight());
-			            at.translate(x, y);}
+			            at.translate(x + 20, y);}
+			            if(pnlMain.getHeight() == 594){
+			            	int x = getX(); 
+			            	int y = getY();
+			            	System.out.println(pnlMain.getHeight());
+			            at.translate(x + 20, y + 20);}
+			            if(pnlMain.getHeight() > 877){
+			            	document.newPage();
+			            	cb.addTemplate(tp, 0, 0);
+			            	
+			            }
+			            
 			            g2.transform(at);
 			            g2.scale(0.63, 0.63);
 			            pnlMain.printAll(g2);
@@ -999,7 +1011,7 @@ public class BDLFrame extends JFrame
 					    e1.printStackTrace();
 					}
 					//End
-					
+					System.out.println(scrollPane.getHeight());
 					//printComponent(pnlMain);					
 		}}});
 		

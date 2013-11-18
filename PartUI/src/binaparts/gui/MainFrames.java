@@ -485,7 +485,7 @@ public class MainFrames extends JFrame
 		lblSupplierPartNumber.setForeground(Color.BLACK);
         lblCreateAPart = new JLabel("Create a Part Number");
         lblCreateAPart.setBounds(229, 32, 415, 52);
-		lblCreateAPart.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+		lblCreateAPart.setFont(new Font("Tahoma", Font.BOLD, 32));
 		lblCreateAPart.setForeground(Color.BLACK);
         lblCustomerPartNumber = new JLabel("Customer Part Number");
         lblCustomerPartNumber.setBounds(372, 142, 161, 17);
@@ -1399,7 +1399,7 @@ public class MainFrames extends JFrame
 		lblCustomerPartNum.setForeground(Color.BLACK);
 		lblSupplierPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblSupplierPartNum.setForeground(Color.BLACK);
-		lblUpdatePart.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+		lblUpdatePart.setFont(new Font("Tahoma", Font.BOLD, 32));
 		lblUpdatePart.setForeground(Color.BLACK);
 		lblProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblProgram.setForeground(Color.BLACK);
@@ -1787,7 +1787,7 @@ public class MainFrames extends JFrame
 	
 //Label Fonts		
 	
-	lblFindPartInfo.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+	lblFindPartInfo.setFont(new Font("Tahoma", Font.BOLD, 32));
 	lblFindPartInfo.setForeground(Color.BLACK);
 	setLayout(null);
 	add(lblBosal);
@@ -1948,7 +1948,7 @@ public class MainFrames extends JFrame
 		 lblPass.setForeground(Color.BLACK);
 		 lblDataBase.setFont(new Font("Tahoma", Font.BOLD, 14));
 		 lblDataBase.setForeground(Color.BLACK);
-		 lblTitle.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+		 lblTitle.setFont(new Font("Tahoma", Font.BOLD, 32));
 		 lblTitle.setForeground(Color.BLACK);
 		 lblPort.setForeground(Color.BLACK);
 		 lblPort.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -2111,7 +2111,7 @@ public class MainFrames extends JFrame
 		lblmanageUsers = new JLabel("Manage");
 		lblmanageUsers.setBounds(230, 27, 144, 39);
 		lblmanageUsers.setVisible(true);
-		lblmanageUsers.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+		lblmanageUsers.setFont(new Font("Tahoma", Font.BOLD, 32));
 		lblmanageUsers.setForeground(Color.BLACK);
 		lblUsername = new JLabel("Username:");
 		lblUsername.setBounds(319, 158, 74, 17);
@@ -3502,7 +3502,7 @@ public class MainFrames extends JFrame
 						lblYear.setForeground(Color.BLACK);
 						lblSearchPart.setFont(new Font("Tahoma", Font.BOLD, 14));
 						lblSearchPart.setForeground(Color.BLACK);
-						lblExperimental.setFont(new Font("EucrosiaUPC", Font.BOLD, 64));
+						lblExperimental.setFont(new Font("Tahoma", Font.BOLD, 32));
 						lblExperimental.setForeground(Color.BLACK);
 						ButtonGroup group = new ButtonGroup();
 						group.add(rbtnCreate);
