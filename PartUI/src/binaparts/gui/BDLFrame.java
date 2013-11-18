@@ -21,6 +21,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -58,6 +59,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,6 +93,7 @@ public class BDLFrame extends JFrame
 		try{
 			BDLframe.setIconImage(ImageIO.read(new File("res/bosalimage.png")));
 		}catch(Exception ex){ex.printStackTrace();}
+		System.out.println(pnlMain.getHeight());
 	}
 	public String getSearchText() {
 		return searchText;
@@ -164,7 +167,9 @@ public class BDLFrame extends JFrame
 			System.out.println(this.power+" was put into the power variable");
 		}
 		
-	    public void printComponent(Component comp) {
+	//Code used to physically print the Jpanel
+		
+	    /*public void printComponent(Component comp) {
 	        PrinterJob pj = PrinterJob.getPrinterJob();
 	        pj.setJobName(" Print Component ");
 
@@ -210,20 +215,7 @@ public class BDLFrame extends JFrame
 	            if (scaleFactor > 1d) {
 	                scaleFactor = 0.62d;
 	            }
-
-	            // Calculate the scaled size...
-	            // double scaleWidth = compSize.width / scaleFactor;
-	            // double scaleHeight = compSize.height / scaleFactor;
-	            
-	            // Create a clone of the graphics context.  This allows us to manipulate
-	            // the graphics context without begin worried about what effects
-	            // it might have once we're finished
 	            Graphics2D g2 = (Graphics2D) g.create();
-	            // Calculate the x/y position of the component, this will center
-	            // the result on the page if it can
-	            /*double x = ((pf.getImageableWidth() - scaleWidth) / 2d) + pf.getImageableX();
-	            double y = ((pf.getImageableHeight() - scaleHeight) / 2d) + pf.getImageableY();
-	            System.out.println(x + " " + y);*/
 	            // Create a new AffineTransformation
 	            AffineTransform at = new AffineTransform();
 	            // Translate the offset to out "center" of page
@@ -275,8 +267,8 @@ public class BDLFrame extends JFrame
 
 	        return dScale;
 
-	    }
-			
+	    }*///End
+		
 	//temp arrays to hold comboBox info 
 		private JSONArray temp1;
 		private JSONArray temp2;
@@ -982,7 +974,7 @@ public class BDLFrame extends JFrame
 					btnDelete.setVisible(false);
 					btnPrint.setVisible(false);
 					btnSave.setVisible(false);
-					
+		//Code used for sending JPanel to PDF
 					try {
 			            Document document = new Document(PageSize.A4.rotate(), 50, 50, 50, 50);
 			            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:/Users/shawg/Desktop/test1.pdf"));
@@ -992,20 +984,21 @@ public class BDLFrame extends JFrame
 			            @SuppressWarnings("deprecation")
 						Graphics2D g2 = tp.createGraphics(pnlMain.getWidth(), pnlMain.getHeight());
 			            AffineTransform at = new AffineTransform();
-			            // Translate the offset to out "center" of page
-			            // at.translate(x, y);
-			            // Set the scaling
-			            at.scale(0.63, 0.63);
-			            // Apply the transformation
+			            if(pnlMain.getHeight() > 594){
+			            	int x = getX(); 
+			            	int y = getY() + (pnlMain.getHeight() - 594);
+			            	System.out.println(pnlMain.getHeight());
+			            at.translate(x, y);}
 			            g2.transform(at);
-			            //g2.scale(0.65, 1.0);
-			            pnlMain.print(g2);
+			            g2.scale(0.63, 0.63);
+			            pnlMain.printAll(g2);
 			            g2.dispose();
-			            cb.addTemplate(tp, 7, 0);
+			            cb.addTemplate(tp, 0, 0);
 			            document.close();
 					} catch (Exception e1) {
 					    e1.printStackTrace();
 					}
+					//End
 					
 					//printComponent(pnlMain);					
 		}}});
