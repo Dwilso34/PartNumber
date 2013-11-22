@@ -484,14 +484,14 @@ public class BDLFrame extends JFrame
 			setVisible(true);
 							
 		//Images
-			final ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosalMufflerImage.jpg"));
+			final ImageIcon bosal = new ImageIcon(getClass().getResource("/images/smallBosalMuffler.png"));
 			lblBosal = new JLabel(bosal);
 			lblBosal.setBounds(399, 5, 192, 91);
 			
 		//JLabels
 			lblBDL = new JLabel("Breakdown List");
 			lblBDL.setHorizontalAlignment(SwingConstants.CENTER);
-			lblBDL.setBounds(593, 25, 255, 40);
+			lblBDL.setBounds(555, 25, 255, 40);
 			lblBDL.setFont(new Font("Tahoma", Font.BOLD, 32));
 			lblBDL.setForeground(Color.BLACK);
 			lblCustomer = new JLabel("Customer");
@@ -1517,9 +1517,9 @@ public class BDLFrame extends JFrame
 			          typeString = "Remove";
 			        }
 			        System.out.print("Type : " + typeString);
-			        javax.swing.text.Document source = documentEvent.getDocument();
-			        int length = ((DocumentEvent) source).getLength();
-			        System.out.println("Length: " + length);
+			        //javax.swing.event.DocumentEvent source = (DocumentEvent) documentEvent.getDocument();
+			        //int length = ((DocumentEvent) source).getLength();
+			        //System.out.println("Length: " + length);
 			     }
 			};
 			txtCustomer = new JTextField();
