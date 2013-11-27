@@ -42,6 +42,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -245,7 +246,7 @@ public class BDLFrame extends JFrame
 		private JButton btnAdd;
 		private JButton btnDelete;
 		private JButton btnSave;
-		private JButton btnPrint;
+		private JButton btnPdfPrint;
 		
 	//JTable	
 		private JTable myTable;
@@ -871,13 +872,13 @@ public class BDLFrame extends JFrame
 			}
 		});
 		
-		ImageIcon print = new ImageIcon(getClass().getResource("/images/print.jpg"));
-		btnPrint = new JButton(print);
-		btnPrint.setBounds(875, 130, 103, 34);
-		btnPrint.addActionListener(new ActionListener() {
+		ImageIcon print = new ImageIcon(getClass().getResource("/images/pdf.jpg"));
+		btnPdfPrint = new JButton(print);
+		btnPdfPrint.setBounds(875, 130, 103, 34);
+		btnPdfPrint.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == btnPrint)
+				if (e.getSource() == btnPdfPrint)
 				{
 					setBackground(Color.WHITE);
 					rbtnUpdateBDL.setVisible(false);
@@ -885,16 +886,19 @@ public class BDLFrame extends JFrame
 					rbtnSearchBDL.setVisible(false);
 					btnAdd.setVisible(false);
 					btnDelete.setVisible(false);
-					btnPrint.setVisible(false);
+					btnPdfPrint.setVisible(false);
 					btnSave.setVisible(false);
 					cbxCustomer.setVisible(false);
 					cbxPlatform.setVisible(false);
 					cbxName.setVisible(false);
 					
-					Path p1 = Paths.get(System.getProperty("user.home"), "Desktop");
+					JFileChooser fc = new JFileChooser();
+	                fc.showSaveDialog(null);
+	                File file = fc.getSelectedFile();
+	             
+					/*Path p1 = Paths.get(System.getProperty("user.home"), "Desktop");
 					System.out.println(p1);
 					
-
 					String s = (String)JOptionPane.showInputDialog(
 		                    BDLframe,
 		                    "Enter New File Name:",
@@ -902,11 +906,11 @@ public class BDLFrame extends JFrame
 		                    JOptionPane.PLAIN_MESSAGE,
 		                    bosal,
 		                    null,
-		                    p1+"\\"+txtBosalPartNum.getText()+".jpg");
+		                    p1+"\\"+txtBosalPartNum.getText()+""+.bosal.0000+"");*/
 		//Code used for sending JPanel to PDF
 					try {
 			            Document document = new Document(PageSize.A4.rotate(), 50, 50, 50, 50);
-			            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:/Users/shawg/Desktop/test1.pdf"));
+			            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file+".pdf"));
 			            document.open();
 			            PdfContentByte cb = writer.getDirectContent();
 			            PdfTemplate tp = cb.createTemplate(pnlMain.getWidth(), pnlMain.getHeight());
@@ -929,14 +933,13 @@ public class BDLFrame extends JFrame
 			            g2.dispose();
 			            cb.addTemplate(tp, 0, 0);
 			            document.close();
-			            
 			            setBackground(new Color(105, 105, 105));
 			            rbtnUpdateBDL.setVisible(true);
 						rbtnCreateBDL.setVisible(true);
 						rbtnSearchBDL.setVisible(true);
 						btnAdd.setVisible(true);
 						btnDelete.setVisible(true);
-						btnPrint.setVisible(true);
+						btnPdfPrint.setVisible(true);
 						btnSave.setVisible(true);
 						cbxCustomer.setVisible(true);
 						cbxPlatform.setVisible(true);
@@ -954,6 +957,7 @@ public class BDLFrame extends JFrame
 					if(e.getClickCount() == 2){
 						
 						if(e.getSource() == txtBosalPartNum){
+							System.out.println("I made it");
 							String s = (String)JOptionPane.showInputDialog(
 				                    BDLframe,
 				                    "Enter a Bosal Part Number:",
@@ -967,11 +971,12 @@ public class BDLFrame extends JFrame
 							    setSearchText(s);
 							}	
 							txtBosalPartNum.setText(getSearchText());
-						}else if(e.getSource() == myTable){
+						}if(e.getSource() == myTable){
 							JTable table = ((JTable)e.getSource());
 							int row = table.getSelectedRow();
 							int column = table.getSelectedColumn();
 							if(column == 4){
+								System.out.println("I made it");
 								String s = (String)JOptionPane.showInputDialog(
 					                    BDLframe,
 					                    "Enter a Bosal Part Number:",
@@ -986,10 +991,19 @@ public class BDLFrame extends JFrame
 								}
 								table.setValueAt(getSearchText(), row, column);
 							}
+						}else if (e.getSource() == txtCustImage){
+							System.out.println("I made it");
+							JFileChooser fc = new JFileChooser();
+			                fc.showSaveDialog(null);
+			                File file = fc.getSelectedFile();
+			                if ((file != null) && (file.length() > 0)) {
+								    
+								}
+							}
 						}
 					}					
-				}
-			};
+				};
+			
 			final TableModelListener columnListener = new TableModelListener(){
 				public void tableChanged(TableModelEvent e) {
 					if(e.getColumn() == 4){
@@ -1083,7 +1097,7 @@ public class BDLFrame extends JFrame
 			scrollPane.setBounds(30, 242, 1210, 519);
 			scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			scrollPane.setViewportView(myTable);
-			
+
 			//myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);	
 			int[] columnsWidth = {
 				     //  1   2   3   4    5    6    7   8   9  10  11  12  13  14  15  16  (Column Numbers)
@@ -1188,7 +1202,7 @@ public class BDLFrame extends JFrame
 								if(cbxName.isSelected() == true){
 									System.out.println(getName()+" is the Engine that was selected");
 									System.out.println("T F T1");
-									try{		
+									try{	
 										System.out.println("T F T2");
 										for(int i = 0; i < temp3.length(); i++){
 											System.out.println("T F T3");
@@ -1932,7 +1946,7 @@ public class BDLFrame extends JFrame
 			add(lblBOSAL);
 			add(scrollPane);
 			add(btnSave);
-			add(btnPrint);
+			add(btnPdfPrint);
 			add(txtaNote);
 			add(txtaRemark);
 			add(lblNote);
