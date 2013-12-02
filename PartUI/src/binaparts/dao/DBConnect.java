@@ -163,8 +163,7 @@ public class DBConnect {
 	//returns the rank of the user defined in ConnectionProperties (done)
 	public String getUserRank() throws Exception{
 		
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String username = config.getProperty("appUser");
+		String username = getUser();
 		String rk = null;
 		
 		try{
@@ -187,6 +186,33 @@ public class DBConnect {
 			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 		return rk;
+	}
+	//returns the rank of the user defined in ConnectionProperties (done)
+	public int getUserRankValue() throws Exception{
+		
+		String rk = getUserRank();
+		int rkValue = 0;
+		
+		try{
+			getDBConnection();
+			pst = con.prepareStatement("SELECT * FROM `ranks` WHERE `rank` = ?");
+			pst.setString(1, rk);
+			ResultSet rs = pst.executeQuery();
+			
+			while(rs.next()){
+				rkValue = rs.getInt("value");
+			}	
+			pst.close();
+			rs.close();
+			con.close();
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
+		return rkValue;
 	}
 	//returns true/false value to verify if the user defined in ConnectionProperites is valid (done)
 	public boolean verifyUser() throws Exception {
