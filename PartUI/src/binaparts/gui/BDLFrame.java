@@ -112,7 +112,8 @@ public class BDLFrame extends JFrame
 	}
 		
 	public class BDLMain extends JPanel
-	{//global variables
+	{
+	//global variables
 		private String customer;
 		private String platform;
 		private String name;
@@ -754,125 +755,124 @@ public class BDLFrame extends JFrame
 					}
 				}				
 			});
-		
+			
 		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
-		btnSave = new JButton(save);
-		btnSave.setBounds(875, 177, 103, 34);
-		btnSave.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == btnSave)
-				{
-					if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
-						JOptionPane.showMessageDialog(BDLframe,
-							    "Please Enter a Bosal Part Number",
-							    "Invalid Entry",
-							    JOptionPane.ERROR_MESSAGE);					
-					} else {
-						int n = JOptionPane.showConfirmDialog(
-							    BDLframe,
-							    "Are you sure you want to save part data?",
-							    "Save:",
-							    JOptionPane.YES_NO_OPTION,
-								JOptionPane.WARNING_MESSAGE);
-						if(n == 0){
-							TableModel table = myTable.getModel();
-							int rowCount = table.getRowCount();
-							if(rowCount == 0){
-								JOptionPane.showMessageDialog(BDLframe,
-									    "No Items were added to this breakdown list",
-									    "Invalid Entry",
-									    JOptionPane.ERROR_MESSAGE);	
-							} else {
-								String[] itm = new String[rowCount];
-								String[] qty = new String[rowCount];
-								String s1 = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
-								for(int i = 0; i < rowCount; i++){
-									itm[i] = table.getValueAt(i, 4).toString();
-									if(table.getValueAt(i,1).toString().equals("")){
-										qty[i] = "0";
-									} else {
-										qty[i] = table.getValueAt(i, 1).toString();
+		btnSave = new JButton(save);		
+		btnSave.setBounds(875, 177, 103, 34);		
+		btnSave.addActionListener(new ActionListener() {	
+				public void actionPerformed(ActionEvent e) {
+					if (e.getSource() == btnSave)
+					{
+						if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
+							JOptionPane.showMessageDialog(BDLframe,
+								    "Please Enter a Bosal Part Number",
+								    "Invalid Entry",
+								    JOptionPane.ERROR_MESSAGE);					
+						} else {
+							int n = JOptionPane.showConfirmDialog(
+								    BDLframe,
+								    "Are you sure you want to save part data?",
+								    "Save:",
+								    JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE);
+							if(n == 0){
+								TableModel table = myTable.getModel();
+								int rowCount = table.getRowCount();
+								if(rowCount == 0){
+									JOptionPane.showMessageDialog(BDLframe,
+										    "No Items were added to this breakdown list",
+										    "Invalid Entry",
+										    JOptionPane.ERROR_MESSAGE);	
+								} else {
+									String[] itm = new String[rowCount];
+									String[] qty = new String[rowCount];
+									String s1 = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
+									for(int i = 0; i < rowCount; i++){
+										itm[i] = table.getValueAt(i, 4).toString();
+										if(table.getValueAt(i,1).toString().equals("")){
+											qty[i] = "0";
+										} else {
+											qty[i] = table.getValueAt(i, 1).toString();
+										}
 									}
-								}
-								for(int i = 0; i < rowCount; i++){
-									s1 = s1+"{\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i]+"}";
-									if (i < (rowCount - 1)){
-										s1 = s1 + ",";
+									for(int i = 0; i < rowCount; i++){
+										s1 = s1+"{\"Item"+(i+1)+"\":\""+itm[i]+"\","+"\"Qty"+(i+1)+"\":"+qty[i]+"}";
+										if (i < (rowCount - 1)){
+											s1 = s1 + ",";
+										}
 									}
-								}
-								s1 = s1 + "]";
-
-								String s2 = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"}";
-								if (!(txtREV.getText().equals("")) || !(txtREV.getText() == null)) {
-									s2 = s2+", {\"Rev\":\""+txtREV.getText()+"\"}";
-								}
-								if (!(txtREVDate.getText().equals("")) || !(txtREVDate.getText() == null)) {
-									s2 = s2+", {\"RevDate\":\""+txtREVDate.getText()+"\"}";
-								}
-								if (!(txtRelDate.getText().equals("")) || !(txtRelDate.getText() == null)) {
-									s2 = s2+", {\"ReleaseDate\":\""+txtRelDate.getText()+"\"}";
-								}
-								if (!(txtProduction.getText().equals("")) || !(txtProduction.getText() == null)) {
-									s2 = s2+", {\"Production\":\""+txtProduction.getText()+"\"}";
-								}
-								if (!(txtRelPlant1.getText().equals("")) || !(txtRelPlant1.getText() == null)) {
-									s2 = s2+", {\"RelPlant1\":\""+txtRelPlant1.getText()+"\"}";
-								}
-								if (!(txtRelPlant2.getText().equals("")) || !(txtRelPlant2.getText() == null)) {
-									s2 = s2+", {\"RelPlant2\":\""+txtRelPlant2.getText()+"\"}";
-								}
-								if (!(txtRelSupplier.getText().equals("")) || !(txtRelSupplier.getText() == null)) {
-									s2 = s2+", {\"RelSupplier\":\""+txtRelSupplier.getText()+"\"}";
-								}
-								if (!(txtVolume2.getText().equals("")) || !(txtVolume2.getText() == null)) {
-									s2 = s2+", {\"Volume\":\""+txtVolume2.getText()+"\"}";
-								}
-								if (!(txtLength.getText().equals("")) || !(txtLength.getText() == null)) {
-									s2 = s2+", {\"Length\":\""+txtLength.getText()+"\"}";
-								}
-								if (!(txtSection.getText().equals("")) || !(txtSection.getText() == null)) {
-									s2 = s2+", {\"Section\":\""+txtSection.getText()+"\"}";
-								}
-								if (!(txtName.getText().equals("")) || !(txtName.getText() == null)) {
-									s2 = s2+", {\"Engine\":\""+txtName.getText()+"\"}";
-								}
-								if (!(txtPlatform.getText().equals("")) || !(txtPlatform.getText() == null)) {
-									s2 = s2+", {\"Platform\":\""+txtPlatform.getText()+"\"}";
-								}
-								if (!(txtCustomer.getText().equals("")) || !(txtCustomer.getText() == null)) {
-									s2 = s2+", {\"Customer\":\""+txtCustomer.getText()+"\"}";
-								}
-								s2 = s2 + "]";
-								System.out.print(s2);
-								JSONArray temp1;
-								JSONArray temp2;
-								try {
-									temp1 = new JSONArray(s1);
-									temp2 = new JSONArray(s2);
-									if (rbtnCreateBDL.isSelected() == true) {
-										con.insertNewBDL(temp1);
-										con.insertBDLInfo(temp2);
+									s1 = s1 + "]";
+	
+									String s2 = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"}";
+									if (!(txtREV.getText().equals("")) || !(txtREV.getText() == null)) {
+										s2 = s2+", {\"Rev\":\""+txtREV.getText()+"\"}";
 									}
-									else if (rbtnSearchBDL.isSelected() == true) {
-										con.insertNewBDL(temp1);
-										con.insertBDLInfo(temp2);
+									if (!(txtREVDate.getText().equals("")) || !(txtREVDate.getText() == null)) {
+										s2 = s2+", {\"RevDate\":\""+txtREVDate.getText()+"\"}";
 									}
-									
-									System.out.println(temp1);
-									System.out.println(temp2);
-								} catch (JSONException ex) {
-									ex.printStackTrace();
-								} catch (Exception ex) {
-									ex.printStackTrace();
+									if (!(txtRelDate.getText().equals("")) || !(txtRelDate.getText() == null)) {
+										s2 = s2+", {\"ReleaseDate\":\""+txtRelDate.getText()+"\"}";
+									}
+									if (!(txtProduction.getText().equals("")) || !(txtProduction.getText() == null)) {
+										s2 = s2+", {\"Production\":\""+txtProduction.getText()+"\"}";
+									}
+									if (!(txtRelPlant1.getText().equals("")) || !(txtRelPlant1.getText() == null)) {
+										s2 = s2+", {\"RelPlant1\":\""+txtRelPlant1.getText()+"\"}";
+									}
+									if (!(txtRelPlant2.getText().equals("")) || !(txtRelPlant2.getText() == null)) {
+										s2 = s2+", {\"RelPlant2\":\""+txtRelPlant2.getText()+"\"}";
+									}
+									if (!(txtRelSupplier.getText().equals("")) || !(txtRelSupplier.getText() == null)) {
+										s2 = s2+", {\"RelSupplier\":\""+txtRelSupplier.getText()+"\"}";
+									}
+									if (!(txtVolume2.getText().equals("")) || !(txtVolume2.getText() == null)) {
+										s2 = s2+", {\"Volume\":\""+txtVolume2.getText()+"\"}";
+									}
+									if (!(txtLength.getText().equals("")) || !(txtLength.getText() == null)) {
+										s2 = s2+", {\"Length\":\""+txtLength.getText()+"\"}";
+									}
+									if (!(txtSection.getText().equals("")) || !(txtSection.getText() == null)) {
+										s2 = s2+", {\"Section\":\""+txtSection.getText()+"\"}";
+									}
+									if (!(txtName.getText().equals("")) || !(txtName.getText() == null)) {
+										s2 = s2+", {\"Engine\":\""+txtName.getText()+"\"}";
+									}
+									if (!(txtPlatform.getText().equals("")) || !(txtPlatform.getText() == null)) {
+										s2 = s2+", {\"Platform\":\""+txtPlatform.getText()+"\"}";
+									}
+									if (!(txtCustomer.getText().equals("")) || !(txtCustomer.getText() == null)) {
+										s2 = s2+", {\"Customer\":\""+txtCustomer.getText()+"\"}";
+									}
+									s2 = s2 + "]";
+									System.out.print(s2);
+									JSONArray temp1;
+									JSONArray temp2;
+									try {
+										temp1 = new JSONArray(s1);
+										temp2 = new JSONArray(s2);
+										if (rbtnCreateBDL.isSelected() == true) {
+											con.insertNewBDL(temp1);
+											con.insertBDLInfo(temp2);
+										}
+										else if (rbtnSearchBDL.isSelected() == true) {
+											con.insertNewBDL(temp1);
+											con.insertBDLInfo(temp2);
+										}
+										
+										System.out.println(temp1);
+										System.out.println(temp2);
+									} catch (JSONException ex) {
+										ex.printStackTrace();
+									} catch (Exception ex) {
+										ex.printStackTrace();
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-		});
-		
+			});
+			
 		ImageIcon print = new ImageIcon(getClass().getResource("/images/pdf.jpg"));
 		btnPdfPrint = new JButton(print);
 		btnPdfPrint.setBounds(875, 130, 103, 34);
@@ -889,25 +889,17 @@ public class BDLFrame extends JFrame
 					btnDelete.setVisible(false);
 					btnPdfPrint.setVisible(false);
 					btnSave.setVisible(false);
+					cbxName.doClick();
+					cbxPlatform.doClick();
+					cbxCustomer.doClick();
 					cbxCustomer.setVisible(false);
 					cbxPlatform.setVisible(false);
-					cbxName.setVisible(false);
+					cbxName.setVisible(false);					
 					
 					JFileChooser fc = new JFileChooser();
 	                fc.showSaveDialog(null);
 	                File file = fc.getSelectedFile();
-	             
-					/*Path p1 = Paths.get(System.getProperty("user.home"), "Desktop");
-					System.out.println(p1);
-					
-					String s = (String)JOptionPane.showInputDialog(
-		                    BDLframe,
-		                    "Enter New File Name:",
-		                    "Search Dialog",
-		                    JOptionPane.PLAIN_MESSAGE,
-		                    bosal,
-		                    null,
-		                    p1+"\\"+txtBosalPartNum.getText()+""+.bosal.0000+"");*/
+	      
 		//Code used for sending JPanel to PDF
 					try {
 			            Document document = new Document(PageSize.A4.rotate(), 50, 50, 50, 50);
@@ -945,8 +937,8 @@ public class BDLFrame extends JFrame
 						cbxCustomer.setVisible(true);
 						cbxPlatform.setVisible(true);
 						cbxName.setVisible(true);
-					} catch (Exception e1) {
-					    e1.printStackTrace();
+					} catch (Exception ex) {
+					    ex.printStackTrace();
 					}
 		//End
 
@@ -993,26 +985,23 @@ public class BDLFrame extends JFrame
 								table.setValueAt(getSearchText(), row, column);
 							}
 						}else if (e.getSource() == lblCustImage){
-							System.out.println("I made it");
-							JFileChooser fc = new JFileChooser();
+							System.out.println("I made it");							
+							String appDir = System.getProperty("user.dir");
+							System.out.println(appDir);
+							JFileChooser fc = new JFileChooser(appDir+"/Customer Logos/");
 			                fc.showOpenDialog(null);
 			                File file = fc.getSelectedFile();
 			                BufferedImage image = null;
 							try {
 								image = ImageIO.read(file);
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-			           
+							} catch (IOException ex) {
+								ex.printStackTrace();
+							}			           
 			                lblCustImage.setIcon(new ImageIcon(image));
-			                if ((file != null) && (file.length() > 0)) {
-								    
-								}
-							}
 						}
 					}					
-				};
+				}
+			};
 			
 			final TableModelListener columnListener = new TableModelListener(){
 				public void tableChanged(TableModelEvent e) {
@@ -1816,7 +1805,6 @@ public class BDLFrame extends JFrame
 			            
 					}						
 			}});
-			rbtnCreateBDL.doClick();
 			
 			rbtnSearchBDL = new JRadioButton("Search BDL");
 			rbtnSearchBDL.setBounds(875, 96, 111, 27);
@@ -1870,7 +1858,15 @@ public class BDLFrame extends JFrame
 						} catch (Exception ex) {ex.printStackTrace();}			            
 					}						
 				}});
-			
+			try {
+				if (con.getUserRankValue() > 0) {
+					rbtnCreateBDL.doClick();
+				} else {
+					rbtnSearchBDL.doClick();
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 			rbtnUpdateBDL = new JRadioButton("Update BDL");
 			rbtnUpdateBDL.setBounds(875, 68, 111, 27);
 			rbtnUpdateBDL.setBackground(new Color(105, 105, 105));
@@ -1899,7 +1895,6 @@ public class BDLFrame extends JFrame
 			setLayout(null);
 			add(lblBosal);
 			add(lblBDL);
-			add(cboCustomer);
 			add(lblCustomer);
 			add(lblType);
 			add(lblEngine);
@@ -1907,20 +1902,13 @@ public class BDLFrame extends JFrame
 			add(lblName);
 			add(txtName);
 			add(txtPower);
-			add(cboName);
 			add(txtType);
 			add(lblVolume);
 			add(txtCustomer);
 			add(lblPower);
 			add(txtPlatform);
 			add(lblPlatform);
-			add(cboPlatform);
-			add(cbxCustomer);
-			add(cbxPlatform);
-			add(cbxName);
-			add(rbtnUpdateBDL);
 			add(rbtnSearchBDL);
-			add(rbtnCreateBDL);
 			add(txtIssuedBy);
 			add(lblIssuedBy);
 			add(lblSilencer);
@@ -1953,19 +1941,34 @@ public class BDLFrame extends JFrame
 			add(lblRelPlant1);
 			add(txtRelPlant2);
 			add(txtRelSupplier);
-			add(lblRelSupplier);
-			add(btnAdd);
-			add(btnDelete);
+			add(lblRelSupplier);			
 			add(lblCUSTOMER);
 			add(lblBOSAL);
-			add(scrollPane);
-			add(btnSave);
+			add(scrollPane);			
 			add(btnPdfPrint);
 			add(txtaNote);
 			add(txtaRemark);
 			add(lblNote);
 			add(lblRemark);
 			add(lblCustImage);
+			
+			try {
+				if (con.getUserRankValue() > 0) {
+					add(cbxCustomer);
+					add(cbxPlatform);
+					add(cbxName);
+					add(cboCustomer);
+					add(cboPlatform);
+					add(cboName);
+					add(rbtnUpdateBDL);
+					add(rbtnCreateBDL);
+					add(btnSave);
+					add(btnAdd);
+					add(btnDelete);
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 
