@@ -1008,7 +1008,8 @@ public class BDLFrame extends JFrame
 			                lblCustImage.setIcon(new ImageIcon(image));
 						}
 					}					
-				};
+				}
+			};
 			
 			final TableModelListener columnListener = new TableModelListener(){
 				public void tableChanged(TableModelEvent e) {
