@@ -1871,6 +1871,7 @@ public class BDLFrame extends JFrame
 				}
 			});
 			
+		
 		//ButtonGroup
 			ButtonGroup group = new ButtonGroup();
 			
