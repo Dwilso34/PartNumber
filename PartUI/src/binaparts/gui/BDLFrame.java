@@ -971,7 +971,7 @@ public class BDLFrame extends JFrame
 							    setSearchText(s);
 							}	
 							txtBosalPartNum.setText(getSearchText());
-						}if(e.getSource() == myTable){
+						}else if(e.getSource() == myTable){
 							JTable table = ((JTable)e.getSource());
 							int row = table.getSelectedRow();
 							int column = table.getSelectedColumn();
@@ -1643,6 +1643,7 @@ public class BDLFrame extends JFrame
 			txtCustImage.setBounds(157, 29, 128, 73);
 			txtCustImage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustImage.setForeground(Color.BLACK);
+			txtCustImage.addMouseListener(mouseClickListener);
 		
 		//JCheckBoxes
 			cbxCustomer = new JCheckBox();
