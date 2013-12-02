@@ -993,23 +993,19 @@ public class BDLFrame extends JFrame
 								table.setValueAt(getSearchText(), row, column);
 							}
 						}else if (e.getSource() == lblCustImage){
-							System.out.println("I made it");
-							JFileChooser fc = new JFileChooser();
+							System.out.println("I made it");							
+							String appDir = System.getProperty("user.dir");
+							System.out.println(appDir);
+							JFileChooser fc = new JFileChooser(appDir+"/Customer Logos/");
 			                fc.showOpenDialog(null);
 			                File file = fc.getSelectedFile();
 			                BufferedImage image = null;
 							try {
 								image = ImageIO.read(file);
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-			           
+							} catch (IOException ex) {
+								ex.printStackTrace();
+							}			           
 			                lblCustImage.setIcon(new ImageIcon(image));
-			                if ((file != null) && (file.length() > 0)) {
-								    
-								}
-							}
 						}
 					}					
 				};
