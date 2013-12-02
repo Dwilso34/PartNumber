@@ -16,6 +16,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -240,7 +241,7 @@ public class BDLFrame extends JFrame
 	//JTextArea	
 		private JTextArea txtaRemark;
 		private JTextArea txtaNote;
-		private JTextArea txtCustImage;
+		private JLabel lblCustImage;
 		
 	//JButton
 		private JButton btnAdd;
@@ -991,11 +992,20 @@ public class BDLFrame extends JFrame
 								}
 								table.setValueAt(getSearchText(), row, column);
 							}
-						}else if (e.getSource() == txtCustImage){
+						}else if (e.getSource() == lblCustImage){
 							System.out.println("I made it");
 							JFileChooser fc = new JFileChooser();
-			                fc.showSaveDialog(null);
+			                fc.showOpenDialog(null);
 			                File file = fc.getSelectedFile();
+			                BufferedImage image = null;
+							try {
+								image = ImageIO.read(file);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+			           
+			                lblCustImage.setIcon(new ImageIcon(image));
 			                if ((file != null) && (file.length() > 0)) {
 								    
 								}
@@ -1639,11 +1649,13 @@ public class BDLFrame extends JFrame
 			txtaNote.setBounds(30, 853, 1211, 35);
 			txtaNote.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtaNote.setForeground(Color.BLACK);
-			txtCustImage = new JTextArea();
-			txtCustImage.setBounds(157, 29, 128, 73);
-			txtCustImage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-			txtCustImage.setForeground(Color.BLACK);
-			txtCustImage.addMouseListener(mouseClickListener);
+			lblCustImage = new JLabel();
+			lblCustImage.setBackground(Color.WHITE);
+			lblCustImage.setOpaque(true);
+			lblCustImage.setBounds(157, 29, 128, 73);
+			lblCustImage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			lblCustImage.setForeground(Color.BLACK);
+			lblCustImage.addMouseListener(mouseClickListener);
 		
 		//JCheckBoxes
 			cbxCustomer = new JCheckBox();
@@ -1953,7 +1965,7 @@ public class BDLFrame extends JFrame
 			add(txtaRemark);
 			add(lblNote);
 			add(lblRemark);
-			add(txtCustImage);
+			add(lblCustImage);
 		}
 	}
 
