@@ -893,9 +893,18 @@ public class BDLFrame extends JFrame
 					btnDelete.setVisible(false);
 					btnPdfPrint.setVisible(false);
 					btnSave.setVisible(false);
+				if (cbxName.isSelected() == false)
+				{
 					cbxName.doClick();
+				}
+				if (cbxPlatform.isSelected() == false)
+				{
 					cbxPlatform.doClick();
+				}
+				if (cbxCustomer.isSelected() == false)
+				{
 					cbxCustomer.doClick();
+				}
 					cbxCustomer.setVisible(false);
 					cbxPlatform.setVisible(false);
 					cbxName.setVisible(false);					
