@@ -353,8 +353,8 @@ public class BDLFrame extends JFrame
 					//loop to dynamically add items from Database to table 			
 					for (int i = 0; i < (rowCount/2); i++) {
 						btnAdd.doClick();
-						table.setValueAt(itm[i], i, 4);
-						table.setValueAt(qty[i], i, 1);
+						table1.setValueAt(itm[i], i, 4);
+						table1.setValueAt(qty[i], i, 1);
 						//checks to see if there is a sub BDL
 						if (containsBDL() == true) {
 							table.setValueAt("#", i, 2);
@@ -881,6 +881,10 @@ public class BDLFrame extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnPdfPrint)
 				{
+					JFileChooser fc = new JFileChooser();
+	                fc.showSaveDialog(null);
+	                File file = fc.getSelectedFile();
+	                
 					setBackground(Color.WHITE);
 					rbtnUpdateBDL.setVisible(false);
 					rbtnCreateBDL.setVisible(false);
@@ -896,9 +900,7 @@ public class BDLFrame extends JFrame
 					cbxPlatform.setVisible(false);
 					cbxName.setVisible(false);					
 					
-					JFileChooser fc = new JFileChooser();
-	                fc.showSaveDialog(null);
-	                File file = fc.getSelectedFile();
+					
 	      
 		//Code used for sending JPanel to PDF
 					try {
@@ -1186,7 +1188,7 @@ public class BDLFrame extends JFrame
 												setType(temp3.getJSONObject(i).get("Type").toString());
 												setVolume(temp3.getJSONObject(i).get("Volume").toString());
 												setPower(temp3.getJSONObject(i).get("Power").toString());
-												i=temp3.length();												
+												i=temp3.length(); //used to end for loop										
 											}
 										}	
 									}catch(Exception ex){ex.printStackTrace();}
@@ -1211,7 +1213,7 @@ public class BDLFrame extends JFrame
 												setType(temp3.getJSONObject(i).get("Type").toString());
 												setVolume(temp3.getJSONObject(i).get("Volume").toString());
 												setPower(temp3.getJSONObject(i).get("Power").toString());
-												i=temp3.length();
+												i=temp3.length(); //used to end for loop
 											}
 										}	
 									}catch(Exception ex){ex.printStackTrace();}
@@ -1238,7 +1240,7 @@ public class BDLFrame extends JFrame
 												setType(temp3.getJSONObject(i).get("Type").toString());
 												setVolume(temp3.getJSONObject(i).get("Volume").toString());
 												setPower(temp3.getJSONObject(i).get("Power").toString());
-												i=temp3.length();
+												i=temp3.length(); //used to end for loop
 											}
 										}	
 										for(int i = 0; i < temp2.length(); i++){
@@ -1246,7 +1248,7 @@ public class BDLFrame extends JFrame
 											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
 												System.out.println("F T T6");
 												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
-												i=temp2.length();
+												i=temp2.length(); //used to end for loop
 											}
 										}
 									}catch(Exception ex){ex.printStackTrace();}
@@ -1261,7 +1263,7 @@ public class BDLFrame extends JFrame
 											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
 												System.out.println("F T F4");
 												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
-												i=temp2.length();
+												i=temp2.length(); //used to end for loop
 											}
 										}
 									}catch(Exception ex){ex.printStackTrace();}									
@@ -1282,7 +1284,7 @@ public class BDLFrame extends JFrame
 												setType(temp3.getJSONObject(i).get("Type").toString());
 												setVolume(temp3.getJSONObject(i).get("Volume").toString());
 												power = temp3.getJSONObject(i).get("Power").toString();
-												i=temp3.length();
+												i=temp3.length(); //used to end for loop
 											}
 										}	
 										for(int i = 0; i < temp2.length(); i++){
@@ -1290,7 +1292,7 @@ public class BDLFrame extends JFrame
 											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
 												System.out.println("F F T6");
 												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
-												i=temp2.length();
+												i=temp2.length(); //used to end for loop
 											}
 										}
 									}catch(Exception ex){ex.printStackTrace();}
@@ -1333,8 +1335,6 @@ public class BDLFrame extends JFrame
 			      }
 			      public void insertUpdate(DocumentEvent documentEvent) {
 			        printIt(documentEvent);
-			        String customer = null;
-					String platform = null;
 					String custPartNum = null;
 					String description = null;
 					
@@ -1346,7 +1346,21 @@ public class BDLFrame extends JFrame
 						setItemsForTable();
 						
 						try {
-							JSONArray temp = con.queryDatabase("breakdown lists info", "BreakdownListNumber", getSearchText());
+							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+							
+							//set text for Description JTextField
+							try{
+								description = temp.getJSONObject(0).get("PartDescription").toString();
+							}catch(Exception ex){description = "-";}
+							txtDescription.setText(description);
+							
+							//set text for CustPartNum JTextField
+							try{
+								custPartNum = temp.getJSONObject(0).get("CustPartNumber").toString();
+							}catch(Exception ex){custPartNum = "-";}
+							txtCustomerPartNum.setText(custPartNum);
+							
+							temp = con.queryDatabase("breakdown lists info", "BreakdownListNumber", getSearchText());
 							
 							//set text for Volume JTextField
 							String volume2= null;
@@ -1439,79 +1453,82 @@ public class BDLFrame extends JFrame
 							}catch(Exception ex){Customer = "-";}
 							txtCustomer.setText(Customer);
 							
+							temp = con.queryDatabase("engines", "Engine", engine);
 							//set text for Type JTextField
 							String type= null;
 							try{
 								type = temp.getJSONObject(0).get("Type").toString();
 							}catch(Exception ex){type = "-";}
-							txtType.setText(type);
+							txtType.setText(type);							
 							
-							temp = con.queryDatabase("engines", "Engine", engine);
 							//set text for Volume1 JTextField
 							String volume1= null;
 							try{
 								volume1 = temp.getJSONObject(0).get("Volume").toString();
-							}catch(Exception ex){volume1 = "-";}
+							} catch (Exception ex) {volume1 = "-";}
 							txtVolume.setText(volume1);
 							
 							//set text for Power JTextField
 							String power= null;
 							try{
 								power = temp.getJSONObject(0).get("Power").toString();
-							}catch(Exception ex){power = "-";}
+							} catch (Exception ex) {power = "-";}
 							txtPower.setText(power);
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
 					}
-					if (rbtnCreateBDL.isSelected() == true){
+					if (rbtnCreateBDL.isSelected() == true) {
 						try {						
 				        	JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
-				        	for(int i = 0; i < temp.length(); i++){
-				        		try{
-									platform = temp.getJSONObject(i).getString("Program").toString();								
-									JSONArray temp2 = con.queryDatabase("programs", "Program", platform);
-									for(int j = 0; j < temp2.length(); j++){
-						        		try{
-						        			customer = temp.getJSONObject(j).get("Customer").toString();
-						        		}catch(Exception ex){
+				        	for (int i = 0; i < temp.length(); i++) {
+				        		try {
+									//platform = temp.getJSONObject(i).getString("Program").toString();	
+									setPlatform(temp.getJSONObject(i).getString("Program").toString());								
+
+									JSONArray temp2 = con.queryDatabase("programs", "Program", getPlatform());
+									for (int j = 0; j < temp2.length(); j++) {
+						        		try {
+						        			//customer = temp.getJSONObject(j).get("Customer").toString();
+						        			setCustomer(temp.getJSONObject(j).get("Customer").toString());
+						        		} catch (Exception ex) {
 						        			//System.out.println("Program " + platform + " does not contain Customer");
 						        		}
 						        	}
-								}catch(Exception ex){
+								} catch (Exception ex) {
 									//System.out.println("Part " + getSearchText() + " does not contain Program");
 								}
-				        		try{
+				        		try {
 									custPartNum = temp.getJSONObject(i).getString("CustPartNumber").toString();
-								}catch(Exception ex){
+								} catch (Exception ex) {
 									//System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
 								}
-				        		try{
+				        		try {
 									description = temp.getJSONObject(i).getString("PartDescription").toString();
-								}catch(Exception ex){
+								} catch (Exception ex) {
 									//System.out.println("Part " + getSearchText() + " does not contain PartDescription");
 								}
 							}						
 						} catch (Exception ex) {ex.printStackTrace();}
-				        if(custPartNum != null){
+				        if (custPartNum != null) {
 							txtCustomerPartNum.setText(custPartNum);
 						}
-				        if(description != null){
+				        if (description != null) {
 							txtDescription.setText(description);
 						}
-				        if(rbtnCreateBDL.isSelected() == true || rbtnUpdateBDL.isSelected() == true){
-					        if(customer != null){
-								cboCustomer.setSelectedItem(customer);
+				        if (rbtnCreateBDL.isSelected() == true || rbtnUpdateBDL.isSelected() == true) {
+					        if (getCustomer() != null) {
+								cboCustomer.setSelectedItem(getCustomer());
 							}
-					        if(platform != null){
-								cboPlatform.setSelectedItem(platform);
+					        if (getPlatform() != null) {
+								cboPlatform.setSelectedItem(getPlatform());
 							}
-				        }else if(rbtnSearchBDL.isSelected() == true){
-				        	if(customer != null){
-								txtCustomer.setText(customer);
+				        } else if (rbtnSearchBDL.isSelected() == true) {
+				        	if (getCustomer() != null) {
+								txtCustomer.setText(getCustomer());
 							}	
-				        	if(platform != null){
-								txtPlatform.setText(platform);
+				        	if (getPlatform() != null) {
+								txtPlatform.setText(getPlatform());
 							}	
 				        }	
 					}
@@ -1529,10 +1546,7 @@ public class BDLFrame extends JFrame
 			        }  else if (type.equals(DocumentEvent.EventType.REMOVE)) {
 			          typeString = "Remove";
 			        }
-			        System.out.print("Type : " + typeString);
-			        //javax.swing.event.DocumentEvent source = (DocumentEvent) documentEvent.getDocument();
-			        //int length = ((DocumentEvent) source).getLength();
-			        //System.out.println("Length: " + length);
+			        System.out.print("Type : " + typeString);			        
 			     }
 			};
 			txtCustomer = new JTextField();
@@ -1688,11 +1702,11 @@ public class BDLFrame extends JFrame
 						if(cbxPlatform.isSelected() == true){
 							System.out.println("Platform CheckBox was Clicked!");
 							System.out.println("I am putting "+getPlatform()+" into the Platform txtField!");
-							if(cbxCustomer.isSelected() == true){
+							/*if(cbxCustomer.isSelected() == true){
 								cbxCustomer.doClick();
-							}
+							}*/
 							txtPlatform.setText(getPlatform());
-							cboCustomer.removeItemListener(cboGetInfo);
+							//cboCustomer.removeItemListener(cboGetInfo);
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboPlatform.setVisible(false);
 							txtPlatform.setVisible(true);
@@ -1711,15 +1725,15 @@ public class BDLFrame extends JFrame
 						if(cbxName.isSelected() == true){
 							System.out.println("Name CheckBox was Clicked!");
 							System.out.println("I am putting "+getName()+" into the Name txtField!");
-							if(cbxCustomer.isSelected() == true){
-								cbxCustomer.doClick();
-							}
-							if(cbxPlatform.isSelected() == true){
+							/*if(cbxPlatform.isSelected() == true){
 								cbxPlatform.doClick();
 							}
+							if(cbxCustomer.isSelected() == true){
+								cbxCustomer.doClick();
+							}*/
 							txtName.setText(getName());
-							cboCustomer.removeItemListener(cboGetInfo);
-							cboPlatform.removeItemListener(cboGetInfo);
+							//cboCustomer.removeItemListener(cboGetInfo);
+							//cboPlatform.removeItemListener(cboGetInfo);
 							cboName.removeItemListener(cboGetInfo);	
 							cboName.setVisible(false);
 							txtName.setVisible(true);
@@ -1777,31 +1791,39 @@ public class BDLFrame extends JFrame
 							txtRelPlant2.setText("");
 							txtRelSupplier.setText("");
 							txtCustomer.setText("");
-							txtCustomer.setVisible(false);
+							txtCustomer.setVisible(false);	
+							cbxCustomer.setSelected(false);
 							cbxCustomer.setVisible(true);
 							cboCustomer.setVisible(true);
 							cboCustomer.setModel(resetCustomerComboBox());
 							cboCustomer.setSelectedIndex(-1);
+							cboCustomer.addItemListener(cboGetInfo);
 							btnAdd.setVisible(true);
 							btnDelete.setVisible(true);
 							txtPlatform.setText("");
 							txtPlatform.setVisible(false);
+							cbxPlatform.setSelected(false);
 							cbxPlatform.setVisible(true);
 							cboPlatform.setVisible(true);
 							cboPlatform.setModel(resetPlatformComboBox());
 							cboPlatform.setSelectedIndex(-1);
+							cboPlatform.addItemListener(cboGetInfo);
 							txtName.setText("");
 							txtName.setVisible(false);
+							cbxName.setSelected(false);
 							cbxName.setVisible(true);
 							cboName.setVisible(true);
 							cboName.setModel(resetEngineComboBox());
 							cboName.setSelectedIndex(-1);
-							cboCustomer.addItemListener(cboGetInfo);
-							cboPlatform.addItemListener(cboGetInfo);
 							cboName.addItemListener(cboGetInfo);
 							myTable.getModel().addTableModelListener(columnListener);
 							myTable.addMouseListener(mouseClickListener);
-						}catch (Exception ex){ex.printStackTrace();}
+							if (table1.getRowCount() != 0) {
+								for (int i = table1.getRowCount(); i > 0; i--) {
+									table1.removeRow(i-1);
+								}
+							}
+						} catch (Exception ex) {ex.printStackTrace();}
 			            
 					}						
 			}});
@@ -1838,21 +1860,24 @@ public class BDLFrame extends JFrame
 							txtRelSupplier.setText("");
 							txtCustomer.setText("");
 							txtCustomer.setVisible(true);
+							cbxCustomer.setSelected(false);
+							cbxCustomer.setVisible(false);
+							cboCustomer.removeItemListener(cboGetInfo);
 							cboCustomer.setVisible(false);
 							txtPlatform.setText("");
 							txtPlatform.setVisible(true);
+							cbxPlatform.setSelected(false);
+							cbxPlatform.setVisible(false);
+							cboPlatform.removeItemListener(cboGetInfo);
 							cboPlatform.setVisible(false);
 							txtName.setText("");
 							txtName.setVisible(true);
-							cbxCustomer.setVisible(false);
-							cbxPlatform.setVisible(false);
+							cbxName.setSelected(false);
 							cbxName.setVisible(false);
+							cboName.removeItemListener(cboGetInfo);
 							cboName.setVisible(false);
 							btnAdd.setVisible(false);
 							btnDelete.setVisible(false);
-							cboCustomer.removeItemListener(cboGetInfo);
-							cboPlatform.removeItemListener(cboGetInfo);
-							cboName.removeItemListener(cboGetInfo);
 							myTable.getModel().removeTableModelListener(columnListener);
 							myTable.removeMouseListener(mouseClickListener);							
 						} catch (Exception ex) {ex.printStackTrace();}			            
