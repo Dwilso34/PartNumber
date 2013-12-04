@@ -1143,7 +1143,7 @@ public class BDLFrame extends JFrame
 			cboName.addMouseListener(new ContextMenuMouseListener());
 			cboName.setForeground(Color.BLACK);	
 			
-			final ItemListener cboGetInfo = (new ItemListener(){	
+			final ItemListener cboGetInfo = (new ItemListener() {	
 				public void itemStateChanged(ItemEvent e)
 				{							
 					if(e.getStateChange() == ItemEvent.SELECTED){
@@ -1347,7 +1347,7 @@ public class BDLFrame extends JFrame
 					String custPartNum = null;
 					String description = null;
 					
-					if (rbtnSearchBDL.isSelected() == true){
+					if (rbtnSearchBDL.isSelected() == true) {
 						//clear all rows on the table already
 						for (int i = table1.getRowCount(); i > 0; i--) {
 							table1.removeRow(i-1);
@@ -1358,128 +1358,135 @@ public class BDLFrame extends JFrame
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
 							
 							//set text for Description JTextField
-							try{
+							try {
 								description = temp.getJSONObject(0).get("PartDescription").toString();
-							}catch(Exception ex){description = "-";}
+							} catch(Exception ex) {description = "-";}
 							txtDescription.setText(description);
 							
 							//set text for CustPartNum JTextField
-							try{
+							try {
 								custPartNum = temp.getJSONObject(0).get("CustPartNumber").toString();
-							}catch(Exception ex){custPartNum = "-";}
+							} catch (Exception ex) {custPartNum = "-";}
 							txtCustomerPartNum.setText(custPartNum);
 							
 							temp = con.queryDatabase("breakdown lists info", "BreakdownListNumber", getSearchText());
 							
 							//set text for Volume JTextField
 							String volume2= null;
-							try{
+							try {
 								volume2 = temp.getJSONObject(0).get("Volume").toString();
-							}catch(Exception ex){volume2 = "-";}
+							} catch (Exception ex) {volume2 = "-";}
 							txtVolume2.setText(volume2);
 							
 							//set text for Length JTextField
 							String length= null;
-							try{
+							try {
 								length = temp.getJSONObject(0).get("Length").toString();
-							}catch(Exception ex){length = "-";}
+							} catch (Exception ex) {length = "-";}
 							txtLength.setText(length);
 							
 							//set text for Section JTextField
 							String section= null;
-							try{
+							try {
 								section = temp.getJSONObject(0).get("Section").toString();
-							}catch(Exception ex){section = "-";}
+							} catch (Exception ex) {section = "-";}
 							txtSection.setText(section);
 							
 							//set text for Rev JTextField
 							String rev= null;
-							try{
+							try {
 								rev = temp.getJSONObject(0).get("Rev").toString();
-							}catch(Exception ex){rev = "-";}
+							} catch (Exception ex) {rev = "-";}
 							txtREV.setText(rev);
 							
 							//set text for Release Date JTextField
 							String releaseDate= null;
-							try{
+							try {
 								releaseDate = temp.getJSONObject(0).get("ReleaseDate").toString();
-							}catch(Exception ex){releaseDate = "-";}
+							} catch (Exception ex) {releaseDate = "-";}
 							txtRelDate.setText(releaseDate);
 							
 							//set text for Rev Date JTextField
 							String revDate= null;
-							try{
+							try {
 								revDate = temp.getJSONObject(0).get("RevDate").toString();
-							}catch(Exception ex){revDate = "-";}
+							} catch (Exception ex) {revDate = "-";}
 							txtREVDate.setText(revDate);
 							
 							//set text for Production JTextField
 							String production= null;
-							try{
+							try {
 								production = temp.getJSONObject(0).get("Production").toString();
-							}catch(Exception ex){production = "-";}
+							} catch(Exception ex) {production = "-";}
 							txtProduction.setText(production);
 							
 							//set text for RelPlant1 JTextField
 							String relPlant1= null;
-							try{
+							try {
 								relPlant1 = temp.getJSONObject(0).get("RelPlant1").toString();
-							}catch(Exception ex){relPlant1 = "-";}
+							} catch (Exception ex) {relPlant1 = "-";}
 							txtRelPlant1.setText(relPlant1);
 							
 							//set text for RelPlant2 JTextField
 							String relPlant2= null;
-							try{
+							try {
 								relPlant2 = temp.getJSONObject(0).get("RelPlant2").toString();
-							}catch(Exception ex){relPlant2 = "-";}
+							} catch (Exception ex) {relPlant2 = "-";}
 							txtRelPlant2.setText(relPlant2);
 							
 							//set text for RelSupplier JTextField
 							String relSupplier= null;
-							try{
+							try {
 								relSupplier = temp.getJSONObject(0).get("RelSupplier").toString();
-							}catch(Exception ex){relSupplier = "-";}
+							} catch (Exception ex) {relSupplier = "-";}
 							txtRelSupplier.setText(relSupplier);
 							
 							//set text for Engine JTextField
 							String engine= null;
-							try{
+							try {
 								engine = temp.getJSONObject(0).get("Engine").toString();
-							}catch(Exception ex){engine = "-";}
+							} catch (Exception ex) {engine = "-";}
 							txtName.setText(engine);
 							
 							//set text for Platform JTextField
 							String Platform= null;
-							try{
+							try {
 								Platform = temp.getJSONObject(0).get("Platform").toString();
-							}catch(Exception ex){Platform = "-";}
+							} catch (Exception ex) {Platform = "-";}
 							txtPlatform.setText(Platform);
 							
 							//set text for Customer JTextField
 							String Customer= null;
-							try{
+							try {
 								Customer = temp.getJSONObject(0).get("Customer").toString();
-							}catch(Exception ex){Customer = "-";}
+							} catch (Exception ex) {Customer = "-";}
 							txtCustomer.setText(Customer);
+
+							//set image for Customer Logo
+							try {
+								System.out.println("Setting the customer logo");
+								ImageIcon customerLogo = new ImageIcon("/Customer Logos/"+Customer+".jpg");
+								lblCustomer.setIcon(customerLogo);
+							} catch (Exception ex) {ex.printStackTrace();}
 							
 							temp = con.queryDatabase("engines", "Engine", engine);
 							//set text for Type JTextField
 							String type= null;
-							try{
+							try {
 								type = temp.getJSONObject(0).get("Type").toString();
-							}catch(Exception ex){type = "-";}
+							} catch (Exception ex) {type = "-";}
 							txtType.setText(type);							
 							
 							//set text for Volume1 JTextField
 							String volume1= null;
-							try{
+							try {
 								volume1 = temp.getJSONObject(0).get("Volume").toString();
 							} catch (Exception ex) {volume1 = "-";}
 							txtVolume.setText(volume1);
 							
 							//set text for Power JTextField
 							String power= null;
-							try{
+							try {
 								power = temp.getJSONObject(0).get("Power").toString();
 							} catch (Exception ex) {power = "-";}
 							txtPower.setText(power);
