@@ -881,7 +881,8 @@ public class BDLFrame extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnPdfPrint)
 				{
-					JFileChooser fc = new JFileChooser();
+					String appDir = System.getProperty("user.home");
+					JFileChooser fc = new JFileChooser(appDir+"/Desktop/");
 	                fc.showSaveDialog(null);
 	                File file = fc.getSelectedFile();
 	                
