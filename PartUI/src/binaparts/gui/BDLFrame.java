@@ -1372,6 +1372,13 @@ public class BDLFrame extends JFrame
 							
 							temp = con.queryDatabase("breakdown lists info", "BreakdownListNumber", getSearchText());
 							
+							//set text for Issued By JTextField
+							String issuedBy= null;
+							try {
+								issuedBy = temp.getJSONObject(0).get("CreatedBy").toString();
+							} catch (Exception ex) {issuedBy = "-";}
+							txtIssuedBy.setText(issuedBy);
+							
 							//set text for Volume JTextField
 							String volume2= null;
 							try {
@@ -1785,7 +1792,7 @@ public class BDLFrame extends JFrame
 				{		
 					if (e.getSource() == rbtnCreateBDL){
 						try {
-							txtIssuedBy.setText(con.getUsersName());
+							txtIssuedBy.setText("  "+con.getUsersName());
 							temp1 = con.queryReturnAllCustomers();
 							temp2 = con.queryReturnAllPrograms();
 							temp3 = con.queryReturnAllEngines();
@@ -1856,7 +1863,7 @@ public class BDLFrame extends JFrame
 				{		
 					if (e.getSource() == rbtnSearchBDL){
 						try {
-							txtIssuedBy.setText(con.getUsersName());
+							txtIssuedBy.setText("");
 							txtType.setText("");
 							txtVolume.setText("");
 							txtPower.setText("");
