@@ -1029,6 +1029,16 @@ public class BDLFrame extends JFrame
 						
 						try {
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+							if (temp.length() == 0) {
+								System.out.println("that number didnt exist in `bosal parts`");
+								try {
+									System.out.println("trying the delta list");
+									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
+									System.out.println("found "+temp.toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+							}
 							for(int i = 0; i < temp.length(); i++){
 								try{
 									description = temp.getJSONObject(i).getString("PartDescription").toString();
@@ -1357,6 +1367,16 @@ public class BDLFrame extends JFrame
 						
 						try {
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+							if (temp.length() == 0) {
+								System.out.println("that number didnt exist in `bosal parts`");
+								try {
+									System.out.println("trying the delta list");
+									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
+									System.out.println("found "+temp.toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+							}
 							
 							//set text for Description JTextField
 							try {
@@ -1505,6 +1525,16 @@ public class BDLFrame extends JFrame
 					if (rbtnCreateBDL.isSelected() == true) {
 						try {						
 				        	JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+				        	if (temp.length() == 0) {
+								System.out.println("that number didnt exist in `bosal parts`");
+								try {
+									System.out.println("trying the delta list");
+									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
+									System.out.println("found "+temp.toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+							}
 				        	for (int i = 0; i < temp.length(); i++) {
 				        		try {
 									//platform = temp.getJSONObject(i).getString("Program").toString();	
