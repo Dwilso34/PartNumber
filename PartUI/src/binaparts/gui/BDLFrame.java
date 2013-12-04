@@ -308,7 +308,7 @@ public class BDLFrame extends JFrame
 		}
 		public boolean containsBDL(){
 			try {
-				JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
+				JSONArray temp = con.queryDatabase("breakdown lists info", "BreakdownListNumber", getSearchText());
 				if (temp.length() > 0) {
 					return true;
 				}
@@ -353,6 +353,7 @@ public class BDLFrame extends JFrame
 					//loop to dynamically add items from Database to table 			
 					for (int i = 0; i < (rowCount/2); i++) {
 						btnAdd.doClick();
+						setSearchText(itm[i]);
 						table1.setValueAt(itm[i], i, 4);
 						table1.setValueAt(qty[i], i, 1);
 						//checks to see if there is a sub BDL
@@ -1018,16 +1019,18 @@ public class BDLFrame extends JFrame
 			final TableModelListener columnListener = new TableModelListener(){
 				public void tableChanged(TableModelEvent e) {
 					if(e.getColumn() == 4){
+						System.out.println("column part number has changed");
 						int row = e.getLastRow();
 						String description = null;
-						int rev = -1;
+						String rev = null;
 						String drawingNumber = null;
-						int drawingRev = -1;
+						String drawingRev = null;
 						String drawingRevDate = null;
 						String productionReleaseDate = null;
 						String customer = null;
 						
 						try {
+							//Grab the data from the correct database
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
 							if (temp.length() == 0) {
 								System.out.println("that number didnt exist in `bosal parts`");
@@ -1039,6 +1042,7 @@ public class BDLFrame extends JFrame
 									ex.printStackTrace();
 								}
 							}
+							//Grabbing the data from returned JSON Array for table
 							for(int i = 0; i < temp.length(); i++){
 								try{
 									description = temp.getJSONObject(i).getString("PartDescription").toString();
@@ -1046,7 +1050,12 @@ public class BDLFrame extends JFrame
 									//System.out.println("Part " + getSearchText() + " does not contain PartDescription");
 								}
 								try{
-									rev = (int)temp.getJSONObject(i).getInt("Rev");
+									rev = temp.getJSONObject(i).get("Rev").toString();
+									if(rev.length() < 3){
+										for(int j = rev.length(); j < 3; j++){
+											rev = "0" + rev;
+										}
+									}
 								}catch(Exception ex){
 									//System.out.println("Part " + getSearchText() + " does not contain Rev");
 								}
@@ -1056,7 +1065,12 @@ public class BDLFrame extends JFrame
 									//System.out.println("Part " + getSearchText() + " does not contain DrawingNumber");
 								}
 								try{
-								drawingRev = (int)temp.getJSONObject(i).getInt("DrawingRev");
+									drawingRev = temp.getJSONObject(i).get("DrawingRev").toString();
+									if(drawingRev.length() < 3){
+										for(int j = drawingRev.length(); j < 3; j++){
+											drawingRev = "0" + drawingRev;
+										}
+									}
 								}catch(Exception ex){
 									//System.out.println("Part " + getSearchText() + " does not contain DrawingRev");
 								}
@@ -1082,13 +1096,13 @@ public class BDLFrame extends JFrame
 						if(description != null){
 							table1.setValueAt(description, row, 3);
 						}
-						if(rev != -1){
+						if(rev != null){
 							table1.setValueAt(rev, row, 6);
 						}
 						if(drawingNumber != null){
 							table1.setValueAt(drawingNumber, row, 7);
 						}
-						if(drawingRev != -1){
+						if(drawingRev != null){
 							table1.setValueAt(drawingRev, row, 8);
 						}
 						if(drawingRevDate != null){
@@ -1106,7 +1120,7 @@ public class BDLFrame extends JFrame
 			bdlHeaders();
 			myTable = new JTable(table1){	
 				public boolean isCellEditable(int row, int column){
-					if(column == 1){
+					if(column == 1 || column == 11 || column == 13 || column == 14 || column == 15){
 						return true;
 					}else{						
 						return false;
@@ -1363,7 +1377,8 @@ public class BDLFrame extends JFrame
 						for (int i = table1.getRowCount(); i > 0; i--) {
 							table1.removeRow(i-1);
 						}
-						setItemsForTable();
+						btnAdd.doClick();
+						table1.setValueAt(getSearchText(), 0, 4);
 						
 						try {
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
@@ -1490,12 +1505,12 @@ public class BDLFrame extends JFrame
 							} catch (Exception ex) {Customer = "-";}
 							txtCustomer.setText(Customer);
 
-							//set image for Customer Logo
+							/*//set image for Customer Logo
 							try {
 								System.out.println("Setting the customer logo");
 								ImageIcon customerLogo = new ImageIcon("/Customer Logos/"+Customer+".jpg");
 								lblCustomer.setIcon(customerLogo);
-							} catch (Exception ex) {ex.printStackTrace();}
+							} catch (Exception ex) {ex.printStackTrace();}*/
 							
 							temp = con.queryDatabase("engines", "Engine", engine);
 							//set text for Type JTextField
@@ -1521,6 +1536,8 @@ public class BDLFrame extends JFrame
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
+
+						setItemsForTable();
 					}
 					if (rbtnCreateBDL.isSelected() == true) {
 						try {						
@@ -1932,7 +1949,7 @@ public class BDLFrame extends JFrame
 							cboName.setVisible(false);
 							btnAdd.setVisible(false);
 							btnDelete.setVisible(false);
-							myTable.getModel().removeTableModelListener(columnListener);
+							//myTable.getModel().removeTableModelListener(columnListener);
 							myTable.removeMouseListener(mouseClickListener);							
 						} catch (Exception ex) {ex.printStackTrace();}			            
 					}						
