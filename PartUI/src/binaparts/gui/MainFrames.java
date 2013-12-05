@@ -1280,6 +1280,16 @@ public class MainFrames extends JFrame
 					
 					try{
 						JSONObject temp = (con.queryDatabase("bosal parts", "BosalPartNumber", findBosalText)).getJSONObject(0);
+							if (temp.length() == 0) {
+								System.out.println("that number didnt exist in `bosal parts`");
+								try {
+									System.out.println("trying the delta list");
+									JSONObject temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", findBosalText).getJSONObject(0);
+									System.out.println("found "+temp.toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+							}
 						//set text for CustPartNumber JTextField
 						String cpartText= null;
 						//filter Description Combo Box by the PartType of checked Bosal #
@@ -1298,56 +1308,56 @@ public class MainFrames extends JFrame
 						}catch(Exception ex){ex.printStackTrace();}
 						//set text for CustPartNumber JTextField
 						try{
-							cpartText = temp.get("CustPartNumber").toString();
+							cpartText = temp.getJSONObject(0).getString("CustPartNumber").toString();
 						}catch(Exception ex){cpartText = "-";}
 						txtCusDescrip.setText(cpartText);
 						
 						//set text for SupPartNumber JTextField
 						String spartText= null;
 						try{
-							spartText = temp.get("SupPartNumber").toString();
+							spartText = temp.getJSONObject(0).getString("SupPartNumber").toString();
 						}catch(Exception ex){spartText = "-";}
 						txtSupDescrip.setText(spartText);
 						
 						//set text for Description JComboBox
 						String descripText= null;
 						try{
-							descripText = temp.get("PartDescription").toString();
+							descripText = temp.getJSONObject(0).getString("PartDescription").toString();
 						}catch(Exception ex){descripText = "-";}
 						cboDescrip.setSelectedItem(descripText);
 						
 						//set text for Program JComboBox
 						String programText = null;
 						try{
-							programText = temp.get("Program").toString();
+							programText = temp.getJSONObject(0).getString("Program").toString();
 						}catch(Exception ex){programText = "-";}
 						cboProgram.setSelectedItem(programText);
 						
 						//set text for Rev JTextField
 						int Rev = 0;
 						try{
-							Rev = Integer.valueOf(temp.get("Rev").toString());
+							Rev = Integer.valueOf(temp.getJSONObject(0).getString("Rev").toString());
 						}catch(Exception ex){Rev = 0;}
 						txtRev.setText(Integer.toString(Rev));
 						
 						//set text for DrawingNumber JTextField
 						String DrawingNumber = null;
 						try{
-							DrawingNumber = temp.get("DrawingNumber").toString();
+							DrawingNumber = temp.getJSONObject(0).getString("DrawingNumber").toString();
 						}catch(Exception ex){DrawingNumber = "-";}
 						txtDrawingNum.setText(DrawingNumber);
 						
 						//set text for DrawingRev JTextField
 						String DrawingRev = null;
 						try{
-							DrawingRev = temp.get("DrawingRev").toString();
+							DrawingRev = temp.getJSONObject(0).getString("DrawingRev").toString();
 						}catch(Exception ex){DrawingRev = "-";}
 						txtDrawingRev.setText(DrawingRev);
 						
 						//set text for DrawingRevDate JComboBoxes
 						String[] DrawingDay = null;
 						try{
-							DrawingDay = temp.get("DrawingRevDate").toString().split("[/]");
+							DrawingDay = temp.getJSONObject(0).getString("DrawingRevDate").toString().split("[/]");
 							cboDrawingDay.setSelectedItem(DrawingDay[1]);
 							cboDrawingMonth.setSelectedItem(DrawingDay[0]);
 							cboDrawingYear.setSelectedItem(DrawingDay[2]);
@@ -1359,7 +1369,7 @@ public class MainFrames extends JFrame
 						//set text for ProductionReleaseDate JComboBoxes
 						String[] ProductionDay = null;
 						try{
-							ProductionDay = temp.get("ProductionReleaseDate").toString().split("[/]");
+							ProductionDay = temp.getJSONObject(0).getString("ProductionReleaseDate").toString().split("[/]");
 							cboProductionDay.setSelectedItem(ProductionDay[1]);
 							cboProductionMonth.setSelectedItem(ProductionDay[0]);
 							cboProductionYear.setSelectedItem(ProductionDay[2]);

@@ -1142,7 +1142,7 @@ public class BDLFrame extends JFrame
 			//myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);	
 			int[] columnsWidth = {
 				     //  1   2   3   4    5   6   7   8   9  10  11  12  13  14  15  16  (Column Numbers)
-		                30, 30, 15, 263, 85, 85, 30, 70, 70, 85, 85, 30, 80, 80, 70, 85
+		                30, 30, 15, 273, 85, 85, 27, 77, 60, 85, 85, 30, 80, 80, 70, 85
 		        };
 			int i = 0;
 			for (int width : columnsWidth) {
