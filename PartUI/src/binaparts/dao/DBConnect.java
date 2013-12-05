@@ -1,9 +1,11 @@
 package binaparts.dao;
 
 import java.sql.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.joda.time.LocalDate;
+
 import binaparts.properties.*;
 import binaparts.util.ToJSON;
 
@@ -547,6 +549,29 @@ public class DBConnect {
 			}
 			return json;
 		}
+	//returns jsonArray of All Part Numbers 
+	public JSONArray queryAllDeltaParts() throws Exception{
+			
+		ToJSON converter = new ToJSON();
+		JSONArray json = new JSONArray();
+		try{
+			getDBConnection();
+			pst = con.prepareStatement("SELECT * FROM `delta 1 parts` ORDER BY `DeltaPartNumber`");
+			ResultSet rs = pst.executeQuery();
+			if (isResultSetEmpty(rs) == false ){    
+				json = converter.toJSONArray(rs);
+			}
+			pst.close();
+			con.close();
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
+		return json;
+	}
 	//returns jsonArray filtered by Material PartType
 	public JSONArray queryMaterialPartType(int queryValue) throws Exception{
 		
@@ -1299,7 +1324,7 @@ public class DBConnect {
 						+ "`ProductionReleaseDate` = ?, "
 						+ "`UpdatedBy` = ?, "
 						+ "`Updated` = ?"
-						+ "WHERE `BosalPartNUmber`= ?");
+						+ "WHERE `BosalPartNumber`= ?");
 				pst.setString(1, Description);
 				pst.setString(2, CusPartNumber);
 				pst.setString(3, SupPartNumber);
@@ -1323,4 +1348,36 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}
+
+
+	public void updateDeltaProgram() {
+		String DeltaPartNumber;
+		String Program;
+		String newProgram = "Delta 34XX";
+		try {
+			JSONArray temp = queryAllDeltaParts();
+			System.out.println(temp.length());
+			getDBConnection();
+			for (int i = 0; i < temp.length(); i++) {
+				DeltaPartNumber = temp.getJSONObject(i).get("DeltaPartNumber").toString();
+				Program = temp.getJSONObject(i).get("Program").toString();
+				
+				System.out.println(DeltaPartNumber + " FROM " + Program + " TO "+newProgram);
+				
+				pst = con.prepareStatement("UPDATE `delta 1 parts` SET `Program` = ? WHERE `DeltaPartNumber`= ?");
+				pst.setString(1, newProgram);				
+				pst.setString(2, DeltaPartNumber);
+				pst.executeUpdate();			
+			}
+			pst.close();
+			con.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+
+
+
+
 }
