@@ -53,6 +53,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
@@ -65,6 +66,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
@@ -241,8 +245,8 @@ public class BDLFrame extends JFrame
 		private JTextField txtRelSupplier;
 		
 	//JTextArea	
-		private JTextArea txtaRemark;
-		private JTextArea txtaNote;
+		private JTextPane txtaRemark;
+		private JTextPane txtaNote;
 		private JLabel lblCustImage;
 		
 	//JButton
@@ -552,7 +556,7 @@ public class BDLFrame extends JFrame
 			lblEngine.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblEngine.setForeground(Color.BLACK);
 			lblBosalPartNum = new JLabel("BOSAL PART NR");
-			lblBosalPartNum.setBounds(399, 100, 166, 20);
+			lblBosalPartNum.setBounds(407, 100, 168, 20);
 			lblBosalPartNum.setHorizontalAlignment(SwingConstants.CENTER);
 			lblBosalPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblBosalPartNum.setBackground(new Color(150, 150, 150));
@@ -560,7 +564,7 @@ public class BDLFrame extends JFrame
 			lblBosalPartNum.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblBosalPartNum.setForeground(Color.BLACK);
 			lblCustomerPartNum = new JLabel("CUSTOMER PART NR");
-			lblCustomerPartNum.setBounds(564, 100, 187, 20);
+			lblCustomerPartNum.setBounds(574, 100, 177, 20);
 			lblCustomerPartNum.setHorizontalAlignment(SwingConstants.CENTER);
 			lblCustomerPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblCustomerPartNum.setBackground(new Color(150, 150, 150));
@@ -576,7 +580,7 @@ public class BDLFrame extends JFrame
 			lblIMDS.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblIMDS.setForeground(Color.BLACK);
 			lblDescription = new JLabel("DESCRIPTION");
-			lblDescription.setBounds(399, 138, 166, 20);
+			lblDescription.setBounds(407, 138, 168, 20);
 			lblDescription.setHorizontalAlignment(SwingConstants.CENTER);
 			lblDescription.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblDescription.setBackground(new Color(150, 150, 150));
@@ -584,7 +588,7 @@ public class BDLFrame extends JFrame
 			lblDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblDescription.setForeground(Color.BLACK);
 			lblSilencer = new JLabel("Silencer");
-			lblSilencer.setBounds(399, 157, 77, 58);
+			lblSilencer.setBounds(407, 157, 77, 58);
 			lblSilencer.setHorizontalAlignment(SwingConstants.CENTER);
 			lblSilencer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblSilencer.setBackground(new Color(150, 150, 150));
@@ -592,21 +596,21 @@ public class BDLFrame extends JFrame
 			lblSilencer.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblSilencer.setForeground(Color.BLACK);
 			lblVolume2 = new JLabel("Volume (L):");
-			lblVolume2.setBounds(475, 157, 90, 20);
+			lblVolume2.setBounds(483, 157, 92, 20);
 			lblVolume2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblVolume2.setBackground(new Color(150, 150, 150));
 			lblVolume2.setOpaque(true);
 			lblVolume2.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblVolume2.setForeground(Color.BLACK);
 			lblLength = new JLabel("Length:");
-			lblLength.setBounds(475, 176, 90, 20);
+			lblLength.setBounds(483, 176, 92, 20);
 			lblLength.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblLength.setBackground(new Color(150, 150, 150));
 			lblLength.setOpaque(true);
 			lblLength.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblLength.setForeground(Color.BLACK);
 			lblSection = new JLabel("Section:");
-			lblSection.setBounds(475, 195, 90, 20);
+			lblSection.setBounds(483, 195, 92, 20);
 			lblSection.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblSection.setBackground(new Color(150, 150, 150));
 			lblSection.setOpaque(true);
@@ -621,28 +625,28 @@ public class BDLFrame extends JFrame
 			lblIssuedBy.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblIssuedBy.setForeground(Color.BLACK);
 			lblPage = new JLabel("Page:");
-			lblPage.setBounds(1064, 10, 77, 20);
+			lblPage.setBounds(1050, 10, 91, 20);
 			lblPage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblPage.setBackground(new Color(150, 150, 150));
 			lblPage.setOpaque(true);
 			lblPage.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblPage.setForeground(Color.BLACK);
 			lblREV = new JLabel("REV:");
-			lblREV.setBounds(1064, 29, 77, 20);
+			lblREV.setBounds(1050, 29, 91, 20);
 			lblREV.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblREV.setBackground(new Color(150, 150, 150));
 			lblREV.setOpaque(true);
 			lblREV.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblREV.setForeground(Color.BLACK);
 			lblRelDate = new JLabel("Rel Date:");
-			lblRelDate.setBounds(1064, 48, 77, 20);
+			lblRelDate.setBounds(1050, 48, 91, 20);
 			lblRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelDate.setBackground(new Color(150, 150, 150));
 			lblRelDate.setOpaque(true);
 			lblRelDate.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelDate.setForeground(Color.BLACK);
 			lblREVDate = new JLabel("REV Date:");
-			lblREVDate.setBounds(1064, 67, 77, 20);
+			lblREVDate.setBounds(1050, 67, 91, 20);
 			lblREVDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblREVDate.setBackground(new Color(150, 150, 150));
 			lblREVDate.setOpaque(true);
@@ -650,7 +654,7 @@ public class BDLFrame extends JFrame
 			lblREVDate.setForeground(Color.BLACK);
 			lblProduction = new JLabel("Production");
 			lblProduction.setHorizontalAlignment(SwingConstants.CENTER);
-			lblProduction.setBounds(1041, 92, 200, 20);
+			lblProduction.setBounds(1050, 92, 191, 20);
 			lblProduction.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblProduction.setBackground(new Color(150, 150, 150));
 			lblProduction.setOpaque(true);
@@ -679,7 +683,7 @@ public class BDLFrame extends JFrame
 			lblRelSupplier.setForeground(Color.BLACK);
 			lblBOSAL = new JLabel("BOSAL");
 			lblBOSAL.setHorizontalAlignment(SwingConstants.CENTER);
-			lblBOSAL.setBounds(371, 223, 550, 20);
+			lblBOSAL.setBounds(407, 223, 540, 20);
 			lblBOSAL.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblBOSAL.setBackground(new Color(150, 150, 150));
 			lblBOSAL.setOpaque(true);
@@ -687,7 +691,7 @@ public class BDLFrame extends JFrame
 			lblBOSAL.setForeground(Color.BLACK);
 			lblCUSTOMER = new JLabel("CUSTOMER");
 			lblCUSTOMER.setHorizontalAlignment(SwingConstants.CENTER);
-			lblCUSTOMER.setBounds(920, 223, 320, 20);
+			lblCUSTOMER.setBounds(946, 223, 294, 20);
 			lblCUSTOMER.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblCUSTOMER.setBackground(new Color(150, 150, 150));
 			lblCUSTOMER.setOpaque(true);
@@ -777,7 +781,7 @@ public class BDLFrame extends JFrame
 			
 		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
 		btnSave = new JButton(save);		
-		btnSave.setBounds(875, 177, 103, 34);		
+		btnSave.setBounds(898, 177, 102, 34);		
 		btnSave.addActionListener(new ActionListener() {	
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnSave)
@@ -894,7 +898,7 @@ public class BDLFrame extends JFrame
 			
 		ImageIcon print = new ImageIcon(getClass().getResource("/images/pdf.jpg"));
 		btnPdfPrint = new JButton(print);
-		btnPdfPrint.setBounds(875, 130, 103, 34);
+		btnPdfPrint.setBounds(898, 130, 102, 34);
 		btnPdfPrint.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -1156,7 +1160,7 @@ public class BDLFrame extends JFrame
 			//myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);	
 			int[] columnsWidth = {
 				     //  1   2   3   4    5   6   7   8   9  10  11  12  13  14  15  16  (Column Numbers)
-		                30, 30, 15, 273, 85, 85, 27, 77, 60, 85, 85, 30, 80, 80, 70, 85
+		                30, 22, 15, 306, 85, 85, 27, 77, 60, 85, 85, 30, 70, 70, 65, 85
 		        };
 			int i = 0;
 			for (int width : columnsWidth) {
@@ -1201,6 +1205,12 @@ public class BDLFrame extends JFrame
 								System.out.println("I Grabbed the Text from the Customer ComboBox!");								
 								System.out.println("I am about to Click the Customer CheckBox!");
 								cbxCustomer.doClick();
+								/*//set image for Customer Logo
+								try {
+									System.out.println("Setting the customer logo");
+									ImageIcon customerLogo = new ImageIcon("/images/General Motors.jpg");
+									lblCustImage = new JLabel(customerLogo);
+								} catch (Exception ex) {ex.printStackTrace();}*/
 							}
 						}
 						else if(e.getSource().equals(cboPlatform)){							
@@ -1526,12 +1536,12 @@ public class BDLFrame extends JFrame
 							} catch (Exception ex) {Customer = "-";}
 							txtCustomer.setText(Customer);
 
-							/*//set image for Customer Logo
+							//set image for Customer Logo
 							try {
 								System.out.println("Setting the customer logo");
-								ImageIcon customerLogo = new ImageIcon("/Customer Logos/"+Customer+".jpg");
-								lblCustomer.setIcon(customerLogo);
-							} catch (Exception ex) {ex.printStackTrace();}*/
+								ImageIcon customerLogo = new ImageIcon("/images/General Motors.jpg");
+								lblCustImage.setIcon(customerLogo);
+							} catch (Exception ex) {ex.printStackTrace();}
 							
 							temp = con.queryDatabase("engines", "Engine", engine);
 							//set text for Type JTextField
@@ -1642,76 +1652,90 @@ public class BDLFrame extends JFrame
 			     }
 			};
 			txtCustomer = new JTextField();
+			txtCustomer.addMouseListener(new ContextMenuMouseListener());
 			txtCustomer.setHorizontalAlignment(JTextField.CENTER);
 			txtCustomer.setBackground(Color.white);
 			txtCustomer.setBounds(157, 10, 128, 20);
 			txtCustomer.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustomer.setForeground(Color.BLACK);
 			txtPlatform = new JTextField();
+			txtPlatform.addMouseListener(new ContextMenuMouseListener());
 			txtPlatform.setHorizontalAlignment(JTextField.CENTER);
 			txtPlatform.setBackground(Color.white);
 			txtPlatform.setBounds(157, 101, 128, 20);
 			txtPlatform.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPlatform.setForeground(Color.BLACK);
 			txtType = new JTextField();
+			txtType.addMouseListener(new ContextMenuMouseListener());
 			txtType.setHorizontalAlignment(JTextField.CENTER);
 			txtType.setBounds(157, 120, 128, 20);
 			txtType.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtType.setForeground(Color.BLACK);
 			txtName = new JTextField();
+			txtName.addMouseListener(new ContextMenuMouseListener());
 			txtName.setHorizontalAlignment(JTextField.CENTER);
 			txtName.setBackground(Color.white);
 			txtName.setBounds(157, 139, 128, 20);
 			txtName.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtName.setForeground(Color.BLACK);
 			txtVolume = new JTextField();
+			txtVolume.addMouseListener(new ContextMenuMouseListener());
 			txtVolume.setHorizontalAlignment(JTextField.CENTER);
 			txtVolume.setBounds(157, 158, 128, 20);
 			txtVolume.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtVolume.setForeground(Color.BLACK);
 			txtPower = new JTextField();
+			txtPower.addMouseListener(new ContextMenuMouseListener());
 			txtPower.setHorizontalAlignment(JTextField.CENTER);
 			txtPower.setBounds(157, 177, 128, 20);
 			txtPower.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPower.setForeground(Color.BLACK);
 			txtBosalPartNum = new JTextField();
+			txtBosalPartNum.addMouseListener(new ContextMenuMouseListener());
 			txtBosalPartNum.setHorizontalAlignment(JTextField.CENTER);
-			txtBosalPartNum.setBounds(399, 119, 166, 20);
+			txtBosalPartNum.setBounds(407, 119, 168, 20);
 			txtBosalPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtBosalPartNum.setForeground(Color.BLACK);
 			txtBosalPartNum.addMouseListener(mouseClickListener);
 			txtBosalPartNum.getDocument().addDocumentListener(documentListener);
 			txtCustomerPartNum = new JTextField();
+			txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
 			txtCustomerPartNum.setHorizontalAlignment(JTextField.CENTER);
-			txtCustomerPartNum.setBounds(564, 119, 187, 20);
+			txtCustomerPartNum.setBounds(574, 119, 177, 20);
 			txtCustomerPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtCustomerPartNum.setForeground(Color.BLACK);
 			txtIMDS = new JTextField();
+			txtIMDS.addMouseListener(new ContextMenuMouseListener());
 			txtIMDS.setHorizontalAlignment(JTextField.CENTER);
 			txtIMDS.setBounds(750, 119, 98, 20);
 			txtIMDS.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtIMDS.setForeground(Color.BLACK);
 			txtDescription = new JTextField();
+			txtDescription.addMouseListener(new ContextMenuMouseListener());
 			txtDescription.setHorizontalAlignment(JTextField.CENTER);
-			txtDescription.setBounds(564, 138, 284, 20);
+			txtDescription.setBounds(574, 138, 274, 20);
 			txtDescription.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtDescription.setForeground(Color.BLACK);
 			txtVolume2 = new JTextField();
+			txtVolume2.addMouseListener(new ContextMenuMouseListener());
 			txtVolume2.setHorizontalAlignment(JTextField.CENTER);
-			txtVolume2.setBounds(564, 157, 284, 20);
+			txtVolume2.setBounds(574, 157, 274, 20);
 			txtVolume2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtVolume2.setForeground(Color.BLACK);
 			txtLength = new JTextField();
+			txtLength.addMouseListener(new ContextMenuMouseListener());
 			txtLength.setHorizontalAlignment(JTextField.CENTER);
-			txtLength.setBounds(564, 176, 284, 20);
+			txtLength.setBounds(574, 176, 274, 20);
 			txtLength.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtLength.setForeground(Color.BLACK);
 			txtSection = new JTextField();
+			txtSection.addMouseListener(new ContextMenuMouseListener());
 			txtSection.setHorizontalAlignment(JTextField.CENTER);
-			txtSection.setBounds(564, 195, 284, 20);
+			txtSection.setBounds(574, 195, 274, 20);
 			txtSection.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtSection.setForeground(Color.BLACK);
 			txtIssuedBy = new JTextField();
+			txtIssuedBy.addMouseListener(new ContextMenuMouseListener());
 			txtIssuedBy.setHorizontalAlignment(JTextField.RIGHT);
 			txtIssuedBy.setBackground(Color.white);
 			txtIssuedBy.setBounds(636, 70, 212, 20);
@@ -1719,50 +1743,68 @@ public class BDLFrame extends JFrame
 			txtIssuedBy.setForeground(Color.BLACK);
 			txtIssuedBy.setEditable(false);
 			txtPage = new JTextField();
+			txtPage.addMouseListener(new ContextMenuMouseListener());
 			txtPage.setHorizontalAlignment(JTextField.CENTER);
 			txtPage.setBounds(1140, 10, 101, 20);
 			txtPage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPage.setForeground(Color.BLACK);
 			txtREV = new JTextField();
+			txtREV.addMouseListener(new ContextMenuMouseListener());
 			txtREV.setHorizontalAlignment(JTextField.CENTER);
 			txtREV.setBounds(1140, 29, 101, 20);
 			txtREV.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREV.setForeground(Color.BLACK);
 			txtRelDate = new JTextField();
+			txtRelDate.addMouseListener(new ContextMenuMouseListener());
 			txtRelDate.setHorizontalAlignment(JTextField.CENTER);
 			txtRelDate.setBounds(1140, 48, 101, 20);
 			txtRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelDate.setForeground(Color.BLACK);
 			txtREVDate = new JTextField();
+			txtREVDate.addMouseListener(new ContextMenuMouseListener());
 			txtREVDate.setHorizontalAlignment(JTextField.CENTER);
 			txtREVDate.setBounds(1140, 67, 101, 20);
 			txtREVDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREVDate.setForeground(Color.BLACK);
 			txtProduction = new JTextField();
+			txtProduction.addMouseListener(new ContextMenuMouseListener());
 			txtProduction.setHorizontalAlignment(JTextField.CENTER);
-			txtProduction.setBounds(1041, 111, 200, 20);
+			txtProduction.setBounds(1050, 111, 191, 20);
 			txtProduction.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtProduction.setForeground(Color.BLACK);
 			txtRelPlant1 = new JTextField();
+			txtRelPlant1.addMouseListener(new ContextMenuMouseListener());
 			txtRelPlant1.setHorizontalAlignment(JTextField.CENTER);
 			txtRelPlant1.setBounds(1140, 136, 100, 20);
 			txtRelPlant1.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelPlant1.setForeground(Color.BLACK);
 			txtRelPlant2 = new JTextField();
+			txtRelPlant2.addMouseListener(new ContextMenuMouseListener());
 			txtRelPlant2.setHorizontalAlignment(JTextField.CENTER);
 			txtRelPlant2.setBounds(1140, 155, 100, 20);
 			txtRelPlant2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelPlant2.setForeground(Color.BLACK);
 			txtRelSupplier = new JTextField();
+			txtRelSupplier.addMouseListener(new ContextMenuMouseListener());
 			txtRelSupplier.setHorizontalAlignment(JTextField.CENTER);
 			txtRelSupplier.setBounds(1140, 174, 100, 20);
 			txtRelSupplier.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelSupplier.setForeground(Color.BLACK);
-			txtaRemark = new JTextArea();
+			txtaRemark = new JTextPane();
+			txtaRemark.addMouseListener(new ContextMenuMouseListener());
+			StyledDocument doc = txtaRemark.getStyledDocument();
+			SimpleAttributeSet center = new SimpleAttributeSet();
+			StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+			doc.setParagraphAttributes(0, doc.getLength(), center, false);
 			txtaRemark.setBounds(30, 789, 1211, 35);
 			txtaRemark.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtaRemark.setForeground(Color.BLACK);
-			txtaNote = new JTextArea();
+			txtaNote = new JTextPane();
+			txtaNote.addMouseListener(new ContextMenuMouseListener());
+			StyledDocument doc1 = txtaNote.getStyledDocument();
+			SimpleAttributeSet center1 = new SimpleAttributeSet();
+			StyleConstants.setAlignment(center1, StyleConstants.ALIGN_CENTER);
+			doc1.setParagraphAttributes(0, doc1.getLength(), center1, false);
 			txtaNote.setBounds(30, 853, 1211, 35);
 			txtaNote.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtaNote.setForeground(Color.BLACK);
@@ -1873,7 +1915,7 @@ public class BDLFrame extends JFrame
 			
 		//JRadioButtons
 			rbtnCreateBDL = new JRadioButton("Create BDL");
-			rbtnCreateBDL.setBounds(875, 39, 103, 27);
+			rbtnCreateBDL.setBounds(895, 39, 103, 27);
 			rbtnCreateBDL.setBackground(new Color(105, 105, 105));
 			rbtnCreateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnCreateBDL.setForeground(Color.BLACK);
@@ -1943,7 +1985,7 @@ public class BDLFrame extends JFrame
 			}});
 			
 			rbtnSearchBDL = new JRadioButton("Search BDL");
-			rbtnSearchBDL.setBounds(875, 96, 111, 27);
+			rbtnSearchBDL.setBounds(895, 96, 111, 27);
 			rbtnSearchBDL.setBackground(new Color(105, 105, 105));
 			rbtnSearchBDL.setForeground(Color.BLACK);
 			rbtnSearchBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -2007,7 +2049,7 @@ public class BDLFrame extends JFrame
 				ex.printStackTrace();
 			}
 			rbtnUpdateBDL = new JRadioButton("Update BDL");
-			rbtnUpdateBDL.setBounds(875, 68, 111, 27);
+			rbtnUpdateBDL.setBounds(895, 68, 111, 27);
 			rbtnUpdateBDL.setBackground(new Color(105, 105, 105));
 			rbtnUpdateBDL.setForeground(Color.BLACK);
 			rbtnUpdateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -2110,6 +2152,7 @@ public class BDLFrame extends JFrame
 			}
 		}
 	}
+
 }
 
 
