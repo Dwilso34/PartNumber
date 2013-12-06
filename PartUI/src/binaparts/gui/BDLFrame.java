@@ -26,6 +26,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -70,6 +74,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -237,8 +242,8 @@ public class BDLFrame extends JFrame
 		private JTextField txtIssuedBy;
 		private JTextField txtPage;
 		private JTextField txtREV;
-		private JTextField txtRelDate;
-		private JTextField txtREVDate;
+		private JXDatePicker txtRelDate;
+		private JXDatePicker txtREVDate;
 		private JTextField txtProduction;
 		private JTextField txtRelPlant1;
 		private JTextField txtRelPlant2;
@@ -830,11 +835,12 @@ public class BDLFrame extends JFrame
 									if (!(txtREV.getText().equals("")) || !(txtREV.getText() == null)) {
 										s2 = s2+", {\"Rev\":\""+txtREV.getText()+"\"}";
 									}
-									if (!(txtREVDate.getText().equals("")) || !(txtREVDate.getText() == null)) {
-										s2 = s2+", {\"RevDate\":\""+txtREVDate.getText()+"\"}";
+
+									if (!(txtREVDate.getDate().toString().equals("")) || !(txtREVDate.getDate().toString() == null)) {
+										s2 = s2+", {\"RevDate\":\""+txtREVDate.getDate().toString()+"\"}";
 									}
-									if (!(txtRelDate.getText().equals("")) || !(txtRelDate.getText() == null)) {
-										s2 = s2+", {\"ReleaseDate\":\""+txtRelDate.getText()+"\"}";
+									if (!(txtRelDate.getDate().toString().equals("")) || !(txtRelDate.getDate().toString() == null)) {
+										s2 = s2+", {\"ReleaseDate\":\""+txtRelDate.getDate().toString()+"\"}";
 									}
 									if (!(txtProduction.getText().equals("")) || !(txtProduction.getText() == null)) {
 										s2 = s2+", {\"Production\":\""+txtProduction.getText()+"\"}";
@@ -1019,7 +1025,7 @@ public class BDLFrame extends JFrame
 								}
 								table.setValueAt(getSearchText(), row, column);
 							}
-						}else if (e.getSource() == lblCustImage){
+						}else if (e.getSource() == lblCustImage) {
 							System.out.println("I made it");							
 							String appDir = System.getProperty("user.dir");
 							System.out.println(appDir);
@@ -1034,6 +1040,7 @@ public class BDLFrame extends JFrame
 							}			           
 			                lblCustImage.setIcon(new ImageIcon(image));
 						}
+						
 					}					
 				}
 			};
@@ -1475,17 +1482,20 @@ public class BDLFrame extends JFrame
 							
 							//set text for Release Date JTextField
 							String releaseDate= null;
+							String d = null;
 							try {
 								releaseDate = temp.getJSONObject(0).get("ReleaseDate").toString();
+								DateFormat sysDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+								d = sysDate.format(txtRelDate.getDate()).toString();
 							} catch (Exception ex) {releaseDate = "-";}
-							txtRelDate.setText(releaseDate);
+							txtRelDate.setToolTipText(d);
 							
 							//set text for Rev Date JTextField
 							String revDate= null;
 							try {
 								revDate = temp.getJSONObject(0).get("RevDate").toString();
 							} catch (Exception ex) {revDate = "-";}
-							txtREVDate.setText(revDate);
+							txtREVDate.setToolTipText(revDate);
 							
 							//set text for Production JTextField
 							String production= null;
@@ -1754,16 +1764,19 @@ public class BDLFrame extends JFrame
 			txtREV.setBounds(1140, 29, 101, 20);
 			txtREV.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREV.setForeground(Color.BLACK);
-			txtRelDate = new JTextField();
+			txtRelDate = new JXDatePicker();
 			txtRelDate.addMouseListener(new ContextMenuMouseListener());
-			txtRelDate.setHorizontalAlignment(JTextField.CENTER);
-			txtRelDate.setBounds(1140, 48, 101, 20);
+			DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+			txtRelDate.setFormats(dateFormat);
+			
+			txtRelDate.setBounds(1140, 48, 110, 20);
 			txtRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelDate.setForeground(Color.BLACK);
-			txtREVDate = new JTextField();
+			txtREVDate = new JXDatePicker();
 			txtREVDate.addMouseListener(new ContextMenuMouseListener());
-			txtREVDate.setHorizontalAlignment(JTextField.CENTER);
-			txtREVDate.setBounds(1140, 67, 101, 20);
+			DateFormat dateFormat1 = new SimpleDateFormat("MM/dd/yyyy");
+			txtREVDate.setFormats(dateFormat1);
+			txtREVDate.setBounds(1140, 67, 110, 20);
 			txtREVDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREVDate.setForeground(Color.BLACK);
 			txtProduction = new JTextField();
@@ -1940,8 +1953,8 @@ public class BDLFrame extends JFrame
 							txtSection.setText("");
 							txtPage.setText("");
 							txtREV.setText("");
-							txtRelDate.setText("");
-							txtREVDate.setText("");
+							txtRelDate.setDate(null);
+							txtREVDate.setDate(null);
 							txtProduction.setText("");
 							txtRelPlant1.setText("");
 							txtRelPlant2.setText("");
@@ -2008,8 +2021,8 @@ public class BDLFrame extends JFrame
 							txtSection.setText("");
 							txtPage.setText("");
 							txtREV.setText("");
-							txtRelDate.setText("");
-							txtREVDate.setText("");
+							txtRelDate.setDate(null);
+							txtREVDate.setDate(null);
 							txtProduction.setText("");
 							txtRelPlant1.setText("");
 							txtRelPlant2.setText("");
@@ -2057,7 +2070,47 @@ public class BDLFrame extends JFrame
 				
 				public void actionPerformed(ActionEvent e)
 				{		
-					
+					txtIssuedBy.setText("");
+					txtType.setText("");
+					txtVolume.setText("");
+					txtPower.setText("");
+					txtBosalPartNum.setText("");
+					txtCustomerPartNum.setText("");
+					txtIMDS.setText("");
+					txtDescription.setText("");
+					txtVolume2.setText("");
+					txtLength.setText("");
+					txtSection.setText("");
+					txtPage.setText("");
+					txtREV.setText("");
+					txtRelDate.setDate(null);
+					txtREVDate.setDate(null);
+					txtProduction.setText("");
+					txtRelPlant1.setText("");
+					txtRelPlant2.setText("");
+					txtRelSupplier.setText("");
+					txtCustomer.setText("");
+					txtCustomer.setVisible(true);
+					cbxCustomer.setSelected(false);
+					cbxCustomer.setVisible(false);
+					cboCustomer.removeItemListener(cboGetInfo);
+					cboCustomer.setVisible(false);
+					txtPlatform.setText("");
+					txtPlatform.setVisible(true);
+					cbxPlatform.setSelected(false);
+					cbxPlatform.setVisible(false);
+					cboPlatform.removeItemListener(cboGetInfo);
+					cboPlatform.setVisible(false);
+					txtName.setText("");
+					txtName.setVisible(true);
+					cbxName.setSelected(false);
+					cbxName.setVisible(false);
+					cboName.removeItemListener(cboGetInfo);
+					cboName.setVisible(false);
+					btnAdd.setVisible(false);
+					btnDelete.setVisible(false);
+					//myTable.getModel().removeTableModelListener(columnListener);
+					myTable.removeMouseListener(mouseClickListener);	
 				}
 			});
 			

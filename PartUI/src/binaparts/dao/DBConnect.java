@@ -1303,7 +1303,7 @@ public class DBConnect {
 			}
 		}
 	//updates a BosalPartNumber in parts list
-	public void update(String BosalPartNumber, String CusPartNumber, 
+	public void updateBosal(String BosalPartNumber, String CusPartNumber, 
 			String SupPartNumber, String Description, String Program, 
 			int Rev, String DrawingNumber, int DrawingRev, String DrawingRevDate,
 			String ProductionReleaseDate) throws Exception{
@@ -1348,7 +1348,52 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}
-
+	//updates a BosalPartNumber in parts list
+		public void updateDelta(String DeltaPartNumber, String CusPartNumber, 
+				String SupPartNumber, String Description, String Program, 
+				int Rev, String DrawingNumber, int DrawingRev, String DrawingRevDate,
+				String ProductionReleaseDate) throws Exception{
+				
+				try{
+					String usersname = getUsersName();
+					Timestamp timestamp = getTimestamp();
+					getDBConnection();
+					pst = con.prepareStatement("UPDATE `delta 1 parts` SET "
+							+ "`PartDescription` = ?, " 
+							+ "`CustPartNumber` = ?, " 
+							+ "`SupPartNumber` = ?, "
+							+ "`Program` = ?, "
+							+ "`Rev` = ?, "
+							+ "`DrawingNumber` = ?, "
+							+ "`DrawingRev` = ?, "
+							+ "`DrawingRevDate` = ?, "
+							+ "`ProductionReleaseDate` = ?, "
+							+ "`UpdatedBy` = ?, "
+							+ "`Updated` = ?"
+							+ "WHERE `DeltaPartNumber`= ?");
+					pst.setString(1, Description);
+					pst.setString(2, CusPartNumber);
+					pst.setString(3, SupPartNumber);
+					pst.setString(4,  Program);
+					pst.setInt(5, Rev);
+					pst.setString(6, DrawingNumber);
+					pst.setInt(7, DrawingRev);
+					pst.setString(8, DrawingRevDate);
+					pst.setString(9, ProductionReleaseDate);
+					pst.setString(10, usersname);
+					pst.setTimestamp(11, timestamp);
+					pst.setString(12, DeltaPartNumber);
+					pst.executeUpdate();
+					pst.close();
+					con.close();
+				}catch(SQLException SQLex){
+					SQLex.printStackTrace();
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}finally{
+					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				}
+			}
 
 	public void updateDeltaProgram() {
 		String DeltaPartNumber;
