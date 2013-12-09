@@ -1155,12 +1155,13 @@ public class DBConnect {
 			Timestamp timestamp = getTimestamp();
 			getDBConnection();
 			String BosalPartNumber = bdl.getJSONObject(0).get("BreakdownListNumber").toString();
+			int actualBDLItemCount = 1;
 			for (double x = (((double)bdl.length())-1)/10; x > 0; x--) {
 				int count;
 				if (x >= 1) {
-					count = (2*10);
+					count = (20);
 				} else {
-					count = (int)(2*(x*10));
+					count = (int)(x*20);
 				}				
 				int index = 0; //index through the JSONArray
 				String[] values = new String[count];
@@ -1174,13 +1175,14 @@ public class DBConnect {
 					//if i is even then an Item is added to the statement
 					else if (i%2 == 0){
 						statement = statement + ", Item" + index;
-						values[i] = bdl.getJSONObject(index).get("Item"+index).toString();
+						values[i] = bdl.getJSONObject(actualBDLItemCount).get("Item"+actualBDLItemCount).toString();
 					}
 					//if i is odd then a Qty is added to the statement
 					else if (i%2 != 0){
 						statement = statement + ", Qty"+index;
-						values[i] = bdl.getJSONObject(index).get("Qty"+index).toString();
+						values[i] = bdl.getJSONObject(actualBDLItemCount).get("Qty"+actualBDLItemCount).toString();
 						index++;
+						actualBDLItemCount++;
 					}
 				}
 				statement = statement + ", CreatedBy, Created, UpdatedBy, Updated) VALUES(";
@@ -1193,6 +1195,7 @@ public class DBConnect {
 					}				
 				}
 				statement = statement + ")";
+				System.out.println("x = " + x + " " +statement);
 				pst = con.prepareStatement(statement);
 				//loop to set the values of the parameters going into the Database
 				for (int i = -1; i < count; i++){
@@ -1212,9 +1215,9 @@ public class DBConnect {
 				pst.setTimestamp((count+3), timestamp);
 				pst.setString((count+4), usersname);
 				pst.setTimestamp((count+5), timestamp);
-				pst.executeUpdate();
-				pst.close();
+				pst.executeUpdate();				
 			}
+			pst.close();
 			con.close();
 			System.out.println("New BDL Info Created Successfully");
 		}catch(SQLException SQLex){
@@ -1349,7 +1352,7 @@ public class DBConnect {
 			}
 		}
 	//updates a BosalPartNumber in parts list
-		public void updateDelta(String DeltaPartNumber, String CusPartNumber, 
+	public void updateDelta(String DeltaPartNumber, String CusPartNumber, 
 				String SupPartNumber, String Description, String Program, 
 				int Rev, String DrawingNumber, int DrawingRev, String DrawingRevDate,
 				String ProductionReleaseDate) throws Exception{
