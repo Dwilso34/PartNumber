@@ -630,28 +630,28 @@ public class BDLFrame extends JFrame
 			lblIssuedBy.setFont(new Font("Tahoma", Font.BOLD, 12));
 			lblIssuedBy.setForeground(Color.BLACK);
 			lblPage = new JLabel("Page:");
-			lblPage.setBounds(1050, 10, 91, 20);
+			lblPage.setBounds(1040, 10, 91, 20);
 			lblPage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblPage.setBackground(new Color(150, 150, 150));
 			lblPage.setOpaque(true);
 			lblPage.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblPage.setForeground(Color.BLACK);
 			lblREV = new JLabel("REV:");
-			lblREV.setBounds(1050, 29, 91, 20);
+			lblREV.setBounds(1040, 29, 91, 20);
 			lblREV.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblREV.setBackground(new Color(150, 150, 150));
 			lblREV.setOpaque(true);
 			lblREV.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblREV.setForeground(Color.BLACK);
 			lblRelDate = new JLabel("Rel Date:");
-			lblRelDate.setBounds(1050, 48, 91, 20);
+			lblRelDate.setBounds(1040, 48, 91, 20);
 			lblRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelDate.setBackground(new Color(150, 150, 150));
 			lblRelDate.setOpaque(true);
 			lblRelDate.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelDate.setForeground(Color.BLACK);
 			lblREVDate = new JLabel("REV Date:");
-			lblREVDate.setBounds(1050, 67, 91, 20);
+			lblREVDate.setBounds(1040, 67, 91, 20);
 			lblREVDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblREVDate.setBackground(new Color(150, 150, 150));
 			lblREVDate.setOpaque(true);
@@ -659,28 +659,28 @@ public class BDLFrame extends JFrame
 			lblREVDate.setForeground(Color.BLACK);
 			lblProduction = new JLabel("Production");
 			lblProduction.setHorizontalAlignment(SwingConstants.CENTER);
-			lblProduction.setBounds(1050, 92, 191, 20);
+			lblProduction.setBounds(1040, 92, 201, 20);
 			lblProduction.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblProduction.setBackground(new Color(150, 150, 150));
 			lblProduction.setOpaque(true);
 			lblProduction.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblProduction.setForeground(Color.BLACK);
 			lblRelPlant1 = new JLabel("Rel Plant 1:");
-			lblRelPlant1.setBounds(1050, 136, 91, 20);
+			lblRelPlant1.setBounds(1040, 136, 91, 20);
 			lblRelPlant1.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelPlant1.setBackground(new Color(150, 150, 150));
 			lblRelPlant1.setOpaque(true);
 			lblRelPlant1.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelPlant1.setForeground(Color.BLACK);
 			lblRelPlant2 = new JLabel("Rel Plant 2:");
-			lblRelPlant2.setBounds(1050, 155, 91, 20);
+			lblRelPlant2.setBounds(1040, 155, 91, 20);
 			lblRelPlant2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelPlant2.setBackground(new Color(150, 150, 150));
 			lblRelPlant2.setOpaque(true);
 			lblRelPlant2.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRelPlant2.setForeground(Color.BLACK);
 			lblRelSupplier = new JLabel("Rel Supplier:");
-			lblRelSupplier.setBounds(1050, 174, 91, 20);
+			lblRelSupplier.setBounds(1040, 174, 91, 20);
 			lblRelSupplier.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblRelSupplier.setBackground(new Color(150, 150, 150));
 			lblRelSupplier.setOpaque(true);
@@ -786,7 +786,7 @@ public class BDLFrame extends JFrame
 			
 		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
 		btnSave = new JButton(save);		
-		btnSave.setBounds(898, 177, 102, 34);		
+		btnSave.setBounds(893, 177, 102, 34);		
 		btnSave.addActionListener(new ActionListener() {	
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnSave)
@@ -904,7 +904,7 @@ public class BDLFrame extends JFrame
 			
 		ImageIcon print = new ImageIcon(getClass().getResource("/images/pdf.jpg"));
 		btnPdfPrint = new JButton(print);
-		btnPdfPrint.setBounds(898, 130, 102, 34);
+		btnPdfPrint.setBounds(893, 130, 102, 34);
 		btnPdfPrint.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -1481,21 +1481,23 @@ public class BDLFrame extends JFrame
 							txtREV.setText(rev);
 							
 							//set text for Release Date JTextField
-							String releaseDate= null;
+						
 							String d = null;
 							try {
-								releaseDate = temp.getJSONObject(0).get("ReleaseDate").toString();
-								DateFormat sysDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-								d = sysDate.format(txtRelDate.getDate()).toString();
-							} catch (Exception ex) {releaseDate = "-";}
-							txtRelDate.setToolTipText(d);
+								@SuppressWarnings("deprecation")
+								Date releaseDate = new Date(temp.getJSONObject(0).get("ReleaseDate").toString());
+								txtRelDate.setDate(releaseDate);
+							} catch (Exception ex) {d = "-";}
+							
 							
 							//set text for Rev Date JTextField
-							String revDate= null;
+							String e = null;
 							try {
-								revDate = temp.getJSONObject(0).get("RevDate").toString();
-							} catch (Exception ex) {revDate = "-";}
-							txtREVDate.setToolTipText(revDate);
+								@SuppressWarnings("deprecation")
+								Date revDate = new Date(temp.getJSONObject(0).get("RevDate").toString());
+								txtREVDate.setDate(revDate);
+							} catch (Exception ex) {e = "-";}
+							
 							
 							//set text for Production JTextField
 							String production= null;
@@ -1549,8 +1551,7 @@ public class BDLFrame extends JFrame
 							//set image for Customer Logo
 							try {
 								System.out.println("Setting the customer logo");
-								ImageIcon customerLogo = new ImageIcon("/images/General Motors.jpg");
-								lblCustImage.setIcon(customerLogo);
+								
 							} catch (Exception ex) {ex.printStackTrace();}
 							
 							temp = con.queryDatabase("engines", "Engine", engine);
@@ -1643,6 +1644,180 @@ public class BDLFrame extends JFrame
 								txtPlatform.setText(getPlatform());
 							}	
 				        }	
+					}
+					if (rbtnUpdateBDL.isSelected() == true) {
+						for (int i = table1.getRowCount(); i > 0; i--) {
+							table1.removeRow(i-1);
+						}
+						btnAdd.doClick();
+						table1.setValueAt(getSearchText(), 0, 4);
+						
+						try {
+							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+							if (temp.length() == 0) {
+								System.out.println("that number didnt exist in `bosal parts`");
+								try {
+									System.out.println("trying the delta list");
+									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
+									System.out.println("found "+temp.toString());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+							}
+							
+							//set text for Description JTextField
+							try {
+								description = temp.getJSONObject(0).get("PartDescription").toString();
+							} catch(Exception ex) {description = "-";}
+							txtDescription.setText(description);
+							
+							//set text for CustPartNum JTextField
+							try {
+								custPartNum = temp.getJSONObject(0).get("CustPartNumber").toString();
+							} catch (Exception ex) {custPartNum = "-";}
+							txtCustomerPartNum.setText(custPartNum);
+							
+							temp = con.queryDatabase("breakdown lists info", "BreakdownListNumber", getSearchText());
+							
+							//set text for Issued By JTextField
+							String issuedBy= null;
+							try {
+								issuedBy = temp.getJSONObject(0).get("CreatedBy").toString();
+							} catch (Exception ex) {issuedBy = "-";}
+							txtIssuedBy.setText(issuedBy);
+							
+							//set text for Volume JTextField
+							String volume2= null;
+							try {
+								volume2 = temp.getJSONObject(0).get("Volume").toString();
+							} catch (Exception ex) {volume2 = "-";}
+							txtVolume2.setText(volume2);
+							
+							//set text for Length JTextField
+							String length= null;
+							try {
+								length = temp.getJSONObject(0).get("Length").toString();
+							} catch (Exception ex) {length = "-";}
+							txtLength.setText(length);
+							
+							//set text for Section JTextField
+							String section= null;
+							try {
+								section = temp.getJSONObject(0).get("Section").toString();
+							} catch (Exception ex) {section = "-";}
+							txtSection.setText(section);
+							
+							//set text for Rev JTextField
+							String rev= null;
+							try {
+								rev = temp.getJSONObject(0).get("Rev").toString();
+							} catch (Exception ex) {rev = "-";}
+							txtREV.setText(rev);
+							
+							//set text for Release Date JTextField
+						
+							String d = null;
+							try {
+								@SuppressWarnings("deprecation")
+								Date releaseDate = new Date(temp.getJSONObject(0).get("ReleaseDate").toString());
+								txtRelDate.setDate(releaseDate);
+							} catch (Exception ex) {d = "-";}
+							
+							
+							//set text for Rev Date JTextField
+							String e = null;
+							try {
+								@SuppressWarnings("deprecation")
+								Date revDate = new Date(temp.getJSONObject(0).get("RevDate").toString());
+								txtREVDate.setDate(revDate);
+							} catch (Exception ex) {e = "-";}
+							
+							
+							//set text for Production JTextField
+							String production= null;
+							try {
+								production = temp.getJSONObject(0).get("Production").toString();
+							} catch(Exception ex) {production = "-";}
+							txtProduction.setText(production);
+							
+							//set text for RelPlant1 JTextField
+							String relPlant1= null;
+							try {
+								relPlant1 = temp.getJSONObject(0).get("RelPlant1").toString();
+							} catch (Exception ex) {relPlant1 = "-";}
+							txtRelPlant1.setText(relPlant1);
+							
+							//set text for RelPlant2 JTextField
+							String relPlant2= null;
+							try {
+								relPlant2 = temp.getJSONObject(0).get("RelPlant2").toString();
+							} catch (Exception ex) {relPlant2 = "-";}
+							txtRelPlant2.setText(relPlant2);
+							
+							//set text for RelSupplier JTextField
+							String relSupplier= null;
+							try {
+								relSupplier = temp.getJSONObject(0).get("RelSupplier").toString();
+							} catch (Exception ex) {relSupplier = "-";}
+							txtRelSupplier.setText(relSupplier);
+							
+							//set text for Engine JTextField
+							String engine= null;
+							try {
+								engine = temp.getJSONObject(0).get("Engine").toString();
+							} catch (Exception ex) {engine = "-";}
+							txtName.setText(engine);
+							
+							//set text for Platform JTextField
+							String Platform= null;
+							try {
+								Platform = temp.getJSONObject(0).get("Platform").toString();
+							} catch (Exception ex) {Platform = "-";}
+							txtPlatform.setText(Platform);
+							
+							//set text for Customer JTextField
+							String Customer= null;
+							try {
+								Customer = temp.getJSONObject(0).get("Customer").toString();
+							} catch (Exception ex) {Customer = "-";}
+							txtCustomer.setText(Customer);
+
+							//set image for Customer Logo
+							try {
+								System.out.println("Setting the customer logo");
+								ImageIcon customerLogo = new ImageIcon("/images/General Motors.jpg");
+								lblCustImage = new JLabel(customerLogo);
+								lblCustImage.setBounds(157, 29, 128, 73);
+								lblCustImage.setIcon(customerLogo);
+								lblCustImage.repaint();
+							} catch (Exception ex) {ex.printStackTrace();}
+							
+							temp = con.queryDatabase("engines", "Engine", engine);
+							//set text for Type JTextField
+							String type= null;
+							try {
+								type = temp.getJSONObject(0).get("Type").toString();
+							} catch (Exception ex) {type = "-";}
+							txtType.setText(type);							
+							
+							//set text for Volume1 JTextField
+							String volume1= null;
+							try {
+								volume1 = temp.getJSONObject(0).get("Volume").toString();
+							} catch (Exception ex) {volume1 = "-";}
+							txtVolume.setText(volume1);
+							
+							//set text for Power JTextField
+							String power= null;
+							try {
+								power = temp.getJSONObject(0).get("Power").toString();
+							} catch (Exception ex) {power = "-";}
+							txtPower.setText(power);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+
+						setItemsForTable();
 					}
 			      }
 			      public void removeUpdate(DocumentEvent documentEvent) {
@@ -1755,13 +1930,13 @@ public class BDLFrame extends JFrame
 			txtPage = new JTextField();
 			txtPage.addMouseListener(new ContextMenuMouseListener());
 			txtPage.setHorizontalAlignment(JTextField.CENTER);
-			txtPage.setBounds(1140, 10, 101, 20);
+			txtPage.setBounds(1130, 10, 110, 20);
 			txtPage.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtPage.setForeground(Color.BLACK);
 			txtREV = new JTextField();
 			txtREV.addMouseListener(new ContextMenuMouseListener());
 			txtREV.setHorizontalAlignment(JTextField.CENTER);
-			txtREV.setBounds(1140, 29, 101, 20);
+			txtREV.setBounds(1130, 29, 110, 20);
 			txtREV.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREV.setForeground(Color.BLACK);
 			txtRelDate = new JXDatePicker();
@@ -1769,38 +1944,38 @@ public class BDLFrame extends JFrame
 			DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 			txtRelDate.setFormats(dateFormat);
 			
-			txtRelDate.setBounds(1140, 48, 110, 20);
+			txtRelDate.setBounds(1130, 48, 110, 20);
 			txtRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelDate.setForeground(Color.BLACK);
 			txtREVDate = new JXDatePicker();
 			txtREVDate.addMouseListener(new ContextMenuMouseListener());
 			DateFormat dateFormat1 = new SimpleDateFormat("MM/dd/yyyy");
 			txtREVDate.setFormats(dateFormat1);
-			txtREVDate.setBounds(1140, 67, 110, 20);
+			txtREVDate.setBounds(1130, 67, 110, 20);
 			txtREVDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtREVDate.setForeground(Color.BLACK);
 			txtProduction = new JTextField();
 			txtProduction.addMouseListener(new ContextMenuMouseListener());
 			txtProduction.setHorizontalAlignment(JTextField.CENTER);
-			txtProduction.setBounds(1050, 111, 191, 20);
+			txtProduction.setBounds(1040, 111, 201, 20);
 			txtProduction.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtProduction.setForeground(Color.BLACK);
 			txtRelPlant1 = new JTextField();
 			txtRelPlant1.addMouseListener(new ContextMenuMouseListener());
 			txtRelPlant1.setHorizontalAlignment(JTextField.CENTER);
-			txtRelPlant1.setBounds(1140, 136, 100, 20);
+			txtRelPlant1.setBounds(1130, 136, 110, 20);
 			txtRelPlant1.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelPlant1.setForeground(Color.BLACK);
 			txtRelPlant2 = new JTextField();
 			txtRelPlant2.addMouseListener(new ContextMenuMouseListener());
 			txtRelPlant2.setHorizontalAlignment(JTextField.CENTER);
-			txtRelPlant2.setBounds(1140, 155, 100, 20);
+			txtRelPlant2.setBounds(1130, 155, 110, 20);
 			txtRelPlant2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelPlant2.setForeground(Color.BLACK);
 			txtRelSupplier = new JTextField();
 			txtRelSupplier.addMouseListener(new ContextMenuMouseListener());
 			txtRelSupplier.setHorizontalAlignment(JTextField.CENTER);
-			txtRelSupplier.setBounds(1140, 174, 100, 20);
+			txtRelSupplier.setBounds(1130, 174, 110, 20);
 			txtRelSupplier.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelSupplier.setForeground(Color.BLACK);
 			txtaRemark = new JTextPane();
@@ -1928,7 +2103,7 @@ public class BDLFrame extends JFrame
 			
 		//JRadioButtons
 			rbtnCreateBDL = new JRadioButton("Create BDL");
-			rbtnCreateBDL.setBounds(895, 39, 103, 27);
+			rbtnCreateBDL.setBounds(890, 39, 103, 27);
 			rbtnCreateBDL.setBackground(new Color(105, 105, 105));
 			rbtnCreateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnCreateBDL.setForeground(Color.BLACK);
@@ -1998,7 +2173,7 @@ public class BDLFrame extends JFrame
 			}});
 			
 			rbtnSearchBDL = new JRadioButton("Search BDL");
-			rbtnSearchBDL.setBounds(895, 96, 111, 27);
+			rbtnSearchBDL.setBounds(890, 96, 111, 27);
 			rbtnSearchBDL.setBackground(new Color(105, 105, 105));
 			rbtnSearchBDL.setForeground(Color.BLACK);
 			rbtnSearchBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -2062,7 +2237,7 @@ public class BDLFrame extends JFrame
 				ex.printStackTrace();
 			}
 			rbtnUpdateBDL = new JRadioButton("Update BDL");
-			rbtnUpdateBDL.setBounds(895, 68, 111, 27);
+			rbtnUpdateBDL.setBounds(890, 68, 111, 27);
 			rbtnUpdateBDL.setBackground(new Color(105, 105, 105));
 			rbtnUpdateBDL.setForeground(Color.BLACK);
 			rbtnUpdateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
