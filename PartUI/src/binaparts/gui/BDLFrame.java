@@ -364,11 +364,11 @@ public class BDLFrame extends JFrame
 					for (int i = 0; i < (rowCount/2); i++) {
 						btnAdd.doClick();
 						setSearchText(itm[i]);
-						table1.setValueAt(itm[i], i, 4);
-						table1.setValueAt(qty[i], i, 1);
+						table1.setValueAt(itm[i], i+1, 4);
+						table1.setValueAt(qty[i], i+1, 1);
 						//checks to see if there is a sub BDL
 						if (containsBDL() == true) {
-							table.setValueAt("#", i, 2);
+							table.setValueAt("#", i+1, 2);
 							//setSubItemsForTable(itm[i]);
 						}
 					}
@@ -732,6 +732,7 @@ public class BDLFrame extends JFrame
 						setItemColumnIndex();
 						DefaultTableCellRenderer r = new DefaultTableCellRenderer();
 						r.setHorizontalAlignment(JLabel.CENTER);
+						//loop to center the text on all columns except column 3 (descriptions)
 						for (int i = 0; i < table1.getColumnCount(); i++) {
 							if (i != 3) {
 								myTable.getColumnModel().getColumn(i).setCellRenderer( r );
@@ -795,7 +796,7 @@ public class BDLFrame extends JFrame
 									JOptionPane.WARNING_MESSAGE);
 							if(n == 0){
 								TableModel table = myTable.getModel();
-								int rowCount = table.getRowCount();
+								int rowCount = (table.getRowCount()-1);
 								if(rowCount == 0){
 									JOptionPane.showMessageDialog(BDLframe,
 										    "No Items were added to this breakdown list",
@@ -806,11 +807,11 @@ public class BDLFrame extends JFrame
 									String[] qty = new String[rowCount];
 									String s1 = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
 									for(int i = 0; i < rowCount; i++){
-										itm[i] = table.getValueAt(i, 4).toString();
-										if(table.getValueAt(i,1).toString().equals("")){
+										itm[i] = table.getValueAt(i+1, 4).toString();
+										if(table.getValueAt(i+1,1).toString().equals("")){
 											qty[i] = "0";
 										} else {
-											qty[i] = table.getValueAt(i, 1).toString();
+											qty[i] = table.getValueAt(i+1, 1).toString();
 										}
 									}
 									for(int i = 0; i < rowCount; i++){
@@ -863,7 +864,8 @@ public class BDLFrame extends JFrame
 										s2 = s2+", {\"Customer\":\""+txtCustomer.getText()+"\"}";
 									}
 									s2 = s2 + "]";
-									System.out.print(s2);
+									System.out.println(s1);
+									System.out.println(s2);
 									JSONArray temp1;
 									JSONArray temp2;
 									try {
@@ -873,9 +875,9 @@ public class BDLFrame extends JFrame
 											con.insertNewBDL(temp1);
 											con.insertBDLInfo(temp2);
 										}
-										else if (rbtnSearchBDL.isSelected() == true) {
-											con.insertNewBDL(temp1);
-											con.insertBDLInfo(temp2);
+										else if (rbtnUpdateBDL.isSelected() == true) {
+											//con.insertNewBDL(temp1);
+											con.updateBDLInfo(temp2);
 										}
 										
 										System.out.println(temp1);
@@ -1571,6 +1573,8 @@ public class BDLFrame extends JFrame
 						setItemsForTable();
 					}
 					if (rbtnCreateBDL.isSelected() == true) {
+						
+						//searches for the PartNumber entered in both Bosal and Delta lists
 						try {						
 				        	JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
 				        	if (temp.length() == 0) {
@@ -1579,6 +1583,10 @@ public class BDLFrame extends JFrame
 									System.out.println("trying the delta list");
 									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
 									System.out.println("found "+temp.toString() + " in the delta list");
+									//adds the BDL number to the first row of the table
+									for (int i = table1.getRowCount(); i > 0; i--) {
+										table1.removeRow(i-1);
+									}
 									btnAdd.doClick();
 									table1.setValueAt(getSearchText(), 0, 4);
 								} catch (Exception ex) {
@@ -1587,13 +1595,11 @@ public class BDLFrame extends JFrame
 							}
 				        	for (int i = 0; i < temp.length(); i++) {
 				        		try {
-									//platform = temp.getJSONObject(i).getString("Program").toString();	
 									setPlatform(temp.getJSONObject(i).getString("Program").toString());								
 
 									JSONArray temp2 = con.queryDatabase("programs", "Program", getPlatform());
 									for (int j = 0; j < temp2.length(); j++) {
 						        		try {
-						        			//customer = temp.getJSONObject(j).get("Customer").toString();
 						        			setCustomer(temp.getJSONObject(j).get("Customer").toString());
 						        		} catch (Exception ex) {
 						        			//System.out.println("Program " + platform + " does not contain Customer");
@@ -2040,6 +2046,9 @@ public class BDLFrame extends JFrame
 							btnAdd.setVisible(false);
 							btnDelete.setVisible(false);
 							//myTable.getModel().removeTableModelListener(columnListener);
+							for (int i = table1.getRowCount(); i > 0; i--) {
+								table1.removeRow(i-1);
+							}
 							myTable.removeMouseListener(mouseClickListener);							
 						} catch (Exception ex) {ex.printStackTrace();}			            
 					}						
@@ -2102,6 +2111,9 @@ public class BDLFrame extends JFrame
 					btnAdd.setVisible(false);
 					btnDelete.setVisible(false);
 					//myTable.getModel().removeTableModelListener(columnListener);
+					for (int i = table1.getRowCount(); i > 0; i--) {
+						table1.removeRow(i-1);
+					}
 					myTable.removeMouseListener(mouseClickListener);	
 				}
 			});
