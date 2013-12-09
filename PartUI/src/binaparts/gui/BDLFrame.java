@@ -277,8 +277,8 @@ public class BDLFrame extends JFrame
 	    }
 		public void setItemColumnIndex(){
 			int rows = table1.getRowCount();
-			for(int i = 0; i < rows; i++){
-				table1.setValueAt(i+1, i, 0);
+			for(int i = 1; i < rows; i++){
+				table1.setValueAt(i, i, 0);
 				table1.setValueAt(0, i, 1);
 			}
 		}
@@ -730,23 +730,13 @@ public class BDLFrame extends JFrame
 						String[] data = new String[0];
 						table1.addRow(data);
 						setItemColumnIndex();
-						 DefaultTableCellRenderer r = new DefaultTableCellRenderer();
-						 r.setHorizontalAlignment(JLabel.CENTER);
-						 myTable.getColumnModel().getColumn(0).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(1).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(2).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(4).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(5).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(6).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(7).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(8).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(9).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(10).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(11).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(12).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(13).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(14).setCellRenderer( r );
-						 myTable.getColumnModel().getColumn(15).setCellRenderer( r );
+						DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+						r.setHorizontalAlignment(JLabel.CENTER);
+						for (int i = 0; i < table1.getColumnCount(); i++) {
+							if (i != 3) {
+								myTable.getColumnModel().getColumn(i).setCellRenderer( r );
+							}
+						}
 					}
 				}				
 			});
@@ -1588,7 +1578,9 @@ public class BDLFrame extends JFrame
 								try {
 									System.out.println("trying the delta list");
 									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
-									System.out.println("found "+temp.toString());
+									System.out.println("found "+temp.toString() + " in the delta list");
+									btnAdd.doClick();
+									table1.setValueAt(getSearchText(), 0, 4);
 								} catch (Exception ex) {
 									ex.printStackTrace();
 								}
