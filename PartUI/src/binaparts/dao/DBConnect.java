@@ -774,10 +774,10 @@ public class DBConnect {
 		}
 	}
 	//inserts a new row into `parts list` to create a new part
-	public void insertNewPart(int PartType, int Material, String BosalPartNumber, 
-			String CustomerPartNumber, String SupplierPartNumber, String Description,
-			String Program, int Seq, String TypeDescription, int Rev, String DrawingNumber,
-			int DrawingRev, String DrawingRevDate, String ProductionReleaseDate) throws Exception{	
+	public void insertNewPart(int PartType, int Material, String BosalPartNumber, String DrawingNumber,
+			int DrawingRev, String DrawingRevDate, String CustomerPartNumber, String CustDrawingNumber,
+			int CustDrawingRev, String CustDrawingRevDate, String SupplierPartNumber, String Description,
+			String Program, int Seq, String TypeDescription, int Rev, String ProductionReleaseDate) throws Exception{	
 		try{
 			String usersname = getUsersName();
 			Timestamp timestamp = getTimestamp();
@@ -786,40 +786,46 @@ public class DBConnect {
 					+ "(PartType, "
 					+ "Material, "
 					+ "BosalPartNumber, "
+					+ "DrawingNumber, "
+					+ "DrawingRev, "
+					+ "DrawingRevDate, "
 					+ "CustPartNumber, "
+					+ "CustDrawingNumber, "
+					+ "CustDrawingRev, "
+					+ "CustDrawingRevDate, "
 					+ "SupPartNumber, "
 					+ "PartDescription, "
 					+ "Program, "
 					+ "SeqNumber, "
 					+ "TypeDescription, "
 					+ "Rev, "
-					+ "DrawingNumber, "
-					+ "DrawingRev, "
-					+ "DrawingRevDate, "
 					+ "ProductionReleaseDate, "
 					+ "CreatedBy, "
 					+ "Created, "
 					+ "UpdatedBy, "
 					+ "Updated) "
-					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			pst.setInt(1, PartType);
 			pst.setInt(2, Material);
 			pst.setString(3, BosalPartNumber);
-			pst.setString(4, CustomerPartNumber);
-			pst.setString(5, SupplierPartNumber);
-			pst.setString(6, Description);
-			pst.setString(7, Program);
-			pst.setInt(8, Seq);
-			pst.setString(9, TypeDescription);
-			pst.setInt(10, Rev);
-			pst.setString(11, DrawingNumber);
-			pst.setInt(12, DrawingRev);
-			pst.setString(13, DrawingRevDate);
-			pst.setString(14, ProductionReleaseDate);
-			pst.setString(15, usersname);
-			pst.setTimestamp(16, timestamp);
-			pst.setString(17, usersname);
-			pst.setTimestamp(18, timestamp);
+			pst.setString(4, DrawingNumber);
+			pst.setInt(5, DrawingRev);
+			pst.setString(6, DrawingRevDate);
+			pst.setString(7, CustomerPartNumber);
+			pst.setString(8, CustDrawingNumber);
+			pst.setInt(9, CustDrawingRev);
+			pst.setString(10, CustDrawingRevDate);
+			pst.setString(11, SupplierPartNumber);
+			pst.setString(12, Description);
+			pst.setString(13, Program);
+			pst.setInt(14, Seq);
+			pst.setString(15, TypeDescription);
+			pst.setInt(16, Rev);
+			pst.setString(17, ProductionReleaseDate);
+			pst.setString(18, usersname);
+			pst.setTimestamp(19, timestamp);
+			pst.setString(20, usersname);
+			pst.setTimestamp(21, timestamp);
 			pst.executeUpdate();
 			pst.close();
 			iterateNextSequenceNumber(PartType);
@@ -1306,10 +1312,10 @@ public class DBConnect {
 			}
 		}
 	//updates a BosalPartNumber in parts list
-	public void updateBosal(String BosalPartNumber, String CusPartNumber, 
-			String SupPartNumber, String Description, String Program, 
-			int Rev, String DrawingNumber, int DrawingRev, String DrawingRevDate,
-			String ProductionReleaseDate) throws Exception{
+	public void updateBosal(String BosalPartNumber, String DrawingNumber, int DrawingRev, 
+			String DrawingRevDate, String CusPartNumber, String CustDrawingNumber, 
+			int CustDrawingRev, String CustDrawingRevDate, String SupPartNumber, String Description, 
+			String Program, int Rev, String ProductionReleaseDate) throws Exception{
 			
 			try{
 				String usersname = getUsersName();
@@ -1317,29 +1323,35 @@ public class DBConnect {
 				getDBConnection();
 				pst = con.prepareStatement("UPDATE `bosal parts` SET "
 						+ "`PartDescription` = ?, " 
-						+ "`CustPartNumber` = ?, " 
-						+ "`SupPartNumber` = ?, "
-						+ "`Program` = ?, "
-						+ "`Rev` = ?, "
 						+ "`DrawingNumber` = ?, "
 						+ "`DrawingRev` = ?, "
 						+ "`DrawingRevDate` = ?, "
+						+ "`CustPartNumber` = ?, " 
+						+ "`CustDrawingNumber` = ?, "
+						+ "`CustDrawingRev` = ?, "
+						+ "`CustDrawingRevDate` = ?, "
+						+ "`SupPartNumber` = ?, "
+						+ "`Program` = ?, "
+						+ "`Rev` = ?, "
 						+ "`ProductionReleaseDate` = ?, "
 						+ "`UpdatedBy` = ?, "
 						+ "`Updated` = ?"
 						+ "WHERE `BosalPartNumber`= ?");
 				pst.setString(1, Description);
-				pst.setString(2, CusPartNumber);
-				pst.setString(3, SupPartNumber);
-				pst.setString(4,  Program);
-				pst.setInt(5, Rev);
-				pst.setString(6, DrawingNumber);
-				pst.setInt(7, DrawingRev);
-				pst.setString(8, DrawingRevDate);
-				pst.setString(9, ProductionReleaseDate);
-				pst.setString(10, usersname);
-				pst.setTimestamp(11, timestamp);
-				pst.setString(12, BosalPartNumber);
+				pst.setString(2, DrawingNumber);
+				pst.setInt(3, DrawingRev);
+				pst.setString(4, DrawingRevDate);
+				pst.setString(5, CusPartNumber);
+				pst.setString(6, CustDrawingNumber);
+				pst.setInt(7, CustDrawingRev);
+				pst.setString(8, CustDrawingRevDate);
+				pst.setString(9, SupPartNumber);
+				pst.setString(10,  Program);
+				pst.setInt(11, Rev);
+				pst.setString(12, ProductionReleaseDate);
+				pst.setString(13, usersname);
+				pst.setTimestamp(14, timestamp);
+				pst.setString(15, BosalPartNumber);
 				pst.executeUpdate();
 				pst.close();
 				con.close();

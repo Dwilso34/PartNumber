@@ -327,12 +327,15 @@ public class MainFrames extends JFrame
 //JLabel
 	private JLabel lblSeq;
 	private JLabel lblDescription;
-	private JLabel lblMatterialDescription;
+	private JLabel lblMaterialDescription;
 	private JLabel lblTypeDescription;
 	private JLabel lblType;
 	private JLabel lblMatterial;
 	private JLabel lblBosalPartNumber;
 	private JLabel lblCustomerPartNumber;
+	private JLabel lblCustDrawingNum;
+	private JLabel lblCustDrawingRev;
+	private JLabel lblCustDrawingRevDate;
 	private JLabel lblSupplierPartNumber;
 	private JLabel lblCreateAPart;
 	private JLabel lblBosal;
@@ -347,16 +350,21 @@ public class MainFrames extends JFrame
 	private JLabel lblMonth2;
 	private JLabel lblDay2;
 	private JLabel lblYear2;
+	private JLabel lblMonth3;
+	private JLabel lblDay3;
+	private JLabel lblYear3;
 
 //JTextField
 	private JTextField txtDescrip;
 	private JTextField txtMDescrip;
 	private JTextField txtDrawingNum;
+	private JTextField txtDrawingRev;
 	private JTextField txtSeq;
 	private JTextField txtBPart;
 	private JTextField txtCPart;
+	private JTextField txtCustDrawingRev;
+	private JTextField txtCustDrawingNum;
 	private JTextField txtSPart;
-	private JTextField txtDrawingRev;
 	
 //JComboBox	
 	JPanel contentPane;	
@@ -420,6 +428,9 @@ public class MainFrames extends JFrame
 	private JComboBox<String> cboDrawingDay;
 	private JComboBox<String> cboDrawingMonth;
 	private JComboBox<String> cboDrawingYear;
+	private JComboBox<String> cboCustDrawingDay;
+	private JComboBox<String> cboCustDrawingMonth;
+	private JComboBox<String> cboCustDrawingYear;
 	private JComboBox<String> cboProductionDay;
 	private JComboBox<String> cboProductionMonth;
 	private JComboBox<String> cboProductionYear;
@@ -467,10 +478,10 @@ public class MainFrames extends JFrame
         lblTypeDescription.setBounds(137, 90, 115, 17);
 		lblTypeDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblTypeDescription.setForeground(Color.BLACK);
-        lblMatterialDescription = new JLabel("Material Description");
-        lblMatterialDescription.setBounds(137, 142, 135, 17);
-		lblMatterialDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblMatterialDescription.setForeground(Color.BLACK);
+        lblMaterialDescription = new JLabel("Material Description");
+        lblMaterialDescription.setBounds(137, 142, 135, 17);
+		lblMaterialDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblMaterialDescription.setForeground(Color.BLACK);
         lblDescription = new JLabel("Description");
         lblDescription.setBounds(137, 194, 77, 17);
 		lblDescription.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -491,6 +502,18 @@ public class MainFrames extends JFrame
         lblCustomerPartNumber.setBounds(372, 142, 161, 17);
 		lblCustomerPartNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblCustomerPartNumber.setForeground(Color.BLACK);
+        lblCustDrawingNum = new JLabel("Cust Drawing Number");
+        lblCustDrawingNum.setBounds(178, 5, 170, 20);
+		lblCustDrawingNum.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblCustDrawingNum.setForeground(Color.BLACK);
+        lblCustDrawingRev = new JLabel("Cust Drawing Rev");
+        lblCustDrawingRev.setBounds(372, 5, 160, 20);
+        lblCustDrawingRev.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblCustDrawingRev.setForeground(Color.BLACK);
+        lblCustDrawingRevDate = new JLabel("Cust Drawing Rev Date");
+        lblCustDrawingRevDate.setBounds(551, 5, 170, 20);
+        lblCustDrawingRevDate.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblCustDrawingRevDate.setForeground(Color.BLACK);
         lblBosalPartNumber = new JLabel("Bosal Part Number");
         lblBosalPartNumber.setBounds(372, 90, 130, 17);
 		lblBosalPartNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -516,7 +539,7 @@ public class MainFrames extends JFrame
         lblProductionReleaseDate.setFont(new Font("Tahoma", Font.BOLD, 14));
         lblProductionReleaseDate.setForeground(Color.BLACK);
         lblMonth = new JLabel("MM");
-        lblMonth.setBounds(551, 115, 26, 20);
+        lblMonth.setBounds(551, 192, 26, 20);
         lblMonth.setFont(new Font("Tahoma", Font.BOLD, 14));
         lblMonth.setForeground(Color.BLACK);
         lblDay = new JLabel("DD");
@@ -528,7 +551,7 @@ public class MainFrames extends JFrame
         lblYear.setFont(new Font("Tahoma", Font.BOLD, 14));
         lblYear.setForeground(Color.BLACK);
         lblMonth2 = new JLabel("MM");
-        lblMonth2.setBounds(551, 192, 26, 20);
+        lblMonth2.setBounds(551, 115, 26, 20);
         lblMonth2.setFont(new Font("Tahoma", Font.BOLD, 14));
         lblMonth2.setForeground(Color.BLACK);
         lblDay2 = new JLabel("DD");
@@ -539,6 +562,18 @@ public class MainFrames extends JFrame
         lblYear2.setBounds(695, 115, 36, 20);
         lblYear2.setFont(new Font("Tahoma", Font.BOLD, 14));
         lblYear2.setForeground(Color.BLACK);
+        lblMonth3 = new JLabel("MM");
+        lblMonth3.setBounds(551, 45, 26, 20);
+        lblMonth3.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblMonth3.setForeground(Color.BLACK);
+        lblDay3 = new JLabel("DD");
+        lblDay3.setBounds(622, 45, 26, 20);
+        lblDay3.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblDay3.setForeground(Color.BLACK);
+        lblYear3 = new JLabel("YYYY");
+        lblYear3.setBounds(695, 45, 36, 20);
+        lblYear3.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblYear3.setForeground(Color.BLACK);
         ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
         lblBosal = new JLabel(bosal);
         lblBosal.setBounds(24, 32, 199, 42);
@@ -574,6 +609,14 @@ public class MainFrames extends JFrame
 		txtCPart.setBounds(372, 165, 156, 20);
 		txtCPart.setForeground(Color.BLACK);
 		txtCPart.addMouseListener(new ContextMenuMouseListener());
+		txtCustDrawingNum = new JTextField();
+		txtCustDrawingNum.setBounds(178, 31, 156, 20);
+		txtCustDrawingNum.setForeground(Color.BLACK);
+		txtCustDrawingNum.addMouseListener(new ContextMenuMouseListener());
+		txtCustDrawingRev = new JTextField();
+		txtCustDrawingRev.setBounds(372, 31, 156, 20);
+		txtCustDrawingRev.setForeground(Color.BLACK);
+		txtCustDrawingRev.addMouseListener(new ContextMenuMouseListener());
 		txtSPart = new JTextField();
 		txtSPart.setBounds(372, 217, 156, 20);
 		txtSPart.setForeground(Color.BLACK);
@@ -630,6 +673,12 @@ public class MainFrames extends JFrame
 		cboDrawingDay.setForeground(Color.BLACK);
 		AutoCompleteDecorator.decorate(cboDrawingDay);
 		cboDrawingDay.setSelectedIndex(-1);
+		cboCustDrawingDay = new JComboBox<String>(days);
+		cboCustDrawingDay.setBounds(622, 31, 45, 20);
+		cboCustDrawingDay.setEditable(false);
+		cboCustDrawingDay.setForeground(Color.BLACK);
+		AutoCompleteDecorator.decorate(cboCustDrawingDay);
+		cboCustDrawingDay.setSelectedIndex(-1);
 		cboProductionDay = new JComboBox<String>(days);
 		cboProductionDay.setBounds(622, 139, 45, 20);
 		cboProductionDay.setForeground(Color.BLACK);
@@ -644,6 +693,12 @@ public class MainFrames extends JFrame
 		cboDrawingMonth.setEditable(false);
 		AutoCompleteDecorator.decorate(cboDrawingMonth);
 		cboDrawingMonth.setSelectedIndex(-1);
+		cboCustDrawingMonth = new JComboBox<String>(months);
+		cboCustDrawingMonth.setBounds(551, 31, 45, 20);
+		cboCustDrawingMonth.setForeground(Color.BLACK);
+		cboCustDrawingMonth.setEditable(false);
+		AutoCompleteDecorator.decorate(cboCustDrawingMonth);
+		cboCustDrawingMonth.setSelectedIndex(-1);
 		cboProductionMonth = new JComboBox<String>(months);
 		cboProductionMonth.setBounds(551, 139, 45, 20);
 		cboProductionMonth.setForeground(Color.BLACK);
@@ -660,6 +715,12 @@ public class MainFrames extends JFrame
 		cboDrawingYear.setEditable(true);
 		AutoCompleteDecorator.decorate(cboDrawingYear);
 		cboDrawingYear.setSelectedIndex(-1);
+		cboCustDrawingYear = new JComboBox<String>(years);
+		cboCustDrawingYear.setBounds(695, 31, 73, 20);
+		cboCustDrawingYear.setForeground(Color.BLACK);
+		cboCustDrawingYear.setEditable(true);
+		AutoCompleteDecorator.decorate(cboCustDrawingYear);
+		cboCustDrawingYear.setSelectedIndex(-1);
 		cboProductionYear = new JComboBox<String>(years);
 		cboProductionYear.setBounds(695, 139, 73, 20);
 		cboProductionYear.setForeground(Color.BLACK);
@@ -758,47 +819,58 @@ public class MainFrames extends JFrame
 						System.out.println("Saving New Part.....");
 						try {
 							int PartType = Integer.valueOf((String) cboType.getSelectedItem());
-							System.out.println(PartType);
+							//System.out.println(PartType);
 							int Material = 0;
 							if(cboMat.getSelectedItem()!= null){
 								Material = Integer.valueOf((String) cboMat.getSelectedItem());
 							}
-							System.out.println(Material);
+							//System.out.println(Material);
 							String BosalPartNumber = txtBPart.getText();
-							System.out.println(BosalPartNumber);
-							String CustomerPartNumber = txtCPart.getText();
-							System.out.println(CustomerPartNumber);
-							String SupplierPartNumber = txtSPart.getText();
-							System.out.println(SupplierPartNumber);
-							String Description = (String) cboDescrip.getSelectedItem();
-							System.out.println(Description);
-							String Program = (String) cboProgram.getSelectedItem();
-							System.out.println(Program);
-							int Seq = Integer.valueOf(txtSeq.getText());
-							System.out.println(Seq);
-							String TypeDescription = txtDescrip.getText();
-							System.out.println(TypeDescription);
-							int Rev = 0;
-							System.out.println(Rev);
+							//System.out.println(BosalPartNumber);
 							String DrawingNumber = txtDrawingNum.getText();
-							System.out.println(DrawingNumber);
+							//System.out.println(DrawingNumber);
 							int DrawingRev;
 							try{
 								DrawingRev = Integer.valueOf(txtDrawingRev.getText());
 							}catch(Exception ex){DrawingRev = 0;}
-							System.out.println(DrawingRev);
+							//System.out.println(DrawingRev);
 							String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
 									+(String)cboDrawingDay.getSelectedItem()+"/"
 									+(String)cboDrawingYear.getSelectedItem();
-							System.out.println(DrawingRevDate);
+							//System.out.println(DrawingRevDate);
+							String CustomerPartNumber = txtCPart.getText();
+							//System.out.println(CustomerPartNumber);
+							String CustDrawingNumber = txtCustDrawingNum.getText();
+							//System.out.println(CustDrawingNumber);
+							int CustDrawingRev;
+							try{
+								CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());
+							}catch(Exception ex){CustDrawingRev = 0;}
+							//System.out.println(CustDrawingRev);
+							String CustDrawingRevDate = (String)cboCustDrawingMonth.getSelectedItem()+"/"
+									+(String)cboCustDrawingDay.getSelectedItem()+"/"
+									+(String)cboCustDrawingYear.getSelectedItem();
+							//System.out.println(CustDrawingRevDate);
+							String SupplierPartNumber = txtSPart.getText();
+							//System.out.println(SupplierPartNumber);
+							String Description = (String) cboDescrip.getSelectedItem();
+							//System.out.println(Description);
+							String Program = (String) cboProgram.getSelectedItem();
+							//System.out.println(Program);
+							int Seq = Integer.valueOf(txtSeq.getText());
+							//System.out.println(Seq);
+							String TypeDescription = txtDescrip.getText();
+							//System.out.println(TypeDescription);
+							int Rev = 0;
+							//System.out.println(Rev);
 							String ProductionReleaseDate = (String)cboProductionMonth.getSelectedItem()+"/"
 									+(String)cboProductionDay.getSelectedItem()+"/"
 									+(String)cboProductionYear.getSelectedItem();	
-							System.out.println(ProductionReleaseDate);
-							con.insertNewPart(PartType, Material, BosalPartNumber, CustomerPartNumber, 
-									SupplierPartNumber, Description, Program, Seq, TypeDescription,
-									Rev, DrawingNumber, DrawingRev, DrawingRevDate, ProductionReleaseDate);
-							
+							//System.out.println(ProductionReleaseDate);
+							con.insertNewPart(PartType, Material, BosalPartNumber, DrawingNumber, DrawingRev, 
+									DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
+									CustDrawingRevDate, SupplierPartNumber, Description, Program, Seq, 
+									TypeDescription, Rev, ProductionReleaseDate);							
 							setVisible(false);
 							Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 							int height = screenSize.height;
@@ -885,10 +957,16 @@ public class MainFrames extends JFrame
         add(txtDescrip);
         add(txtBPart);
         add(lblMonth);
+        add(lblDay);
+        add(lblYear);
+        add(lblMonth2);
         add(lblDay2);
         add(lblYear2);
+        add(lblMonth3);
+        add(lblDay3);
+        add(lblYear3);
         add(lblMatterial);
-        add(lblMatterialDescription);
+        add(lblMaterialDescription);
         add(lblCustomerPartNumber);
         add(cboProductionMonth);
         add(cboProductionDay);
@@ -897,15 +975,16 @@ public class MainFrames extends JFrame
         add(txtMDescrip);
         add(txtCPart);
         add(lblDrawingRevDate);
+        add(lblCustDrawingRevDate);
         add(lblSeq);
         add(lblDescription);
         add(lblSupplierPartNumber);
-        add(lblMonth2);
-        add(lblDay);
-        add(lblYear);
         add(txtSeq);
         add(cboDescrip);
         add(txtSPart);
+        add(cboCustDrawingMonth);
+        add(cboCustDrawingDay);
+        add(cboCustDrawingYear);
         add(cboDrawingMonth);
         add(cboDrawingDay);
         add(cboDrawingYear);
@@ -915,6 +994,10 @@ public class MainFrames extends JFrame
         add(txtDrawingNum);
         add(lblDrawingRev);
         add(txtDrawingRev);
+        add(lblCustDrawingNum);
+        add(txtCustDrawingNum);
+        add(lblCustDrawingRev);
+        add(txtCustDrawingRev);
         add(btnBack);
         add(btnSave);
 	}
@@ -926,6 +1009,9 @@ public class MainFrames extends JFrame
 				private JLabel lblUpdatePart;
 				private JLabel lblBosalPartNum;
 				private JLabel lblCustomerPartNum;
+				private JLabel lblCustDrawingNum;
+				private JLabel lblCustDrawingRev;
+				private JLabel lblCustDrawingRevDate;
 				private JLabel lblSupplierPartNum;
 				private JLabel lblDescription;
 				private JLabel lblProgram;
@@ -952,6 +1038,8 @@ public class MainFrames extends JFrame
 				private JTextField txtRev;
 				private JTextField txtDrawingNum;
 				private JTextField txtDrawingRev;
+				private JTextField txtCustDrawingNum;
+				private JTextField txtCustDrawingRev;
 				
 				//JComboBoxes			
 				private JComboBox<String> cboProgram;
@@ -994,6 +1082,9 @@ public class MainFrames extends JFrame
 				private JComboBox<String> cboProductionDay;
 				private JComboBox<String> cboProductionMonth;
 				private JComboBox<String> cboProductionYear;
+				private JComboBox<String> cboCustDrawingDay;
+				private JComboBox<String> cboCustDrawingMonth;
+				private JComboBox<String> cboCustDrawingYear;
 				
 				//Update Panel		
 				public UpdatePanel(final JPanel update) 
@@ -1027,6 +1118,14 @@ public class MainFrames extends JFrame
 					txtDrawingRev.setBounds(437, 327, 192, 20);
 					txtDrawingRev.setForeground(Color.BLACK);
 					txtDrawingRev.addMouseListener(new ContextMenuMouseListener());
+					txtCustDrawingNum = new JTextField();
+					txtCustDrawingNum.setBounds(437, 31, 174, 20);
+					txtCustDrawingNum.setForeground(Color.BLACK);
+					txtCustDrawingNum.addMouseListener(new ContextMenuMouseListener());
+					txtCustDrawingRev = new JTextField();
+					txtCustDrawingRev.setBounds(437, 86, 192, 20);
+					txtCustDrawingRev.setForeground(Color.BLACK);
+					txtCustDrawingRev.addMouseListener(new ContextMenuMouseListener());
 								
 				//JComboBoxes
 					
@@ -1056,6 +1155,12 @@ public class MainFrames extends JFrame
 					cboDrawingDay.setEditable(false);
 					AutoCompleteDecorator.decorate(cboDrawingDay);
 					cboDrawingDay.setSelectedIndex(-1);
+					cboCustDrawingDay = new JComboBox<String>(days);
+					cboCustDrawingDay.setBounds(496, 135, 45, 20);
+					cboCustDrawingDay.setForeground(Color.BLACK);
+					cboCustDrawingDay.setEditable(false);
+					AutoCompleteDecorator.decorate(cboCustDrawingDay);
+					cboCustDrawingDay.setSelectedIndex(-1);
 					cboProductionDay = new JComboBox<String>(days);
 					cboProductionDay.setBounds(496, 272, 45, 20);
 					cboProductionDay.setForeground(Color.BLACK);
@@ -1070,6 +1175,12 @@ public class MainFrames extends JFrame
 					cboDrawingMonth.setEditable(false);
 					AutoCompleteDecorator.decorate(cboDrawingMonth);
 					cboDrawingMonth.setSelectedIndex(-1);
+					cboCustDrawingMonth = new JComboBox<String>(months);
+					cboCustDrawingMonth.setBounds(437, 135, 45, 20);
+					cboCustDrawingMonth.setForeground(Color.BLACK);
+					cboCustDrawingMonth.setEditable(false);
+					AutoCompleteDecorator.decorate(cboCustDrawingMonth);
+					cboCustDrawingMonth.setSelectedIndex(-1);
 					cboProductionMonth = new JComboBox<String>(months);
 					cboProductionMonth.setBounds(437, 272, 45, 20);
 					cboProductionMonth.setForeground(Color.BLACK);
@@ -1086,6 +1197,12 @@ public class MainFrames extends JFrame
 					cboDrawingYear.setEditable(true);
 					AutoCompleteDecorator.decorate(cboDrawingYear);
 					cboDrawingYear.setSelectedIndex(-1);
+					cboCustDrawingYear = new JComboBox<String>(years);
+					cboCustDrawingYear.setBounds(556, 135, 73, 20);
+					cboCustDrawingYear.setForeground(Color.BLACK);
+					cboCustDrawingYear.setEditable(true);
+					AutoCompleteDecorator.decorate(cboCustDrawingYear);
+					cboCustDrawingYear.setSelectedIndex(-1);
 					cboProductionYear = new JComboBox<String>(years);
 					cboProductionYear.setBounds(556, 272, 73, 20);
 					cboProductionYear.setForeground(Color.BLACK);
@@ -1123,6 +1240,16 @@ public class MainFrames extends JFrame
 					lblProductionReleaseDate.setBounds(437, 243, 174, 20);
 					lblProductionReleaseDate.setFont(new Font("Tahoma", Font.BOLD, 14));
 					lblProductionReleaseDate.setForeground(Color.BLACK);
+					lblCustDrawingNum = new JLabel("Cust Drawing Number");
+					lblCustDrawingNum.setBounds(437, 5, 223, 20);
+					lblCustDrawingRev = new JLabel("Cust Drawing Rev");
+					lblCustDrawingRev.setBounds(437, 60, 123, 20);
+					lblCustDrawingRev.setFont(new Font("Tahoma", Font.BOLD, 14));
+					lblCustDrawingRev.setForeground(Color.BLACK);
+					lblCustDrawingRevDate = new JLabel("Cust Drawing Rev Date");
+					lblCustDrawingRevDate.setBounds(437, 109, 158, 20);
+					lblCustDrawingRevDate.setFont(new Font("Tahoma", Font.BOLD, 14));
+					lblCustDrawingRevDate.setForeground(Color.BLACK);
 					
 				//JRadioButton
 					rbtnEurope = new JRadioButton("Europe Part Number");
@@ -1225,21 +1352,7 @@ public class MainFrames extends JFrame
 										JOptionPane.WARNING_MESSAGE
 										);
 								if(n == 0){
-									String BosalPartNumber = txtFindBosal.getText();
-									String CustomerPartNumber = null;
-									if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
-										CustomerPartNumber = null;
-									}else{CustomerPartNumber = txtCusDescrip.getText();}
-									String SupplierPartNumber= null;
-									if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
-										SupplierPartNumber = null;
-									}else{SupplierPartNumber = txtSupDescrip.getText();}
-									String Description = (String) cboDescrip.getSelectedItem();
-									String Program = (String) cboProgram.getSelectedItem();
-									int Rev = 0;
-									if(txtRev.getText().equals("-") || txtRev.getText().equals("")){
-										Rev = 0;
-									}else{Rev = Integer.valueOf(txtRev.getText());}							
+									String BosalPartNumber = txtFindBosal.getText();						
 									String DrawingNumber = null;							
 									if(txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")){
 										DrawingNumber = null;
@@ -1250,19 +1363,49 @@ public class MainFrames extends JFrame
 									}else{
 										try{
 											DrawingRev = Integer.valueOf(txtDrawingRev.getText());
-										}catch(Exception ex){/*ex.printStackTrace();Ignore*/DrawingRev = 0;}
+										}catch(Exception ex){DrawingRev = 0;}
 									}
 									String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
 											+(String)cboDrawingDay.getSelectedItem()+"/"
 											+(String)cboDrawingYear.getSelectedItem();
+									String CustomerPartNumber = null;
+									if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
+										CustomerPartNumber = null;
+									}else{CustomerPartNumber = txtCusDescrip.getText();}						
+									String CustDrawingNumber = null;							
+									if(txtCustDrawingNum.getText().equals("-") || txtCustDrawingNum.getText().equals("")){
+										DrawingNumber = null;
+									}else{CustDrawingNumber = txtCustDrawingNum.getText();}
+									int CustDrawingRev;						
+									if(txtCustDrawingRev.getText().equals("-") || txtCustDrawingRev.getText().equals("")){
+										CustDrawingRev = 0;
+									}else{
+										try{
+											CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());
+										}catch(Exception ex){CustDrawingRev = 0;}
+									}
+									String CustDrawingRevDate = (String)cboCustDrawingMonth.getSelectedItem()+"/"
+											+(String)cboCustDrawingDay.getSelectedItem()+"/"
+											+(String)cboCustDrawingYear.getSelectedItem();
+									String SupplierPartNumber= null;
+									if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
+										SupplierPartNumber = null;
+									}else{SupplierPartNumber = txtSupDescrip.getText();}
+									String Description = (String) cboDescrip.getSelectedItem();
+									String Program = (String) cboProgram.getSelectedItem();
+									int Rev = 0;
+									if(txtRev.getText().equals("-") || txtRev.getText().equals("")){
+										Rev = 0;
+									}else{Rev = Integer.valueOf(txtRev.getText());}	
 									String ProductionReleaseDate = (String)cboProductionMonth.getSelectedItem()+"/"
 											+(String)cboProductionDay.getSelectedItem()+"/"
 											+(String)cboProductionYear.getSelectedItem();									
 									
 									try {
-										con.updateBosal(BosalPartNumber, CustomerPartNumber, SupplierPartNumber, 
-												Description, Program, Rev, DrawingNumber, DrawingRev, 
-												DrawingRevDate, ProductionReleaseDate);
+										con.updateBosal(BosalPartNumber, DrawingNumber, DrawingRev, 
+												DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
+												CustDrawingRevDate, SupplierPartNumber, 
+												Description, Program, Rev, ProductionReleaseDate);
 										
 										setVisible(false);
 										Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1551,6 +1694,10 @@ public class MainFrames extends JFrame
 					lblRev.setForeground(Color.BLACK);
 					lblDrawingNum.setFont(new Font("Tahoma", Font.BOLD, 14));
 					lblDrawingNum.setForeground(Color.BLACK);
+					lblCustDrawingNum.setFont(new Font("Tahoma", Font.BOLD, 14));
+					lblCustDrawingNum.setForeground(Color.BLACK);
+					
+					
 					
 				//Group Layout
 					
@@ -1565,14 +1712,19 @@ public class MainFrames extends JFrame
 					add(txtFindBosal);
 					add(btnCheck);
 					add(lblDrawingRevDate);
+					add(lblCustDrawingRevDate);
 					add(lblSupplierPartNum);
 					add(cboProgram);
 					add(txtSupDescrip);
 					add(txtDrawingNum);
+					add(txtCustDrawingNum);
 					add(lblProgram);
 					add(cboDrawingMonth);
 					add(cboDrawingDay);
 					add(cboDrawingYear);
+					add(cboCustDrawingMonth);
+					add(cboCustDrawingDay);
+					add(cboCustDrawingYear);
 					add(lblProductionReleaseDate);
 					add(cboProductionMonth);
 					add(cboProductionDay);
@@ -1580,6 +1732,7 @@ public class MainFrames extends JFrame
 					add(cboDescrip);
 					add(lblDescription);
 					add(lblDrawingNum);
+					add(lblCustDrawingNum);
 					add(btnSave);
 					add(btnBack);
 					add(lblRev);
@@ -1588,6 +1741,8 @@ public class MainFrames extends JFrame
 					add(txtCusDescrip);
 					add(lblDrawingRev);
 					add(txtDrawingRev);
+					add(lblCustDrawingRev);
+					add(txtCustDrawingRev);
 					add(btnDelete);
 					add(rbtnEurope);
 					add(rbtnAmerica);
