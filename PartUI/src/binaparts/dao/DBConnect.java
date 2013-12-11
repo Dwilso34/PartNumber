@@ -1364,10 +1364,10 @@ public class DBConnect {
 			}
 		}
 	//updates a BosalPartNumber in parts list
-	public void updateDelta(String DeltaPartNumber, String CusPartNumber, 
-				String SupPartNumber, String Description, String Program, 
-				int Rev, String DrawingNumber, int DrawingRev, String DrawingRevDate,
-				String ProductionReleaseDate) throws Exception{
+	public void updateDelta(String DeltaPartNumber, String DrawingNumber, int DrawingRev, 
+			String DrawingRevDate, String CusPartNumber, String CustDrawingNumber, 
+			int CustDrawingRev, String CustDrawingRevDate, String SupPartNumber, String Description, 
+			String Program, int Rev, String ProductionReleaseDate) throws Exception{
 				
 				try{
 					String usersname = getUsersName();
@@ -1375,29 +1375,35 @@ public class DBConnect {
 					getDBConnection();
 					pst = con.prepareStatement("UPDATE `delta 1 parts` SET "
 							+ "`PartDescription` = ?, " 
-							+ "`CustPartNumber` = ?, " 
-							+ "`SupPartNumber` = ?, "
-							+ "`Program` = ?, "
-							+ "`Rev` = ?, "
 							+ "`DrawingNumber` = ?, "
 							+ "`DrawingRev` = ?, "
 							+ "`DrawingRevDate` = ?, "
+							+ "`CustPartNumber` = ?, " 
+							+ "`CustDrawingNumber` = ?, "
+							+ "`CustDrawingRev` = ?, "
+							+ "`CustDrawingRevDate` = ?, "
+							+ "`SupPartNumber` = ?, "
+							+ "`Program` = ?, "
+							+ "`Rev` = ?, "
 							+ "`ProductionReleaseDate` = ?, "
 							+ "`UpdatedBy` = ?, "
 							+ "`Updated` = ?"
 							+ "WHERE `DeltaPartNumber`= ?");
 					pst.setString(1, Description);
-					pst.setString(2, CusPartNumber);
-					pst.setString(3, SupPartNumber);
-					pst.setString(4,  Program);
-					pst.setInt(5, Rev);
-					pst.setString(6, DrawingNumber);
-					pst.setInt(7, DrawingRev);
-					pst.setString(8, DrawingRevDate);
-					pst.setString(9, ProductionReleaseDate);
-					pst.setString(10, usersname);
-					pst.setTimestamp(11, timestamp);
-					pst.setString(12, DeltaPartNumber);
+					pst.setString(2, DrawingNumber);
+					pst.setInt(3, DrawingRev);
+					pst.setString(4, DrawingRevDate);
+					pst.setString(5, CusPartNumber);
+					pst.setString(6, CustDrawingNumber);
+					pst.setInt(7, CustDrawingRev);
+					pst.setString(8, CustDrawingRevDate);
+					pst.setString(9, SupPartNumber);
+					pst.setString(10,  Program);
+					pst.setInt(11, Rev);
+					pst.setString(12, ProductionReleaseDate);
+					pst.setString(13, usersname);
+					pst.setTimestamp(14, timestamp);
+					pst.setString(15, DeltaPartNumber);
 					pst.executeUpdate();
 					pst.close();
 					con.close();

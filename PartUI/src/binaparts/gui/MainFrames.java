@@ -1374,7 +1374,7 @@ public class MainFrames extends JFrame
 									}else{CustomerPartNumber = txtCusDescrip.getText();}						
 									String CustDrawingNumber = null;							
 									if(txtCustDrawingNum.getText().equals("-") || txtCustDrawingNum.getText().equals("")){
-										DrawingNumber = null;
+										CustDrawingNumber = null;
 									}else{CustDrawingNumber = txtCustDrawingNum.getText();}
 									int CustDrawingRev;						
 									if(txtCustDrawingRev.getText().equals("-") || txtCustDrawingRev.getText().equals("")){
@@ -1445,6 +1445,21 @@ public class MainFrames extends JFrame
 										if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
 											CustomerPartNumber = null;
 										}else{CustomerPartNumber = txtCusDescrip.getText();}
+										String CustDrawingNumber = null;							
+										if(txtCustDrawingNum.getText().equals("-") || txtCustDrawingNum.getText().equals("")){
+											CustDrawingNumber = null;
+										}else{CustDrawingNumber = txtCustDrawingNum.getText();}
+										int CustDrawingRev;						
+										if(txtCustDrawingRev.getText().equals("-") || txtCustDrawingRev.getText().equals("")){
+											CustDrawingRev = 0;
+										}else{
+											try{
+												CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());
+											}catch(Exception ex){CustDrawingRev = 0;}
+										}
+										String CustDrawingRevDate = (String)cboCustDrawingMonth.getSelectedItem()+"/"
+												+(String)cboCustDrawingDay.getSelectedItem()+"/"
+												+(String)cboCustDrawingYear.getSelectedItem();
 										String SupplierPartNumber= null;
 										if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
 											SupplierPartNumber = null;
@@ -1465,7 +1480,7 @@ public class MainFrames extends JFrame
 										}else{
 											try{
 												DrawingRev = Integer.valueOf(txtDrawingRev.getText());
-											}catch(Exception ex){/*ex.printStackTrace();Ignore*/DrawingRev = 0;}
+											}catch(Exception ex){DrawingRev = 0;}
 										}
 										String DrawingRevDate = (String)cboDrawingMonth.getSelectedItem()+"/"
 												+(String)cboDrawingDay.getSelectedItem()+"/"
@@ -1475,9 +1490,10 @@ public class MainFrames extends JFrame
 												+(String)cboProductionYear.getSelectedItem();									
 										
 										try {
-											con.updateDelta(DeltaPartNumber, CustomerPartNumber, SupplierPartNumber, 
-													Description, Program, Rev, DrawingNumber, DrawingRev, 
-													DrawingRevDate, ProductionReleaseDate);
+											con.updateDelta(DeltaPartNumber, DrawingNumber, DrawingRev, 
+													DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
+													CustDrawingRevDate, SupplierPartNumber, 
+													Description, Program, Rev, ProductionReleaseDate);
 											
 											setVisible(false);
 											Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
