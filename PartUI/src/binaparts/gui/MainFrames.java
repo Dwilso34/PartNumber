@@ -1987,16 +1987,29 @@ public class MainFrames extends JFrame
 						}}
 						//Searches using customer number to fill table				
 						if(rbtnFindCus.isSelected() == true){
-							try{
-								temp = (con.queryDatabase("bosal parts", "CustPartNumber", searchText));
-								myTable.setModel(populateTableModel("bosal parts", "CustPartNumber", temp, searchText));
-
-								}catch(Exception ex){
+							try {
+								//Grab the data from the correct database
+								 temp = con.queryDatabase("bosal parts", "CustPartNumber", searchText);
+								 myTable.setModel(populateTableModel("bosal parts", "CustPartNumber", temp, searchText));
+								if (temp.length() == 0) {
+									System.out.println("that number didnt exist in `bosal parts`");
+									try {
+										System.out.println("trying the delta list");
+										temp = con.queryDatabase("delta 1 parts", "CustPartNumber", searchText);
+										myTable.setModel(populateTableModel("delta 1 parts", "CustPartNumber", temp, searchText));
+										System.out.println("found "+temp.toString());
+									}catch(Exception ex){
 								JOptionPane.showMessageDialog(
 										    frame,
 										    "Customer Part Number: " + searchText + " does not exist",
 										    "Missing Part Number",
 											JOptionPane.ERROR_MESSAGE);
+						}}}catch(Exception ex){
+							JOptionPane.showMessageDialog(
+								    frame,
+								    "Customer Part Number: " + searchText + " does not exist",
+								    "Missing Part Number",
+									JOptionPane.ERROR_MESSAGE);
 						}}
 						if(rbtnFindPro.isSelected() == true){
 							try{

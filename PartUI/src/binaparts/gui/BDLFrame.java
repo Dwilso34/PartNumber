@@ -1792,21 +1792,21 @@ public class BDLFrame extends JFrame
 							
 							temp = con.queryDatabase("engines", "Engine", engine);
 							//set text for Type JTextField
-							String type= null;
+							String type = null;
 							try {
 								type = temp.getJSONObject(0).get("Type").toString();
 							} catch (Exception ex) {type = "-";}
 							txtType.setText(type);							
 							
 							//set text for Volume1 JTextField
-							String volume1= null;
+							String volume1 = null;
 							try {
 								volume1 = temp.getJSONObject(0).get("Volume").toString();
 							} catch (Exception ex) {volume1 = "-";}
 							txtVolume.setText(volume1);
 							
 							//set text for Power JTextField
-							String power= null;
+							String power = null;
 							try {
 								power = temp.getJSONObject(0).get("Power").toString();
 							} catch (Exception ex) {power = "-";}
@@ -1941,7 +1941,6 @@ public class BDLFrame extends JFrame
 			txtRelDate.addMouseListener(new ContextMenuMouseListener());
 			DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 			txtRelDate.setFormats(dateFormat);
-			
 			txtRelDate.setBounds(1130, 48, 110, 20);
 			txtRelDate.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			txtRelDate.setForeground(Color.BLACK);
@@ -2386,8 +2385,3 @@ public class BDLFrame extends JFrame
 	}
 
 }
-
-
-
-
-
