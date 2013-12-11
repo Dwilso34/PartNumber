@@ -9,7 +9,7 @@ public class UpdateData {
 	public static void main(String[] args) {
 		
 		try {
-			con.updateDeltaProgram();
+			//con.updateDeltaProgram();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

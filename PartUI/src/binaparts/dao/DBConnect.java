@@ -1365,7 +1365,7 @@ public class DBConnect {
 		}
 	//updates a BosalPartNumber in parts list
 	public void updateDelta(String DeltaPartNumber, String CusPartNumber, 
-				String SupPartNumber, String Description, String Program, 
+				String SupPartNumber, String CustDrawingRevDate, String Description, String Program, 
 				int Rev, String DrawingNumber, int DrawingRev, String DrawingRevDate,
 				String ProductionReleaseDate) throws Exception{
 				
@@ -1377,6 +1377,7 @@ public class DBConnect {
 							+ "`PartDescription` = ?, " 
 							+ "`CustPartNumber` = ?, " 
 							+ "`SupPartNumber` = ?, "
+							+ "`CustDrawingRevDate` = ?,"
 							+ "`Program` = ?, "
 							+ "`Rev` = ?, "
 							+ "`DrawingNumber` = ?, "
@@ -1389,15 +1390,16 @@ public class DBConnect {
 					pst.setString(1, Description);
 					pst.setString(2, CusPartNumber);
 					pst.setString(3, SupPartNumber);
-					pst.setString(4,  Program);
-					pst.setInt(5, Rev);
-					pst.setString(6, DrawingNumber);
-					pst.setInt(7, DrawingRev);
-					pst.setString(8, DrawingRevDate);
-					pst.setString(9, ProductionReleaseDate);
-					pst.setString(10, usersname);
-					pst.setTimestamp(11, timestamp);
-					pst.setString(12, DeltaPartNumber);
+					pst.setString(4, CustDrawingRevDate);
+					pst.setString(5,  Program);
+					pst.setInt(6, Rev);
+					pst.setString(7, DrawingNumber);
+					pst.setInt(8, DrawingRev);
+					pst.setString(9, DrawingRevDate);
+					pst.setString(10, ProductionReleaseDate);
+					pst.setString(11, usersname);
+					pst.setTimestamp(12, timestamp);
+					pst.setString(13, DeltaPartNumber);
 					pst.executeUpdate();
 					pst.close();
 					con.close();
