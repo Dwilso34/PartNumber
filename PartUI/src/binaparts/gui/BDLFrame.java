@@ -1,12 +1,9 @@
 package binaparts.gui;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -17,22 +14,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
@@ -55,13 +45,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
@@ -80,7 +67,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import binaparts.dao.DBConnect;
-import binaparts.util.ComponentResizer;
 
 @SuppressWarnings("serial")
 public class BDLFrame extends JFrame 
@@ -120,8 +106,7 @@ public class BDLFrame extends JFrame
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.valueOf(parts[2]));
 		cal.set(Calendar.MONTH, Integer.valueOf(parts[0])-1);
-		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(parts[1]));
-		
+		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(parts[1]));		
 		return cal.getTime();
 	}
 	public String DateToCalendar(Date date) {			
@@ -160,49 +145,37 @@ public class BDLFrame extends JFrame
 			return customer;
 		}
 		public void setCustomer(String customer) {
-			System.out.println(customer+" is being put into the customer variable");
 			this.customer = customer;
-			System.out.println(this.customer+" was put into the customer variable");
 		}
 		public String getPlatform() {
 			return platform;
 		}
 		public void setPlatform(String platform) {
-			System.out.println(platform+" is being put into the platform variable");
 			this.platform = platform;
-			System.out.println(this.platform+" was put into the platform variable");
 		}
 		public String getName() {
 			return name;
 		}
 		public void setName(String name) {
-			System.out.println(name+" is being put into the name variable");
 			this.name = name;
-			System.out.println(this.name+" was put into the name variable");
 		}
 		public String getType() {
 			return type;
 		}
 		public void setType(String type) {
-			System.out.println(type+" is being put into the type variable");
 			this.type = type;
-			System.out.println(this.type+" was put into the type variable");
 		}
 		public String getVolume() {
 			return volume;
 		}
 		public void setVolume(String volume) {
-			System.out.println(volume+" is being put into the volume variable");
 			this.volume = volume;
-			System.out.println(this.volume+" was put into the volume variable");
 		}
 		public String getPower() {
 			return power;
 		}
 		public void setPower(String power) {
-			System.out.println(power+" is being put into the power variable");
 			this.power = power;
-			System.out.println(this.power+" was put into the power variable");
 		}
 		
 	//temp arrays to hold comboBox info 
@@ -387,7 +360,6 @@ public class BDLFrame extends JFrame
 						//checks to see if there is a sub BDL
 						if (containsBDL() == true) {
 							table.setValueAt("#", i+1, 2);
-							//setSubItemsForTable(itm[i]);
 						}
 					}
 				}
@@ -399,7 +371,7 @@ public class BDLFrame extends JFrame
 				ex.printStackTrace();
 			}
 		}
-		public void setSubItemsForTable(String BDLNumber){
+		/*public void setSubItemsForTable(String BDLNumber){
 			TableModel table = myTable.getModel();
 			int rowCount = 0;
 			int tempRowCount = 0;
@@ -450,7 +422,7 @@ public class BDLFrame extends JFrame
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		}
+		}*/
 		
 	//JCheckBoxes
 		private JCheckBox cbxCustomer;
@@ -796,8 +768,8 @@ public class BDLFrame extends JFrame
 		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
 		btnSave = new JButton(save);		
 		btnSave.setBounds(893, 177, 102, 34);		
-		btnSave.addActionListener(new ActionListener() {	
-				public void actionPerformed(ActionEvent e) {
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnSave)
 					{
 						if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
@@ -882,8 +854,6 @@ public class BDLFrame extends JFrame
 										s2 = s2+", {\"Customer\":\""+txtCustomer.getText()+"\"}";
 									}
 									s2 = s2 + "]";
-									System.out.println(s1);
-									System.out.println(s2);
 									JSONArray temp1;
 									JSONArray temp2;
 									try {
@@ -933,18 +903,20 @@ public class BDLFrame extends JFrame
 					btnDelete.setVisible(false);
 					btnPdfPrint.setVisible(false);
 					btnSave.setVisible(false);
-				if (cbxName.isSelected() == false)
-				{
-					cbxName.doClick();
-				}
-				if (cbxPlatform.isSelected() == false)
-				{
-					cbxPlatform.doClick();
-				}
-				if (cbxCustomer.isSelected() == false)
-				{
-					cbxCustomer.doClick();
-				}
+					
+					if (cbxName.isSelected() == false)
+					{
+						cbxName.doClick();
+					}
+					if (cbxPlatform.isSelected() == false)
+					{
+						cbxPlatform.doClick();
+					}
+					if (cbxCustomer.isSelected() == false)
+					{
+						cbxCustomer.doClick();
+					}
+					
 					cbxCustomer.setVisible(false);
 					cbxPlatform.setVisible(false);
 					cbxName.setVisible(false);					
@@ -964,12 +936,10 @@ public class BDLFrame extends JFrame
 			            if(pnlMain.getHeight() > 594){
 			            	int x = getX(); 
 			            	int y = getY() + (pnlMain.getHeight() - 589);
-			            	System.out.println(pnlMain.getHeight());
 			            at.translate(x + 20, y);}
 			            if(pnlMain.getHeight() == 594){
 			            	int x = getX(); 
 			            	int y = getY();
-			            	System.out.println(pnlMain.getHeight());
 			            at.translate(x + 20, y);}       
 			            g2.transform(at);
 			            g2.scale(0.63, 0.63);
@@ -1001,7 +971,6 @@ public class BDLFrame extends JFrame
 					if(e.getClickCount() == 2){
 						
 						if(e.getSource() == txtBosalPartNum){
-							System.out.println("I made it");
 							String s = (String)JOptionPane.showInputDialog(
 				                    BDLframe,
 				                    "Enter a Bosal Part Number:",
@@ -1020,7 +989,6 @@ public class BDLFrame extends JFrame
 							int row = table.getSelectedRow();
 							int column = table.getSelectedColumn();
 							if(column == 4){
-								System.out.println("I made it");
 								String s = (String)JOptionPane.showInputDialog(
 					                    BDLframe,
 					                    "Enter a Bosal Part Number:",
@@ -1036,9 +1004,7 @@ public class BDLFrame extends JFrame
 								table.setValueAt(getSearchText(), row, column);
 							}
 						}else if (e.getSource() == lblCustImage) {
-							System.out.println("I made it");							
 							String appDir = System.getProperty("user.dir");
-							System.out.println(appDir);
 							JFileChooser fc = new JFileChooser(appDir+"/Customer Logos/");
 			                fc.showOpenDialog(null);
 			                File file = fc.getSelectedFile();
@@ -1058,7 +1024,6 @@ public class BDLFrame extends JFrame
 			final TableModelListener columnListener = new TableModelListener(){
 				public void tableChanged(TableModelEvent e) {
 					if(e.getColumn() == 4){
-						System.out.println("column part number has changed");
 						int row = e.getLastRow();
 						String description = null;
 						String rev = null;
@@ -1072,11 +1037,8 @@ public class BDLFrame extends JFrame
 							//Grab the data from the correct database
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
 							if (temp.length() == 0) {
-								System.out.println("that number didnt exist in `bosal parts`");
 								try {
-									System.out.println("trying the delta list");
 									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
-									System.out.println("found "+temp.toString());
 								} catch (Exception ex) {
 									ex.printStackTrace();
 								}
@@ -1086,7 +1048,6 @@ public class BDLFrame extends JFrame
 								try{
 									description = temp.getJSONObject(i).getString("PartDescription").toString();
 								}catch(Exception ex){
-									//System.out.println("Part " + getSearchText() + " does not contain PartDescription");
 								}
 								try{
 									rev = temp.getJSONObject(i).get("Rev").toString();
@@ -1096,12 +1057,10 @@ public class BDLFrame extends JFrame
 										}
 									}
 								}catch(Exception ex){
-									//System.out.println("Part " + getSearchText() + " does not contain Rev");
 								}
 								try{
 									drawingNumber = temp.getJSONObject(i).get("DrawingNumber").toString();
 								}catch(Exception ex){
-									//System.out.println("Part " + getSearchText() + " does not contain DrawingNumber");
 								}
 								try{
 									drawingRev = temp.getJSONObject(i).get("DrawingRev").toString();
@@ -1111,22 +1070,18 @@ public class BDLFrame extends JFrame
 										}
 									}
 								}catch(Exception ex){
-									//System.out.println("Part " + getSearchText() + " does not contain DrawingRev");
 								}
 								try{
 									drawingRevDate = temp.getJSONObject(i).get("DrawingRevDate").toString();
 								}catch(Exception ex){
-									//System.out.println("Part " + getSearchText() + " does not contain DrawingRevDate");
 								}
 								try{
 									productionReleaseDate = temp.getJSONObject(i).get("ProductionReleaseDate").toString();
 								}catch(Exception ex){
-									//System.out.println("Part " + getSearchText() + " does not contain ProductionReleaseDate");
 								}
 								try{
 									customer = temp.getJSONObject(i).get("CustPartNumber").toString();
 								}catch(Exception ex){
-									//System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
 								}
 							}
 						} catch (Exception ex) {
@@ -1164,8 +1119,7 @@ public class BDLFrame extends JFrame
 						return true;
 					}else{						
 						return false;
-					}
-					
+					}					
 				}
 			};
 			
@@ -1216,51 +1170,31 @@ public class BDLFrame extends JFrame
 					if(e.getStateChange() == ItemEvent.SELECTED){
 						if(e.getSource().equals(cboCustomer)){
 							if(e.getStateChange() == ItemEvent.SELECTED){
-								System.out.println(cboCustomer.getSelectedItem().toString());
 								setCustomer(cboCustomer.getSelectedItem().toString());
-								System.out.println("See I put "+getCustomer()+" into Customer like you said!");
-								System.out.println("I Grabbed the Text from the Customer ComboBox!");								
-								System.out.println("I am about to Click the Customer CheckBox!");
 								cbxCustomer.doClick();								
 							}
 						}
 						else if(e.getSource().equals(cboPlatform)){							
 							if(e.getStateChange() == ItemEvent.SELECTED){
-								System.out.println(cboPlatform.getSelectedItem().toString());
 								setPlatform(cboPlatform.getSelectedItem().toString());
-								System.out.println("See I put "+getPlatform()+" into Platform like you said!");
-								System.out.println("I Grabbed the Text from the Platform ComboBox!");
-								System.out.println("I am about to Click the Platform CheckBox!");
 								cbxPlatform.doClick();
 							}
 						}
 						else if(e.getSource().equals(cboName)){							
 							if(e.getStateChange() == ItemEvent.SELECTED){
-								System.out.println(cboName.getSelectedItem().toString());
 								if(cboName.getSelectedItem().toString() != null){
 									setName(cboName.getSelectedItem().toString());
-									System.out.println("See I put "+getName()+" into Name like you said!");
-									System.out.println(cboName.getSelectedItem().toString());
-									System.out.println("I Grabbed the Text from the Name ComboBox!");
-									System.out.println("I am about to Click the Name CheckBox!");
 								}
 								cbxName.doClick();
 							}
 						}				
 						//possible truth table outcomes
 						if(cbxCustomer.isSelected() == true){
-							System.out.println(getCustomer()+" is the Customer that was selected");
 							if(cbxPlatform.isSelected() == true){
-								System.out.println(getPlatform()+" is the Platform that was selected");
 								if(cbxName.isSelected() == true){
-									System.out.println(getName()+" is the Engine that was selected");
-									System.out.println("T T T1");
 									try{		
-										System.out.println("T T T2");
 										for(int i = 0; i < temp3.length(); i++){
-											System.out.println("T T T3");
 											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
-												System.out.println("T T T4");
 												setType(temp3.getJSONObject(i).get("Type").toString());
 												setVolume(temp3.getJSONObject(i).get("Volume").toString());
 												setPower(temp3.getJSONObject(i).get("Power").toString());
@@ -1270,21 +1204,14 @@ public class BDLFrame extends JFrame
 									}catch(Exception ex){ex.printStackTrace();}
 								}
 								else if(cbxName.isSelected() == false){
-									System.out.println("No Engine was selected");
-									System.out.println("T T F");
+									//nothing happens
 								}
 							}
 							else if(cbxPlatform.isSelected() == false){
-								System.out.println("No Platform was selected");
 								if(cbxName.isSelected() == true){
-									System.out.println(getName()+" is the Engine that was selected");
-									System.out.println("T F T1");
 									try{	
-										System.out.println("T F T2");
 										for(int i = 0; i < temp3.length(); i++){
-											System.out.println("T F T3");
 											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
-												System.out.println("T F T4");
 												setPlatform(temp3.getJSONObject(i).get("Platform").toString());
 												setType(temp3.getJSONObject(i).get("Type").toString());
 												setVolume(temp3.getJSONObject(i).get("Volume").toString());
@@ -1295,24 +1222,16 @@ public class BDLFrame extends JFrame
 									}catch(Exception ex){ex.printStackTrace();}
 								}
 								else if(cbxName.isSelected() == false){
-									System.out.println("No Engine was selected");
-									System.out.println("T F F");
+									//nothing happens
 								}
 							}
 						}
 						else if(cbxCustomer.isSelected() == false){
-							System.out.println("No Customer was selected");
 							if(cbxPlatform.isSelected() == true){
-								System.out.println(getPlatform()+" is the Platform that was selected");
 								if(cbxName.isSelected() == true){
-									System.out.println(getName()+" is the Engine that was selected");
-									System.out.println("F T T1");
 									try{		
-										System.out.println("F T T2");
 										for(int i = 0; i < temp3.length(); i++){
-											System.out.println("F T T3");
 											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
-												System.out.println("F T T4");
 												setType(temp3.getJSONObject(i).get("Type").toString());
 												setVolume(temp3.getJSONObject(i).get("Volume").toString());
 												setPower(temp3.getJSONObject(i).get("Power").toString());
@@ -1320,9 +1239,7 @@ public class BDLFrame extends JFrame
 											}
 										}	
 										for(int i = 0; i < temp2.length(); i++){
-											System.out.println("F T T5");
 											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
-												System.out.println("F T T6");
 												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
 												i=temp2.length(); //used to end for loop
 											}
@@ -1330,14 +1247,9 @@ public class BDLFrame extends JFrame
 									}catch(Exception ex){ex.printStackTrace();}
 								}
 								else if(cbxName.isSelected() == false){
-									System.out.println("No Engine was selected");
-									System.out.println("F T F1");
 									try{
-										System.out.println("F T F2");
 										for(int i = 0; i < temp2.length(); i++){
-											System.out.println("F T F3");
 											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
-												System.out.println("F T F4");
 												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
 												i=temp2.length(); //used to end for loop
 											}
@@ -1346,16 +1258,10 @@ public class BDLFrame extends JFrame
 								}
 							}
 							else if(cbxPlatform.isSelected() == false){
-								System.out.println("No Platform was selected");
 								if(cbxName.isSelected() == true){
-									System.out.println(getName()+" is the Engine that was selected");
-									System.out.println("F F T1");
 									try{
-										System.out.println("F F T2");
 										for(int i = 0; i < temp3.length(); i++){
-											System.out.println("F F T3");
 											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
-												System.out.println("F F T4");
 												setPlatform(temp3.getJSONObject(i).get("Platform").toString());
 												setType(temp3.getJSONObject(i).get("Type").toString());
 												setVolume(temp3.getJSONObject(i).get("Volume").toString());
@@ -1364,9 +1270,7 @@ public class BDLFrame extends JFrame
 											}
 										}	
 										for(int i = 0; i < temp2.length(); i++){
-											System.out.println("F F T5");
 											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
-												System.out.println("F F T6");
 												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
 												i=temp2.length(); //used to end for loop
 											}
@@ -1374,8 +1278,7 @@ public class BDLFrame extends JFrame
 									}catch(Exception ex){ex.printStackTrace();}
 								}
 								else if(cbxName.isSelected() == false){
-									System.out.println("No Engine was selected");
-									System.out.println("F F F");
+									//nothing happens
 								}
 							}
 						}
@@ -1421,15 +1324,12 @@ public class BDLFrame extends JFrame
 						}
 						btnAdd.doClick();
 						table1.setValueAt(getSearchText(), 0, 4);
-						
+
 						try {
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
 							if (temp.length() == 0) {
-								System.out.println("that number didnt exist in `bosal parts`");
 								try {
-									System.out.println("trying the delta list");
 									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
-									System.out.println("found "+temp.toString());
 								} catch (Exception ex) {
 									ex.printStackTrace();
 								}
@@ -1547,14 +1447,8 @@ public class BDLFrame extends JFrame
 							try {
 								Customer = temp.getJSONObject(0).get("Customer").toString();
 							} catch (Exception ex) {Customer = "-";}
-							txtCustomer.setText(Customer);
+							txtCustomer.setText(Customer);							
 
-							//set image for Customer Logo
-							try {
-								System.out.println("Setting the customer logo");
-								
-							} catch (Exception ex) {ex.printStackTrace();}
-							
 							temp = con.queryDatabase("engines", "Engine", engine);
 							//set text for Type JTextField
 							String type= null;
@@ -1579,7 +1473,6 @@ public class BDLFrame extends JFrame
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
-
 						setItemsForTable();
 					}
 					if (rbtnCreateBDL.isSelected() == true) {
@@ -1588,11 +1481,8 @@ public class BDLFrame extends JFrame
 						try {						
 				        	JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
 				        	if (temp.length() == 0) {
-								System.out.println("that number didnt exist in `bosal parts`");
 								try {
-									System.out.println("trying the delta list");
 									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
-									System.out.println("found "+temp.toString() + " in the delta list");									
 								} catch (Exception ex) {
 									ex.printStackTrace();
 								}
@@ -1613,21 +1503,17 @@ public class BDLFrame extends JFrame
 							        		try {
 							        			setCustomer(temp.getJSONObject(j).get("Customer").toString());
 							        		} catch (Exception ex) {
-							        			//System.out.println("Program " + platform + " does not contain Customer");
 							        		}
 							        	}
 									} catch (Exception ex) {
-										//System.out.println("Part " + getSearchText() + " does not contain Program");
 									}
 					        		try {
 										custPartNum = temp.getJSONObject(i).getString("CustPartNumber").toString();
 									} catch (Exception ex) {
-										//System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
 									}
 					        		try {
 										description = temp.getJSONObject(i).getString("PartDescription").toString();
 									} catch (Exception ex) {
-										//System.out.println("Part " + getSearchText() + " does not contain PartDescription");
 									}
 								}	
 				        	}
@@ -1665,11 +1551,8 @@ public class BDLFrame extends JFrame
 						try {
 							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
 							if (temp.length() == 0) {
-								System.out.println("that number didnt exist in `bosal parts`");
 								try {
-									System.out.println("trying the delta list");
 									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
-									System.out.println("found "+temp.toString());
 								} catch (Exception ex) {
 									ex.printStackTrace();
 								}
@@ -1729,8 +1612,7 @@ public class BDLFrame extends JFrame
 							try {
 								releaseDate = CalendarToDate((String)temp.getJSONObject(0).get("ReleaseDate"));
 								txtRelDate.setDate(releaseDate);
-							} catch (Exception ex) {releaseDate = null;}
-							
+							} catch (Exception ex) {releaseDate = null;}							
 							
 							//set text for Rev Date JTextField
 							Date revDate = null;
@@ -1829,8 +1711,8 @@ public class BDLFrame extends JFrame
 			        printIt(documentEvent);
 			      }
 			      private void printIt(DocumentEvent documentEvent) {
-			        DocumentEvent.EventType type = documentEvent.getType();
-			        String typeString = null;
+			        //DocumentEvent.EventType type = documentEvent.getType();
+			        /*String typeString = null;
 			        if (type.equals(DocumentEvent.EventType.CHANGE)) {
 			          typeString = "Change";
 			        }  else if (type.equals(DocumentEvent.EventType.INSERT)) {
@@ -1838,7 +1720,7 @@ public class BDLFrame extends JFrame
 			        }  else if (type.equals(DocumentEvent.EventType.REMOVE)) {
 			          typeString = "Remove";
 			        }
-			        System.out.print("Type : " + typeString);			        
+			        System.out.println("Type : " + typeString);*/			        
 			     }
 			};
 			txtCustomer = new JTextField();
@@ -2029,8 +1911,6 @@ public class BDLFrame extends JFrame
 				public void actionPerformed(ActionEvent e){
 					if(e.getSource() == cbxCustomer){
 						if(cbxCustomer.isSelected() == true){
-							System.out.println("Customer CheckBox was Clicked!");
-							System.out.println("I am putting "+getCustomer()+" into the Customer txtField!");
 							txtCustomer.setText(getCustomer());
 							cboCustomer.removeItemListener(cboGetInfo);
 							cboCustomer.setVisible(false);
@@ -2038,7 +1918,6 @@ public class BDLFrame extends JFrame
 							txtCustomer.setEditable(false);
 						}
 						else if (cbxCustomer.isSelected() == false){
-							System.out.println("cbxCustomer was Deselected!");
 							txtCustomer.setEditable(true);
 							txtCustomer.setVisible(false);
 							cboCustomer.setVisible(true);
@@ -2047,21 +1926,14 @@ public class BDLFrame extends JFrame
 						}
 					}					
 					if(e.getSource() == cbxPlatform){
-						if(cbxPlatform.isSelected() == true){
-							System.out.println("Platform CheckBox was Clicked!");
-							System.out.println("I am putting "+getPlatform()+" into the Platform txtField!");
-							/*if(cbxCustomer.isSelected() == true){
-								cbxCustomer.doClick();
-							}*/
-							txtPlatform.setText(getPlatform());
-							//cboCustomer.removeItemListener(cboGetInfo);
+						if(cbxPlatform.isSelected() == true){							
+							txtPlatform.setText(getPlatform());							
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboPlatform.setVisible(false);
 							txtPlatform.setVisible(true);
 							txtPlatform.setEditable(false);
 						}
 						else if (cbxPlatform.isSelected() == false){
-							System.out.println("cbxPlatform was Deselected!");
 							txtPlatform.setEditable(true);
 							txtPlatform.setVisible(false);
 							cboPlatform.setVisible(true);
@@ -2071,24 +1943,13 @@ public class BDLFrame extends JFrame
 					}					
 					if(e.getSource() == cbxName){
 						if(cbxName.isSelected() == true){
-							System.out.println("Name CheckBox was Clicked!");
-							System.out.println("I am putting "+getName()+" into the Name txtField!");
-							/*if(cbxPlatform.isSelected() == true){
-								cbxPlatform.doClick();
-							}
-							if(cbxCustomer.isSelected() == true){
-								cbxCustomer.doClick();
-							}*/
 							txtName.setText(getName());
-							//cboCustomer.removeItemListener(cboGetInfo);
-							//cboPlatform.removeItemListener(cboGetInfo);
 							cboName.removeItemListener(cboGetInfo);	
 							cboName.setVisible(false);
 							txtName.setVisible(true);
 							txtName.setEditable(false);
 						}
 						else if (cbxName.isSelected() == false){
-							System.out.println("cbxName was Deselected!");
 							txtType.setText("");
 							txtVolume.setText("");
 							txtPower.setText("");
@@ -2181,8 +2042,7 @@ public class BDLFrame extends JFrame
 			rbtnSearchBDL.setBackground(new Color(105, 105, 105));
 			rbtnSearchBDL.setForeground(Color.BLACK);
 			rbtnSearchBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
-			rbtnSearchBDL.addActionListener(new ActionListener(){
-				
+			rbtnSearchBDL.addActionListener(new ActionListener(){				
 				public void actionPerformed(ActionEvent e)
 				{		
 					if (e.getSource() == rbtnSearchBDL){
@@ -2226,7 +2086,7 @@ public class BDLFrame extends JFrame
 							cboName.setVisible(false);
 							btnAdd.setVisible(false);
 							btnDelete.setVisible(false);
-							//myTable.getModel().removeTableModelListener(columnListener);
+							myTable.getModel().addTableModelListener(columnListener);
 							for (int i = table1.getRowCount(); i > 0; i--) {
 								table1.removeRow(i-1);
 							}
@@ -2275,32 +2135,18 @@ public class BDLFrame extends JFrame
 					txtRelSupplier.setText("");
 					txtCustomer.setText("");
 					txtCustomer.setVisible(false);
-					//cbxCustomer.setSelected(false);
-					//cbxCustomer.setVisible(false);
-					//cboCustomer.removeItemListener(cboGetInfo);
 					cboCustomer.setVisible(true);
 					txtPlatform.setText("");
 					txtPlatform.setVisible(false);
-					//cbxPlatform.setSelected(false);
-					//cbxPlatform.setVisible(false);
-					//cboPlatform.removeItemListener(cboGetInfo);
 					cboPlatform.setVisible(true);
 					txtName.setText("");
 					txtName.setVisible(false);
-					//cbxName.setSelected(false);
-					//cbxName.setVisible(false);
-					//cboName.removeItemListener(cboGetInfo);
 					cboName.setVisible(true);
-					//btnAdd.setVisible(false);
-					//btnDelete.setVisible(false);
-					//myTable.getModel().removeTableModelListener(columnListener);
 					for (int i = table1.getRowCount(); i > 0; i--) {
 						table1.removeRow(i-1);
 					}
-					//myTable.removeMouseListener(mouseClickListener);	
 				}
-			});
-			
+			});			
 		
 		//ButtonGroup
 			ButtonGroup group = new ButtonGroup();
@@ -2392,5 +2238,4 @@ public class BDLFrame extends JFrame
 			}
 		}
 	}
-
 }

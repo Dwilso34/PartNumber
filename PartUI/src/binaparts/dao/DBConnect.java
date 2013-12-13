@@ -56,7 +56,6 @@ public class DBConnect {
 			return columnNames;			
 		}catch(Exception ex){
 			String[] columnNames = null;
-			System.out.println("i screwed up");
 			ex.printStackTrace();
 			return columnNames;
 		}finally{
@@ -254,9 +253,7 @@ public class DBConnect {
 	//create a user and add to database (Requires admin)
 	public void createUser(String username, String password, String rank, 
 			String firstName, String lastName) throws Exception{
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String appUser = config.getProperty("appUser");
-		if(getUserRank().equals("admin")){
+		if(getUserRankValue() > 0){
 			try{
 				getDBConnection();
 				con.setAutoCommit(false);
@@ -280,14 +277,12 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
-			System.out.println(appUser+" does not have permission to do that!");
+			//System.out.println(getUser()+" does not have permission to do that!");
 		}
 	}
 	//delete a user from database (Requires admin)
 	public void deleteUser(String username) throws Exception{
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String appUser = config.getProperty("appUser");
-		if(getUserRank().equals("admin")){
+		if(getUserRankValue() > 0){
 			try{
 				getDBConnection();
 				con.setAutoCommit(false);
@@ -307,7 +302,7 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
-			System.out.println(appUser+" does not have permission to do that!");
+			//System.out.println(getUser()+" does not have permission to do that!");
 		}
 	}
 	//changes a user's rank in database (Requires admin)
@@ -330,7 +325,7 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
-			System.out.println(getUser()+" does not have permission to do that!");
+			//System.out.println(getUser()+" does not have permission to do that!");
 		}
 	}
 	//changes a users password in database 
@@ -402,7 +397,7 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
-			System.out.println(getUser()+" does not have permission to do that!");
+			//System.out.println(getUser()+" does not have permission to do that!");
 		}
 	}
 	//create a customer and add it to the database
@@ -453,7 +448,7 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
-			System.out.println(getUser()+" does not have permission to do that!");
+			//System.out.println(getUser()+" does not have permission to do that!");
 		}
 	}
 	//returns jsonArray of User filtered by username (done)
@@ -827,7 +822,6 @@ public class DBConnect {
 			pst.close();
 			iterateNextSequenceNumber(PartType);
 			con.close();
-			System.out.println("New Part Created Successfully");
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -881,101 +875,85 @@ public class DBConnect {
 			Timestamp timestamp = getTimestamp();
 			getDBConnection();
 			String BosalPartNumber = bdlInfo.getJSONObject(0).get("BreakdownListNumber").toString();
-			System.out.println("json array length is "+bdlInfo.length());
 			int count = (bdlInfo.length()-1);			
-			System.out.println("The count is "+count);
 			String[] values = new String[count];
-			System.out.println(values.length);
 			int i = 0;
 			String statement = "INSERT INTO `breakdown lists info` (BreakdownListNumber";
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Rev").toString();
-				System.out.println(values[i]);
 				statement = statement + ", Rev";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("RevDate").toString();
-				System.out.println(values[i]);
 				statement = statement + ", RevDate";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("ReleaseDate").toString();
-				System.out.println(values[i]);
 				statement = statement + ", ReleaseDate";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Production").toString();
-				System.out.println(values[i]);
 				statement = statement + ", Production";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant1").toString();
-				System.out.println(values[i]);
 				statement = statement + ", RelPlant1";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant2").toString();
-				System.out.println(values[i]);
 				statement = statement + ", RelPlant2";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("RelSupplier").toString();
-				System.out.println(values[i]);
 				statement = statement + ", RelSupplier";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Volume").toString();
-				System.out.println(values[i]);
 				statement = statement + ", Volume";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Length").toString();
-				System.out.println(values[i]);
 				statement = statement + ", Length";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Section").toString();
-				System.out.println(values[i]);
 				statement = statement + ", Section";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 				
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Engine").toString();
-				System.out.println(values[i]);
 				statement = statement + ", Engine";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Platform").toString();
-				System.out.println(values[i]);
 				statement = statement + ", Platform";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Customer").toString();
-				System.out.println(values[i]);
 				statement = statement + ", Customer";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
@@ -991,7 +969,6 @@ public class DBConnect {
 				}				
 			}
 			statement = statement + ")";
-			System.out.println(statement);
 			pst = con.prepareStatement(statement);
 			//loop to set the values of the parameters going into the Database
 			for (i = -1; i < count; i++){
@@ -1001,7 +978,6 @@ public class DBConnect {
 				//if i is even then an Item is added to the parameters
 				else {
 					pst.setString(i+2, values[i]);
-					System.out.println(values[i]);
 				} 
 			}				
 			pst.setString((count+2), usersname);
@@ -1011,7 +987,6 @@ public class DBConnect {
 			pst.executeUpdate();
 			pst.close();
 			con.close();
-			System.out.println("New BDL Info Created Successfully");
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -1027,114 +1002,95 @@ public class DBConnect {
 			Timestamp timestamp = getTimestamp();
 			getDBConnection();
 			String BosalPartNumber = bdlInfo.getJSONObject(0).get("BreakdownListNumber").toString();
-			System.out.println("json array length is "+bdlInfo.length());
 			int count = (bdlInfo.length()-1);			
-			System.out.println("The count is "+count);
 			String[] values = new String[count];
-			System.out.println(values.length);
 			int i = 0;
 			String statement = "UPDATE `breakdown lists info` SET ";
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Rev").toString();
-				System.out.println(values[i]);
 				statement = statement + "`Rev` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("RevDate").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `RevDate` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("ReleaseDate").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `ReleaseDate` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Production").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `Production` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant1").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `RelPlant1` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant2").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `RelPlant2` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("RelSupplier").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `RelSupplier` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Volume").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `Volume` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Length").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `Length` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Section").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `Section` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Engine").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `Engine` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Platform").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `Platform` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			try {
 				values[i] = bdlInfo.getJSONObject(i+1).get("Customer").toString();
-				System.out.println(values[i]);
 				statement = statement + ", `Customer` = ?";
 				i++;
 			} catch (Exception ex) {ex.printStackTrace();}
 			
 			statement = statement + ", `UpdatedBy` = ?, `Updated` = ? WHERE `BreakdownListNumber` = ?";
 			
-			System.out.println(statement);
 			pst = con.prepareStatement(statement);
 			//loop to set the values of the parameters going into the Database
 			for (i = 0; i < count; i++) {					
-				pst.setString(i+1, values[i]);
-				System.out.println(values[i]);
-				
+				pst.setString(i+1, values[i]);				
 			}				
 			pst.setString((count+1), usersname);
 			pst.setTimestamp((count+2), timestamp);
@@ -1142,7 +1098,6 @@ public class DBConnect {
 			pst.executeUpdate();
 			pst.close();
 			con.close();
-			System.out.println("New BDL Info Created Successfully");
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -1198,7 +1153,6 @@ public class DBConnect {
 					}				
 				}
 				statement = statement + ")";
-				System.out.println("x = " + x + " " +statement);
 				pst = con.prepareStatement(statement);
 				//loop to set the values of the parameters going into the Database
 				for (int i = -1; i < count; i++){
@@ -1222,7 +1176,6 @@ public class DBConnect {
 			}
 			pst.close();
 			con.close();
-			System.out.println("New BDL Info Created Successfully");
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -1251,7 +1204,7 @@ public class DBConnect {
 					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 				}
 			}else{
-				System.out.println(getUser()+" does not have permission to do that!");
+				//System.out.println(getUser()+" does not have permission to do that!");
 			}
 			return false;
 		}
@@ -1338,7 +1291,7 @@ public class DBConnect {
 					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 				}
 			}else{
-				System.out.println(getUser()+" does not have permission to do that!");
+				//System.out.println(getUser()+" does not have permission to do that!");
 			}
 		}
 	//updates a BosalPartNumber in parts list
@@ -1441,7 +1394,8 @@ public class DBConnect {
 					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 				}
 			}
-
+	/*
+	//method to automatically update columns of data (modified for every use)
 	public void updateDeltaProgram() {
 		String DeltaPartNumber;
 		String Program;
@@ -1466,10 +1420,5 @@ public class DBConnect {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-
-
-
-
+	}*/
 }

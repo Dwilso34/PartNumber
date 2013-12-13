@@ -23,8 +23,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -37,7 +35,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -92,7 +89,6 @@ public class MainFrames extends JFrame
 	    frame.setSize(screenWidth / 2, screenHeight / 2);
 	    frame.setLocation(screenWidth / 4, screenHeight / 4);
 		frame.setResizable(false);
-		//frame.setLocationRelativeTo(null);
 		frame.setSize(645, 545);
 		frame.setContentPane(contentPane);
 		frame.setVisible(true);	
@@ -109,14 +105,12 @@ public class MainFrames extends JFrame
 					+Integer.toString(cal.get(Calendar.YEAR));
 		return s;
 	}
-	public Date CalendarToDate(String date) {	
-		
+	public Date CalendarToDate(String date) {			
 		String[] parts = date.split("/");
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.valueOf(parts[2]));
 		cal.set(Calendar.MONTH, Integer.valueOf(parts[0])-1);
-		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(parts[1]));
-		
+		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(parts[1]));		
 		return cal.getTime();
 	}
 	class MainPanel extends JPanel
@@ -747,51 +741,33 @@ public class MainFrames extends JFrame
 							    JOptionPane.YES_NO_OPTION,
 								JOptionPane.WARNING_MESSAGE);
 						if(n == 0){
-							System.out.println("Saving New Part.....");
 							try {
 								int PartType = Integer.valueOf((String) cboType.getSelectedItem());
-								//System.out.println(PartType);
 								int Material = 0;
 								if(cboMat.getSelectedItem()!= null){
 									Material = Integer.valueOf((String) cboMat.getSelectedItem());
 								}
-								//System.out.println(Material);
 								String BosalPartNumber = txtBPart.getText();
-								//System.out.println(BosalPartNumber);
 								String DrawingNumber = txtDrawingNum.getText();
-								//System.out.println(DrawingNumber);
 								int DrawingRev;
 								try{
 									DrawingRev = Integer.valueOf(txtDrawingRev.getText());
 								}catch(Exception ex){DrawingRev = 0;}
-								//System.out.println(DrawingRev);
 								String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());
-								//System.out.println(DrawingRevDate);
 								String CustomerPartNumber = txtCPart.getText();
-								//System.out.println(CustomerPartNumber);
 								String CustDrawingNumber = txtCustDrawingNum.getText();
-								//System.out.println(CustDrawingNumber);
 								int CustDrawingRev;
 								try{
 									CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());
 								}catch(Exception ex){CustDrawingRev = 0;}
-								//System.out.println(CustDrawingRev);
 								String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());
-								//System.out.println(CustDrawingRevDate);
 								String SupplierPartNumber = txtSPart.getText();
-								//System.out.println(SupplierPartNumber);
 								String Description = (String) cboDescrip.getSelectedItem();
-								//System.out.println(Description);
 								String Program = (String) cboProgram.getSelectedItem();
-								//System.out.println(Program);
 								int Seq = Integer.valueOf(txtSeq.getText());
-								//System.out.println(Seq);
 								String TypeDescription = txtDescrip.getText();
-								//System.out.println(TypeDescription);
 								int Rev = 0;
-								//System.out.println(Rev);
 								String ProductionReleaseDate = DateToCalendar(jxdProductionReleaseDate.getDate());
-								//System.out.println(ProductionReleaseDate);
 								con.insertNewPart(PartType, Material, BosalPartNumber, DrawingNumber, DrawingRev, 
 										DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
 										CustDrawingRevDate, SupplierPartNumber, Description, Program, Seq, 
@@ -1807,12 +1783,9 @@ public class MainFrames extends JFrame
 								 temp = con.queryDatabase("bosal parts", "CustPartNumber", searchText);
 								 myTable.setModel(populateTableModel("bosal parts", "CustPartNumber", temp, searchText));
 								if (temp.length() == 0) {
-									System.out.println("that number didnt exist in `bosal parts`");
 									try {
-										System.out.println("trying the delta list");
 										temp = con.queryDatabase("delta 1 parts", "CustPartNumber", searchText);
 										myTable.setModel(populateTableModel("delta 1 parts", "CustPartNumber", temp, searchText));
-										System.out.println("found "+temp.toString());
 									}catch(Exception ex){
 								JOptionPane.showMessageDialog(
 										    frame,
@@ -2225,15 +2198,12 @@ public class MainFrames extends JFrame
 //Password comparison returning true/false
 	public boolean comparePasswords(String password, String confirmPassword)
 	{
-		System.out.println(password+":"+confirmPassword);
 		boolean status = false;		
 		if(password.equals("") || confirmPassword.equals("")){
-			System.out.println("empty passwords");
 		}
 		if(password.equals(confirmPassword) && !password.equals("") && !confirmPassword.equals("")){
-			System.out.println("Passwords confirmed");
 			status = true;
-		}else{System.out.println("Passwords Do Not Match");}
+		}
 		return status;
 	}
 	
