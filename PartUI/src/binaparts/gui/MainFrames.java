@@ -2124,861 +2124,737 @@ public class MainFrames extends JFrame
 	class ManagePanel extends JPanel
 	{
 	//JLabels	
-	private JLabel lblbosal;
-	private JLabel lblmanageUsers;
-	private JLabel lblUsername;
-	private JLabel lblPassword;
-	private JLabel lblPassword2;
-	private JLabel lblRank;
-	private JLabel lblPassConfirm;	
-	private JLabel lblAddProgram;
-	private JLabel lblAddCustomer;
-	private JLabel lblProStart;
-	private JLabel lblProEnd;
-	private JLabel lblCust;
-	private JLabel lblCustomer;
-	private JLabel lblDeleteCust;
-	private JLabel lblDeletePro;
-	private JLabel lblFirstName;
-	private JLabel lblLastName;
-	
-//JTextFields
-	private JTextField txtUsername;
-	private JTextField txtAddCusPro;
-	private JTextField txtProStart;
-	private JTextField txtProEnd;
-	private JTextField txtCust;
-	private JTextField txtFirstName;
-	private JTextField txtLastName;
-	
-//JPasswordFields
-	private JPasswordField txtPassword;
-	private JPasswordField txtConfirmPassword;
-	
-//JComboBoxes
-	private JComboBox<?> cboUserRank;
-	private JComboBox<String> cboDeletePro;
-	private ComboBoxModel<String> resetDeleteProComboBox()
-	{
-		JSONArray temp1 = new JSONArray();
-		ComboBoxModel<String> ProComboBoxDefault = null;
-		String[] Pro = null;
+		private JLabel lblbosal;
+		private JLabel lblmanageUsers;
+		private JLabel lblUsername;
+		private JLabel lblPassword;
+		private JLabel lblPassword2;
+		private JLabel lblRank;
+		private JLabel lblPassConfirm;	
+		private JLabel lblAddProgram;
+		private JLabel lblAddCustomer;
+		private JLabel lblProStart;
+		private JLabel lblProEnd;
+		private JLabel lblCust;
+		private JLabel lblCustomer;
+		private JLabel lblDeleteCust;
+		private JLabel lblDeletePro;
+		private JLabel lblFirstName;
+		private JLabel lblLastName;
 		
-		try {
-			temp1 = con.queryReturnAllPrograms();
-			Pro = new String[temp1.length()];
-			for(int i = 0; i < temp1.length(); i ++){
-				Pro[i] = temp1.getJSONObject(i).get("Program").toString();
-			}
-			ProComboBoxDefault = (new DefaultComboBoxModel<String> (Pro));
-		}catch(Exception ex){ex.printStackTrace();/*Ignore*/}
-		return ProComboBoxDefault;
-	}
-	private JComboBox<String> cboDeleteCust;
-	private ComboBoxModel<String> resetDeleteCustComboBox()
-	{
-		JSONArray temp1 = new JSONArray();
-		ComboBoxModel<String> CustComboBoxDefault = null;
-		String[] Cust = null;
+	//JTextFields
+		private JTextField txtUsername;
+		private JTextField txtAddCusPro;
+		private JTextField txtProStart;
+		private JTextField txtProEnd;
+		private JTextField txtCust;
+		private JTextField txtFirstName;
+		private JTextField txtLastName;
 		
-		try {
-			temp1 = con.queryReturnAllCustomers();
-			Cust = new String[temp1.length()];
-			for(int i = 0; i < temp1.length(); i++){
-				Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
-			}
-			CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
-		}catch(Exception ex){ex.printStackTrace();}
-		return CustComboBoxDefault;
-	}
-	private JComboBox<String> cboCustomer;
-	private ComboBoxModel<String> resetCustomerComboBox()
-	{
-		JSONArray temp1 = new JSONArray();
-		ComboBoxModel<String> CustComboBoxDefault = null;
-		String[] Cust = null;
+	//JPasswordFields
+		private JPasswordField txtPassword;
+		private JPasswordField txtConfirmPassword;
 		
-		try {
-			temp1 = con.queryReturnAllCustomers();
-			Cust = new String[temp1.length()];
-			for(int i = 0; i < temp1.length(); i++){
-				Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
-			}
-			CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
-		}catch(Exception ex){ex.printStackTrace();}
-		return CustComboBoxDefault;
-	}
-		
-//JButtons
-	private JButton btnBack;
-	private JButton btnSave;
-	private JButton btnDelete;
-	
-//JRadioButtons
-	private JRadioButton rbtnDeleteUser;
-	private JRadioButton rbtnCreateUser;
-	private JRadioButton rbtnChangeUserRank;
-	private JRadioButton rbtnChangePass;
-	private JRadioButton rbtnAddProgram;
-	private JRadioButton rbtnAddCustomer;
-	
-//Password comparison returning true/false
-	public boolean comparePasswords(String password, String confirmPassword)
-	{
-		System.out.println(password+":"+confirmPassword);
-		boolean status = false;		
-		if(password.equals("") || confirmPassword.equals("")){
-			System.out.println("empty passwords");
+	//JComboBoxes
+		private JComboBox<?> cboUserRank;
+		private JComboBox<String> cboDeletePro;
+		private ComboBoxModel<String> resetDeleteProComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> ProComboBoxDefault = null;
+			String[] Pro = null;
+			
+			try {
+				temp1 = con.queryReturnAllPrograms();
+				Pro = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i ++){
+					Pro[i] = temp1.getJSONObject(i).get("Program").toString();
+				}
+				ProComboBoxDefault = (new DefaultComboBoxModel<String> (Pro));
+			}catch(Exception ex){ex.printStackTrace();/*Ignore*/}
+			return ProComboBoxDefault;
 		}
-		if(password.equals(confirmPassword) && !password.equals("") && !confirmPassword.equals("")){
-			System.out.println("Passwords confirmed");
-			status = true;
-		}else{System.out.println("Passwords Do Not Match");}
-		return status;
-	}
-	
-//String Panel
-	@SuppressWarnings("unused")
-	public ManagePanel(final JPanel manage)
-	{
-	// Bosal Image	
-	
-		ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-		lblbosal = new JLabel(bosal);
-		lblbosal.setBounds(10, 10, 194, 56);
-		setBackground(new Color(105, 105, 105));
-		
-		ImageIcon checkmark = new ImageIcon(getClass().getResource("/images/checkmark.jpg"));
-		ImageIcon xmark = new ImageIcon(getClass().getResource("/images/xmark.jpg"));
+		private JComboBox<String> cboDeleteCust;
+		private ComboBoxModel<String> resetDeleteCustComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> CustComboBoxDefault = null;
+			String[] Cust = null;
 			
-	//Labels	
-		
-		lblmanageUsers = new JLabel("Manage");
-		lblmanageUsers.setBounds(230, 27, 144, 39);
-		lblmanageUsers.setVisible(true);
-		lblmanageUsers.setFont(new Font("Tahoma", Font.BOLD, 32));
-		lblmanageUsers.setForeground(Color.BLACK);
-		lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(319, 158, 74, 17);
-		lblUsername.setVisible(true);
-		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblUsername.setForeground(Color.BLACK);
-		lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(321, 193, 72, 17);
-		lblPassword.setVisible(true);
-		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblPassword.setForeground(Color.BLACK);
-		lblPassword2 = new JLabel("Confirm Password:");
-		lblPassword2.setBounds(262, 228, 131, 17);
-		lblPassword2.setVisible(true);
-		lblPassword2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblPassword2.setForeground(Color.BLACK);
-		lblRank = new JLabel("User Rank:");
-		lblRank.setBounds(318, 263, 75, 17);
-		lblRank.setVisible(true);
-		lblRank.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblRank.setForeground(Color.BLACK);
-		lblPassConfirm = new JLabel("");
-		lblPassConfirm.setBounds(598, 234, 150, 0);
-		lblAddProgram = new JLabel("Enter New Program:");
-		lblAddProgram.setBounds(251, 193, 142, 17);
-		lblAddProgram.setVisible(false);
-		lblAddProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblAddProgram.setForeground(Color.BLACK);
-		lblAddCustomer = new JLabel("Enter New Customer:");
-		lblAddCustomer.setBounds(251, 193, 150, 17);
-		lblAddCustomer.setVisible(false);
-		lblAddCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblAddCustomer.setForeground(Color.BLACK);
-		lblProStart = new JLabel("Program Start:");
-		lblProStart.setBounds(286, 228, 107, 17);
-		lblProStart.setVisible(false);
-		lblProStart.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblProStart.setForeground(Color.BLACK);
-		lblProEnd = new JLabel("Program End:");
-		lblProEnd.setBounds(297, 263, 96, 17);
-		lblProEnd.setVisible(false);
-		lblProEnd.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblProEnd.setForeground(Color.BLACK);
-		lblCust = new JLabel("Customer Abrv:");
-		lblCust.setBounds(290, 228, 110, 17);
-		lblCust.setVisible(false);
-		lblCust.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblCust.setForeground(Color.BLACK);
-		lblCustomer = new JLabel("Customer:");
-		lblCustomer.setBounds(319, 158, 74, 17);
-		lblCustomer.setVisible(false);
-		lblCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblCustomer.setForeground(Color.BLACK);
-		lblDeleteCust = new JLabel("Delete Customer:");
-		lblDeleteCust.setBounds(280, 263, 120, 17);
-		lblDeleteCust.setVisible(false);
-		lblDeleteCust.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblDeleteCust.setForeground(Color.BLACK);
-		lblDeletePro = new JLabel("Delete Program:");
-		lblDeletePro.setBounds(281, 298, 112, 17);
-		lblDeletePro.setVisible(false);
-		lblDeletePro.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblDeletePro.setForeground(Color.BLACK);
-		lblFirstName = new JLabel("First Name:");
-		lblFirstName.setBounds(383, 105, 80, 17);
-		lblFirstName.setVisible(true);
-		lblFirstName.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblFirstName.setForeground(Color.BLACK);
-		lblLastName = new JLabel("Last Name:");
-		lblLastName.setBounds(489, 105, 96, 17);
-		lblLastName.setVisible(true);
-		lblLastName.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblLastName.setForeground(Color.BLACK);
-		
-	//TextFields	
-		
-		txtUsername = new JTextField();
-		txtUsername.setBounds(403, 158, 182, 20);
-		txtUsername.setVisible(true);
-		txtUsername.setForeground(Color.BLACK);
-		txtUsername.addMouseListener(new ContextMenuMouseListener());
-		txtPassword = new JPasswordField();
-		txtPassword.setBounds(411, 193, 182, 20);
-		txtPassword.setVisible(true);
-		txtPassword.addMouseListener(new ContextMenuMouseListener());
-		txtPassword.setForeground(Color.BLACK);
-		txtConfirmPassword = new JPasswordField();
-		txtConfirmPassword.setBounds(410, 227, 182, 22);
-		txtConfirmPassword.setVisible(true);
-		txtConfirmPassword.addMouseListener(new ContextMenuMouseListener());
-		txtConfirmPassword.setForeground(Color.BLACK);
-		txtAddCusPro = new JTextField();
-		txtAddCusPro.setBounds(411, 193, 182, 20);
-		txtAddCusPro.setVisible(false);
-		txtAddCusPro.addMouseListener(new ContextMenuMouseListener());
-		txtAddCusPro.setForeground(Color.BLACK);
-		txtProStart = new JTextField();
-		txtProStart.setBounds(410, 228, 182, 20);
-		txtProStart.setVisible(false);
-		txtProStart.addMouseListener(new ContextMenuMouseListener());
-		txtProStart.setForeground(Color.BLACK);
-		txtProEnd = new JTextField();
-		txtProEnd.setBounds(410, 263, 182, 20);
-		txtProEnd.setVisible(false);
-		txtProEnd.addMouseListener(new ContextMenuMouseListener());
-		txtProEnd.setForeground(Color.BLACK);
-		txtCust = new JTextField();
-		txtCust.setBounds(410, 228, 182, 20);
-		txtCust.setVisible(false);
-		txtCust.addMouseListener(new ContextMenuMouseListener());
-		txtCust.setForeground(Color.BLACK);
-		txtFirstName = new JTextField();
-		txtFirstName.setBounds(383, 123, 96, 20);
-		txtFirstName.setVisible(true);
-		txtFirstName.addMouseListener(new ContextMenuMouseListener());
-		txtFirstName.setForeground(Color.BLACK);
-		txtLastName = new JTextField();
-		txtLastName.setBounds(489, 123, 96, 20);
-		txtLastName.setVisible(true);
-		txtLastName.addMouseListener(new ContextMenuMouseListener());
-		txtLastName.setForeground(Color.BLACK);
-		
-	//ComboBox
-		
-		String[] ranks = {"admin","gui","engineer", "default"};
-		cboUserRank = new JComboBox<Object>(ranks);
-		cboUserRank.setBounds(410, 263, 182, 20);
-		cboUserRank.addMouseListener(new ContextMenuMouseListener());
-		cboUserRank.setSelectedIndex(-1);
-		cboUserRank.setBackground(Color.white);
-		cboCustomer = new JComboBox<String>();
-		cboCustomer.setBounds(403, 158, 182, 20);
-		cboCustomer.setModel(resetCustomerComboBox());
-		cboCustomer.setVisible(false);
-		cboCustomer.addMouseListener(new ContextMenuMouseListener());
-		cboCustomer.setSelectedIndex(-1);
-		cboCustomer.setBackground(Color.white);
-		cboDeleteCust = new JComboBox<String>();
-		cboDeleteCust.setBounds(410, 263, 182, 20);
-		cboDeleteCust.setModel(resetCustomerComboBox());
-		cboDeleteCust.setVisible(false);
-		cboDeleteCust.addMouseListener(new ContextMenuMouseListener());
-		cboDeleteCust.setSelectedIndex(-1);
-		cboDeleteCust.setBackground(Color.white);
-		cboDeletePro = new JComboBox<String>();
-		cboDeletePro.setBounds(403, 294, 182, 20);
-		cboDeletePro.setModel(resetDeleteProComboBox());
-		cboDeletePro.setVisible(false);
-		cboDeletePro.addMouseListener(new ContextMenuMouseListener());
-		cboDeletePro.setSelectedIndex(-1);
-		cboDeletePro.setBackground(Color.white);
-		
-	//RadioButton
-		
-		ItemListener passwordListener = (new ItemListener(){
-			
-			public void itemStateChanged(ItemEvent e){
-				if(rbtnCreateUser.isSelected() == true || rbtnChangePass.isSelected() == true){
-					txtConfirmPassword.addKeyListener(new KeyAdapter(){
-						
-						public void keyReleased(KeyEvent e)
-						{
-							String password = (new String (txtPassword.getPassword()));
-							String confirmPassword = (new String (txtConfirmPassword.getPassword()));
-							if(comparePasswords(password, confirmPassword) == false){
-								lblPassConfirm.setText("Passwords Do Not Match");
-								lblPassConfirm.setForeground(new Color(204, 0, 0));
-							}else if(comparePasswords(password, confirmPassword) == true){
-								lblPassConfirm.setText("Confirmed");
-								lblPassConfirm.setForeground(new Color(154, 205, 50));
-							}else{
-								lblPassConfirm.setText("");
-							}}});
-		}}});
-		
-		rbtnAddProgram = new JRadioButton("Add Program");
-		rbtnAddProgram.setBounds(42, 294, 118, 25);
-		rbtnAddProgram.setBackground(new Color(105, 105, 105));
-		rbtnAddProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
-		rbtnAddProgram.setForeground(Color.BLACK);
-		rbtnAddProgram.addActionListener(new ActionListener(){
-			
-			public void actionPerformed(ActionEvent e)
-			{		
-				if (e.getSource() == rbtnAddProgram){
-					cboCustomer.setModel(resetCustomerComboBox());
-		            lblUsername.setVisible(false);
-		            lblPassword.setVisible(false);
-		            lblPassword2.setVisible(false);
-		            lblProStart.setVisible(true);
-		            lblProEnd.setVisible(true);
-		            lblRank.setVisible(false);
-		            lblCust.setVisible(false);
-		            lblCustomer.setVisible(true);
-		            cboCustomer.setVisible(true);
-		            cboUserRank.setVisible(false);
-		            txtConfirmPassword.setVisible(false);
-		            txtPassword.setVisible(false);
-		            txtUsername.setVisible(false);
-		            txtProStart.setVisible(true);
-		            txtProEnd.setVisible(true);
-		            txtCust.setVisible(false);
-		            lblAddCustomer.setVisible(false);
-		            lblAddProgram.setVisible(true);
-		            txtAddCusPro.setVisible(true);
-		            btnDelete.setVisible(true);
-		            btnSave.setVisible(true);
-		            cboDeleteCust.setVisible(false);
-		            lblDeleteCust.setVisible(false);
-		            cboDeletePro.setVisible(true);
-		            lblDeletePro.setVisible(true);
-		            txtLastName.setVisible(false);
-		            txtFirstName.setVisible(false);
-		            lblLastName.setVisible(false);
-		            lblFirstName.setVisible(false);
-		            cboUserRank.setSelectedIndex(-1);
-		            cboCustomer.setModel(resetCustomerComboBox());
-		            cboCustomer.setSelectedIndex(-1);
-		            cboDeleteCust.setSelectedIndex(-1);
-		            cboDeletePro.setModel(resetDeleteProComboBox());
-		            cboDeletePro.setSelectedIndex(-1);
-		            
-				}						
-		}});
-		
-		rbtnAddCustomer = new JRadioButton("Add Customer");
-		rbtnAddCustomer.setBounds(42, 259, 136, 25);
-		rbtnAddCustomer.setBackground(new Color(105, 105, 105));
-		rbtnAddCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
-		rbtnAddCustomer.setForeground(Color.BLACK);
-		rbtnAddCustomer.addActionListener(new ActionListener(){
-			
-			public void actionPerformed(ActionEvent e)
-			{		
-				if (e.getSource() == rbtnAddCustomer){
-					lblUsername.setVisible(false);
-		            lblPassword.setVisible(false);
-		            lblPassword2.setVisible(false);
-		            lblRank.setVisible(false);
-		            lblProStart.setVisible(false);
-		            lblProEnd.setVisible(false);
-		            lblCust.setVisible(true);
-		            lblCustomer.setVisible(false);
-		            cboCustomer.setVisible(false);
-		            cboUserRank.setVisible(false);
-		            txtConfirmPassword.setVisible(false);
-		            txtPassword.setVisible(false);
-		            txtProStart.setVisible(false);
-		            txtProEnd.setVisible(false);
-		            txtUsername.setVisible(false);
-		            txtCust.setVisible(true);
-		            lblAddProgram.setVisible(false);
-		            lblAddCustomer.setVisible(true);
-		            txtAddCusPro.setVisible(true);
-		            btnDelete.setVisible(true);
-		            btnSave.setVisible(true);
-		            cboDeleteCust.setVisible(true);
-		            lblDeleteCust.setVisible(true);
-		            cboDeletePro.setVisible(false);
-		            lblDeletePro.setVisible(false);
-		            txtLastName.setVisible(false);
-		            txtFirstName.setVisible(false);
-		            lblLastName.setVisible(false);
-		            lblFirstName.setVisible(false);
-		            cboUserRank.setSelectedIndex(-1);
-		            cboCustomer.setModel(resetCustomerComboBox());
-		            cboCustomer.setSelectedIndex(-1);
-		            cboDeleteCust.setModel(resetDeleteCustComboBox());
-		            cboDeleteCust.setSelectedIndex(-1);
-		            cboDeletePro.setSelectedIndex(-1);
-				}						
-		}});
-		
-		rbtnDeleteUser = new JRadioButton("Delete User");
-		rbtnDeleteUser.setBounds(42, 154, 103, 25);
-		rbtnDeleteUser.setBackground(new Color(105, 105, 105));
-		rbtnDeleteUser.setFont(new Font("Tahoma", Font.BOLD, 14));
-		rbtnDeleteUser.setForeground(Color.BLACK);
-		rbtnDeleteUser.addActionListener(new ActionListener(){
-			
-			public void actionPerformed(ActionEvent e)
-			{		
-				if (e.getSource() == rbtnDeleteUser){
-					lblUsername.setVisible(true);
-		            lblPassword.setVisible(true);
-		            lblPassword2.setVisible(true);
-		            lblRank.setVisible(true);
-		            lblProStart.setVisible(false);
-		            lblProEnd.setVisible(false);
-		            lblCust.setVisible(false);
-		            lblCustomer.setVisible(false);
-		            cboCustomer.setVisible(false);
-		            cboUserRank.setVisible(true);
-		            txtConfirmPassword.setVisible(true);
-		            txtPassword.setVisible(true);
-		            txtUsername.setVisible(true);
-		            lblAddProgram.setVisible(true);
-		            lblAddProgram.setVisible(false);
-		            lblAddCustomer.setVisible(false);
-		            txtAddCusPro.setVisible(false);
-		            btnDelete.setVisible(true);
-		            btnSave.setVisible(false);
-		            txtProStart.setVisible(false);
-		            txtProEnd.setVisible(false);
-		            txtUsername.setEditable(true);
-		            txtCust.setVisible(false);
-		            txtUsername.setBackground(Color.white);
-		            txtPassword.setText("");
-		            txtPassword.setEditable(false);
-		            txtPassword.setBackground(new Color(190, 190, 190));
-		            txtConfirmPassword.setText("");
-		            txtConfirmPassword.setEditable(false);
-		            txtConfirmPassword.setBackground(new Color(190, 190, 190));
-		            cboUserRank.setEditable(false);
-		            cboUserRank.setBackground(new Color(190, 190, 190));
-		            lblPassConfirm.setText("");
-		            cboDeleteCust.setVisible(false);
-		            lblDeleteCust.setVisible(false);
-		            cboDeletePro.setVisible(false);
-		            lblDeletePro.setVisible(false);
-		            txtLastName.setVisible(false);
-		            txtFirstName.setVisible(false);
-		            lblLastName.setVisible(false);
-		            lblFirstName.setVisible(false);
-		            cboUserRank.setSelectedIndex(-1);
-		            cboCustomer.setSelectedIndex(-1);
-		            cboDeleteCust.setSelectedIndex(-1);
-		            cboDeletePro.setSelectedIndex(-1);
-				}						
-		}});
-		rbtnDeleteUser.addItemListener(passwordListener);
-		
-		rbtnCreateUser = new JRadioButton("Create User");
-		rbtnCreateUser.setBounds(42, 119, 107, 25);
-		rbtnCreateUser.setSelected(true);
-		rbtnCreateUser.setBackground(new Color(105, 105, 105));
-		rbtnCreateUser.setFont(new Font("Tahoma", Font.BOLD, 14));
-		rbtnCreateUser.setForeground(Color.BLACK);
-		rbtnCreateUser.addActionListener(new ActionListener(){
-			
-			public void actionPerformed(ActionEvent e) 
-			{
-				if (e.getSource() == rbtnCreateUser){
-					lblUsername.setVisible(true);
-		            lblPassword.setVisible(true);
-		            lblPassword2.setVisible(true);
-		            lblRank.setVisible(true);
-		            lblProStart.setVisible(false);
-		            lblProEnd.setVisible(false);
-		            lblCust.setVisible(false);
-		            lblCustomer.setVisible(false);
-		            cboCustomer.setVisible(false);
-		            cboUserRank.setVisible(true);
-		            txtConfirmPassword.setVisible(true);
-		            txtPassword.setVisible(true);
-		            txtUsername.setVisible(true);
-		            lblAddProgram.setVisible(true);
-		            lblAddProgram.setVisible(false);
-		            lblAddCustomer.setVisible(false);
-		            txtAddCusPro.setVisible(false);
-		            btnDelete.setVisible(false);
-		            btnSave.setVisible(true);
-		            txtProStart.setVisible(false);
-		            txtCust.setVisible(false);
-		            txtProEnd.setVisible(false);
-		            txtUsername.setEditable(true);
-		            txtUsername.setBackground(Color.white);
-		            txtPassword.setEditable(true);
-		            txtPassword.setBackground(Color.white);
-		            txtConfirmPassword.setEditable(true);
-		            txtConfirmPassword.setBackground(Color.white);
-		            cboUserRank.setEditable(true);
-		            cboUserRank.setBackground(Color.white);
-		            lblPassConfirm.setText("");
-		            cboDeleteCust.setVisible(false);
-		            lblDeleteCust.setVisible(false);
-		            cboDeletePro.setVisible(false);
-		            lblDeletePro.setVisible(false);
-		            txtLastName.setVisible(true);
-		            txtFirstName.setVisible(true);
-		            lblLastName.setVisible(true);
-		            lblFirstName.setVisible(true);
-		            cboUserRank.setSelectedIndex(-1);
-		            cboCustomer.setSelectedIndex(-1);
-		            cboDeleteCust.setSelectedIndex(-1);
-		            cboDeletePro.setSelectedIndex(-1);
+			try {
+				temp1 = con.queryReturnAllCustomers();
+				Cust = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i++){
+					Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
 				}
-		}});
-		rbtnCreateUser.addItemListener(passwordListener);
-		rbtnCreateUser.setSelected(true);
-		
-		rbtnChangeUserRank = new JRadioButton("Changer User Rank");
-		rbtnChangeUserRank.setBounds(42, 189, 159, 25);
-		rbtnChangeUserRank.setBackground(new Color(105, 105, 105));
-		rbtnChangeUserRank.setFont(new Font("Tahoma", Font.BOLD, 14));
-		rbtnChangeUserRank.setForeground(Color.BLACK);
-		rbtnChangeUserRank.addActionListener(new ActionListener(){
+				CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
+			}catch(Exception ex){ex.printStackTrace();}
+			return CustComboBoxDefault;
+		}
+		private JComboBox<String> cboCustomer;
+		private ComboBoxModel<String> resetCustomerComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> CustComboBoxDefault = null;
+			String[] Cust = null;
 			
-			public void actionPerformed(ActionEvent e) 
-			{
-				if (e.getSource() == rbtnChangeUserRank){
-					lblUsername.setVisible(true);
-		            lblPassword.setVisible(true);
-		            lblPassword2.setVisible(true);
-		            lblProStart.setVisible(false);
-		            lblProEnd.setVisible(false);
-		            lblRank.setVisible(true);
-		            lblCust.setVisible(false);
-		            lblCustomer.setVisible(false);
-		            cboCustomer.setVisible(false);
-		            cboUserRank.setVisible(true);
-		            txtConfirmPassword.setVisible(true);
-		            txtPassword.setVisible(true);
-		            txtUsername.setVisible(true);
-		            lblAddProgram.setVisible(true);
-		            lblAddProgram.setVisible(false);
-		            lblAddCustomer.setVisible(false);
-		            txtAddCusPro.setVisible(false);
-		            btnDelete.setVisible(false);
-		            btnSave.setVisible(true);
-		            txtUsername.setEditable(true);
-		            txtCust.setVisible(false);
-		            txtUsername.setBackground(Color.white);
-		            txtPassword.setText("");
-		            txtPassword.setEditable(false);
-		            txtProStart.setVisible(false);
-		            txtProEnd.setVisible(false);
-		            txtPassword.setBackground(new Color(190, 190, 190));
-		            txtConfirmPassword.setText("");
-		            txtConfirmPassword.setEditable(false);
-		            txtConfirmPassword.setBackground(new Color(190, 190, 190));
-		            cboUserRank.setEditable(true);
-		            cboUserRank.setBackground(Color.white);
-		            lblPassConfirm.setText("");
-		            cboDeleteCust.setVisible(false);
-		            lblDeleteCust.setVisible(false);
-		            cboDeletePro.setVisible(false);
-		            lblDeletePro.setVisible(false);
-		            txtLastName.setVisible(false);
-		            txtFirstName.setVisible(false);
-		            lblLastName.setVisible(false);
-		            lblFirstName.setVisible(false);
-		            cboUserRank.setSelectedIndex(-1);
-		            cboCustomer.setSelectedIndex(-1);
-		            cboDeleteCust.setSelectedIndex(-1);
-		            cboDeletePro.setSelectedIndex(-1);
+			try {
+				temp1 = con.queryReturnAllCustomers();
+				Cust = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i++){
+					Cust[i] = temp1.getJSONObject(i).get("Customer").toString();
 				}
-		}});
-		rbtnChangeUserRank.addItemListener(passwordListener);
-		
-		rbtnChangePass = new JRadioButton("Change Password");
-		rbtnChangePass.setBounds(42, 224, 149, 25);
-		rbtnChangePass.setBackground(new Color(105, 105, 105));
-		rbtnChangePass.setFont(new Font("Tahoma", Font.BOLD, 14));
-		rbtnChangePass.setForeground(Color.BLACK);
-		rbtnChangePass.addActionListener(new ActionListener(){
+				CustComboBoxDefault = (new DefaultComboBoxModel<String> (Cust));
+			}catch(Exception ex){ex.printStackTrace();}
+			return CustComboBoxDefault;
+		}
 			
-			public void actionPerformed(ActionEvent e) 
-			{
-				if (e.getSource() == rbtnChangePass){
-					lblUsername.setVisible(true);
-		            lblPassword.setVisible(true);
-		            lblPassword2.setVisible(true);
-		            lblProStart.setVisible(false);
-		            lblProEnd.setVisible(false);
-		            lblRank.setVisible(true);
-		            lblCust.setVisible(false);
-		            lblCustomer.setVisible(false);
-		            cboCustomer.setVisible(false);
-		            cboUserRank.setVisible(true);
-		            txtConfirmPassword.setVisible(true);
-		            txtPassword.setVisible(true);
-		            txtUsername.setVisible(true);
-		            lblAddProgram.setVisible(true);
-		            lblAddProgram.setVisible(false);
-		            lblAddCustomer.setVisible(false);
-		            txtAddCusPro.setVisible(false);
-		            btnDelete.setVisible(false);
-		            btnSave.setVisible(true);
-		            txtProStart.setVisible(false);
-		            txtCust.setVisible(false);
-		            txtProEnd.setVisible(false);
-		            txtUsername.setEditable(true);
-		            txtUsername.setBackground(Color.white);
-		            txtPassword.setEditable(true);
-		            txtPassword.setBackground(Color.white);
-		            txtConfirmPassword.setEditable(true);
-		            txtConfirmPassword.setBackground(Color.white);
-		            cboUserRank.setEditable(false);
-		            cboUserRank.setBackground(new Color(190, 190, 190));
-		            lblPassConfirm.setText("");
-		            cboDeleteCust.setVisible(false);
-		            lblDeleteCust.setVisible(false);
-		            cboDeletePro.setVisible(false);
-		            lblDeletePro.setVisible(false);
-		            txtLastName.setVisible(false);
-		            txtFirstName.setVisible(false);
-		            lblLastName.setVisible(false);
-		            lblFirstName.setVisible(false);
-		            cboUserRank.setSelectedIndex(-1);
-		            cboCustomer.setSelectedIndex(-1);
-		            cboDeleteCust.setSelectedIndex(-1);
-		            cboDeletePro.setSelectedIndex(-1);
-				}
-		}});
-		rbtnChangePass.addItemListener(passwordListener);
+	//JButtons
+		private JButton btnBack;
+		private JButton btnSave;
+		private JButton btnDelete;
 		
-		ButtonGroup group = new ButtonGroup();
+	//JRadioButtons
+		private JRadioButton rbtnDeleteUser;
+		private JRadioButton rbtnCreateUser;
+		private JRadioButton rbtnChangeUserRank;
+		private JRadioButton rbtnChangePass;
+		private JRadioButton rbtnAddProgram;
+		private JRadioButton rbtnAddCustomer;
 		
-		group.add(rbtnDeleteUser);
-		group.add(rbtnCreateUser);
-		group.add(rbtnChangeUserRank);
-		group.add(rbtnChangePass);
-		group.add(rbtnAddProgram);
-		group.add(rbtnAddCustomer);
+	//Password comparison returning true/false
+		public boolean comparePasswords(String password, String confirmPassword)
+		{
+			System.out.println(password+":"+confirmPassword);
+			boolean status = false;		
+			if(password.equals("") || confirmPassword.equals("")){
+				System.out.println("empty passwords");
+			}
+			if(password.equals(confirmPassword) && !password.equals("") && !confirmPassword.equals("")){
+				System.out.println("Passwords confirmed");
+				status = true;
+			}else{System.out.println("Passwords Do Not Match");}
+			return status;
+		}
+		
+	//String Panel
+		@SuppressWarnings("unused")
+		public ManagePanel(final JPanel manage)
+		{
+		// Bosal Image	
+		
+			ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+			lblbosal = new JLabel(bosal);
+			lblbosal.setBounds(10, 10, 194, 56);
+			setBackground(new Color(105, 105, 105));
 			
-	//Buttons	
-		
-		ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
-		btnBack = new JButton(back);
-		btnBack.setBounds(42, 338, 106, 35);
-		btnBack.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e)
-			{
-				if (e.getSource() == btnBack)
-				{
-					lblUsername.setVisible(true);
-		            lblPassword.setVisible(true);
-		            lblPassword2.setVisible(true);
-		            lblRank.setVisible(true);
-		            lblProStart.setVisible(false);
-		            lblProEnd.setVisible(false);
-		            lblCust.setVisible(false);
-		            lblCustomer.setVisible(false);
-		            cboCustomer.setVisible(false);
-		            cboUserRank.setVisible(true);
-		            txtConfirmPassword.setVisible(true);
-		            txtPassword.setVisible(true);
-		            txtUsername.setVisible(true);
-		            lblAddProgram.setVisible(true);
-		            lblAddProgram.setVisible(false);
-		            lblAddCustomer.setVisible(false);
-		            txtAddCusPro.setVisible(false);
-		            btnDelete.setVisible(false);
-		            btnSave.setVisible(true);
-		            rbtnCreateUser.setSelected(true);
-		            txtUsername.setEditable(true);
-		            txtUsername.setBackground(Color.white);
-		            txtPassword.setEditable(true);
-		            txtProStart.setVisible(false);
-		            txtProEnd.setVisible(false);
-		            txtCust.setVisible(false);
-		            txtPassword.setBackground(Color.white);
-		            txtConfirmPassword.setEditable(true);
-		            txtConfirmPassword.setBackground(Color.white);
-		            cboUserRank.setEditable(true);
-		            cboUserRank.setBackground(Color.white);
-		            lblPassConfirm.setText("");
-					setVisible(false);
-					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-					int height = screenSize.height;
-					int width = screenSize.width;
-					frame.setResizable(false);
-					frame.setSize(width/2, height/2);
-					frame.setLocationRelativeTo(null);
-					frame.setSize(645, 545);
-					frame.setTitle("Main Menu:");
-					main.setVisible(true);
-					txtUsername.setText("");
-					txtPassword.setText("");
-					txtConfirmPassword.setText("");
-					cboDeleteCust.setVisible(false);
-					lblDeleteCust.setVisible(false);
-					cboDeletePro.setVisible(false);
-					lblDeletePro.setVisible(false);
-					txtLastName.setVisible(true);
-			        txtFirstName.setVisible(true);
-			        lblLastName.setVisible(true);
-			        lblFirstName.setVisible(true);
-					cboUserRank.setSelectedIndex(-1);
-					cboCustomer.setSelectedIndex(-1);
-					cboDeleteCust.setSelectedIndex(-1);
-					cboDeletePro.setSelectedIndex(-1);
-		}}});
-		
-		ImageIcon delete = new ImageIcon(getClass().getResource("/images/delete.jpg"));
-		btnDelete = new JButton(delete);
-		btnDelete.setBounds(256, 338, 106, 35);
-		btnDelete.setVisible(false);
-		btnDelete.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e)
-			{
-				int n = 1;
-				if (e.getSource() == btnDelete)
-				{
-					if(rbtnDeleteUser.isSelected() == true){
-						if(txtUsername.getText().equals("")){
-							JOptionPane.showMessageDialog(
-								    frame,
-								    "Please Enter A Username",
-								    "Creditenials Error",
-									JOptionPane.ERROR_MESSAGE);
-						}else{
-							try{
-								if(con.getUserRank().equals("admin")){
-									n = JOptionPane.showConfirmDialog(
-											    frame,
-											    "Are you sure you want to delete user: " + txtUsername.getText() + "?",
-											    "Delete:",
-											    JOptionPane.YES_NO_OPTION,
-												JOptionPane.WARNING_MESSAGE);
-								}else{
-									config = new ConfigurationManager(configFilePath);
-									JOptionPane.showMessageDialog(
-									    frame,
-									    "" + (config.getProperty("appUser") 
-									    		+ " does not have permission to Delete Users"),
-									    "Creditenials Error",
-										JOptionPane.ERROR_MESSAGE);
-								}
-							}catch(Exception ex){/*Ignore*/}
-						}
-					}
-					if(n == 0){
-						try{
-							String username = txtUsername.getText();
-					if(rbtnDeleteUser.isSelected() == true){
-						con.deleteUser(username);
-					}
-						}catch(Exception ex){/*Ignore*/}
-						txtUsername.setText("");
-					}
-					if(rbtnAddProgram.isSelected() == true){
-						if(cboDeletePro.getSelectedItem().equals("")){
-							JOptionPane.showMessageDialog(
-									frame,
-									"Please Select a Program",
-									"Creditenials Error",
-									JOptionPane.ERROR_MESSAGE);
-						}else{
-							try{
-								if(con.getUserRank().equals("admin")){
-									n = JOptionPane.showConfirmDialog(
-											frame,
-											"Are you sure you want to delete " + cboDeletePro.getSelectedItem() + " ?",
-											"Delete:",
-											JOptionPane.YES_NO_OPTION,
-											JOptionPane.WARNING_MESSAGE);
-					}else{
-						config = new ConfigurationManager(configFilePath);
-						JOptionPane.showMessageDialog(
-								frame,
-								"" + (config.getProperty("appUser")
-										+ "does not have permission to Delete Programs"),
-										"Creditenials Error",
-										JOptionPane.ERROR_MESSAGE);
-					}
-							}catch(Exception ex){/*Ignore*/}
-						}
-					}
-					if(n == 0){
-						try{
-							String program = cboDeletePro.getSelectedItem().toString();
-					if(rbtnAddProgram.isSelected() == true){
-						con.deleteProgram(program);
-						cboDeletePro.setModel(resetDeleteProComboBox());
-					}
-					}catch(Exception ex){/*Ignore*/}
-						cboDeletePro.setSelectedIndex(-1);
-					}
-						if(rbtnAddCustomer.isSelected() == true){
-							if(cboDeleteCust.getSelectedItem().equals("")){
-								JOptionPane.showMessageDialog(
-										frame,
-										"Please Select a Customer",
-										"Creditenials Error",
-										JOptionPane.ERROR_MESSAGE);
-							}else{
-								try{
-									if(con.getUserRank().equals("admin")){
-										n = JOptionPane.showConfirmDialog(
-												frame,
-												"Are you sure you want to delete " + cboDeleteCust.getSelectedItem() + " ?",
-												"Delete:",
-												JOptionPane.YES_NO_OPTION,
-												JOptionPane.WARNING_MESSAGE);
-									}else{
-										config = new ConfigurationManager(configFilePath);
-										JOptionPane.showMessageDialog(
-												frame,
-												"" + (config.getProperty("appUser")
-														+ "does not have permission to Delete Customers"),
-														"Creditenials Error",
-														JOptionPane.ERROR_MESSAGE);
-									}
-								}catch(Exception ex){/*Ignore*/}
-							}
-						}
-						if(n == 0){
-							try{
-								String customer = cboDeleteCust.getSelectedItem().toString();
-						if(rbtnAddCustomer.isSelected() == true){
-							con.deleteCustomer(customer);
-							cboDeleteCust.setModel(resetDeleteCustComboBox());
-						}
-						}catch(Exception ex){/*Ignore*/}
-							cboDeleteCust.setSelectedIndex(-1);
-						}}}});
-		
-		ImageIcon create = new ImageIcon(getClass().getResource("/images/save.jpg"));
-		btnSave = new JButton(create);
-		btnSave.setBounds(487, 338, 106, 35);
-		btnSave.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) 
-			{
+			ImageIcon checkmark = new ImageIcon(getClass().getResource("/images/checkmark.jpg"));
+			ImageIcon xmark = new ImageIcon(getClass().getResource("/images/xmark.jpg"));
 				
-					if (e.getSource() == btnSave){
-						int n = 1;
-						if(rbtnCreateUser.isSelected() == true){
+		//Labels	
+			
+			lblmanageUsers = new JLabel("Manage");
+			lblmanageUsers.setBounds(230, 27, 144, 39);
+			lblmanageUsers.setVisible(true);
+			lblmanageUsers.setFont(new Font("Tahoma", Font.BOLD, 32));
+			lblmanageUsers.setForeground(Color.BLACK);
+			lblUsername = new JLabel("Username:");
+			lblUsername.setBounds(319, 158, 74, 17);
+			lblUsername.setVisible(true);
+			lblUsername.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblUsername.setForeground(Color.BLACK);
+			lblPassword = new JLabel("Password:");
+			lblPassword.setBounds(321, 193, 72, 17);
+			lblPassword.setVisible(true);
+			lblPassword.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblPassword.setForeground(Color.BLACK);
+			lblPassword2 = new JLabel("Confirm Password:");
+			lblPassword2.setBounds(262, 228, 131, 17);
+			lblPassword2.setVisible(true);
+			lblPassword2.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblPassword2.setForeground(Color.BLACK);
+			lblRank = new JLabel("User Rank:");
+			lblRank.setBounds(318, 263, 75, 17);
+			lblRank.setVisible(true);
+			lblRank.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblRank.setForeground(Color.BLACK);
+			lblPassConfirm = new JLabel("");
+			lblPassConfirm.setBounds(598, 234, 150, 0);
+			lblAddProgram = new JLabel("Enter New Program:");
+			lblAddProgram.setBounds(251, 193, 142, 17);
+			lblAddProgram.setVisible(false);
+			lblAddProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblAddProgram.setForeground(Color.BLACK);
+			lblAddCustomer = new JLabel("Enter New Customer:");
+			lblAddCustomer.setBounds(243, 193, 150, 17);
+			lblAddCustomer.setVisible(false);
+			lblAddCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblAddCustomer.setForeground(Color.BLACK);
+			lblProStart = new JLabel("Program Start:");
+			lblProStart.setBounds(286, 228, 107, 17);
+			lblProStart.setVisible(false);
+			lblProStart.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblProStart.setForeground(Color.BLACK);
+			lblProEnd = new JLabel("Program End:");
+			lblProEnd.setBounds(297, 263, 96, 17);
+			lblProEnd.setVisible(false);
+			lblProEnd.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblProEnd.setForeground(Color.BLACK);
+			lblCust = new JLabel("Customer Abrv:");
+			lblCust.setBounds(283, 228, 110, 17);
+			lblCust.setVisible(false);
+			lblCust.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblCust.setForeground(Color.BLACK);
+			lblCustomer = new JLabel("Customer:");
+			lblCustomer.setBounds(319, 158, 74, 17);
+			lblCustomer.setVisible(false);
+			lblCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblCustomer.setForeground(Color.BLACK);
+			lblDeleteCust = new JLabel("Delete Customer:");
+			lblDeleteCust.setBounds(273, 263, 120, 17);
+			lblDeleteCust.setVisible(false);
+			lblDeleteCust.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblDeleteCust.setForeground(Color.BLACK);
+			lblDeletePro = new JLabel("Delete Program:");
+			lblDeletePro.setBounds(281, 295, 112, 17);
+			lblDeletePro.setVisible(false);
+			lblDeletePro.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblDeletePro.setForeground(Color.BLACK);
+			lblFirstName = new JLabel("First Name:");
+			lblFirstName.setBounds(383, 100, 96, 20);
+			lblFirstName.setVisible(true);
+			lblFirstName.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblFirstName.setForeground(Color.BLACK);
+			lblLastName = new JLabel("Last Name:");
+			lblLastName.setBounds(489, 100, 96, 20);
+			lblLastName.setVisible(true);
+			lblLastName.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblLastName.setForeground(Color.BLACK);
+			
+		//TextFields	
+			
+			txtUsername = new JTextField();
+			txtUsername.setBounds(403, 158, 182, 20);
+			txtUsername.setVisible(true);
+			txtUsername.setForeground(Color.BLACK);
+			txtUsername.addMouseListener(new ContextMenuMouseListener());
+			txtPassword = new JPasswordField();
+			txtPassword.setBounds(403, 193, 182, 20);
+			txtPassword.setVisible(true);
+			txtPassword.addMouseListener(new ContextMenuMouseListener());
+			txtPassword.setForeground(Color.BLACK);
+			txtConfirmPassword = new JPasswordField();
+			txtConfirmPassword.setBounds(403, 227, 182, 22);
+			txtConfirmPassword.setVisible(true);
+			txtConfirmPassword.addMouseListener(new ContextMenuMouseListener());
+			txtConfirmPassword.setForeground(Color.BLACK);
+			txtAddCusPro = new JTextField();
+			txtAddCusPro.setBounds(403, 193, 182, 20);
+			txtAddCusPro.setVisible(false);
+			txtAddCusPro.addMouseListener(new ContextMenuMouseListener());
+			txtAddCusPro.setForeground(Color.BLACK);
+			txtProStart = new JTextField();
+			txtProStart.setBounds(403, 228, 182, 20);
+			txtProStart.setVisible(false);
+			txtProStart.addMouseListener(new ContextMenuMouseListener());
+			txtProStart.setForeground(Color.BLACK);
+			txtProEnd = new JTextField();
+			txtProEnd.setBounds(403, 263, 182, 20);
+			txtProEnd.setVisible(false);
+			txtProEnd.addMouseListener(new ContextMenuMouseListener());
+			txtProEnd.setForeground(Color.BLACK);
+			txtCust = new JTextField();
+			txtCust.setBounds(403, 228, 182, 20);
+			txtCust.setVisible(false);
+			txtCust.addMouseListener(new ContextMenuMouseListener());
+			txtCust.setForeground(Color.BLACK);
+			txtFirstName = new JTextField();
+			txtFirstName.setBounds(383, 123, 96, 20);
+			txtFirstName.setVisible(true);
+			txtFirstName.addMouseListener(new ContextMenuMouseListener());
+			txtFirstName.setForeground(Color.BLACK);
+			txtLastName = new JTextField();
+			txtLastName.setBounds(489, 123, 96, 20);
+			txtLastName.setVisible(true);
+			txtLastName.addMouseListener(new ContextMenuMouseListener());
+			txtLastName.setForeground(Color.BLACK);
+			
+		//ComboBox
+			
+			String[] ranks = {"admin","gui","engineer", "default"};
+			cboUserRank = new JComboBox<Object>(ranks);
+			cboUserRank.setBounds(403, 263, 182, 20);
+			cboUserRank.addMouseListener(new ContextMenuMouseListener());
+			cboUserRank.setSelectedIndex(-1);
+			cboUserRank.setBackground(Color.white);
+			cboCustomer = new JComboBox<String>();
+			cboCustomer.setBounds(403, 158, 182, 20);
+			cboCustomer.setModel(resetCustomerComboBox());
+			cboCustomer.setVisible(false);
+			cboCustomer.addMouseListener(new ContextMenuMouseListener());
+			cboCustomer.setSelectedIndex(-1);
+			cboCustomer.setBackground(Color.white);
+			cboDeleteCust = new JComboBox<String>();
+			cboDeleteCust.setBounds(403, 263, 182, 20);
+			cboDeleteCust.setModel(resetCustomerComboBox());
+			cboDeleteCust.setVisible(false);
+			cboDeleteCust.addMouseListener(new ContextMenuMouseListener());
+			cboDeleteCust.setSelectedIndex(-1);
+			cboDeleteCust.setBackground(Color.white);
+			cboDeletePro = new JComboBox<String>();
+			cboDeletePro.setBounds(403, 294, 182, 20);
+			cboDeletePro.setModel(resetDeleteProComboBox());
+			cboDeletePro.setVisible(false);
+			cboDeletePro.addMouseListener(new ContextMenuMouseListener());
+			cboDeletePro.setSelectedIndex(-1);
+			cboDeletePro.setBackground(Color.white);
+			
+		//RadioButton
+			
+			ItemListener passwordListener = (new ItemListener(){
+				
+				public void itemStateChanged(ItemEvent e){
+					if(rbtnCreateUser.isSelected() == true || rbtnChangePass.isSelected() == true){
+						txtConfirmPassword.addKeyListener(new KeyAdapter(){
+							
+							public void keyReleased(KeyEvent e)
+							{
+								String password = (new String (txtPassword.getPassword()));
+								String confirmPassword = (new String (txtConfirmPassword.getPassword()));
+								if(comparePasswords(password, confirmPassword) == false){
+									lblPassConfirm.setText("Passwords Do Not Match");
+									lblPassConfirm.setForeground(new Color(204, 0, 0));
+								}else if(comparePasswords(password, confirmPassword) == true){
+									lblPassConfirm.setText("Confirmed");
+									lblPassConfirm.setForeground(new Color(154, 205, 50));
+								}else{
+									lblPassConfirm.setText("");
+								}}});
+			}}});
+			
+			rbtnAddProgram = new JRadioButton("Add Program");
+			rbtnAddProgram.setBounds(42, 294, 118, 25);
+			rbtnAddProgram.setBackground(new Color(105, 105, 105));
+			rbtnAddProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnAddProgram.setForeground(Color.BLACK);
+			rbtnAddProgram.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e)
+				{		
+					if (e.getSource() == rbtnAddProgram){
+						cboCustomer.setModel(resetCustomerComboBox());
+			            lblUsername.setVisible(false);
+			            lblPassword.setVisible(false);
+			            lblPassword2.setVisible(false);
+			            lblProStart.setVisible(true);
+			            lblProEnd.setVisible(true);
+			            lblRank.setVisible(false);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(true);
+			            cboCustomer.setVisible(true);
+			            cboUserRank.setVisible(false);
+			            txtConfirmPassword.setVisible(false);
+			            txtPassword.setVisible(false);
+			            txtUsername.setVisible(false);
+			            txtProStart.setVisible(true);
+			            txtProEnd.setVisible(true);
+			            txtCust.setVisible(false);
+			            lblAddCustomer.setVisible(false);
+			            lblAddProgram.setVisible(true);
+			            txtAddCusPro.setVisible(true);
+			            btnDelete.setVisible(true);
+			            btnSave.setVisible(true);
+			            cboDeleteCust.setVisible(false);
+			            lblDeleteCust.setVisible(false);
+			            cboDeletePro.setVisible(true);
+			            lblDeletePro.setVisible(true);
+			            txtLastName.setVisible(false);
+			            txtFirstName.setVisible(false);
+			            lblLastName.setVisible(false);
+			            lblFirstName.setVisible(false);
+			            cboUserRank.setSelectedIndex(-1);
+			            cboCustomer.setModel(resetCustomerComboBox());
+			            cboCustomer.setSelectedIndex(-1);
+			            cboDeleteCust.setSelectedIndex(-1);
+			            cboDeletePro.setModel(resetDeleteProComboBox());
+			            cboDeletePro.setSelectedIndex(-1);
+			            
+					}						
+			}});
+			
+			rbtnAddCustomer = new JRadioButton("Add Customer");
+			rbtnAddCustomer.setBounds(42, 259, 136, 25);
+			rbtnAddCustomer.setBackground(new Color(105, 105, 105));
+			rbtnAddCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnAddCustomer.setForeground(Color.BLACK);
+			rbtnAddCustomer.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e)
+				{		
+					if (e.getSource() == rbtnAddCustomer){
+						lblUsername.setVisible(false);
+			            lblPassword.setVisible(false);
+			            lblPassword2.setVisible(false);
+			            lblRank.setVisible(false);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblCust.setVisible(true);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
+			            cboUserRank.setVisible(false);
+			            txtConfirmPassword.setVisible(false);
+			            txtPassword.setVisible(false);
+			            txtProStart.setVisible(false);
+			            txtProEnd.setVisible(false);
+			            txtUsername.setVisible(false);
+			            txtCust.setVisible(true);
+			            lblAddProgram.setVisible(false);
+			            lblAddCustomer.setVisible(true);
+			            txtAddCusPro.setVisible(true);
+			            btnDelete.setVisible(true);
+			            btnSave.setVisible(true);
+			            cboDeleteCust.setVisible(true);
+			            lblDeleteCust.setVisible(true);
+			            cboDeletePro.setVisible(false);
+			            lblDeletePro.setVisible(false);
+			            txtLastName.setVisible(false);
+			            txtFirstName.setVisible(false);
+			            lblLastName.setVisible(false);
+			            lblFirstName.setVisible(false);
+			            cboUserRank.setSelectedIndex(-1);
+			            cboCustomer.setModel(resetCustomerComboBox());
+			            cboCustomer.setSelectedIndex(-1);
+			            cboDeleteCust.setModel(resetDeleteCustComboBox());
+			            cboDeleteCust.setSelectedIndex(-1);
+			            cboDeletePro.setSelectedIndex(-1);
+					}						
+			}});
+			
+			rbtnDeleteUser = new JRadioButton("Delete User");
+			rbtnDeleteUser.setBounds(42, 154, 103, 25);
+			rbtnDeleteUser.setBackground(new Color(105, 105, 105));
+			rbtnDeleteUser.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnDeleteUser.setForeground(Color.BLACK);
+			rbtnDeleteUser.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e)
+				{		
+					if (e.getSource() == rbtnDeleteUser){
+						lblUsername.setVisible(true);
+			            lblPassword.setVisible(true);
+			            lblPassword2.setVisible(true);
+			            lblRank.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
+			            cboUserRank.setVisible(true);
+			            txtConfirmPassword.setVisible(true);
+			            txtPassword.setVisible(true);
+			            txtUsername.setVisible(true);
+			            lblAddProgram.setVisible(true);
+			            lblAddProgram.setVisible(false);
+			            lblAddCustomer.setVisible(false);
+			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(true);
+			            btnSave.setVisible(false);
+			            txtProStart.setVisible(false);
+			            txtProEnd.setVisible(false);
+			            txtUsername.setEditable(true);
+			            txtCust.setVisible(false);
+			            txtUsername.setBackground(Color.white);
+			            txtPassword.setText("");
+			            txtPassword.setEditable(false);
+			            txtPassword.setBackground(new Color(190, 190, 190));
+			            txtConfirmPassword.setText("");
+			            txtConfirmPassword.setEditable(false);
+			            txtConfirmPassword.setBackground(new Color(190, 190, 190));
+			            cboUserRank.setEditable(false);
+			            cboUserRank.setBackground(new Color(190, 190, 190));
+			            lblPassConfirm.setText("");
+			            cboDeleteCust.setVisible(false);
+			            lblDeleteCust.setVisible(false);
+			            cboDeletePro.setVisible(false);
+			            lblDeletePro.setVisible(false);
+			            txtLastName.setVisible(false);
+			            txtFirstName.setVisible(false);
+			            lblLastName.setVisible(false);
+			            lblFirstName.setVisible(false);
+			            cboUserRank.setSelectedIndex(-1);
+			            cboCustomer.setSelectedIndex(-1);
+			            cboDeleteCust.setSelectedIndex(-1);
+			            cboDeletePro.setSelectedIndex(-1);
+					}						
+			}});
+			rbtnDeleteUser.addItemListener(passwordListener);
+			
+			rbtnCreateUser = new JRadioButton("Create User");
+			rbtnCreateUser.setBounds(42, 119, 107, 25);
+			rbtnCreateUser.setSelected(true);
+			rbtnCreateUser.setBackground(new Color(105, 105, 105));
+			rbtnCreateUser.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnCreateUser.setForeground(Color.BLACK);
+			rbtnCreateUser.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (e.getSource() == rbtnCreateUser){
+						lblUsername.setVisible(true);
+			            lblPassword.setVisible(true);
+			            lblPassword2.setVisible(true);
+			            lblRank.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
+			            cboUserRank.setVisible(true);
+			            txtConfirmPassword.setVisible(true);
+			            txtPassword.setVisible(true);
+			            txtUsername.setVisible(true);
+			            lblAddProgram.setVisible(true);
+			            lblAddProgram.setVisible(false);
+			            lblAddCustomer.setVisible(false);
+			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(false);
+			            btnSave.setVisible(true);
+			            txtProStart.setVisible(false);
+			            txtCust.setVisible(false);
+			            txtProEnd.setVisible(false);
+			            txtUsername.setEditable(true);
+			            txtUsername.setBackground(Color.white);
+			            txtPassword.setEditable(true);
+			            txtPassword.setBackground(Color.white);
+			            txtConfirmPassword.setEditable(true);
+			            txtConfirmPassword.setBackground(Color.white);
+			            cboUserRank.setEditable(true);
+			            cboUserRank.setBackground(Color.white);
+			            lblPassConfirm.setText("");
+			            cboDeleteCust.setVisible(false);
+			            lblDeleteCust.setVisible(false);
+			            cboDeletePro.setVisible(false);
+			            lblDeletePro.setVisible(false);
+			            txtLastName.setVisible(true);
+			            txtFirstName.setVisible(true);
+			            lblLastName.setVisible(true);
+			            lblFirstName.setVisible(true);
+			            cboUserRank.setSelectedIndex(-1);
+			            cboCustomer.setSelectedIndex(-1);
+			            cboDeleteCust.setSelectedIndex(-1);
+			            cboDeletePro.setSelectedIndex(-1);
+					}
+			}});
+			rbtnCreateUser.addItemListener(passwordListener);
+			rbtnCreateUser.setSelected(true);
+			
+			rbtnChangeUserRank = new JRadioButton("Changer User Rank");
+			rbtnChangeUserRank.setBounds(42, 189, 159, 25);
+			rbtnChangeUserRank.setBackground(new Color(105, 105, 105));
+			rbtnChangeUserRank.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnChangeUserRank.setForeground(Color.BLACK);
+			rbtnChangeUserRank.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (e.getSource() == rbtnChangeUserRank){
+						lblUsername.setVisible(true);
+			            lblPassword.setVisible(true);
+			            lblPassword2.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblRank.setVisible(true);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
+			            cboUserRank.setVisible(true);
+			            txtConfirmPassword.setVisible(true);
+			            txtPassword.setVisible(true);
+			            txtUsername.setVisible(true);
+			            lblAddProgram.setVisible(true);
+			            lblAddProgram.setVisible(false);
+			            lblAddCustomer.setVisible(false);
+			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(false);
+			            btnSave.setVisible(true);
+			            txtUsername.setEditable(true);
+			            txtCust.setVisible(false);
+			            txtUsername.setBackground(Color.white);
+			            txtPassword.setText("");
+			            txtPassword.setEditable(false);
+			            txtProStart.setVisible(false);
+			            txtProEnd.setVisible(false);
+			            txtPassword.setBackground(new Color(190, 190, 190));
+			            txtConfirmPassword.setText("");
+			            txtConfirmPassword.setEditable(false);
+			            txtConfirmPassword.setBackground(new Color(190, 190, 190));
+			            cboUserRank.setEditable(true);
+			            cboUserRank.setBackground(Color.white);
+			            lblPassConfirm.setText("");
+			            cboDeleteCust.setVisible(false);
+			            lblDeleteCust.setVisible(false);
+			            cboDeletePro.setVisible(false);
+			            lblDeletePro.setVisible(false);
+			            txtLastName.setVisible(false);
+			            txtFirstName.setVisible(false);
+			            lblLastName.setVisible(false);
+			            lblFirstName.setVisible(false);
+			            cboUserRank.setSelectedIndex(-1);
+			            cboCustomer.setSelectedIndex(-1);
+			            cboDeleteCust.setSelectedIndex(-1);
+			            cboDeletePro.setSelectedIndex(-1);
+					}
+			}});
+			rbtnChangeUserRank.addItemListener(passwordListener);
+			
+			rbtnChangePass = new JRadioButton("Change Password");
+			rbtnChangePass.setBounds(42, 224, 149, 25);
+			rbtnChangePass.setBackground(new Color(105, 105, 105));
+			rbtnChangePass.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnChangePass.setForeground(Color.BLACK);
+			rbtnChangePass.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (e.getSource() == rbtnChangePass){
+						lblUsername.setVisible(true);
+			            lblPassword.setVisible(true);
+			            lblPassword2.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblRank.setVisible(true);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
+			            cboUserRank.setVisible(true);
+			            txtConfirmPassword.setVisible(true);
+			            txtPassword.setVisible(true);
+			            txtUsername.setVisible(true);
+			            lblAddProgram.setVisible(true);
+			            lblAddProgram.setVisible(false);
+			            lblAddCustomer.setVisible(false);
+			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(false);
+			            btnSave.setVisible(true);
+			            txtProStart.setVisible(false);
+			            txtCust.setVisible(false);
+			            txtProEnd.setVisible(false);
+			            txtUsername.setEditable(true);
+			            txtUsername.setBackground(Color.white);
+			            txtPassword.setEditable(true);
+			            txtPassword.setBackground(Color.white);
+			            txtConfirmPassword.setEditable(true);
+			            txtConfirmPassword.setBackground(Color.white);
+			            cboUserRank.setEditable(false);
+			            cboUserRank.setBackground(new Color(190, 190, 190));
+			            lblPassConfirm.setText("");
+			            cboDeleteCust.setVisible(false);
+			            lblDeleteCust.setVisible(false);
+			            cboDeletePro.setVisible(false);
+			            lblDeletePro.setVisible(false);
+			            txtLastName.setVisible(false);
+			            txtFirstName.setVisible(false);
+			            lblLastName.setVisible(false);
+			            lblFirstName.setVisible(false);
+			            cboUserRank.setSelectedIndex(-1);
+			            cboCustomer.setSelectedIndex(-1);
+			            cboDeleteCust.setSelectedIndex(-1);
+			            cboDeletePro.setSelectedIndex(-1);
+					}
+			}});
+			rbtnChangePass.addItemListener(passwordListener);
+			
+			ButtonGroup group = new ButtonGroup();
+			
+			group.add(rbtnDeleteUser);
+			group.add(rbtnCreateUser);
+			group.add(rbtnChangeUserRank);
+			group.add(rbtnChangePass);
+			group.add(rbtnAddProgram);
+			group.add(rbtnAddCustomer);
+				
+		//Buttons	
+			
+			ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
+			btnBack = new JButton(back);
+			btnBack.setBounds(42, 338, 106, 35);
+			btnBack.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e)
+				{
+					if (e.getSource() == btnBack)
+					{
+						lblUsername.setVisible(true);
+			            lblPassword.setVisible(true);
+			            lblPassword2.setVisible(true);
+			            lblRank.setVisible(true);
+			            lblProStart.setVisible(false);
+			            lblProEnd.setVisible(false);
+			            lblCust.setVisible(false);
+			            lblCustomer.setVisible(false);
+			            cboCustomer.setVisible(false);
+			            cboUserRank.setVisible(true);
+			            txtConfirmPassword.setVisible(true);
+			            txtPassword.setVisible(true);
+			            txtUsername.setVisible(true);
+			            lblAddProgram.setVisible(true);
+			            lblAddProgram.setVisible(false);
+			            lblAddCustomer.setVisible(false);
+			            txtAddCusPro.setVisible(false);
+			            btnDelete.setVisible(false);
+			            btnSave.setVisible(true);
+			            rbtnCreateUser.setSelected(true);
+			            txtUsername.setEditable(true);
+			            txtUsername.setBackground(Color.white);
+			            txtPassword.setEditable(true);
+			            txtProStart.setVisible(false);
+			            txtProEnd.setVisible(false);
+			            txtCust.setVisible(false);
+			            txtPassword.setBackground(Color.white);
+			            txtConfirmPassword.setEditable(true);
+			            txtConfirmPassword.setBackground(Color.white);
+			            cboUserRank.setEditable(true);
+			            cboUserRank.setBackground(Color.white);
+			            lblPassConfirm.setText("");
+						setVisible(false);
+						Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+						int height = screenSize.height;
+						int width = screenSize.width;
+						frame.setResizable(false);
+						frame.setSize(width/2, height/2);
+						frame.setLocationRelativeTo(null);
+						frame.setSize(645, 545);
+						frame.setTitle("Main Menu:");
+						main.setVisible(true);
+						txtUsername.setText("");
+						txtPassword.setText("");
+						txtConfirmPassword.setText("");
+						cboDeleteCust.setVisible(false);
+						lblDeleteCust.setVisible(false);
+						cboDeletePro.setVisible(false);
+						lblDeletePro.setVisible(false);
+						txtLastName.setVisible(true);
+				        txtFirstName.setVisible(true);
+				        lblLastName.setVisible(true);
+				        lblFirstName.setVisible(true);
+						cboUserRank.setSelectedIndex(-1);
+						cboCustomer.setSelectedIndex(-1);
+						cboDeleteCust.setSelectedIndex(-1);
+						cboDeletePro.setSelectedIndex(-1);
+			}}});
+			
+			ImageIcon delete = new ImageIcon(getClass().getResource("/images/delete.jpg"));
+			btnDelete = new JButton(delete);
+			btnDelete.setBounds(256, 338, 106, 35);
+			btnDelete.setVisible(false);
+			btnDelete.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e)
+				{
+					int n = 1;
+					if (e.getSource() == btnDelete)
+					{
+						if(rbtnDeleteUser.isSelected() == true){
 							if(txtUsername.getText().equals("")){
 								JOptionPane.showMessageDialog(
 									    frame,
@@ -2990,38 +2866,8 @@ public class MainFrames extends JFrame
 									if(con.getUserRank().equals("admin")){
 										n = JOptionPane.showConfirmDialog(
 												    frame,
-												    "Are you sure you want to create user: " + txtUsername.getText() + "?",
-												    "Save:",
-												    JOptionPane.YES_NO_OPTION,
-													JOptionPane.WARNING_MESSAGE);
-									}else{
-										config = new ConfigurationManager(configFilePath);
-										JOptionPane.showMessageDialog(
-												    frame,
-												    "" + (config.getProperty("appUser") 
-												    		+ " does not have permission to Create Users"),
-												    "Creditenials Error",
-													JOptionPane.ERROR_MESSAGE);
-									}	
-								}catch(Exception ex){/*Ignore*/}
-							}
-						}
-						if(rbtnChangeUserRank.isSelected() == true){
-							if(txtUsername.getText().equals("")){
-								JOptionPane.showMessageDialog(
-									    frame,
-									    "Please Enter A Username",
-									    "Creditenials Error",
-										JOptionPane.ERROR_MESSAGE);
-							}else{
-								try{
-									if(con.getUserRank().equals("admin")){
-										n = JOptionPane.showConfirmDialog(
-												    frame,
-												    "Are you sure you want to change " 
-												    		+ txtUsername.getText() + "'s rank to " 
-												    		+ cboUserRank.getSelectedItem().toString()+"?",
-												    "Save:",
+												    "Are you sure you want to delete user: " + txtUsername.getText() + "?",
+												    "Delete:",
 												    JOptionPane.YES_NO_OPTION,
 													JOptionPane.WARNING_MESSAGE);
 									}else{
@@ -3029,174 +2875,328 @@ public class MainFrames extends JFrame
 										JOptionPane.showMessageDialog(
 										    frame,
 										    "" + (config.getProperty("appUser") 
-										    		+ " does not have permission to Change User Rank"),
+										    		+ " does not have permission to Delete Users"),
 										    "Creditenials Error",
 											JOptionPane.ERROR_MESSAGE);
 									}
 								}catch(Exception ex){/*Ignore*/}
 							}
 						}
-						if(rbtnChangePass.isSelected() == true){
-							if(txtUsername.getText().equals("")){
-								JOptionPane.showMessageDialog(
-									    frame,
-									    "Please Enter A Username",
-									    "Creditenials Error",
-										JOptionPane.ERROR_MESSAGE);
-							}else{
-								n = JOptionPane.showConfirmDialog(
-									    frame,
-									    "Are you sure you want to change " + txtUsername.getText() + "'s password?",
-									    "Save:",
-									    JOptionPane.YES_NO_OPTION,
-										JOptionPane.WARNING_MESSAGE);
-							}
+						if(n == 0){
+							try{
+								String username = txtUsername.getText();
+						if(rbtnDeleteUser.isSelected() == true){
+							con.deleteUser(username);
+						}
+							}catch(Exception ex){/*Ignore*/}
+							txtUsername.setText("");
 						}
 						if(rbtnAddProgram.isSelected() == true){
-							if(txtAddCusPro.getText().equals("")){
+							if(cboDeletePro.getSelectedItem().equals("")){
 								JOptionPane.showMessageDialog(
 										frame,
-										"Please Enter a Program",
-										"Creditenial Error",
+										"Please Select a Program",
+										"Creditenials Error",
 										JOptionPane.ERROR_MESSAGE);
 							}else{
-								n = JOptionPane.showConfirmDialog(
-										frame,
-										"Are you sure you want to create " + txtAddCusPro.getText() + " as a new program?",
-										"Save:",
-										JOptionPane.YES_NO_OPTION,
-										JOptionPane.WARNING_MESSAGE);
+								try{
+									if(con.getUserRank().equals("admin")){
+										n = JOptionPane.showConfirmDialog(
+												frame,
+												"Are you sure you want to delete " + cboDeletePro.getSelectedItem() + " ?",
+												"Delete:",
+												JOptionPane.YES_NO_OPTION,
+												JOptionPane.WARNING_MESSAGE);
+						}else{
+							config = new ConfigurationManager(configFilePath);
+							JOptionPane.showMessageDialog(
+									frame,
+									"" + (config.getProperty("appUser")
+											+ "does not have permission to Delete Programs"),
+											"Creditenials Error",
+											JOptionPane.ERROR_MESSAGE);
+						}
+								}catch(Exception ex){/*Ignore*/}
 							}
 						}
-						if(rbtnAddCustomer.isSelected() == true){
-							if(txtAddCusPro.getText().equals("")){
-								JOptionPane.showMessageDialog(
-										frame,
-										"Please Enter a Customer",
-										"Creditential Error",
-										JOptionPane.ERROR_MESSAGE);
-							}else{
-								n = JOptionPane.showConfirmDialog(
-										frame,
-										"Are you sure you want to create " + txtAddCusPro.getText() + " as a new Customer?",
-										"Save",
-										JOptionPane.YES_NO_OPTION,
-										JOptionPane.WARNING_MESSAGE);
-							}
+						if(n == 0){
+							try{
+								String program = cboDeletePro.getSelectedItem().toString();
+						if(rbtnAddProgram.isSelected() == true){
+							con.deleteProgram(program);
+							cboDeletePro.setModel(resetDeleteProComboBox());
 						}
+						}catch(Exception ex){/*Ignore*/}
+							cboDeletePro.setSelectedIndex(-1);
+						}
+							if(rbtnAddCustomer.isSelected() == true){
+								if(cboDeleteCust.getSelectedItem().equals("")){
+									JOptionPane.showMessageDialog(
+											frame,
+											"Please Select a Customer",
+											"Creditenials Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									try{
+										if(con.getUserRank().equals("admin")){
+											n = JOptionPane.showConfirmDialog(
+													frame,
+													"Are you sure you want to delete " + cboDeleteCust.getSelectedItem() + " ?",
+													"Delete:",
+													JOptionPane.YES_NO_OPTION,
+													JOptionPane.WARNING_MESSAGE);
+										}else{
+											config = new ConfigurationManager(configFilePath);
+											JOptionPane.showMessageDialog(
+													frame,
+													"" + (config.getProperty("appUser")
+															+ "does not have permission to Delete Customers"),
+															"Creditenials Error",
+															JOptionPane.ERROR_MESSAGE);
+										}
+									}catch(Exception ex){/*Ignore*/}
+								}
+							}
 							if(n == 0){
 								try{
-									if(rbtnCreateUser.isSelected() == true){
-										String confirmPassword = (new String(txtConfirmPassword.getPassword()));
-										String password = (new String(txtPassword.getPassword()));
-										String username = txtUsername.getText();
-										String firstName = txtFirstName.getText();
-										String lastName = txtLastName.getText();
-										if(comparePasswords(password, confirmPassword) == true){
-											String rank = cboUserRank.getSelectedItem().toString();
-											con.createUser(username, password, rank, firstName, lastName);
-										}else{
-											JOptionPane.showMessageDialog(
-												    frame,
-												    "Passwords Do Not Match",
-												    "Creditenials Error",
-													JOptionPane.ERROR_MESSAGE);
-										}
-									}
-									if(rbtnAddCustomer.isSelected() == true){
-										String newCust = txtCust.getText();
-										String newCustomer = txtAddCusPro.getText();
-										con.createCustomer(newCustomer, newCust);
-										cboCustomer.setModel(resetCustomerComboBox());
-										cboDeleteCust.setModel(resetDeleteCustComboBox());
-									}
-									if(rbtnAddProgram.isSelected() == true){
-										String Program = txtAddCusPro.getText();
-										String Customer = cboCustomer.getSelectedItem().toString();
-										String ProgramStart = txtProStart.getText();
-										String ProgramEnd = txtProEnd.getText();
-										String Cust = con.queryDatabase("customers", "Customer", Customer).getJSONObject(0).getString("Cust").toString();
-										con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd);
-										cboDeletePro.setModel(resetDeleteProComboBox());
-									}
-									if(rbtnChangeUserRank.isSelected() == true){
-										String rank = cboUserRank.getSelectedItem().toString();
-										String username = txtUsername.getText();
-										con.changeUserRank(username, rank);
-									}
-									if(rbtnChangePass.isSelected() == true){
-										String confirmPassword = (new String(txtConfirmPassword.getPassword()));
-										String password = (new String(txtPassword.getPassword()));
-										String username = txtUsername.getText();
-										if(comparePasswords(password, confirmPassword) == true){
-											con.changeUserPassword(username, password);
-										}else{
-											JOptionPane.showMessageDialog(
-												    frame,
-												    "Passwords Do Not Match",
-												    "Creditenials Error",
-													JOptionPane.ERROR_MESSAGE);
-										}
-									}
-										
-								}catch(Exception ex){ex.printStackTrace();}
-								txtUsername.setText("");
-								txtPassword.setText("");
-								txtConfirmPassword.setText("");
-								txtCust.setText("");
-								txtAddCusPro.setText("");
-								txtProStart.setText("");
-								txtProEnd.setText("");				
-								cboCustomer.setSelectedIndex(-1);
-								cboUserRank.setSelectedIndex(-1);
+									String customer = cboDeleteCust.getSelectedItem().toString();
+							if(rbtnAddCustomer.isSelected() == true){
+								con.deleteCustomer(customer);
+								cboDeleteCust.setModel(resetDeleteCustComboBox());
+							}
+							}catch(Exception ex){/*Ignore*/}
 								cboDeleteCust.setSelectedIndex(-1);
-								cboDeletePro.setSelectedIndex(-1);
-						}}}});
-		setupPanel();
-	}
-	
-	private void setupPanel()
-{
-	setLayout(null);
-	add(lblbosal);
-	add(lblmanageUsers);
-	add(rbtnCreateUser);
-	add(lblFirstName);
-	add(txtFirstName);
-	add(lblLastName);
-	add(txtLastName);
-	add(rbtnDeleteUser);
-	add(lblCustomer);
-	add(lblUsername);
-	add(txtUsername);
-	add(cboCustomer);
-	add(rbtnChangeUserRank);
-	add(lblPassword);
-	add(lblAddCustomer);
-	add(lblAddProgram);
-	add(txtPassword);
-	add(txtAddCusPro);
-	add(rbtnChangePass);
-	add(lblPassword2);
-	add(lblProStart);
-	add(lblCust);
-	add(txtCust);
-	add(txtProStart);
-	add(txtConfirmPassword);
-	add(lblPassConfirm);
-	add(rbtnAddCustomer);
-	add(lblRank);
-	add(lblDeleteCust);
-	add(lblProEnd);
-	add(cboDeleteCust);
-	add(txtProEnd);
-	add(cboUserRank);
-	add(rbtnAddProgram);
-	add(lblDeletePro);
-	add(cboDeletePro);
-	add(btnBack);
-	add(btnDelete);
-	add(btnSave);
+							}}}});
+			
+			ImageIcon create = new ImageIcon(getClass().getResource("/images/save.jpg"));
+			btnSave = new JButton(create);
+			btnSave.setBounds(487, 338, 106, 35);
+			btnSave.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) 
+				{
+					
+						if (e.getSource() == btnSave){
+							int n = 1;
+							if(rbtnCreateUser.isSelected() == true){
+								if(txtUsername.getText().equals("")){
+									JOptionPane.showMessageDialog(
+										    frame,
+										    "Please Enter A Username",
+										    "Creditenials Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									try{
+										if(con.getUserRank().equals("admin")){
+											n = JOptionPane.showConfirmDialog(
+													    frame,
+													    "Are you sure you want to create user: " + txtUsername.getText() + "?",
+													    "Save:",
+													    JOptionPane.YES_NO_OPTION,
+														JOptionPane.WARNING_MESSAGE);
+										}else{
+											config = new ConfigurationManager(configFilePath);
+											JOptionPane.showMessageDialog(
+													    frame,
+													    "" + (config.getProperty("appUser") 
+													    		+ " does not have permission to Create Users"),
+													    "Creditenials Error",
+														JOptionPane.ERROR_MESSAGE);
+										}	
+									}catch(Exception ex){/*Ignore*/}
+								}
+							}
+							if(rbtnChangeUserRank.isSelected() == true){
+								if(txtUsername.getText().equals("")){
+									JOptionPane.showMessageDialog(
+										    frame,
+										    "Please Enter A Username",
+										    "Creditenials Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									try{
+										if(con.getUserRank().equals("admin")){
+											n = JOptionPane.showConfirmDialog(
+													    frame,
+													    "Are you sure you want to change " 
+													    		+ txtUsername.getText() + "'s rank to " 
+													    		+ cboUserRank.getSelectedItem().toString()+"?",
+													    "Save:",
+													    JOptionPane.YES_NO_OPTION,
+														JOptionPane.WARNING_MESSAGE);
+										}else{
+											config = new ConfigurationManager(configFilePath);
+											JOptionPane.showMessageDialog(
+											    frame,
+											    "" + (config.getProperty("appUser") 
+											    		+ " does not have permission to Change User Rank"),
+											    "Creditenials Error",
+												JOptionPane.ERROR_MESSAGE);
+										}
+									}catch(Exception ex){/*Ignore*/}
+								}
+							}
+							if(rbtnChangePass.isSelected() == true){
+								if(txtUsername.getText().equals("")){
+									JOptionPane.showMessageDialog(
+										    frame,
+										    "Please Enter A Username",
+										    "Creditenials Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									n = JOptionPane.showConfirmDialog(
+										    frame,
+										    "Are you sure you want to change " + txtUsername.getText() + "'s password?",
+										    "Save:",
+										    JOptionPane.YES_NO_OPTION,
+											JOptionPane.WARNING_MESSAGE);
+								}
+							}
+							if(rbtnAddProgram.isSelected() == true){
+								if(txtAddCusPro.getText().equals("")){
+									JOptionPane.showMessageDialog(
+											frame,
+											"Please Enter a Program",
+											"Creditenial Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									n = JOptionPane.showConfirmDialog(
+											frame,
+											"Are you sure you want to create " + txtAddCusPro.getText() + " as a new program?",
+											"Save:",
+											JOptionPane.YES_NO_OPTION,
+											JOptionPane.WARNING_MESSAGE);
+								}
+							}
+							if(rbtnAddCustomer.isSelected() == true){
+								if(txtAddCusPro.getText().equals("")){
+									JOptionPane.showMessageDialog(
+											frame,
+											"Please Enter a Customer",
+											"Creditential Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									n = JOptionPane.showConfirmDialog(
+											frame,
+											"Are you sure you want to create " + txtAddCusPro.getText() + " as a new Customer?",
+											"Save",
+											JOptionPane.YES_NO_OPTION,
+											JOptionPane.WARNING_MESSAGE);
+								}
+							}
+								if(n == 0){
+									try{
+										if(rbtnCreateUser.isSelected() == true){
+											String confirmPassword = (new String(txtConfirmPassword.getPassword()));
+											String password = (new String(txtPassword.getPassword()));
+											String username = txtUsername.getText();
+											String firstName = txtFirstName.getText();
+											String lastName = txtLastName.getText();
+											if(comparePasswords(password, confirmPassword) == true){
+												String rank = cboUserRank.getSelectedItem().toString();
+												con.createUser(username, password, rank, firstName, lastName);
+											}else{
+												JOptionPane.showMessageDialog(
+													    frame,
+													    "Passwords Do Not Match",
+													    "Creditenials Error",
+														JOptionPane.ERROR_MESSAGE);
+											}
+										}
+										if(rbtnAddCustomer.isSelected() == true){
+											String newCust = txtCust.getText();
+											String newCustomer = txtAddCusPro.getText();
+											con.createCustomer(newCustomer, newCust);
+											cboCustomer.setModel(resetCustomerComboBox());
+											cboDeleteCust.setModel(resetDeleteCustComboBox());
+										}
+										if(rbtnAddProgram.isSelected() == true){
+											String Program = txtAddCusPro.getText();
+											String Customer = cboCustomer.getSelectedItem().toString();
+											String ProgramStart = txtProStart.getText();
+											String ProgramEnd = txtProEnd.getText();
+											String Cust = con.queryDatabase("customers", "Customer", Customer).getJSONObject(0).getString("Cust").toString();
+											con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd);
+											cboDeletePro.setModel(resetDeleteProComboBox());
+										}
+										if(rbtnChangeUserRank.isSelected() == true){
+											String rank = cboUserRank.getSelectedItem().toString();
+											String username = txtUsername.getText();
+											con.changeUserRank(username, rank);
+										}
+										if(rbtnChangePass.isSelected() == true){
+											String confirmPassword = (new String(txtConfirmPassword.getPassword()));
+											String password = (new String(txtPassword.getPassword()));
+											String username = txtUsername.getText();
+											if(comparePasswords(password, confirmPassword) == true){
+												con.changeUserPassword(username, password);
+											}else{
+												JOptionPane.showMessageDialog(
+													    frame,
+													    "Passwords Do Not Match",
+													    "Creditenials Error",
+														JOptionPane.ERROR_MESSAGE);
+											}
+										}
+											
+									}catch(Exception ex){ex.printStackTrace();}
+									txtUsername.setText("");
+									txtPassword.setText("");
+									txtConfirmPassword.setText("");
+									txtCust.setText("");
+									txtAddCusPro.setText("");
+									txtProStart.setText("");
+									txtProEnd.setText("");				
+									cboCustomer.setSelectedIndex(-1);
+									cboUserRank.setSelectedIndex(-1);
+									cboDeleteCust.setSelectedIndex(-1);
+									cboDeletePro.setSelectedIndex(-1);
+							}}}});
+			setupPanel();
+		}
+		
+		private void setupPanel()
+	{
+		setLayout(null);
+		add(lblbosal);
+		add(lblmanageUsers);
+		add(rbtnCreateUser);
+		add(lblFirstName);
+		add(txtFirstName);
+		add(lblLastName);
+		add(txtLastName);
+		add(rbtnDeleteUser);
+		add(lblCustomer);
+		add(lblUsername);
+		add(txtUsername);
+		add(cboCustomer);
+		add(rbtnChangeUserRank);
+		add(lblPassword);
+		add(lblAddCustomer);
+		add(lblAddProgram);
+		add(txtPassword);
+		add(txtAddCusPro);
+		add(rbtnChangePass);
+		add(lblPassword2);
+		add(lblProStart);
+		add(lblCust);
+		add(txtCust);
+		add(txtProStart);
+		add(txtConfirmPassword);
+		add(lblPassConfirm);
+		add(rbtnAddCustomer);
+		add(lblRank);
+		add(lblDeleteCust);
+		add(lblProEnd);
+		add(cboDeleteCust);
+		add(txtProEnd);
+		add(cboUserRank);
+		add(rbtnAddProgram);
+		add(lblDeletePro);
+		add(cboDeletePro);
+		add(btnBack);
+		add(btnDelete);
+		add(btnSave);
 }}//End of Class ManageUsersPanel
 	class ExperimentalPanel extends JPanel
 	{
