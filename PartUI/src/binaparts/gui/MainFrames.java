@@ -23,8 +23,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -37,7 +35,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -92,7 +89,6 @@ public class MainFrames extends JFrame
 	    frame.setSize(screenWidth / 2, screenHeight / 2);
 	    frame.setLocation(screenWidth / 4, screenHeight / 4);
 		frame.setResizable(false);
-		//frame.setLocationRelativeTo(null);
 		frame.setSize(645, 545);
 		frame.setContentPane(contentPane);
 		frame.setVisible(true);	
@@ -109,14 +105,12 @@ public class MainFrames extends JFrame
 					+Integer.toString(cal.get(Calendar.YEAR));
 		return s;
 	}
-	public Date CalendarToDate(String date) {	
-		
+	public Date CalendarToDate(String date) {			
 		String[] parts = date.split("/");
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.valueOf(parts[2]));
 		cal.set(Calendar.MONTH, Integer.valueOf(parts[0])-1);
-		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(parts[1]));
-		
+		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(parts[1]));		
 		return cal.getTime();
 	}
 	class MainPanel extends JPanel
@@ -747,51 +741,33 @@ public class MainFrames extends JFrame
 							    JOptionPane.YES_NO_OPTION,
 								JOptionPane.WARNING_MESSAGE);
 						if(n == 0){
-							System.out.println("Saving New Part.....");
 							try {
 								int PartType = Integer.valueOf((String) cboType.getSelectedItem());
-								//System.out.println(PartType);
 								int Material = 0;
 								if(cboMat.getSelectedItem()!= null){
 									Material = Integer.valueOf((String) cboMat.getSelectedItem());
 								}
-								//System.out.println(Material);
 								String BosalPartNumber = txtBPart.getText();
-								//System.out.println(BosalPartNumber);
 								String DrawingNumber = txtDrawingNum.getText();
-								//System.out.println(DrawingNumber);
 								int DrawingRev;
 								try{
 									DrawingRev = Integer.valueOf(txtDrawingRev.getText());
 								}catch(Exception ex){DrawingRev = 0;}
-								//System.out.println(DrawingRev);
 								String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());
-								//System.out.println(DrawingRevDate);
 								String CustomerPartNumber = txtCPart.getText();
-								//System.out.println(CustomerPartNumber);
 								String CustDrawingNumber = txtCustDrawingNum.getText();
-								//System.out.println(CustDrawingNumber);
 								int CustDrawingRev;
 								try{
 									CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());
 								}catch(Exception ex){CustDrawingRev = 0;}
-								//System.out.println(CustDrawingRev);
 								String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());
-								//System.out.println(CustDrawingRevDate);
 								String SupplierPartNumber = txtSPart.getText();
-								//System.out.println(SupplierPartNumber);
 								String Description = (String) cboDescrip.getSelectedItem();
-								//System.out.println(Description);
 								String Program = (String) cboProgram.getSelectedItem();
-								//System.out.println(Program);
 								int Seq = Integer.valueOf(txtSeq.getText());
-								//System.out.println(Seq);
 								String TypeDescription = txtDescrip.getText();
-								//System.out.println(TypeDescription);
 								int Rev = 0;
-								//System.out.println(Rev);
 								String ProductionReleaseDate = DateToCalendar(jxdProductionReleaseDate.getDate());
-								//System.out.println(ProductionReleaseDate);
 								con.insertNewPart(PartType, Material, BosalPartNumber, DrawingNumber, DrawingRev, 
 										DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
 										CustDrawingRevDate, SupplierPartNumber, Description, Program, Seq, 
@@ -1807,12 +1783,9 @@ public class MainFrames extends JFrame
 								 temp = con.queryDatabase("bosal parts", "CustPartNumber", searchText);
 								 myTable.setModel(populateTableModel("bosal parts", "CustPartNumber", temp, searchText));
 								if (temp.length() == 0) {
-									System.out.println("that number didnt exist in `bosal parts`");
 									try {
-										System.out.println("trying the delta list");
 										temp = con.queryDatabase("delta 1 parts", "CustPartNumber", searchText);
 										myTable.setModel(populateTableModel("delta 1 parts", "CustPartNumber", temp, searchText));
-										System.out.println("found "+temp.toString());
 									}catch(Exception ex){
 								JOptionPane.showMessageDialog(
 										    frame,
@@ -2155,6 +2128,7 @@ public class MainFrames extends JFrame
 		private JPasswordField txtPassword;
 		private JPasswordField txtConfirmPassword;
 		
+<<<<<<< HEAD
 	//JComboBoxes
 		private JComboBox<?> cboUserRank;
 		private JComboBox<String> cboDeletePro;
@@ -2180,6 +2154,46 @@ public class MainFrames extends JFrame
 			JSONArray temp1 = new JSONArray();
 			ComboBoxModel<String> CustComboBoxDefault = null;
 			String[] Cust = null;
+=======
+//JButtons
+	private JButton btnBack;
+	private JButton btnSave;
+	private JButton btnDelete;
+	
+//JRadioButtons
+	private JRadioButton rbtnDeleteUser;
+	private JRadioButton rbtnCreateUser;
+	private JRadioButton rbtnChangeUserRank;
+	private JRadioButton rbtnChangePass;
+	private JRadioButton rbtnAddProgram;
+	private JRadioButton rbtnAddCustomer;
+	
+//Password comparison returning true/false
+	public boolean comparePasswords(String password, String confirmPassword)
+	{
+		boolean status = false;		
+		if(password.equals("") || confirmPassword.equals("")){
+		}
+		if(password.equals(confirmPassword) && !password.equals("") && !confirmPassword.equals("")){
+			status = true;
+		}
+		return status;
+	}
+	
+//String Panel
+	@SuppressWarnings("unused")
+	public ManagePanel(final JPanel manage)
+	{
+	// Bosal Image	
+	
+		ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+		lblbosal = new JLabel(bosal);
+		lblbosal.setBounds(10, 10, 194, 56);
+		setBackground(new Color(105, 105, 105));
+		
+		ImageIcon checkmark = new ImageIcon(getClass().getResource("/images/checkmark.jpg"));
+		ImageIcon xmark = new ImageIcon(getClass().getResource("/images/xmark.jpg"));
+>>>>>>> ddf36b368d0eb0bd7b4dd7ae9e4b5787c388268e
 			
 			try {
 				temp1 = con.queryReturnAllCustomers();
