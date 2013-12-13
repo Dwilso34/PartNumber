@@ -2128,7 +2128,6 @@ public class MainFrames extends JFrame
 		private JPasswordField txtPassword;
 		private JPasswordField txtConfirmPassword;
 		
-<<<<<<< HEAD
 	//JComboBoxes
 		private JComboBox<?> cboUserRank;
 		private JComboBox<String> cboDeletePro;
@@ -2153,48 +2152,7 @@ public class MainFrames extends JFrame
 		{
 			JSONArray temp1 = new JSONArray();
 			ComboBoxModel<String> CustComboBoxDefault = null;
-			String[] Cust = null;
-=======
-//JButtons
-	private JButton btnBack;
-	private JButton btnSave;
-	private JButton btnDelete;
-	
-//JRadioButtons
-	private JRadioButton rbtnDeleteUser;
-	private JRadioButton rbtnCreateUser;
-	private JRadioButton rbtnChangeUserRank;
-	private JRadioButton rbtnChangePass;
-	private JRadioButton rbtnAddProgram;
-	private JRadioButton rbtnAddCustomer;
-	
-//Password comparison returning true/false
-	public boolean comparePasswords(String password, String confirmPassword)
-	{
-		boolean status = false;		
-		if(password.equals("") || confirmPassword.equals("")){
-		}
-		if(password.equals(confirmPassword) && !password.equals("") && !confirmPassword.equals("")){
-			status = true;
-		}
-		return status;
-	}
-	
-//String Panel
-	@SuppressWarnings("unused")
-	public ManagePanel(final JPanel manage)
-	{
-	// Bosal Image	
-	
-		ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-		lblbosal = new JLabel(bosal);
-		lblbosal.setBounds(10, 10, 194, 56);
-		setBackground(new Color(105, 105, 105));
-		
-		ImageIcon checkmark = new ImageIcon(getClass().getResource("/images/checkmark.jpg"));
-		ImageIcon xmark = new ImageIcon(getClass().getResource("/images/xmark.jpg"));
->>>>>>> ddf36b368d0eb0bd7b4dd7ae9e4b5787c388268e
-			
+			String[] Cust = null;			
 			try {
 				temp1 = con.queryReturnAllCustomers();
 				Cust = new String[temp1.length()];
