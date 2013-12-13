@@ -118,11 +118,19 @@ public class BDLFrame extends JFrame
 		
 		String[] parts = date.split("/");
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, Integer.valueOf(parts[2])+1900);
-		cal.set(Calendar.MONTH, Integer.valueOf(parts[0]));
+		cal.set(Calendar.YEAR, Integer.valueOf(parts[2]));
+		cal.set(Calendar.MONTH, Integer.valueOf(parts[0])-1);
 		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(parts[1]));
 		
 		return cal.getTime();
+	}
+	public String DateToCalendar(Date date) {			
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		String s = Integer.toString(cal.get(Calendar.MONTH)+1)+"/"
+					+Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"
+					+Integer.toString(cal.get(Calendar.YEAR));
+		return s;
 	}
 	public String getSearchText() {
 		return searchText;
@@ -789,7 +797,6 @@ public class BDLFrame extends JFrame
 		btnSave = new JButton(save);		
 		btnSave.setBounds(893, 177, 102, 34);		
 		btnSave.addActionListener(new ActionListener() {	
-				@SuppressWarnings("deprecation")
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnSave)
 					{
@@ -839,18 +846,10 @@ public class BDLFrame extends JFrame
 									}
 
 									if (!(txtREVDate.getDate().toString().equals("")) || !(txtREVDate.getDate().toString() == null)) {
-										Calendar cal = Calendar.getInstance();
-										cal.setTime(txtREVDate.getDate());
-										s2 = s2+", {\"RevDate\":\""+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"
-																	+Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"
-																	+Integer.toString(cal.get(Calendar.YEAR))+"\"}";
+										s2 = s2+", {\"RevDate\":\""+DateToCalendar(txtREVDate.getDate())+"\"}";
 									}
 									if (!(txtRelDate.getDate().toString().equals("")) || !(txtRelDate.getDate().toString() == null)) {
-										Calendar cal = Calendar.getInstance();
-										cal.setTime(txtRelDate.getDate());
-										s2 = s2+", {\"RelDate\":\""+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"
-																	+Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"
-																	+Integer.toString(cal.get(Calendar.YEAR))+"\"}";									}
+										s2 = s2+", {\"ReleaseDate\":\""+DateToCalendar(txtRelDate.getDate())+"\"}";						}
 									
 									if (!(txtProduction.getText().equals("")) || !(txtProduction.getText() == null)) {
 										s2 = s2+", {\"Production\":\""+txtProduction.getText()+"\"}";

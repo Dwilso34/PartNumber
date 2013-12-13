@@ -102,19 +102,19 @@ public class MainFrames extends JFrame
 		}catch(Exception ex){ex.printStackTrace();}
 	}
 	public String DateToCalendar(Date date) {			
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(date);
-			String s = Integer.toString(cal.get(Calendar.MONTH)+1)+"/"
-						+Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"
-						+Integer.toString(cal.get(Calendar.YEAR));
-			return s;
-		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		String s = Integer.toString(cal.get(Calendar.MONTH)+1)+"/"
+					+Integer.toString(cal.get(Calendar.DAY_OF_MONTH))+"/"
+					+Integer.toString(cal.get(Calendar.YEAR));
+		return s;
+	}
 	public Date CalendarToDate(String date) {	
 		
 		String[] parts = date.split("/");
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.valueOf(parts[2]));
-		cal.set(Calendar.MONTH, Integer.valueOf(parts[0]));
+		cal.set(Calendar.MONTH, Integer.valueOf(parts[0])-1);
 		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(parts[1]));
 		
 		return cal.getTime();
@@ -766,7 +766,7 @@ public class MainFrames extends JFrame
 								}catch(Exception ex){DrawingRev = 0;}
 								//System.out.println(DrawingRev);
 								String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());
-								System.out.println(DrawingRevDate);
+								//System.out.println(DrawingRevDate);
 								String CustomerPartNumber = txtCPart.getText();
 								//System.out.println(CustomerPartNumber);
 								String CustDrawingNumber = txtCustDrawingNum.getText();
@@ -777,7 +777,7 @@ public class MainFrames extends JFrame
 								}catch(Exception ex){CustDrawingRev = 0;}
 								//System.out.println(CustDrawingRev);
 								String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());
-								System.out.println(CustDrawingRevDate);
+								//System.out.println(CustDrawingRevDate);
 								String SupplierPartNumber = txtSPart.getText();
 								//System.out.println(SupplierPartNumber);
 								String Description = (String) cboDescrip.getSelectedItem();
@@ -791,7 +791,7 @@ public class MainFrames extends JFrame
 								int Rev = 0;
 								//System.out.println(Rev);
 								String ProductionReleaseDate = DateToCalendar(jxdProductionReleaseDate.getDate());
-								System.out.println(ProductionReleaseDate);
+								//System.out.println(ProductionReleaseDate);
 								con.insertNewPart(PartType, Material, BosalPartNumber, DrawingNumber, DrawingRev, 
 										DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
 										CustDrawingRevDate, SupplierPartNumber, Description, Program, Seq, 
