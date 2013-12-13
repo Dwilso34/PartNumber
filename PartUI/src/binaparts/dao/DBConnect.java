@@ -1234,6 +1234,41 @@ public class DBConnect {
 			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}	
+	//deletes a BosalPartNumber from parts list 
+	public boolean deleteBDL(JSONArray bdl) throws Exception{	
+			if (getUserRankValue() > 0){
+				String BreakdownListNumber = bdl.getJSONObject(0).get("BreakdownListNumber").toString();
+				try{
+					getDBConnection();
+					pst = con.prepareStatement("DELETE FROM `breakdown lists` WHERE `BreakdownListNumber` = ?");
+					pst.setString(1, BreakdownListNumber);
+					pst.executeUpdate();
+					pst.close();	
+					con.close();
+					return true;
+				}catch(SQLException SQLex){
+					SQLex.printStackTrace();
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}finally{
+					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				}
+			}else{
+				System.out.println(getUser()+" does not have permission to do that!");
+			}
+			return false;
+		}
+	//if the current BDL is able to be deleted then a new BDL will be made in its place
+	public void updateBDL(JSONArray bdl) {
+		try {
+			if (deleteBDL(bdl) == true) {
+				insertNewBDL(bdl);
+			}
+		} catch (Exception ex) {			
+			ex.printStackTrace();
+		}
+			
+	}
 	//Returns JSONArray of Experimental Part Numbers (to be used prior to Auto-Increment for conversion)
 	public JSONArray queryReturnAllExpParts() throws Exception{
 		

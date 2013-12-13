@@ -894,7 +894,7 @@ public class BDLFrame extends JFrame
 											con.insertBDLInfo(temp2);
 										}
 										else if (rbtnUpdateBDL.isSelected() == true) {
-											//con.insertNewBDL(temp1);
+											con.updateBDL(temp1);
 											con.updateBDLInfo(temp2);
 										}
 										
@@ -1221,13 +1221,7 @@ public class BDLFrame extends JFrame
 								System.out.println("See I put "+getCustomer()+" into Customer like you said!");
 								System.out.println("I Grabbed the Text from the Customer ComboBox!");								
 								System.out.println("I am about to Click the Customer CheckBox!");
-								cbxCustomer.doClick();
-								/*//set image for Customer Logo
-								try {
-									System.out.println("Setting the customer logo");
-									ImageIcon customerLogo = new ImageIcon("/images/General Motors.jpg");
-									lblCustImage = new JLabel(customerLogo);
-								} catch (Exception ex) {ex.printStackTrace();}*/
+								cbxCustomer.doClick();								
 							}
 						}
 						else if(e.getSource().equals(cboPlatform)){							
@@ -1644,7 +1638,7 @@ public class BDLFrame extends JFrame
 				        if (description != null) {
 							txtDescription.setText(description);
 						}
-				        if (rbtnCreateBDL.isSelected() == true || rbtnUpdateBDL.isSelected() == true) {
+				        if (rbtnCreateBDL.isSelected() == true) {
 					        if (getCustomer() != null) {
 								cboCustomer.setSelectedItem(getCustomer());
 							}
@@ -1661,6 +1655,7 @@ public class BDLFrame extends JFrame
 				        }	
 					}
 					if (rbtnUpdateBDL.isSelected() == true) {
+						//clears the table of any rows and adds the BDL part number to the top row of the table
 						for (int i = table1.getRowCount(); i > 0; i--) {
 							table1.removeRow(i-1);
 						}
@@ -1729,24 +1724,20 @@ public class BDLFrame extends JFrame
 							} catch (Exception ex) {rev = "-";}
 							txtREV.setText(rev);
 							
-							//set text for Release Date JTextField
-						
-							String d = null;
+							//set text for Release Date JTextField						
+							Date releaseDate = null;
 							try {
-								@SuppressWarnings("deprecation")
-								Date releaseDate = new Date(temp.getJSONObject(0).get("ReleaseDate").toString());
+								releaseDate = CalendarToDate((String)temp.getJSONObject(0).get("ReleaseDate"));
 								txtRelDate.setDate(releaseDate);
-							} catch (Exception ex) {d = "-";}
+							} catch (Exception ex) {releaseDate = null;}
 							
 							
 							//set text for Rev Date JTextField
-							String e = null;
+							Date revDate = null;
 							try {
-								@SuppressWarnings("deprecation")
-								Date revDate = new Date(temp.getJSONObject(0).get("RevDate").toString());
+								revDate = CalendarToDate((String)temp.getJSONObject(0).get("RevDate"));
 								txtREVDate.setDate(revDate);
-							} catch (Exception ex) {e = "-";}
-							
+							} catch (Exception ex) {revDate = null;}							
 							
 							//set text for Production JTextField
 							String production= null;
@@ -1780,32 +1771,32 @@ public class BDLFrame extends JFrame
 							String engine= null;
 							try {
 								engine = temp.getJSONObject(0).get("Engine").toString();
-							} catch (Exception ex) {engine = "-";}
-							txtName.setText(engine);
+							} catch (Exception ex) {engine = null;}
+							setName(engine);
 							
 							//set text for Platform JTextField
 							String Platform= null;
 							try {
 								Platform = temp.getJSONObject(0).get("Platform").toString();
-							} catch (Exception ex) {Platform = "-";}
-							txtPlatform.setText(Platform);
+							} catch (Exception ex) {Platform = null;}
+							setPlatform(Platform);
 							
 							//set text for Customer JTextField
 							String Customer= null;
 							try {
 								Customer = temp.getJSONObject(0).get("Customer").toString();
-							} catch (Exception ex) {Customer = "-";}
-							txtCustomer.setText(Customer);
-
-							//set image for Customer Logo
-							try {
-								System.out.println("Setting the customer logo");
-								ImageIcon customerLogo = new ImageIcon("/images/General Motors.jpg");
-								lblCustImage = new JLabel(customerLogo);
-								lblCustImage.setBounds(157, 29, 128, 73);
-								lblCustImage.setIcon(customerLogo);
-								lblCustImage.repaint();
-							} catch (Exception ex) {ex.printStackTrace();}
+							} catch (Exception ex) {Customer = null;}
+							setCustomer(Customer);
+							
+					        if (getCustomer() != null) {
+								cboCustomer.setSelectedItem(getCustomer());
+							}
+					        if (getPlatform() != null) {
+								cboPlatform.setSelectedItem(getPlatform());
+							}
+					        if (getName() != null) {
+								cboName.setSelectedItem(getName());
+							}
 							
 							temp = con.queryDatabase("engines", "Engine", engine);
 							//set text for Type JTextField
@@ -1831,7 +1822,6 @@ public class BDLFrame extends JFrame
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
-
 						setItemsForTable();
 					}
 			      }
@@ -2244,6 +2234,8 @@ public class BDLFrame extends JFrame
 						} catch (Exception ex) {ex.printStackTrace();}			            
 					}						
 				}});
+			
+			//determines the radio button that is selected when the panel is opened up
 			try {
 				if (con.getUserRankValue() > 0) {
 					rbtnCreateBDL.doClick();
@@ -2282,30 +2274,30 @@ public class BDLFrame extends JFrame
 					txtRelPlant2.setText("");
 					txtRelSupplier.setText("");
 					txtCustomer.setText("");
-					txtCustomer.setVisible(true);
-					cbxCustomer.setSelected(false);
-					cbxCustomer.setVisible(false);
-					cboCustomer.removeItemListener(cboGetInfo);
-					cboCustomer.setVisible(false);
+					txtCustomer.setVisible(false);
+					//cbxCustomer.setSelected(false);
+					//cbxCustomer.setVisible(false);
+					//cboCustomer.removeItemListener(cboGetInfo);
+					cboCustomer.setVisible(true);
 					txtPlatform.setText("");
-					txtPlatform.setVisible(true);
-					cbxPlatform.setSelected(false);
-					cbxPlatform.setVisible(false);
-					cboPlatform.removeItemListener(cboGetInfo);
-					cboPlatform.setVisible(false);
+					txtPlatform.setVisible(false);
+					//cbxPlatform.setSelected(false);
+					//cbxPlatform.setVisible(false);
+					//cboPlatform.removeItemListener(cboGetInfo);
+					cboPlatform.setVisible(true);
 					txtName.setText("");
-					txtName.setVisible(true);
-					cbxName.setSelected(false);
-					cbxName.setVisible(false);
-					cboName.removeItemListener(cboGetInfo);
-					cboName.setVisible(false);
-					btnAdd.setVisible(false);
-					btnDelete.setVisible(false);
+					txtName.setVisible(false);
+					//cbxName.setSelected(false);
+					//cbxName.setVisible(false);
+					//cboName.removeItemListener(cboGetInfo);
+					cboName.setVisible(true);
+					//btnAdd.setVisible(false);
+					//btnDelete.setVisible(false);
 					//myTable.getModel().removeTableModelListener(columnListener);
 					for (int i = table1.getRowCount(); i > 0; i--) {
 						table1.removeRow(i-1);
 					}
-					myTable.removeMouseListener(mouseClickListener);	
+					//myTable.removeMouseListener(mouseClickListener);	
 				}
 			});
 			
