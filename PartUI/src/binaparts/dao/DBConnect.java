@@ -130,11 +130,16 @@ public class DBConnect {
 		String username = config.getProperty("appUser");
 		return username;
 	}
+	//returns user's passowrd based on specific applications config settings 
+	public String getPassword() throws Exception{			
+		ConfigurationManager config = new ConfigurationManager(configFilePath);
+		String password = config.getProperty("appPassword");
+		return password;
+	}
 	//returns users Real name based on specific applications config settings 
 	public String getUsersName() throws Exception{
 		
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String username = config.getProperty("appUser");
+		String username = getUser();
 		String usersName = null;
 		String first = null;
 		String last = null;
@@ -217,11 +222,9 @@ public class DBConnect {
 		return rkValue;
 	}
 	//returns true/false value to verify if the user defined in ConnectionProperites is valid (done)
-	public boolean verifyUser() throws Exception {
-		
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String username = config.getProperty("appUser");
-		String password = config.getProperty("appPassword");
+	public boolean verifyUser() throws Exception {		
+		String username = getUser();
+		String password = getPassword();
 		boolean userCheck = false;
 		try{
 			getDBConnection();
@@ -309,9 +312,7 @@ public class DBConnect {
 	}
 	//changes a user's rank in database (Requires admin)
 	public void changeUserRank(String username, String rank) throws Exception{
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String appUser = config.getProperty("appUser");
-		if(getUserRank().equals("admin")){
+		if(getUserRankValue() > 0){
 			try{
 				getDBConnection();				
 				pst = con.prepareStatement("UPDATE `users` SET `rank` = ? WHERE username = ?");
@@ -329,7 +330,7 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
-			System.out.println(appUser+" does not have permission to do that!");
+			System.out.println(getUser()+" does not have permission to do that!");
 		}
 	}
 	//changes a users password in database 
@@ -381,9 +382,7 @@ public class DBConnect {
 	}
 	//delete a user from database (Requires admin)
 	public void deleteProgram(String program) throws Exception{
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String appUser = config.getProperty("appUser");
-		if(getUserRank().equals("admin")){
+		if(getUserRankValue() > 0){
 			try{
 				getDBConnection();
 				con.setAutoCommit(false);
@@ -403,7 +402,7 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
-			System.out.println(appUser+" does not have permission to do that!");
+			System.out.println(getUser()+" does not have permission to do that!");
 		}
 	}
 	//create a customer and add it to the database
@@ -434,9 +433,7 @@ public class DBConnect {
 	}
 	//delete a user from database (Requires admin)
 	public void deleteCustomer(String customer) throws Exception{
-		ConfigurationManager config = new ConfigurationManager(configFilePath);
-		String appUser = config.getProperty("appUser");
-		if(getUserRank().equals("admin")){
+		if(getUserRankValue() > 0){
 			try{
 				getDBConnection();
 				con.setAutoCommit(false);
@@ -456,7 +453,7 @@ public class DBConnect {
 				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
 		}else{
-			System.out.println(appUser+" does not have permission to do that!");
+			System.out.println(getUser()+" does not have permission to do that!");
 		}
 	}
 	//returns jsonArray of User filtered by username (done)
@@ -1325,9 +1322,7 @@ public class DBConnect {
 		}
 	//deletes a BosalPartNumber from parts list 
 	public void deletePart(String BosalPartNumber) throws Exception{	
-			ConfigurationManager config = new ConfigurationManager(configFilePath);
-			String appUser = config.getProperty("appUser");
-			if(getUserRank().equals("admin")){
+			if(getUserRankValue() > 0){
 				try{
 					getDBConnection();
 					pst = con.prepareStatement("DELETE FROM `bosal parts` WHERE `BosalPartNumber` = ?");
@@ -1343,7 +1338,7 @@ public class DBConnect {
 					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 				}
 			}else{
-				System.out.println(appUser+" does not have permission to do that!");
+				System.out.println(getUser()+" does not have permission to do that!");
 			}
 		}
 	//updates a BosalPartNumber in parts list
