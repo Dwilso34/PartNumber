@@ -1598,43 +1598,45 @@ public class BDLFrame extends JFrame
 								try {
 									System.out.println("trying the delta list");
 									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
-									System.out.println("found "+temp.toString() + " in the delta list");
-									//adds the BDL number to the first row of the table
-									for (int i = table1.getRowCount(); i > 0; i--) {
-										table1.removeRow(i-1);
-									}
-									btnAdd.doClick();
-									table1.setValueAt(getSearchText(), 0, 4);
+									System.out.println("found "+temp.toString() + " in the delta list");									
 								} catch (Exception ex) {
 									ex.printStackTrace();
 								}
 							}
-				        	for (int i = 0; i < temp.length(); i++) {
-				        		try {
-									setPlatform(temp.getJSONObject(i).getString("Program").toString());								
-
-									JSONArray temp2 = con.queryDatabase("programs", "Program", getPlatform());
-									for (int j = 0; j < temp2.length(); j++) {
-						        		try {
-						        			setCustomer(temp.getJSONObject(j).get("Customer").toString());
-						        		} catch (Exception ex) {
-						        			//System.out.println("Program " + platform + " does not contain Customer");
-						        		}
-						        	}
-								} catch (Exception ex) {
-									//System.out.println("Part " + getSearchText() + " does not contain Program");
+				        	if (temp.length() > 0) {
+					        	//clear all rows on the table already
+								for (int i = table1.getRowCount(); i > 0; i--) {
+									table1.removeRow(i-1);
 								}
-				        		try {
-									custPartNum = temp.getJSONObject(i).getString("CustPartNumber").toString();
-								} catch (Exception ex) {
-									//System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
-								}
-				        		try {
-									description = temp.getJSONObject(i).getString("PartDescription").toString();
-								} catch (Exception ex) {
-									//System.out.println("Part " + getSearchText() + " does not contain PartDescription");
-								}
-							}						
+								btnAdd.doClick();
+								table1.setValueAt(getSearchText(), 0, 4);
+					        	for (int i = 0; i < temp.length(); i++) {
+					        		try {
+										setPlatform(temp.getJSONObject(i).getString("Program").toString());								
+	
+										JSONArray temp2 = con.queryDatabase("programs", "Program", getPlatform());
+										for (int j = 0; j < temp2.length(); j++) {
+							        		try {
+							        			setCustomer(temp.getJSONObject(j).get("Customer").toString());
+							        		} catch (Exception ex) {
+							        			//System.out.println("Program " + platform + " does not contain Customer");
+							        		}
+							        	}
+									} catch (Exception ex) {
+										//System.out.println("Part " + getSearchText() + " does not contain Program");
+									}
+					        		try {
+										custPartNum = temp.getJSONObject(i).getString("CustPartNumber").toString();
+									} catch (Exception ex) {
+										//System.out.println("Part " + getSearchText() + " does not contain CustPartNumber");
+									}
+					        		try {
+										description = temp.getJSONObject(i).getString("PartDescription").toString();
+									} catch (Exception ex) {
+										//System.out.println("Part " + getSearchText() + " does not contain PartDescription");
+									}
+								}	
+				        	}
 						} catch (Exception ex) {ex.printStackTrace();}
 				        if (custPartNum != null) {
 							txtCustomerPartNum.setText(custPartNum);
