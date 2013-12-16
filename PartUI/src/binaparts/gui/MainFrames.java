@@ -215,7 +215,7 @@ public class MainFrames extends JFrame
 					{
 						if (e.getSource() == btnManageUsers) {
 							setVisible(false);
-							frame.setSize(640,430);
+							frame.setSize(640,460);
 							frame.setTitle("Manage Users:");
 							frame.setResizable(false);
 							frame.setLocationRelativeTo(main);
@@ -1413,6 +1413,19 @@ public class MainFrames extends JFrame
 						}catch(Exception ex){DrawingRev = "-";}
 						txtDrawingRev.setText(DrawingRev);
 						
+						String CustDrawingNumber = null;
+						try{
+							CustDrawingNumber = temp.getJSONObject(0).getString("CustDrawingNumber").toString();
+						}catch(Exception ex){CustDrawingNumber = "-";}
+						txtCustDrawingNum.setText(CustDrawingNumber);
+						
+						//set text for DrawingRev JTextField
+						String CustDrawingRev = null;
+						try{
+							CustDrawingRev = temp.getJSONObject(0).getString("CustDrawingRev").toString();
+						}catch(Exception ex){CustDrawingRev = "-";}
+						txtCustDrawingRev.setText(CustDrawingRev);
+						
 						Date drawingRevDate = null;
 						try {
 							drawingRevDate = CalendarToDate((String)temp.getJSONObject(0).get("DrawingRevDate"));
@@ -2096,7 +2109,7 @@ public class MainFrames extends JFrame
 }
 	class ManagePanel extends JPanel
 	{
-	//JLabels	
+		//JLabels	
 		private JLabel lblbosal;
 		private JLabel lblmanageUsers;
 		private JLabel lblUsername;
@@ -2114,6 +2127,13 @@ public class MainFrames extends JFrame
 		private JLabel lblDeletePro;
 		private JLabel lblFirstName;
 		private JLabel lblLastName;
+		private JLabel lblEngine;
+		private JLabel lblPlatform;
+		private JLabel lblType;
+		private JLabel lblVolume;
+		private JLabel lblPower;
+		private JLabel lblDeleteEngine;
+		
 		
 	//JTextFields
 		private JTextField txtUsername;
@@ -2123,12 +2143,51 @@ public class MainFrames extends JFrame
 		private JTextField txtCust;
 		private JTextField txtFirstName;
 		private JTextField txtLastName;
+		private JTextField txtEngine;
+		private JTextField txtVolume;
+		private JTextField txtPower;
 		
 	//JPasswordFields
 		private JPasswordField txtPassword;
 		private JPasswordField txtConfirmPassword;
 		
 	//JComboBoxes
+		private JComboBox<String> cboDeleteEngine;
+		private ComboBoxModel<String> resetEngineComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> ProComboBoxDefault = null;
+			String[] Pro = null;
+			
+			try {
+				temp1 = con.queryReturnAllEngines();
+				Pro = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i ++){
+					Pro[i] = temp1.getJSONObject(i).get("Engine").toString();
+				}
+				ProComboBoxDefault = (new DefaultComboBoxModel<String> (Pro));
+			}catch(Exception ex){ex.printStackTrace();/*Ignore*/}
+			return ProComboBoxDefault;
+		}
+		private JComboBox<String> cboPlatform;
+		private ComboBoxModel<String> resetPlatformComboBox()
+		{
+			JSONArray temp1 = new JSONArray();
+			ComboBoxModel<String> ProComboBoxDefault = null;
+			String[] Pro = null;
+			
+			try {
+				temp1 = con.queryReturnAllPlatforms();
+				Pro = new String[temp1.length()];
+				for(int i = 0; i < temp1.length(); i ++){
+					Pro[i] = temp1.getJSONObject(i).get("Program").toString();
+				}
+				ProComboBoxDefault = (new DefaultComboBoxModel<String> (Pro));
+			}catch(Exception ex){ex.printStackTrace();/*Ignore*/}
+			return ProComboBoxDefault;
+		}
+		private JComboBox<?> cboType;
+		
 		private JComboBox<?> cboUserRank;
 		private JComboBox<String> cboDeletePro;
 		private ComboBoxModel<String> resetDeleteProComboBox()
@@ -2193,6 +2252,7 @@ public class MainFrames extends JFrame
 		private JRadioButton rbtnChangePass;
 		private JRadioButton rbtnAddProgram;
 		private JRadioButton rbtnAddCustomer;
+		private JRadioButton rbtnAddEngine;
 		
 	//Password comparison returning true/false
 		public boolean comparePasswords(String password, String confirmPassword)
@@ -2288,7 +2348,7 @@ public class MainFrames extends JFrame
 			lblDeleteCust.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblDeleteCust.setForeground(Color.BLACK);
 			lblDeletePro = new JLabel("Delete Program:");
-			lblDeletePro.setBounds(281, 295, 112, 17);
+			lblDeletePro.setBounds(281, 298, 112, 17);
 			lblDeletePro.setVisible(false);
 			lblDeletePro.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblDeletePro.setForeground(Color.BLACK);
@@ -2302,6 +2362,36 @@ public class MainFrames extends JFrame
 			lblLastName.setVisible(true);
 			lblLastName.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblLastName.setForeground(Color.BLACK);
+			lblEngine = new JLabel("Engine:");
+			lblEngine.setBounds(336, 156, 57, 20);
+			lblEngine.setVisible(false);
+			lblEngine.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblEngine.setForeground(Color.BLACK);
+			lblPlatform = new JLabel("Platform:");
+			lblPlatform.setBounds(329, 261, 64, 20);
+			lblPlatform.setVisible(false);
+			lblPlatform.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblPlatform.setForeground(Color.BLACK);
+			lblType = new JLabel("Type:");
+			lblType.setBounds(354, 296, 39, 20);
+			lblType.setVisible(false);
+			lblType.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblType.setForeground(Color.BLACK);
+			lblVolume = new JLabel("Volume:");
+			lblVolume.setBounds(336, 191, 57, 20);
+			lblVolume.setVisible(false);
+			lblVolume.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblVolume.setForeground(Color.BLACK);
+			lblPower = new JLabel("Power:");
+			lblPower.setBounds(344, 226, 49, 20);
+			lblPower.setVisible(false);
+			lblPower.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblPower.setForeground(Color.BLACK);
+			lblDeleteEngine = new JLabel("Delete Engine:");
+			lblDeleteEngine.setBounds(293, 328, 100, 20);
+			lblDeleteEngine.setVisible(false);
+			lblDeleteEngine.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblDeleteEngine.setForeground(Color.BLACK);
 			
 		//TextFields	
 			
@@ -2350,6 +2440,21 @@ public class MainFrames extends JFrame
 			txtLastName.setVisible(true);
 			txtLastName.addMouseListener(new ContextMenuMouseListener());
 			txtLastName.setForeground(Color.BLACK);
+			txtEngine = new JTextField();
+			txtEngine.setBounds(403, 158, 182, 20);
+			txtEngine.setVisible(false);
+			txtEngine.addMouseListener(new ContextMenuMouseListener());
+			txtEngine.setForeground(Color.BLACK);
+			txtVolume = new JTextField();
+			txtVolume.setBounds(403, 193, 182, 20);
+			txtVolume.setVisible(false);
+			txtVolume.addMouseListener(new ContextMenuMouseListener());
+			txtVolume.setForeground(Color.BLACK);
+			txtPower = new JTextField();
+			txtPower.setBounds(403, 228, 182, 20);
+			txtPower.setVisible(false);
+			txtPower.addMouseListener(new ContextMenuMouseListener());
+			txtPower.setForeground(Color.BLACK);
 			
 		//ComboBox
 			
@@ -2374,12 +2479,33 @@ public class MainFrames extends JFrame
 			cboDeleteCust.setSelectedIndex(-1);
 			cboDeleteCust.setBackground(Color.white);
 			cboDeletePro = new JComboBox<String>();
-			cboDeletePro.setBounds(403, 294, 182, 20);
+			cboDeletePro.setBounds(403, 298, 182, 20);
 			cboDeletePro.setModel(resetDeleteProComboBox());
 			cboDeletePro.setVisible(false);
 			cboDeletePro.addMouseListener(new ContextMenuMouseListener());
 			cboDeletePro.setSelectedIndex(-1);
 			cboDeletePro.setBackground(Color.white);
+			cboPlatform = new JComboBox<String>();
+			cboPlatform.setBounds(403, 263, 182, 20);
+			cboPlatform.setModel(resetPlatformComboBox());
+			cboPlatform.setVisible(false);
+			cboPlatform.addMouseListener(new ContextMenuMouseListener());
+			cboPlatform.setSelectedIndex(-1);
+			cboPlatform.setBackground(Color.white);
+			String[] engineTypes = {"Gasoline", "Diesel"};
+			cboType = new JComboBox<Object>(engineTypes);
+			cboType.setBounds(403, 298, 182, 20);
+			cboType.setVisible(false);
+			cboType.addMouseListener(new ContextMenuMouseListener());
+			cboType.setSelectedIndex(-1);
+			cboType.setBackground(Color.white);
+			cboDeleteEngine = new JComboBox<String>();
+			cboDeleteEngine.setBounds(403, 329, 182, 20);
+			cboDeleteEngine.setModel(resetEngineComboBox());
+			cboDeleteEngine.setVisible(false);
+			cboDeleteEngine.addMouseListener(new ContextMenuMouseListener());
+			cboDeleteEngine.setSelectedIndex(-1);
+			cboDeleteEngine.setBackground(Color.white);
 			
 		//RadioButton
 			
@@ -2404,8 +2530,8 @@ public class MainFrames extends JFrame
 								}}});
 			}}});
 			
-			rbtnAddProgram = new JRadioButton("Add Program");
-			rbtnAddProgram.setBounds(42, 294, 118, 25);
+			rbtnAddProgram = new JRadioButton("Add/Delete Program");
+			rbtnAddProgram.setBounds(42, 294, 170, 25);
 			rbtnAddProgram.setBackground(new Color(105, 105, 105));
 			rbtnAddProgram.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnAddProgram.setForeground(Color.BLACK);
@@ -2444,6 +2570,19 @@ public class MainFrames extends JFrame
 			            txtFirstName.setVisible(false);
 			            lblLastName.setVisible(false);
 			            lblFirstName.setVisible(false);
+			            lblEngine.setVisible(false);
+						lblPlatform.setVisible(false);
+						lblType.setVisible(false);
+						lblVolume.setVisible(false);
+						lblPower.setVisible(false);
+						txtEngine.setVisible(false);
+						txtVolume.setVisible(false);
+						txtPower.setVisible(false);
+						cboPlatform.setVisible(false);
+						lblDeleteEngine.setVisible(false);
+						cboDeleteEngine.setVisible(false);
+						cboDeleteEngine.setSelectedIndex(-1);
+						cboType.setVisible(false);
 			            cboUserRank.setSelectedIndex(-1);
 			            cboCustomer.setModel(resetCustomerComboBox());
 			            cboCustomer.setSelectedIndex(-1);
@@ -2454,8 +2593,8 @@ public class MainFrames extends JFrame
 					}						
 			}});
 			
-			rbtnAddCustomer = new JRadioButton("Add Customer");
-			rbtnAddCustomer.setBounds(42, 259, 136, 25);
+			rbtnAddCustomer = new JRadioButton("Add/Delete Customer");
+			rbtnAddCustomer.setBounds(42, 259, 180, 25);
 			rbtnAddCustomer.setBackground(new Color(105, 105, 105));
 			rbtnAddCustomer.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnAddCustomer.setForeground(Color.BLACK);
@@ -2493,12 +2632,27 @@ public class MainFrames extends JFrame
 			            txtFirstName.setVisible(false);
 			            lblLastName.setVisible(false);
 			            lblFirstName.setVisible(false);
+			            lblEngine.setVisible(false);
+						lblPlatform.setVisible(false);
+						lblType.setVisible(false);
+						lblVolume.setVisible(false);
+						lblPower.setVisible(false);
+						txtEngine.setVisible(false);
+						txtVolume.setVisible(false);
+						txtPower.setVisible(false);
+						cboPlatform.setVisible(false);
+						cboType.setVisible(false);
+						lblDeleteEngine.setVisible(false);
+						cboDeleteEngine.setVisible(false);
+						cboDeleteEngine.setSelectedIndex(-1);
 			            cboUserRank.setSelectedIndex(-1);
 			            cboCustomer.setModel(resetCustomerComboBox());
 			            cboCustomer.setSelectedIndex(-1);
 			            cboDeleteCust.setModel(resetDeleteCustComboBox());
 			            cboDeleteCust.setSelectedIndex(-1);
 			            cboDeletePro.setSelectedIndex(-1);
+			            cboType.setSelectedIndex(-1);
+						cboPlatform.setSelectedIndex(-1);
 					}						
 			}});
 			
@@ -2553,10 +2707,25 @@ public class MainFrames extends JFrame
 			            txtFirstName.setVisible(false);
 			            lblLastName.setVisible(false);
 			            lblFirstName.setVisible(false);
+			            lblEngine.setVisible(false);
+						lblPlatform.setVisible(false);
+						lblType.setVisible(false);
+						lblVolume.setVisible(false);
+						lblPower.setVisible(false);
+						txtEngine.setVisible(false);
+						txtVolume.setVisible(false);
+						txtPower.setVisible(false);
+						cboPlatform.setVisible(false);
+						cboType.setVisible(false);
+						lblDeleteEngine.setVisible(false);
+						cboDeleteEngine.setVisible(false);
+						cboDeleteEngine.setSelectedIndex(-1);
 			            cboUserRank.setSelectedIndex(-1);
 			            cboCustomer.setSelectedIndex(-1);
 			            cboDeleteCust.setSelectedIndex(-1);
 			            cboDeletePro.setSelectedIndex(-1);
+			            cboType.setSelectedIndex(-1);
+						cboPlatform.setSelectedIndex(-1);
 					}						
 			}});
 			rbtnDeleteUser.addItemListener(passwordListener);
@@ -2611,10 +2780,25 @@ public class MainFrames extends JFrame
 			            txtFirstName.setVisible(true);
 			            lblLastName.setVisible(true);
 			            lblFirstName.setVisible(true);
+			            lblEngine.setVisible(false);
+						lblPlatform.setVisible(false);
+						lblType.setVisible(false);
+						lblVolume.setVisible(false);
+						lblPower.setVisible(false);
+						txtEngine.setVisible(false);
+						txtVolume.setVisible(false);
+						txtPower.setVisible(false);
+						cboPlatform.setVisible(false);
+						cboType.setVisible(false);
+						lblDeleteEngine.setVisible(false);
+						cboDeleteEngine.setVisible(false);
+						cboDeleteEngine.setSelectedIndex(-1);
 			            cboUserRank.setSelectedIndex(-1);
 			            cboCustomer.setSelectedIndex(-1);
 			            cboDeleteCust.setSelectedIndex(-1);
 			            cboDeletePro.setSelectedIndex(-1);
+			            cboType.setSelectedIndex(-1);
+						cboPlatform.setSelectedIndex(-1);
 					}
 			}});
 			rbtnCreateUser.addItemListener(passwordListener);
@@ -2671,10 +2855,25 @@ public class MainFrames extends JFrame
 			            txtFirstName.setVisible(false);
 			            lblLastName.setVisible(false);
 			            lblFirstName.setVisible(false);
+			            lblEngine.setVisible(false);
+						lblPlatform.setVisible(false);
+						lblType.setVisible(false);
+						lblVolume.setVisible(false);
+						lblPower.setVisible(false);
+						txtEngine.setVisible(false);
+						txtVolume.setVisible(false);
+						txtPower.setVisible(false);
+						cboPlatform.setVisible(false);
+						cboType.setVisible(false);
+						lblDeleteEngine.setVisible(false);
+						cboDeleteEngine.setVisible(false);
+						cboDeleteEngine.setSelectedIndex(-1);
 			            cboUserRank.setSelectedIndex(-1);
 			            cboCustomer.setSelectedIndex(-1);
 			            cboDeleteCust.setSelectedIndex(-1);
 			            cboDeletePro.setSelectedIndex(-1);
+			            cboType.setSelectedIndex(-1);
+						cboPlatform.setSelectedIndex(-1);
 					}
 			}});
 			rbtnChangeUserRank.addItemListener(passwordListener);
@@ -2728,13 +2927,90 @@ public class MainFrames extends JFrame
 			            txtFirstName.setVisible(false);
 			            lblLastName.setVisible(false);
 			            lblFirstName.setVisible(false);
+			            lblEngine.setVisible(false);
+						lblPlatform.setVisible(false);
+						lblType.setVisible(false);
+						lblVolume.setVisible(false);
+						lblPower.setVisible(false);
+						txtEngine.setVisible(false);
+						txtVolume.setVisible(false);
+						txtPower.setVisible(false);
+						cboPlatform.setVisible(false);
+						cboType.setVisible(false);
+						lblDeleteEngine.setVisible(false);
+						cboDeleteEngine.setVisible(false);
+						cboDeleteEngine.setSelectedIndex(-1);
 			            cboUserRank.setSelectedIndex(-1);
 			            cboCustomer.setSelectedIndex(-1);
 			            cboDeleteCust.setSelectedIndex(-1);
 			            cboDeletePro.setSelectedIndex(-1);
+			            cboType.setSelectedIndex(-1);
+						cboPlatform.setSelectedIndex(-1);
 					}
 			}});
 			rbtnChangePass.addItemListener(passwordListener);
+			
+			rbtnAddEngine = new JRadioButton("Add/Delete Engine");
+			rbtnAddEngine.setBounds(42, 328, 170, 25);
+			rbtnAddEngine.setBackground(new Color(105, 105, 105));
+			rbtnAddEngine.setFont(new Font("Tahoma", Font.BOLD, 14));
+			rbtnAddEngine.setForeground(Color.BLACK);
+			rbtnAddEngine.addActionListener(new ActionListener(){
+				
+				public void actionPerformed(ActionEvent e)
+				{		
+					if (e.getSource() == rbtnAddEngine){
+						lblFirstName.setVisible(false);
+						lblLastName.setVisible(false);
+						lblCustomer.setVisible(false);
+						lblUsername.setVisible(false);
+						lblPassword.setVisible(false);
+						lblPassword2.setVisible(false);
+						lblCust.setVisible(false);
+						txtFirstName.setVisible(false);
+						txtLastName.setVisible(false);
+						cboCustomer.setVisible(false);
+						txtUsername.setVisible(false);
+						txtPassword.setVisible(false);
+						lblProStart.setVisible(false);
+						txtCust.setVisible(false);
+						cboUserRank.setVisible(false);
+						lblRank.setVisible(false);
+						lblProEnd.setVisible(false);
+						txtProEnd.setVisible(false);
+						txtConfirmPassword.setVisible(false);
+						lblPassConfirm.setVisible(false);
+						txtProStart.setVisible(false);
+						lblDeletePro.setVisible(false);
+						lblDeleteCust.setVisible(false);
+						lblAddProgram.setVisible(false);
+						lblAddCustomer.setVisible(false);
+						cboDeletePro.setVisible(false);
+						cboDeleteCust.setVisible(false);
+						txtAddCusPro.setVisible(false);
+						lblEngine.setVisible(true);
+						lblPlatform.setVisible(true);
+						lblType.setVisible(true);
+						lblVolume.setVisible(true);
+						lblPower.setVisible(true);
+						txtEngine.setVisible(true);
+						txtVolume.setVisible(true);
+						txtPower.setVisible(true);
+						cboPlatform.setVisible(true);
+						cboType.setVisible(true);
+						btnDelete.setVisible(true);
+						lblDeleteEngine.setVisible(true);
+						cboDeleteEngine.setVisible(true);
+						cboDeleteEngine.setSelectedIndex(-1);
+						cboType.setSelectedIndex(-1);
+						cboPlatform.setSelectedIndex(-1);
+						cboUserRank.setSelectedIndex(-1);
+			            cboCustomer.setSelectedIndex(-1);
+			            cboDeleteCust.setSelectedIndex(-1);
+			            cboDeletePro.setSelectedIndex(-1);
+					}
+				}
+			});
 			
 			ButtonGroup group = new ButtonGroup();
 			
@@ -2744,12 +3020,13 @@ public class MainFrames extends JFrame
 			group.add(rbtnChangePass);
 			group.add(rbtnAddProgram);
 			group.add(rbtnAddCustomer);
+			group.add(rbtnAddEngine);
 				
 		//Buttons	
 			
 			ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
 			btnBack = new JButton(back);
-			btnBack.setBounds(42, 338, 106, 35);
+			btnBack.setBounds(42, 365, 106, 35);
 			btnBack.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent e)
@@ -2809,15 +3086,30 @@ public class MainFrames extends JFrame
 				        txtFirstName.setVisible(true);
 				        lblLastName.setVisible(true);
 				        lblFirstName.setVisible(true);
+				        lblEngine.setVisible(false);
+						lblPlatform.setVisible(false);
+						lblType.setVisible(false);
+						lblVolume.setVisible(false);
+						lblPower.setVisible(false);
+						txtEngine.setVisible(false);
+						txtVolume.setVisible(false);
+						txtPower.setVisible(false);
+						cboPlatform.setVisible(false);
+						cboType.setVisible(false);
+						lblDeleteEngine.setVisible(false);
+						cboDeleteEngine.setVisible(false);
+						cboDeleteEngine.setSelectedIndex(-1);
 						cboUserRank.setSelectedIndex(-1);
 						cboCustomer.setSelectedIndex(-1);
 						cboDeleteCust.setSelectedIndex(-1);
 						cboDeletePro.setSelectedIndex(-1);
+						cboType.setSelectedIndex(-1);
+						cboPlatform.setSelectedIndex(-1);
 			}}});
 			
 			ImageIcon delete = new ImageIcon(getClass().getResource("/images/delete.jpg"));
 			btnDelete = new JButton(delete);
-			btnDelete.setBounds(256, 338, 106, 35);
+			btnDelete.setBounds(255, 365, 106, 35);
 			btnDelete.setVisible(false);
 			btnDelete.addActionListener(new ActionListener() {
 				
@@ -2891,6 +3183,34 @@ public class MainFrames extends JFrame
 								}catch(Exception ex){/*Ignore*/}
 							}
 						}
+						if(rbtnAddEngine.isSelected() == true){
+							if(cboDeleteEngine.getSelectedItem().equals("")){
+								JOptionPane.showMessageDialog(
+										frame,
+										"Please Select a Program",
+										"Creditenials Error",
+										JOptionPane.ERROR_MESSAGE);
+							}else{
+								try{
+									if(con.getUserRank().equals("admin")){
+										n = JOptionPane.showConfirmDialog(
+												frame,
+												"Are you sure you want to delete " + cboDeleteEngine.getSelectedItem() + " ?",
+												"Delete:",
+												JOptionPane.YES_NO_OPTION,
+												JOptionPane.WARNING_MESSAGE);
+						}else{
+							config = new ConfigurationManager(configFilePath);
+							JOptionPane.showMessageDialog(
+									frame,
+									"" + (config.getProperty("appUser")
+											+ "does not have permission to Delete Programs"),
+											"Creditenials Error",
+											JOptionPane.ERROR_MESSAGE);
+						}
+								}catch(Exception ex){/*Ignore*/}
+							}
+						}
 						if(n == 0){
 							try{
 								String program = cboDeletePro.getSelectedItem().toString();
@@ -2898,8 +3218,21 @@ public class MainFrames extends JFrame
 							con.deleteProgram(program);
 							cboDeletePro.setModel(resetDeleteProComboBox());
 						}
+						
 						}catch(Exception ex){/*Ignore*/}
 							cboDeletePro.setSelectedIndex(-1);
+							
+						}
+						if(n == 0){
+							try{
+						String engine = cboDeleteEngine.getSelectedItem().toString();
+						if(rbtnAddEngine.isSelected() == true){
+							System.out.println("Made It");
+							con.deleteEngine(engine);
+							cboDeleteEngine.setModel(resetEngineComboBox());
+						}
+						}catch(Exception ex){/*Ignore*/}
+							cboDeleteEngine.setSelectedIndex(-1);
 						}
 							if(rbtnAddCustomer.isSelected() == true){
 								if(cboDeleteCust.getSelectedItem().equals("")){
@@ -2942,7 +3275,7 @@ public class MainFrames extends JFrame
 			
 			ImageIcon create = new ImageIcon(getClass().getResource("/images/save.jpg"));
 			btnSave = new JButton(create);
-			btnSave.setBounds(487, 338, 106, 35);
+			btnSave.setBounds(479, 365, 106, 35);
 			btnSave.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent e) 
@@ -3040,6 +3373,22 @@ public class MainFrames extends JFrame
 											JOptionPane.WARNING_MESSAGE);
 								}
 							}
+							if(rbtnAddEngine.isSelected() == true){
+								if(txtEngine.getText().equals("")){
+									JOptionPane.showMessageDialog(
+											frame,
+											"Please Enter a Program",
+											"Creditenial Error",
+											JOptionPane.ERROR_MESSAGE);
+								}else{
+									n = JOptionPane.showConfirmDialog(
+											frame,
+											"Are you sure you want to create " + txtEngine.getText() + " as a new engine?",
+											"Save:",
+											JOptionPane.YES_NO_OPTION,
+											JOptionPane.WARNING_MESSAGE);
+								}
+							}
 							if(rbtnAddCustomer.isSelected() == true){
 								if(txtAddCusPro.getText().equals("")){
 									JOptionPane.showMessageDialog(
@@ -3082,6 +3431,15 @@ public class MainFrames extends JFrame
 											cboCustomer.setModel(resetCustomerComboBox());
 											cboDeleteCust.setModel(resetDeleteCustComboBox());
 										}
+										if(rbtnAddEngine.isSelected() == true){
+											String newEngine = txtEngine.getText();
+											String newVolume = txtVolume.getText();
+											String newPower = txtPower.getText();
+											String newPlatform = cboPlatform.getSelectedItem().toString();
+											String newType = cboType.getSelectedItem().toString();
+											con.createEngine(newEngine, newPlatform, newType, newVolume, newPower);
+										
+										}
 										if(rbtnAddProgram.isSelected() == true){
 											String Program = txtAddCusPro.getText();
 											String Customer = cboCustomer.getSelectedItem().toString();
@@ -3118,7 +3476,12 @@ public class MainFrames extends JFrame
 									txtCust.setText("");
 									txtAddCusPro.setText("");
 									txtProStart.setText("");
-									txtProEnd.setText("");				
+									txtProEnd.setText("");	
+									txtEngine.setText("");
+									txtPower.setText("");
+									txtVolume.setText("");
+									cboPlatform.setSelectedIndex(-1);
+									cboType.setSelectedIndex(-1);
 									cboCustomer.setSelectedIndex(-1);
 									cboUserRank.setSelectedIndex(-1);
 									cboDeleteCust.setSelectedIndex(-1);
@@ -3169,7 +3532,20 @@ public class MainFrames extends JFrame
 		add(btnBack);
 		add(btnDelete);
 		add(btnSave);
-}}//End of Class ManageUsersPanel
+		add(lblEngine);
+		add(lblPlatform);
+		add(lblType);
+		add(lblVolume);
+		add(lblPower);
+		add(txtEngine);
+		add(cboPlatform);
+		add(cboType);
+		add(txtVolume);
+		add(txtPower);
+		add(rbtnAddEngine);
+		add(lblDeleteEngine);
+		add(cboDeleteEngine);
+	}}//End of Class ManageUsersPanel
 	class ExperimentalPanel extends JPanel
 	{
 	//JLabels

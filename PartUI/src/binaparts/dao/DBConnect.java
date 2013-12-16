@@ -375,7 +375,31 @@ public class DBConnect {
 			try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
 	}
-	//delete a user from database (Requires admin)
+	//create a engine and add to database (Requires admin)
+		public void createEngine(String newEngine, String newPlatform, String newType, String newVolume, String newPower) throws Exception{
+			try{
+				getDBConnection();
+				con.setAutoCommit(false);
+				pst = con.prepareStatement("INSERT INTO `engines` (Engine, Platform, Type, Volume, Power) VALUES(?, ? ,?, ?, ?)");
+				pst.setString(1, newEngine);
+				pst.setString(2, newPlatform);
+				pst.setString(3, newType);
+				pst.setString(4, newVolume);
+				pst.setString(5, newPower);
+				pst.executeUpdate();
+					  
+				con.commit();
+				con.setAutoCommit(true);
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch (Exception ex) {
+		        ex.printStackTrace();	
+			}finally{
+				
+				try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+		}
+	//delete a program from database (Requires admin)
 	public void deleteProgram(String program) throws Exception{
 		if(getUserRankValue() > 0){
 			try{
@@ -400,6 +424,31 @@ public class DBConnect {
 			//System.out.println(getUser()+" does not have permission to do that!");
 		}
 	}
+	//delete a engine from database (Requires admin)
+		public void deleteEngine(String engine) throws Exception{
+			if(getUserRankValue() > 0){
+				try{
+					getDBConnection();
+					con.setAutoCommit(false);
+					
+					pst = con.prepareStatement("DELETE FROM `engines` WHERE `Engine` = ?");
+					pst.setString(1, engine);
+					pst.executeUpdate();
+					
+					con.commit();
+					con.setAutoCommit(true);
+				}catch(SQLException SQLex){
+					SQLex.printStackTrace();
+				}catch (Exception ex) {
+			        ex.printStackTrace();	
+				}finally{
+					con.setAutoCommit(true);
+					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				}
+			}else{
+				//System.out.println(getUser()+" does not have permission to do that!");
+			}
+		}
 	//create a customer and add it to the database
 	public void createCustomer(String newCustomer, String newCust) throws Exception{
 		try{
@@ -669,6 +718,33 @@ public class DBConnect {
 			}
 			return json;
 	}
+	//returns jsonArray of all Platforms (done)
+		public JSONArray queryReturnAllPlatforms() throws Exception{
+				
+				ToJSON converter = new ToJSON();
+				JSONArray json = new JSONArray();
+				
+				try{
+					getDBConnection();
+					pst = con.prepareStatement("SELECT * from `programs` ORDER BY `Program` ASC");
+					
+					ResultSet rs = pst.executeQuery();
+					
+					if (isResultSetEmpty(rs) == false ){    
+						json = converter.toJSONArray(rs);
+					}
+					pst.close();
+					con.close();
+				}catch(SQLException SQLex){
+					SQLex.printStackTrace();
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}finally{
+					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				}
+				return json;
+		}
+		
 	//returns jsonArray of all Programs (done)
 	public JSONArray queryReturnAllPrograms() throws Exception{
 			
