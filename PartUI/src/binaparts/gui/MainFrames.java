@@ -97,7 +97,7 @@ public class MainFrames extends JFrame
 			frame.setIconImage(ImageIO.read(new File("res/bosalimage.png")));
 		}catch(Exception ex){ex.printStackTrace();}
 	}
-	public String DateToCalendar(Date date) {			
+	public String DateToCalendar(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		String s = Integer.toString(cal.get(Calendar.MONTH)+1)+"/"
@@ -105,7 +105,7 @@ public class MainFrames extends JFrame
 					+Integer.toString(cal.get(Calendar.YEAR));
 		return s;
 	}
-	public Date CalendarToDate(String date) {			
+	public Date CalendarToDate(String date) {
 		String[] parts = date.split("/");
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.valueOf(parts[2]));
@@ -113,8 +113,7 @@ public class MainFrames extends JFrame
 		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(parts[1]));		
 		return cal.getTime();
 	}
-	class MainPanel extends JPanel
-	{
+	class MainPanel extends JPanel{
 	//Image
 			private JLabel lblMainPic;
 
@@ -178,15 +177,21 @@ public class MainFrames extends JFrame
 							
 					public void actionPerformed(ActionEvent e) 
 					{
-						if (e.getSource() == btnExperimental) {
-							setVisible(false);
-							frame.setSize(790,340);
-							frame.setTitle("Experimental Parts:");
-							frame.setResizable(false);
-							frame.setLocationRelativeTo(main);
-							main.add(experimental);
-							experimental.validate();
-							experimental.setVisible(true);
+						try {
+							if (con.getUserRankValue() > 0) {
+								if (e.getSource() == btnExperimental) {
+									setVisible(false);
+									frame.setSize(790,340);
+									frame.setTitle("Experimental Parts:");
+									frame.setResizable(false);
+									frame.setLocationRelativeTo(main);
+									main.add(experimental);
+									experimental.validate();
+									experimental.setVisible(true);
+								}
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
 						}
 					}					
 				});
@@ -198,11 +203,17 @@ public class MainFrames extends JFrame
 							
 					public void actionPerformed(ActionEvent e) 
 					{
-						if (e.getSource() == btnBDL) {
-							BDLFrame b = new BDLFrame();
-							b.displayBDL();
-							
+						try {
+							if (con.getUserRankValue() > -1) {
+								if (e.getSource() == btnBDL) {
+									BDLFrame b = new BDLFrame();
+									b.displayBDL();							
+								}
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
 						}
+						
 					}					
 				});
 				
@@ -213,15 +224,22 @@ public class MainFrames extends JFrame
 							
 					public void actionPerformed(ActionEvent e) 
 					{
-						if (e.getSource() == btnManageUsers) {
-							setVisible(false);
-							frame.setSize(640,460);
-							frame.setTitle("Manage Users:");
-							frame.setResizable(false);
-							frame.setLocationRelativeTo(main);
-							main.add(manage);
-							manage.setVisible(true);
+						try {
+							if (con.getUserRankValue() > 0) {
+								if (e.getSource() == btnManageUsers) {
+									setVisible(false);
+									frame.setSize(640,460);
+									frame.setTitle("Manage Users:");
+									frame.setResizable(false);
+									frame.setLocationRelativeTo(main);
+									main.add(manage);
+									manage.setVisible(true);
+								}
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
 						}
+						
 					}					
 				});
 				
@@ -261,20 +279,26 @@ public class MainFrames extends JFrame
 				
 					public void actionPerformed(ActionEvent e)
 					{
-						if (e.getSource() == btnCreatePart){
-							try{
-								if(con.verifyUser() == true){
-									setStatus();
-									setVisible(false);
-									frame.setSize(800,390);
-									frame.setTitle("Create Part:");
-									frame.setResizable(false);
-									frame.setLocationRelativeTo(main);
-									main.add(create);
-									create.setVisible(true);
-								}else{setStatus();}
-							}catch(Exception ex){ex.printStackTrace();}
-				}}});
+						try {
+							if (con.getUserRankValue() > 0) {
+								if (e.getSource() == btnCreatePart) {
+									if (con.verifyUser() == true) {
+										setStatus();
+										setVisible(false);
+										frame.setSize(800,390);
+										frame.setTitle("Create Part:");
+										frame.setResizable(false);
+										frame.setLocationRelativeTo(main);
+										main.add(create);
+										create.setVisible(true);
+									} else {setStatus();}
+								}
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						
+				}});
 			
 				ImageIcon updateI = new ImageIcon(getClass().getResource("/images/updatepart.jpg"));
 				btnUpdatePart = new JButton(updateI);
@@ -282,19 +306,23 @@ public class MainFrames extends JFrame
 				btnUpdatePart.addActionListener(new ActionListener() {
 					
 					public void actionPerformed(ActionEvent e) {
-						if (e.getSource() == btnUpdatePart){
-							try{
-								if(con.verifyUser() == true){
-									setStatus();
-									setVisible(false);
-									frame.setSize(790,455);
-									frame.setTitle("Update Part:");
-									frame.setResizable(false);
-									frame.setLocationRelativeTo(main);
-									main.add(update);
-									update.setVisible(true);
-								}else{setStatus();}
-							}catch(Exception ex){/*ignore*/}
+						try {
+							if (con.getUserRankValue() > 0) {
+								if (e.getSource() == btnUpdatePart ){
+									if (con.verifyUser() == true) {
+										setStatus();
+										setVisible(false);
+										frame.setSize(790,455);
+										frame.setTitle("Update Part:");
+										frame.setResizable(false);
+										frame.setLocationRelativeTo(main);
+										main.add(update);
+										update.setVisible(true);
+									} else {setStatus();}
+								}
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
 				}}});
 				
 				ImageIcon findI = new ImageIcon(getClass().getResource("/images/findpartinfo.jpg"));
@@ -338,8 +366,7 @@ public class MainFrames extends JFrame
 				add(lblMainPic);
 			}
 	}
-	class CreatePanel extends JPanel
-	{
+	class CreatePanel extends JPanel{
 	
 //JLabel
 		private JLabel lblSeq;
@@ -877,8 +904,7 @@ public class MainFrames extends JFrame
 	        add(jxdDrawingRevDate);
 	}
 }
-	class UpdatePanel extends JPanel
-	{
+	class UpdatePanel extends JPanel{
 			//JLabels
 	private JLabel lblBosal;
 	private JLabel lblUpdatePart;
@@ -1568,8 +1594,7 @@ public class MainFrames extends JFrame
 		add(jxdCustomerDrawingRevDate);
 		}
 	}
-	class FindPanel extends JPanel
-	{
+	class FindPanel extends JPanel{
 	//JLabels
 	private JLabel lblFindPartInfo;
 	private JLabel lblBosal;
@@ -1935,8 +1960,7 @@ public class MainFrames extends JFrame
 	add(scrollPane);
 	}	
 }
-	class SettingsPanel extends JPanel
-	{
+	class SettingsPanel extends JPanel{
 	//JTextField	
 	private JTextField txtIP;
 	private JTextField txtUser;
@@ -2107,8 +2131,7 @@ public class MainFrames extends JFrame
 		}
 		
 }
-	class ManagePanel extends JPanel
-	{
+	class ManagePanel extends JPanel{
 		//JLabels	
 		private JLabel lblbosal;
 		private JLabel lblmanageUsers;
@@ -3546,8 +3569,7 @@ public class MainFrames extends JFrame
 		add(lblDeleteEngine);
 		add(cboDeleteEngine);
 	}}//End of Class ManageUsersPanel
-	class ExperimentalPanel extends JPanel
-	{
+	class ExperimentalPanel extends JPanel{
 	//JLabels
 	private JLabel lblCreated;
 	private JLabel lblCreatedBy;

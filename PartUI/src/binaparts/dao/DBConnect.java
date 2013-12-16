@@ -376,29 +376,29 @@ public class DBConnect {
 		}
 	}
 	//create a engine and add to database (Requires admin)
-		public void createEngine(String newEngine, String newPlatform, String newType, String newVolume, String newPower) throws Exception{
-			try{
-				getDBConnection();
-				con.setAutoCommit(false);
-				pst = con.prepareStatement("INSERT INTO `engines` (Engine, Platform, Type, Volume, Power) VALUES(?, ? ,?, ?, ?)");
-				pst.setString(1, newEngine);
-				pst.setString(2, newPlatform);
-				pst.setString(3, newType);
-				pst.setString(4, newVolume);
-				pst.setString(5, newPower);
-				pst.executeUpdate();
-					  
-				con.commit();
-				con.setAutoCommit(true);
-			}catch(SQLException SQLex){
-				SQLex.printStackTrace();
-			}catch (Exception ex) {
-		        ex.printStackTrace();	
-			}finally{
-				
-				try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
-			}
+	public void createEngine(String newEngine, String newPlatform, String newType, String newVolume, String newPower) throws Exception{
+		try{
+			getDBConnection();
+			con.setAutoCommit(false);
+			pst = con.prepareStatement("INSERT INTO `engines` (Engine, Platform, Type, Volume, Power) VALUES(?, ? ,?, ?, ?)");
+			pst.setString(1, newEngine);
+			pst.setString(2, newPlatform);
+			pst.setString(3, newType);
+			pst.setString(4, newVolume);
+			pst.setString(5, newPower);
+			pst.executeUpdate();
+				  
+			con.commit();
+			con.setAutoCommit(true);
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch (Exception ex) {
+	        ex.printStackTrace();	
+		}finally{
+			
+			try{if(con.isClosed() == false){con.setAutoCommit(true);con.close();}}catch(Exception ex){ex.printStackTrace();}
 		}
+	}
 	//delete a program from database (Requires admin)
 	public void deleteProgram(String program) throws Exception{
 		if(getUserRankValue() > 0){
@@ -425,30 +425,30 @@ public class DBConnect {
 		}
 	}
 	//delete a engine from database (Requires admin)
-		public void deleteEngine(String engine) throws Exception{
-			if(getUserRankValue() > 0){
-				try{
-					getDBConnection();
-					con.setAutoCommit(false);
-					
-					pst = con.prepareStatement("DELETE FROM `engines` WHERE `Engine` = ?");
-					pst.setString(1, engine);
-					pst.executeUpdate();
-					
-					con.commit();
-					con.setAutoCommit(true);
-				}catch(SQLException SQLex){
-					SQLex.printStackTrace();
-				}catch (Exception ex) {
-			        ex.printStackTrace();	
-				}finally{
-					con.setAutoCommit(true);
-					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
-				}
-			}else{
-				//System.out.println(getUser()+" does not have permission to do that!");
+	public void deleteEngine(String engine) throws Exception{
+		if(getUserRankValue() > 0){
+			try{
+				getDBConnection();
+				con.setAutoCommit(false);
+				
+				pst = con.prepareStatement("DELETE FROM `engines` WHERE `Engine` = ?");
+				pst.setString(1, engine);
+				pst.executeUpdate();
+				
+				con.commit();
+				con.setAutoCommit(true);
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch (Exception ex) {
+		        ex.printStackTrace();	
+			}finally{
+				con.setAutoCommit(true);
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 			}
+		}else{
+			//System.out.println(getUser()+" does not have permission to do that!");
 		}
+	}
 	//create a customer and add it to the database
 	public void createCustomer(String newCustomer, String newCust) throws Exception{
 		try{
@@ -719,32 +719,31 @@ public class DBConnect {
 			return json;
 	}
 	//returns jsonArray of all Platforms (done)
-		public JSONArray queryReturnAllPlatforms() throws Exception{
+	public JSONArray queryReturnAllPlatforms() throws Exception{
 				
-				ToJSON converter = new ToJSON();
-				JSONArray json = new JSONArray();
+			ToJSON converter = new ToJSON();
+			JSONArray json = new JSONArray();
+			
+			try{
+				getDBConnection();
+				pst = con.prepareStatement("SELECT * from `programs` ORDER BY `Program` ASC");
 				
-				try{
-					getDBConnection();
-					pst = con.prepareStatement("SELECT * from `programs` ORDER BY `Program` ASC");
-					
-					ResultSet rs = pst.executeQuery();
-					
-					if (isResultSetEmpty(rs) == false ){    
-						json = converter.toJSONArray(rs);
-					}
-					pst.close();
-					con.close();
-				}catch(SQLException SQLex){
-					SQLex.printStackTrace();
-				}catch(Exception ex){
-					ex.printStackTrace();
-				}finally{
-					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+				ResultSet rs = pst.executeQuery();
+				
+				if (isResultSetEmpty(rs) == false ){    
+					json = converter.toJSONArray(rs);
 				}
-				return json;
-		}
-		
+				pst.close();
+				con.close();
+			}catch(SQLException SQLex){
+				SQLex.printStackTrace();
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}finally{
+				try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+			}
+			return json;
+	}		
 	//returns jsonArray of all Programs (done)
 	public JSONArray queryReturnAllPrograms() throws Exception{
 			
@@ -1503,11 +1502,11 @@ public class DBConnect {
 			pst = con.prepareStatement(s);
 			String value = null;
 			for (int i = 0; i < json.length(); i++) {
-				for (int j = 0; j < (columnNames.length-4); j++) {
+				for (int j = 0; j < (columnNames.length); j++) {
 					try {
 						value = json.getJSONObject(i).get(columnNames[j]).toString();
 					} catch (Exception ex) {value = null;}
-					
+					/*
 					//for updating Bosal/DeltaPartNumbers
 					if ( (columnNames[j].contains("Rev") && !(columnNames[j].contains("Date"))) || columnNames[j].equals("PartType") || columnNames[j].equals("Material")) {
 						if (value == null) {
@@ -1521,29 +1520,29 @@ public class DBConnect {
 						} else {
 							pst.setString(j+1, value);
 						}
-					}
+					}*/
 					
-					/*
+					
 					//for updating Customers
 					if (value == null) {
 						pst.setString(j+1, "");
 					} else {
 						pst.setString(j+1,(value));
-					}*/
+					}
 					System.out.print(value + " ");
 				}
 				
 				//when data uses both CreatedBy and UpdatedBy
-				System.out.print(username + " ");
-				pst.setString(columnNames.length-3, username);
-				System.out.print(time + " ");
-				pst.setTimestamp(columnNames.length-2, time);
-				System.out.print(username + " ");
-				pst.setString(columnNames.length-1, username);
-				System.out.print(time + " ");
-				pst.setTimestamp(columnNames.length, time);
-				System.out.println();
-				pst.executeUpdate();
+				//System.out.print(username + " ");
+				//pst.setString(columnNames.length-3, username);
+				//System.out.print(time + " ");
+				//pst.setTimestamp(columnNames.length-2, time);
+				//System.out.print(username + " ");
+				//pst.setString(columnNames.length-1, username);
+				//System.out.print(time + " ");
+				//pst.setTimestamp(columnNames.length, time);
+				//System.out.println();
+				//pst.executeUpdate();
 			}
 			pst.close();
 			con.close();
