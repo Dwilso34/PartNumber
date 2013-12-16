@@ -9,7 +9,7 @@ public class UpdateData {
 	public static void main(String[] args) {
 		
 		try {
-			con.insertInto("binapartslist", "binapartslist", "bosal parts", "parts list");
+			//con.insertInto("binapartslist", "binapartslist", "bosal parts", "parts list");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
