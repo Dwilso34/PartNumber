@@ -1394,31 +1394,112 @@ public class DBConnect {
 					try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
 				}
 			}
-	/*
+	
 	//method to automatically update columns of data (modified for every use)
-	public void updateDeltaProgram() {
-		String DeltaPartNumber;
-		String Program;
-		String newProgram = "Delta 34XX";
+	public void insertInto(String targetDatabase, String sourceDatabase, String targetTable, String sourceTable) {
 		try {
-			JSONArray temp = queryAllDeltaParts();
-			System.out.println(temp.length());
+			String username = getUsersName();
+			Timestamp time = getTimestamp();	
+			JSONArray json = grabAllFromTable(sourceDatabase, sourceTable);
+			String[] columnNames = getColumnNames(sourceDatabase+"`.`"+sourceTable, "All", null);
+			
 			getDBConnection();
-			for (int i = 0; i < temp.length(); i++) {
-				DeltaPartNumber = temp.getJSONObject(i).get("DeltaPartNumber").toString();
-				Program = temp.getJSONObject(i).get("Program").toString();
+			String s = "INSERT INTO `"+targetDatabase+"`.`"+targetTable+"` (";
+			//loop to add all the column names as SQL parameters
+			for (int i = 0; i < columnNames.length; i++) {
+				s = s + columnNames[i];
+				if (i < (columnNames.length -1)) {
+					s = s + ", ";
+				} else {
+					s = s + ") VALUES(";
+				}
+			}
+			//loop to add a parameter to the SQL statement for each column
+			for (int i = 0; i < columnNames.length; i++) {
+				s = s + "?";
+				if (i < (columnNames.length-1)) {
+					s = s + ", ";
+				} else {
+					s = s + ")";
+				}
+			}
+			System.out.println(s);
+			pst = con.prepareStatement(s);
+			String value = null;
+			for (int i = 0; i < json.length(); i++) {
+				for (int j = 0; j < (columnNames.length-4); j++) {
+					try {
+						value = json.getJSONObject(i).get(columnNames[j]).toString();
+					} catch (Exception ex) {value = null;}
+					
+					//for updating Bosal/DeltaPartNumbers
+					if ( (columnNames[j].contains("Rev") && !(columnNames[j].contains("Date"))) || columnNames[j].equals("PartType") || columnNames[j].equals("Material")) {
+						if (value == null) {
+							pst.setInt(j+1, 0);
+						} else {
+							pst.setInt(j+1, Integer.valueOf(value));
+						}
+					} else {	
+						if (value == null) {
+							pst.setString(j+1, "");
+						} else {
+							pst.setString(j+1, value);
+						}
+					}
+					
+					/*
+					//for updating Customers
+					if (value == null) {
+						pst.setString(j+1, "");
+					} else {
+						pst.setString(j+1,(value));
+					}*/
+					System.out.print(value + " ");
+				}
 				
-				System.out.println(DeltaPartNumber + " FROM " + Program + " TO "+newProgram);
-				
-				pst = con.prepareStatement("UPDATE `delta 1 parts` SET `Program` = ? WHERE `DeltaPartNumber`= ?");
-				pst.setString(1, newProgram);				
-				pst.setString(2, DeltaPartNumber);
-				pst.executeUpdate();			
+				//when data uses both CreatedBy and UpdatedBy
+				System.out.print(username + " ");
+				pst.setString(columnNames.length-3, username);
+				System.out.print(time + " ");
+				pst.setTimestamp(columnNames.length-2, time);
+				System.out.print(username + " ");
+				pst.setString(columnNames.length-1, username);
+				System.out.print(time + " ");
+				pst.setTimestamp(columnNames.length, time);
+				System.out.println();
+				pst.executeUpdate();
 			}
 			pst.close();
 			con.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}*/
+	}
+	//method to automatically update columns of data (modified for every use)
+	public JSONArray grabAllFromTable(String database, String table) {
+		
+		ToJSON converter = new ToJSON();
+		JSONArray json = new JSONArray();
+		
+		try {
+			getDBConnection();
+			pst = con.prepareStatement("SELECT * FROM `"+database+"`.`"+table+"`");
+
+			ResultSet rs = pst.executeQuery();
+			
+			if (isResultSetEmpty(rs) == false ){    
+				json = converter.toJSONArray(rs);				
+			}
+			
+			pst.close();
+			con.close();
+		}catch(SQLException SQLex){
+			SQLex.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}finally{
+			try{if(con.isClosed() == false){con.close();}}catch(Exception ex){ex.printStackTrace();}
+		}
+		return json;
+	}
 }
