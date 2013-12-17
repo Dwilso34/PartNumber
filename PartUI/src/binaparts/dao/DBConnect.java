@@ -1473,8 +1473,8 @@ public class DBConnect {
 	//method to automatically update columns of data (modified for every use)
 	public void insertInto(String targetDatabase, String sourceDatabase, String targetTable, String sourceTable) {
 		try {
-			String username = getUsersName();
-			Timestamp time = getTimestamp();	
+			//String username = getUsersName();
+			//Timestamp time = getTimestamp();	
 			JSONArray json = grabAllFromTable(sourceDatabase, sourceTable);
 			String[] columnNames = getColumnNames(sourceDatabase+"`.`"+sourceTable, "All", null);
 			
