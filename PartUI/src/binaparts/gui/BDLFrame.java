@@ -1010,6 +1010,9 @@ public class BDLFrame extends JFrame
 			                File file = fc.getSelectedFile();
 			                BufferedImage image = null;
 							try {
+								if (file == null) {
+									return;
+								}
 								image = ImageIO.read(file);
 							} catch (IOException ex) {
 								ex.printStackTrace();
