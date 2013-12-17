@@ -98,6 +98,9 @@ public class MainFrames extends JFrame
 		}catch(Exception ex){ex.printStackTrace();}
 	}
 	public String DateToCalendar(Date date) {
+		if (date == null) {
+			return "";
+		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		String s = Integer.toString(cal.get(Calendar.MONTH)+1)+"/"
@@ -471,7 +474,29 @@ public class MainFrames extends JFrame
 		private JButton btnSave;
 		private JButton btnBack;
 		
-		
+		public void resetPanelFields() {
+			txtDescrip.setText("");
+			txtMDescrip.setText("");
+			txtSeq.setText("");			
+			txtCPart.setText("");
+			txtCustDrawingNum.setText("");
+			txtCustDrawingRev.setText("");
+			txtSPart.setText("");
+			txtDrawingNum.setText("");
+			txtDrawingRev.setText("");
+			cboType.setModel(resetTypeComboBox());
+			cboType.setSelectedIndex(-1);
+			cboMat.setModel(resetMatComboBox());
+			cboMat.setSelectedIndex(-1);
+			cboDescrip.setModel(resetDescripComboBox());
+			cboDescrip.setSelectedIndex(-1);
+			cboProgram.setModel(resetProgramComboBox());
+			cboProgram.setSelectedIndex(-1);
+			jxdProductionReleaseDate.setDate(null);
+			jxdCustomerDrawingRevDate.setDate(null);
+			jxdDrawingRevDate.setDate(null);
+			txtBPart.setText("");
+		}
 		public String generateBosalPartNumber(String partType, String material, String curSeq)
 		{
 			String BosalPartNumber = null;
@@ -780,7 +805,7 @@ public class MainFrames extends JFrame
 								try{
 									DrawingRev = Integer.valueOf(txtDrawingRev.getText());
 								}catch(Exception ex){DrawingRev = 0;}
-								String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());
+								String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());								
 								String CustomerPartNumber = txtCPart.getText();
 								String CustDrawingNumber = txtCustDrawingNum.getText();
 								int CustDrawingRev;
@@ -790,7 +815,12 @@ public class MainFrames extends JFrame
 								String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());
 								String SupplierPartNumber = txtSPart.getText();
 								String Description = (String) cboDescrip.getSelectedItem();
-								String Program = (String) cboProgram.getSelectedItem();
+								String Program;
+								if (!(cboProgram.getSelectedItem() == null)) {
+									Program = (String) cboProgram.getSelectedItem();
+								} else {
+									Program = "";
+								}
 								int Seq = Integer.valueOf(txtSeq.getText());
 								String TypeDescription = txtDescrip.getText();
 								int Rev = 0;
@@ -809,20 +839,7 @@ public class MainFrames extends JFrame
 								frame.setSize(645, 545);
 								frame.setTitle("Main Menu:");
 								main.setVisible(true);
-								cboType.setModel(resetTypeComboBox());
-								cboType.setSelectedIndex(-1);
-								cboMat.setModel(resetMatComboBox());
-								cboDescrip.setModel(resetDescripComboBox());
-								cboDescrip.setSelectedIndex(-1);
-								txtCPart.setText("");
-								txtSPart.setText("");
-								txtBPart.setText("");
-								txtMDescrip.setText("");
-								txtDescrip.setText("");
-								cboProgram.setSelectedIndex(-1);
-								txtSeq.setText("");	
-								txtDrawingNum.setText("");
-								txtDrawingRev.setText("");
+								resetPanelFields();
 							}catch(Exception ex){ex.printStackTrace();};
 			}}}});
 			
@@ -843,22 +860,8 @@ public class MainFrames extends JFrame
 					frame.setSize(645, 545);
 					frame.setTitle("Main Menu:");
 					main.setVisible(true);
-					cboType.setModel(resetTypeComboBox());
-					cboType.setSelectedIndex(-1);
-					cboMat.setModel(resetMatComboBox());
-					cboDescrip.setModel(resetDescripComboBox());
-					cboDescrip.setSelectedIndex(-1);
-					txtCPart.setText("");
-					txtSPart.setText("");
-					txtBPart.setText("");
-					txtMDescrip.setText("");
-					txtDescrip.setText("");
-					txtSeq.setText("");
-					cboProgram.setSelectedIndex(-1);
-					txtDrawingNum.setText("");
-					txtDrawingRev.setText("");
-					
-		}});
+					resetPanelFields();					
+			}});
 		setupPanel();	
 	}		
 		private void setupPanel() 
@@ -984,6 +987,20 @@ public class MainFrames extends JFrame
 	private JXDatePicker jxdProductionReleaseDate;
 	private JXDatePicker jxdDrawingRevDate;
 	
+	public void resetPanelFields() {
+		txtCusDescrip.setText("");
+		txtSupDescrip.setText("");
+		txtRev.setText("");
+		txtDrawingRev.setText("");
+		txtDrawingNum.setText("");
+		txtCustDrawingNum.setText("");
+		txtCustDrawingRev.setText("");
+		cboDescrip.setSelectedIndex(-1);
+		cboProgram.setSelectedIndex(-1);
+		jxdCustomerDrawingRevDate.setDate(null);
+		jxdDrawingRevDate.setDate(null);
+		jxdProductionReleaseDate.setDate(null);
+	}
 	//Update Panel		
 	public UpdatePanel(final JPanel update) 
 	{
@@ -1143,14 +1160,8 @@ public class MainFrames extends JFrame
 					if(n == 0){
 						try {
 							con.deletePart(txtFindBosal.getText());
-							cboProgram.setSelectedIndex(-1);
-							txtSupDescrip.setText("");
-							txtCusDescrip.setText("");
+							resetPanelFields();
 							txtFindBosal.setText("");
-							cboDescrip.setModel(resetDescripComboBox());
-							cboDescrip.setSelectedIndex(-1);
-							txtRev.setText("");
-							txtDrawingNum.setText("");
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}
@@ -1176,18 +1187,8 @@ public class MainFrames extends JFrame
 					frame.setSize(645, 545);
 					frame.setTitle("Main Menu:");
 					main.setVisible(true);
-					txtFindBosal.setText("");
-					txtCusDescrip.setText("");
-					txtSupDescrip.setText("");
-					cboProgram.setSelectedIndex(-1);
-					cboDescrip.setModel(resetDescripComboBox());
-					cboDescrip.setSelectedIndex(-1);
-					txtRev.setText("");
-					txtDrawingNum.setText("");
-					rbtnAmerica.doClick();
-					jxdProductionReleaseDate.setDate(null);
-		            jxdCustomerDrawingRevDate.setDate(null);
-		            jxdDrawingRevDate.setDate(null);
+					resetPanelFields();
+		            txtFindBosal.setText("");		            
 				}}});
 		
 		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
@@ -1271,14 +1272,8 @@ public class MainFrames extends JFrame
 							frame.setSize(645, 545);
 							frame.setTitle("Main Menu:");
 							main.setVisible(true);
+							resetPanelFields();
 							txtFindBosal.setText("");
-							txtCusDescrip.setText("");
-							txtSupDescrip.setText("");
-							cboProgram.setSelectedIndex(-1);
-							cboDescrip.setModel(resetDescripComboBox());
-							cboDescrip.setSelectedIndex(-1);
-							txtDrawingNum.setText("");
-							txtRev.setText("");
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}
@@ -1319,7 +1314,7 @@ public class MainFrames extends JFrame
 							}else{
 								try{
 									DrawingRev = Integer.valueOf(txtDrawingRev.getText());
-								}catch(Exception ex){/*ex.printStackTrace();Ignore*/DrawingRev = 0;}
+								}catch(Exception ex){DrawingRev = 0;}
 							}
 							String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());
 									
@@ -1366,6 +1361,7 @@ public class MainFrames extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnCheck)
 				{
+					resetPanelFields();
 					final String findBosalText = txtFindBosal.getText();
 					JSONArray temp = null;
 					try{									
@@ -1481,8 +1477,8 @@ public class MainFrames extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				if (e.getSource() == rbtnAmerica){
-				
-		            txtFindBosal.setText("");
+					resetPanelFields();
+		            /*txtFindBosal.setText("");
 		            txtSupDescrip.setText("");
 		            txtCusDescrip.setText("");
 		            txtRev.setText("");
@@ -1493,7 +1489,7 @@ public class MainFrames extends JFrame
 		            txtFindBosal.requestFocusInWindow();
 		            jxdProductionReleaseDate.setDate(null);
 		            jxdCustomerDrawingRevDate.setDate(null);
-		            jxdDrawingRevDate.setDate(null);
+		            jxdDrawingRevDate.setDate(null);*/
 		           }
 		}});
 		
@@ -1502,8 +1498,8 @@ public class MainFrames extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				if (e.getSource() == rbtnEurope){
-				
-		            txtFindBosal.setText("");
+					resetPanelFields();
+		            /*txtFindBosal.setText("");
 		            txtSupDescrip.setText("");
 		            txtCusDescrip.setText("");
 		            txtRev.setText("");
@@ -1514,7 +1510,7 @@ public class MainFrames extends JFrame
 		            txtFindBosal.requestFocusInWindow();
 		            jxdProductionReleaseDate.setDate(null);
 		            jxdCustomerDrawingRevDate.setDate(null);
-		            jxdDrawingRevDate.setDate(null);
+		            jxdDrawingRevDate.setDate(null);*/
 		           }
 		}});
 		
