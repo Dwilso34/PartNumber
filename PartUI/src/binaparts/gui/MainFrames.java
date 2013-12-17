@@ -1850,7 +1850,7 @@ public class MainFrames extends JFrame
 					}							
 				}
 				int[] columnsWidth = {
-		                110, 110, 110, 200, 80, 110, 40, 70, 130, 70, 130
+		                110, 110, 80, 80, 100, 120, 120, 70, 110, 200, 80, 40, 80, 100, 100, 100, 100
 		        };
 				 int i = 0;
 			        for (int width : columnsWidth) {
@@ -1916,7 +1916,7 @@ public class MainFrames extends JFrame
 				ex.printStackTrace();
 			}	
 			int[] columnsWidth = {
-	                110, 110, 110, 200, 80, 110, 40, 70, 130, 70, 130
+					 110, 110, 80, 80, 100, 120, 120, 70, 110, 200, 80, 40, 80, 100, 100, 100, 100
 	        };
 			 int i = 0;
 		        for (int width : columnsWidth) {
