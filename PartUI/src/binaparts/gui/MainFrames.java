@@ -45,6 +45,7 @@ import org.jdesktop.swingx.autocomplete.*;
 
 import binaparts.dao.*;
 import binaparts.properties.ConfigurationManager;
+import binaparts.util.ComponentResizer;
 
 @SuppressWarnings("serial")
 public class MainFrames extends JFrame
@@ -1693,6 +1694,9 @@ public class MainFrames extends JFrame
 	};
 	scrollPane = new JScrollPane(myTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	scrollPane.setBounds(33, 175, 804, 150);
+	ComponentResizer size = new ComponentResizer();
+	size.setSnapSize(new Dimension(5, 5));
+	size.registerComponent(scrollPane);
 	myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	
 //Image		
