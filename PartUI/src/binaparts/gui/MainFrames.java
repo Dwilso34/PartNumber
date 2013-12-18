@@ -45,6 +45,7 @@ import org.jdesktop.swingx.autocomplete.*;
 
 import binaparts.dao.*;
 import binaparts.properties.ConfigurationManager;
+import binaparts.util.ComponentResizer;
 
 @SuppressWarnings("serial")
 public class MainFrames extends JFrame
@@ -231,7 +232,7 @@ public class MainFrames extends JFrame
 							if (con.getUserRankValue() > 0) {
 								if (e.getSource() == btnManageUsers) {
 									setVisible(false);
-									frame.setSize(640,460);
+									frame.setSize(745,460);
 									frame.setTitle("Manage Users:");
 									frame.setResizable(false);
 									frame.setLocationRelativeTo(main);
@@ -1630,6 +1631,9 @@ public class MainFrames extends JFrame
 	};
 	scrollPane = new JScrollPane(myTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	scrollPane.setBounds(33, 175, 804, 150);
+	ComponentResizer size = new ComponentResizer();
+	size.setSnapSize(new Dimension(5, 5));
+	size.registerComponent(scrollPane);
 	myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	
 //Image		
@@ -2267,7 +2271,8 @@ public class MainFrames extends JFrame
 			lblRank.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblRank.setForeground(Color.BLACK);
 			lblPassConfirm = new JLabel("");
-			lblPassConfirm.setBounds(598, 234, 150, 0);
+			lblPassConfirm.setBounds(592, 228, 150, 20);
+			lblPassConfirm.setVisible(true);
 			lblAddProgram = new JLabel("Enter New Program:");
 			lblAddProgram.setBounds(251, 193, 142, 17);
 			lblAddProgram.setVisible(false);
@@ -2476,9 +2481,11 @@ public class MainFrames extends JFrame
 								String password = (new String (txtPassword.getPassword()));
 								String confirmPassword = (new String (txtConfirmPassword.getPassword()));
 								if(comparePasswords(password, confirmPassword) == false){
+									lblPassConfirm.setVisible(true);
 									lblPassConfirm.setText("Passwords Do Not Match");
 									lblPassConfirm.setForeground(new Color(204, 0, 0));
 								}else if(comparePasswords(password, confirmPassword) == true){
+									lblPassConfirm.setVisible(true);
 									lblPassConfirm.setText("Confirmed");
 									lblPassConfirm.setForeground(new Color(154, 205, 50));
 								}else{
