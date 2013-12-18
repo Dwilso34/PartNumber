@@ -284,6 +284,7 @@ public class MainFrames extends JFrame
 					{
 						try {
 							if (con.getUserRankValue() > 0) {
+								System.out.println("User ranked verified "+con.getUserRankValue()); 
 								if (e.getSource() == btnCreatePart) {
 									if (con.verifyUser() == true) {
 										setStatus();
@@ -1198,9 +1199,7 @@ public class MainFrames extends JFrame
 			
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnSave)
-				{
-				if (rbtnAmerica.isSelected() == true)
-				{
+				{				
 					int n = JOptionPane.showConfirmDialog(
 						    frame,
 						    "Are you sure you want to save part data?",
@@ -1208,150 +1207,80 @@ public class MainFrames extends JFrame
 						    JOptionPane.YES_NO_OPTION,
 							JOptionPane.WARNING_MESSAGE
 							);
-					if(n == 0){
+					if (n == 0) {
 						String BosalPartNumber = txtFindBosal.getText();						
 						String DrawingNumber = null;							
-						if(txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")){
+						if (txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")) {
 							DrawingNumber = null;
-						}else{DrawingNumber = txtDrawingNum.getText();}
+						} else {DrawingNumber = txtDrawingNum.getText();}
 						int DrawingRev;						
-						if(txtDrawingRev.getText().equals("-") || txtDrawingRev.getText().equals("")){
+						if (txtDrawingRev.getText().equals("0") || txtDrawingRev.getText().equals("")) {
 							DrawingRev = 0;
-						}else{
-							try{
-								DrawingRev = Integer.valueOf(txtDrawingRev.getText());
-							}catch(Exception ex){DrawingRev = 0;}
-						}
+						} else {DrawingRev = Integer.valueOf(txtDrawingRev.getText());}
 						String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());
 								
 						String CustomerPartNumber = null;
-						if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
+						if (txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")) {
 							CustomerPartNumber = null;
-						}else{CustomerPartNumber = txtCusDescrip.getText();}						
+						} else {CustomerPartNumber = txtCusDescrip.getText();}						
 						String CustDrawingNumber = null;							
-						if(txtCustDrawingNum.getText().equals("-") || txtCustDrawingNum.getText()
+						if (txtCustDrawingNum.getText().equals("-") || txtCustDrawingNum.getText()
 								.equals("")){
 							DrawingNumber = null;
-						}else{CustDrawingNumber = txtCustDrawingNum.getText();}
-						int CustDrawingRev;						
-						if(txtCustDrawingRev.getText().equals("-") || txtCustDrawingRev.getText().equals("")){
+						} else {CustDrawingNumber = txtCustDrawingNum.getText();}
+						int CustDrawingRev = 0;						
+						if (txtCustDrawingRev.getText().equals("0") || txtCustDrawingRev.getText().equals("")) {
 							CustDrawingRev = 0;
-						}else{
-							try{
-								CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());
-							}catch(Exception ex){CustDrawingRev = 0;}
-						}
-						String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());
-								
+						} else {CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());}
+						String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());								
 						String SupplierPartNumber= null;
-						if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
+						if (txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")) {
 							SupplierPartNumber = null;
-						}else{SupplierPartNumber = txtSupDescrip.getText();}
+						} else {SupplierPartNumber = txtSupDescrip.getText();}
 						String Description = (String) cboDescrip.getSelectedItem();
 						String Program = (String) cboProgram.getSelectedItem();
 						int Rev = 0;
-						if(txtRev.getText().equals("-") || txtRev.getText().equals("")){
+						if (txtRev.getText().equals("0") || txtRev.getText().equals("")) {
 							Rev = 0;
-						}else{Rev = Integer.valueOf(txtRev.getText());}	
-						String ProductionReleaseDate = DateToCalendar(jxdProductionReleaseDate.getDate());
-															
+						} else {Rev = Integer.valueOf(txtRev.getText());}	
+						String ProductionReleaseDate = DateToCalendar(jxdProductionReleaseDate.getDate());															
 						
-						try {
-							con.updateBosal(BosalPartNumber, DrawingNumber, DrawingRev, 
-									DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
-									CustDrawingRevDate, SupplierPartNumber, 
-									Description, Program, Rev, ProductionReleaseDate);
-							
-							setVisible(false);
-							Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-							int height = screenSize.height;
-							int width = screenSize.width;
-							frame.setResizable(false);
-							frame.setSize(width/2, height/2);
-							frame.setLocationRelativeTo(null);
-							frame.setSize(645, 545);
-							frame.setTitle("Main Menu:");
-							main.setVisible(true);
-							resetPanelFields();
-							txtFindBosal.setText("");
-						}catch(Exception ex){
-							ex.printStackTrace();
-						}
-					}
-				}
-				if (rbtnEurope.isSelected() == true)
-				{
-						int n = JOptionPane.showConfirmDialog(
-							    frame,
-							    "Are you sure you want to save part data?",
-							    "Save:",
-							    JOptionPane.YES_NO_OPTION,
-								JOptionPane.WARNING_MESSAGE
-								);
-						if(n == 0){
-							String DeltaPartNumber = txtFindBosal.getText();
-							String CustomerPartNumber = null;
-							if(txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")){
-								CustomerPartNumber = null;
-							}else{CustomerPartNumber = txtCusDescrip.getText();}
-							String SupplierPartNumber= null;
-							if(txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")){
-								SupplierPartNumber = null;
-							}else{SupplierPartNumber = txtSupDescrip.getText();}
-							String Description = (String) cboDescrip.getSelectedItem();
-							String Program = (String) cboProgram.getSelectedItem();
-							int Rev = 0;
-							if(txtRev.getText().equals("-") || txtRev.getText().equals("")){
-								Rev = 0;
-							}else{Rev = Integer.valueOf(txtRev.getText());}							
-							String DrawingNumber = null;							
-							if(txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")){
-								DrawingNumber = null;
-							}else{DrawingNumber = txtDrawingNum.getText();}
-							int DrawingRev;						
-							if(txtDrawingRev.getText().equals("-") || txtDrawingRev.getText().equals("")){
-								DrawingRev = 0;
-							}else{
-								try{
-									DrawingRev = Integer.valueOf(txtDrawingRev.getText());
-								}catch(Exception ex){DrawingRev = 0;}
-							}
-							String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());
-									
-							String ProductionReleaseDate = DateToCalendar(jxdProductionReleaseDate.getDate());
-							String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());									
-							
+						if (rbtnAmerica.isSelected() == true) { 
 							try {
-								con.updateDelta(DeltaPartNumber, CustomerPartNumber, SupplierPartNumber, 
-										CustDrawingRevDate, Description, Program, Rev, DrawingNumber, DrawingRev, 
-										DrawingRevDate, ProductionReleaseDate);
-								
-								setVisible(false);
-								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-								int height = screenSize.height;
-								int width = screenSize.width;
-								frame.setResizable(false);
-								frame.setSize(width/2, height/2);
-								frame.setLocationRelativeTo(null);
-								frame.setSize(645, 545);
-								frame.setTitle("Main Menu:");
-								main.setVisible(true);
-								txtFindBosal.setText("");
-								txtCusDescrip.setText("");
-								txtSupDescrip.setText("");
-								cboProgram.setSelectedIndex(-1);
-								cboDescrip.setModel(resetDescripComboBox());
-								cboDescrip.setSelectedIndex(-1);
-								txtDrawingNum.setText("");
-								txtRev.setText("");
-							}catch(Exception ex){
+								con.updateBosal(BosalPartNumber, DrawingNumber, DrawingRev, 
+										DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
+										CustDrawingRevDate, SupplierPartNumber, Description, Program, Rev, 
+										ProductionReleaseDate);
+							} catch (Exception ex) {
 								ex.printStackTrace();
-							}
-						}
+							}	
+						} else if (rbtnEurope.isSelected() == true) {
+							try {
+								con.updateDelta(BosalPartNumber, DrawingNumber, DrawingRev, 
+										DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
+										CustDrawingRevDate, SupplierPartNumber, Description, Program, Rev, 
+										ProductionReleaseDate);
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}	
+						}													
+						setVisible(false);
+						Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+						int height = screenSize.height;
+						int width = screenSize.width;
+						frame.setResizable(false);
+						frame.setSize(width/2, height/2);
+						frame.setLocationRelativeTo(null);
+						frame.setSize(645, 545);
+						frame.setTitle("Main Menu:");
+						main.setVisible(true);
+						resetPanelFields();
+						txtFindBosal.setText("");						
+						rbtnAmerica.doClick();
 					}
 				}
-				rbtnAmerica.doClick();
-				}});
+			}
+		});
 		
 		ImageIcon check = new ImageIcon(getClass().getResource("/images/check.jpg"));
 		btnCheck = new JButton(check);
@@ -1416,10 +1345,12 @@ public class MainFrames extends JFrame
 						
 						//set text for Rev JTextField
 						int Rev = 0;
-						try{
-							Rev = Integer.valueOf(temp.getJSONObject(0).getString("Rev").toString());
-						}catch(Exception ex){Rev = 0;}
-						txtRev.setText(Integer.toString(Rev));
+						try {
+							System.out.println(temp.getJSONObject(0).get("Rev").toString());
+							Rev = Integer.valueOf(temp.getJSONObject(0).get("Rev").toString());			
+							System.out.println("printing out the variable Rev "+Rev);
+						} catch (Exception ex) {Rev = -1;}
+						txtRev.setText(String.valueOf(Rev));
 						
 						//set text for DrawingNumber JTextField
 						String DrawingNumber = null;
@@ -1429,24 +1360,30 @@ public class MainFrames extends JFrame
 						txtDrawingNum.setText(DrawingNumber);
 						
 						//set text for DrawingRev JTextField
-						String DrawingRev = null;
+						int DrawingRev = 0;
 						try{
-							DrawingRev = temp.getJSONObject(0).getString("DrawingRev").toString();
-						}catch(Exception ex){DrawingRev = "-";}
-						txtDrawingRev.setText(DrawingRev);
+							System.out.println(temp.getJSONObject(0).get("DrawingRev").toString());
+							DrawingRev = Integer.valueOf(temp.getJSONObject(0).get("DrawingRev").toString());
+							System.out.println("printing out the variable DrawingRev "+DrawingRev);
+						}catch(Exception ex){DrawingRev = -1;}
+						txtDrawingRev.setText(String.valueOf(DrawingRev));
 						
 						String CustDrawingNumber = null;
 						try{
-							CustDrawingNumber = temp.getJSONObject(0).getString("CustDrawingNumber").toString();
+							System.out.println(temp.getJSONObject(0).get("CustDrawingNumber").toString());
+							CustDrawingNumber = temp.getJSONObject(0).get("CustDrawingNumber").toString();
+							System.out.println("printing out the variable CustDrawingNumber "+CustDrawingNumber);
 						}catch(Exception ex){CustDrawingNumber = "-";}
 						txtCustDrawingNum.setText(CustDrawingNumber);
 						
 						//set text for DrawingRev JTextField
-						String CustDrawingRev = null;
-						try{
-							CustDrawingRev = temp.getJSONObject(0).getString("CustDrawingRev").toString();
-						}catch(Exception ex){CustDrawingRev = "-";}
-						txtCustDrawingRev.setText(CustDrawingRev);
+						int CustDrawingRev = 0;
+						try{		
+							System.out.println(temp.getJSONObject(0).get("CustDrawingRev").toString());
+							CustDrawingRev =Integer.valueOf(temp.getJSONObject(0).get("CustDrawingRev").toString());	
+							System.out.println("printing out the variable CustDrawingRev "+CustDrawingRev);
+						}catch(Exception ex){CustDrawingRev = -1;}
+						txtCustDrawingRev.setText(String.valueOf(CustDrawingRev));
 						
 						Date drawingRevDate = null;
 						try {

@@ -1230,23 +1230,30 @@ public class DBConnect {
 				statement = statement + ")";
 				pst = con.prepareStatement(statement);
 				//loop to set the values of the parameters going into the Database
-				for (int i = -1; i < count; i++){
-					if (i == -1){
-						pst.setString(i+2, BosalPartNumber);
-					} 
-					//if i is even then an Item is added to the parameters
-					else if (i%2 == 0){
-						pst.setString(i+2, values[i]);
-					} 
-					//if i is odd then a Qty is added to the parameters
-					else if (i%2 != 0){
-						pst.setInt(i+2, Integer.valueOf(values[i]));
-					}
+				for (int i = -1; i < count+4; i++){
+					if (i < count) {
+						if (i == -1){
+							pst.setString(i+2, BosalPartNumber);
+						} 
+						//if i is even then an Item is added to the parameters
+						else if (i%2 == 0) {
+							pst.setString(i+2, values[i]);
+						} 
+						//if i is odd then a Qty is added to the parameters
+						else if (i%2 != 0){
+							pst.setInt(i+2, Integer.valueOf(values[i]));
+						}
+					} else {
+						//if i is even then an Item is added to the parameters
+						if (i%2 == 0) {
+							pst.setString(i+2, usersname);
+						} 
+						//if i is odd then a Qty is added to the parameters
+						else if (i%2 != 0){
+							pst.setTimestamp(i+2, timestamp);
+						}
+					}						
 				}				
-				pst.setString((count+2), usersname);
-				pst.setTimestamp((count+3), timestamp);
-				pst.setString((count+4), usersname);
-				pst.setTimestamp((count+5), timestamp);
 				pst.executeUpdate();				
 			}
 			pst.close();
@@ -1422,42 +1429,45 @@ public class DBConnect {
 			}
 		}
 	//updates a BosalPartNumber in parts list
-	public void updateDelta(String DeltaPartNumber, String CusPartNumber, 
-				String SupPartNumber, String CustDrawingRevDate, String Description, String Program, 
-				int Rev, String DrawingNumber, int DrawingRev, String DrawingRevDate,
-				String ProductionReleaseDate) throws Exception{
-				
+	public void updateDelta(String DeltaPartNumber, String DrawingNumber, int DrawingRev, 
+				String DrawingRevDate, String CusPartNumber, String CustDrawingNumber, 
+				int CustDrawingRev, String CustDrawingRevDate, String SupPartNumber, String Description, 
+				String Program, int Rev, String ProductionReleaseDate) throws Exception{
 				try{
 					String usersname = getUsersName();
 					Timestamp timestamp = getTimestamp();
 					getDBConnection();
 					pst = con.prepareStatement("UPDATE `delta 1 parts` SET "
 							+ "`PartDescription` = ?, " 
-							+ "`CustPartNumber` = ?, " 
-							+ "`SupPartNumber` = ?, "
-							+ "`CustDrawingRevDate` = ?,"
-							+ "`Program` = ?, "
-							+ "`Rev` = ?, "
 							+ "`DrawingNumber` = ?, "
 							+ "`DrawingRev` = ?, "
 							+ "`DrawingRevDate` = ?, "
+							+ "`CustPartNumber` = ?, " 
+							+ "`CustDrawingNumber` = ?, "
+							+ "`CustDrawingRev` = ?, "
+							+ "`CustDrawingRevDate` = ?, "
+							+ "`SupPartNumber` = ?, "
+							+ "`Program` = ?, "
+							+ "`Rev` = ?, "
 							+ "`ProductionReleaseDate` = ?, "
 							+ "`UpdatedBy` = ?, "
 							+ "`Updated` = ?"
 							+ "WHERE `DeltaPartNumber`= ?");
 					pst.setString(1, Description);
-					pst.setString(2, CusPartNumber);
-					pst.setString(3, SupPartNumber);
-					pst.setString(4, CustDrawingRevDate);
-					pst.setString(5,  Program);
-					pst.setInt(6, Rev);
-					pst.setString(7, DrawingNumber);
-					pst.setInt(8, DrawingRev);
-					pst.setString(9, DrawingRevDate);
-					pst.setString(10, ProductionReleaseDate);
-					pst.setString(11, usersname);
-					pst.setTimestamp(12, timestamp);
-					pst.setString(13, DeltaPartNumber);
+					pst.setString(2, DrawingNumber);
+					pst.setInt(3, DrawingRev);
+					pst.setString(4, DrawingRevDate);
+					pst.setString(5, CusPartNumber);
+					pst.setString(6, CustDrawingNumber);
+					pst.setInt(7, CustDrawingRev);
+					pst.setString(8, CustDrawingRevDate);
+					pst.setString(9, SupPartNumber);
+					pst.setString(10,  Program);
+					pst.setInt(11, Rev);
+					pst.setString(12, ProductionReleaseDate);
+					pst.setString(13, usersname);
+					pst.setTimestamp(14, timestamp);
+					pst.setString(15, DeltaPartNumber);
 					pst.executeUpdate();
 					pst.close();
 					con.close();
@@ -1541,7 +1551,7 @@ public class DBConnect {
 				//pst.setString(columnNames.length-1, username);
 				//System.out.print(time + " ");
 				//pst.setTimestamp(columnNames.length, time);
-				//System.out.println();
+				System.out.println();
 				//pst.executeUpdate();
 			}
 			pst.close();

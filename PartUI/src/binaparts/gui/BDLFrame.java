@@ -12,6 +12,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -98,7 +99,6 @@ public class BDLFrame extends JFrame
 		try{
 			BDLframe.setIconImage(ImageIO.read(new File("res/bosalimage.png")));
 		}catch(Exception ex){ex.printStackTrace();}
-		System.out.println(pnlMain.getHeight());
 	}
 	public Date CalendarToDate(String date) {	
 		
@@ -224,7 +224,7 @@ public class BDLFrame extends JFrame
 		private JTextField txtVolume;
 		private JTextField txtPower;
 		private JTextField txtBosalPartNum;
-		private JTextField txtCustomerPartNum;
+		private JTextField txtCustomerPartNumber;
 		private JTextField txtIMDS;
 		private JTextField txtDescription;
 		private JTextField txtVolume2;
@@ -854,6 +854,7 @@ public class BDLFrame extends JFrame
 										s2 = s2+", {\"Customer\":\""+txtCustomer.getText()+"\"}";
 									}
 									s2 = s2 + "]";
+
 									JSONArray temp1;
 									JSONArray temp2;
 									try {
@@ -866,10 +867,7 @@ public class BDLFrame extends JFrame
 										else if (rbtnUpdateBDL.isSelected() == true) {
 											con.updateBDL(temp1);
 											con.updateBDLInfo(temp2);
-										}
-										
-										System.out.println(temp1);
-										System.out.println(temp2);
+										}										
 									} catch (JSONException ex) {
 										ex.printStackTrace();
 									} catch (Exception ex) {
@@ -1035,6 +1033,9 @@ public class BDLFrame extends JFrame
 						String drawingRevDate = null;
 						String productionReleaseDate = null;
 						String customer = null;
+						String customerDrawingNumber = null;
+						String customerDrawingRev = null;
+						String customerDrawingRevDate = null;
 						
 						try {
 							//Grab the data from the correct database
@@ -1066,8 +1067,8 @@ public class BDLFrame extends JFrame
 								}catch(Exception ex){
 								}
 								try{
-									drawingRev = temp.getJSONObject(i).get("DrawingRev").toString();
-									if(drawingRev.length() < 3){
+									drawingRev = String.valueOf(temp.getJSONObject(i).get("DrawingRev"));
+									if (drawingRev.length() < 3) {
 										for(int j = drawingRev.length(); j < 3; j++){
 											drawingRev = "0" + drawingRev;
 										}
@@ -1084,6 +1085,23 @@ public class BDLFrame extends JFrame
 								}
 								try{
 									customer = temp.getJSONObject(i).get("CustPartNumber").toString();
+								}catch(Exception ex){
+								}
+								try{
+									customerDrawingNumber = temp.getJSONObject(i).get("CustDrawingNumber").toString();
+								}catch(Exception ex){
+								}
+								try{
+									customerDrawingRev = temp.getJSONObject(i).get("CustDrawingRev").toString();
+									if(customerDrawingRev.length() < 3){
+										for(int j = customerDrawingRev.length(); j < 3; j++){
+											drawingRev = "0" + customerDrawingRev;
+										}
+									}
+								}catch(Exception ex){
+								}
+								try{
+									customerDrawingRevDate = temp.getJSONObject(i).get("CustDrawingRevDate").toString();
 								}catch(Exception ex){
 								}
 							}
@@ -1110,6 +1128,15 @@ public class BDLFrame extends JFrame
 						}
 						if(customer != null){
 							table1.setValueAt(customer, row, 12);	
+						}
+						if(customerDrawingNumber != null){
+							table1.setValueAt(customerDrawingNumber, row, 13);	
+						}
+						if(customerDrawingRev != null){
+							table1.setValueAt(customerDrawingRev, row, 14);	
+						}
+						if(customerDrawingRevDate != null){
+							table1.setValueAt(customerDrawingRevDate, row, 15);	
 						}
 					}					
 				}				
@@ -1290,7 +1317,8 @@ public class BDLFrame extends JFrame
 						}
 						if(e.getSource().equals(cboPlatform)){		
 							//only the customer is set if cboPlatform is selected
-							if(cbxCustomer.isSelected() == false){						
+							if(cbxCustomer.isSelected() == false){	
+								System.out.println("Setting the customer from the platform information");
 								cboCustomer.setSelectedItem(getCustomer());
 							}												
 						}
@@ -1317,79 +1345,104 @@ public class BDLFrame extends JFrame
 			      }
 			      public void insertUpdate(DocumentEvent documentEvent) {
 			        printIt(documentEvent);
-					String custPartNum = null;
-					String description = null;
+					String description = null;					
+					String custPartNumber = null;
 					
-					if (rbtnSearchBDL.isSelected() == true) {
-						//clear all rows on the table already
-						for (int i = table1.getRowCount(); i > 0; i--) {
-							table1.removeRow(i-1);
-						}
+					//clear all rows on the table already
+					for (int i = table1.getRowCount(); i > 0; i--) {
+						table1.removeRow(i-1);
+					}
+					
+					//get database data on part number being searched
+					JSONArray temp = null;
+					try {
+						temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
+						if (temp.length() == 0) {
+							try {
+								temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						}						
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+					//sets values common for each radio button
+					if (temp != null) {
 						btnAdd.doClick();
 						table1.setValueAt(getSearchText(), 0, 4);
-
 						try {
-							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
-							if (temp.length() == 0) {
-								try {
-									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
-								} catch (Exception ex) {
-									ex.printStackTrace();
-								}
-							}
-							
-							//set text for Description JTextField
-							try {
-								description = temp.getJSONObject(0).get("PartDescription").toString();
-							} catch(Exception ex) {description = "-";}
+							description = temp.getJSONObject(0).get("PartDescription").toString();
+						} catch (Exception ex) {description = null;}				
+						if (description != null) {
 							txtDescription.setText(description);
-							
-							//set text for CustPartNum JTextField
-							try {
-								custPartNum = temp.getJSONObject(0).get("CustPartNumber").toString();
-							} catch (Exception ex) {custPartNum = "-";}
-							txtCustomerPartNum.setText(custPartNum);
-							
-							temp = con.queryDatabase("breakdown lists info", "BreakdownListNumber", getSearchText());
+						}
+						try {
+							custPartNumber = temp.getJSONObject(0).get("CustPartNumber").toString();
+						} catch (Exception ex) {custPartNumber = null;}
+						if (custPartNumber != null) {
+							txtCustomerPartNumber.setText(custPartNumber);
+						}
+						try {
+							setPlatform(temp.getJSONObject(0).get("Program").toString());
+						} catch (Exception ex) {setPlatform(null);}
+						if (rbtnSearchBDL.isSelected() == true) {
+							if (getPlatform() != null) {
+								txtPlatform.setText(getPlatform());
+							}
+						} else {
+							if (getPlatform() != null) {
+								cboPlatform.setSelectedItem(getPlatform());
+							}
+						}
+					} 
+					String createdBy = null;
+					String volume2 = null;
+					String length = null;
+					String section = null;
+					int rev = -1;
+					Date releaseDate = null;
+					Date revDate = null;
+					String production = null;
+					String relPlant1 = null;
+					String relPlant2 = null;
+					String relSupplier = null;			
+					
+					if (rbtnSearchBDL.isSelected() == true || rbtnUpdateBDL.isSelected() == true) {						
+						try {
+							temp = con.queryDatabase("breakdown lists info", "BreakdownListNumber", getSearchText());							
 							
 							//set text for Issued By JTextField
-							String issuedBy= null;
 							try {
-								issuedBy = temp.getJSONObject(0).get("CreatedBy").toString();
-							} catch (Exception ex) {issuedBy = "-";}
-							txtIssuedBy.setText(issuedBy);
+								createdBy = temp.getJSONObject(0).get("CreatedBy").toString();
+							} catch (Exception ex) {createdBy = null;}
+							txtIssuedBy.setText(createdBy);
 							
-							//set text for Volume JTextField
-							String volume2= null;
+							//set text for BDL Volume JTextField
 							try {
 								volume2 = temp.getJSONObject(0).get("Volume").toString();
-							} catch (Exception ex) {volume2 = "-";}
+							} catch (Exception ex) {volume2 = null;}
 							txtVolume2.setText(volume2);
 							
 							//set text for Length JTextField
-							String length= null;
 							try {
 								length = temp.getJSONObject(0).get("Length").toString();
-							} catch (Exception ex) {length = "-";}
+							} catch (Exception ex) {length = null;}
 							txtLength.setText(length);
 							
 							//set text for Section JTextField
-							String section= null;
 							try {
 								section = temp.getJSONObject(0).get("Section").toString();
-							} catch (Exception ex) {section = "-";}
+							} catch (Exception ex) {section = null;}
 							txtSection.setText(section);
 							
 							//set text for Rev JTextField
-							String rev= null;
 							try {
-								rev = temp.getJSONObject(0).get("Rev").toString();
-							} catch (Exception ex) {rev = "-";}
-							txtREV.setText(rev);
+								rev = Integer.valueOf(temp.getJSONObject(0).get("Rev").toString());
+							} catch (Exception ex) {rev = -1;}
+							txtREV.setText(String.valueOf(rev));
 							
 							//set text for Release Date JTextField
-						
-							Date releaseDate = null;
 							try {
 								releaseDate = CalendarToDate((String)temp.getJSONObject(0).get("ReleaseDate"));
 								txtRelDate.setDate(releaseDate);
@@ -1397,317 +1450,75 @@ public class BDLFrame extends JFrame
 							
 							
 							//set text for Rev Date JTextField
-							Date revDate = null;
 							try {
 								revDate = CalendarToDate((String)temp.getJSONObject(0).get("RevDate"));
 								txtREVDate.setDate(revDate);
 							} catch (Exception ex) {revDate = null;}
 							
 							//set text for Production JTextField
-							String production= null;
 							try {
 								production = temp.getJSONObject(0).get("Production").toString();
-							} catch(Exception ex) {production = "-";}
+							} catch(Exception ex) {production = null;}
 							txtProduction.setText(production);
 							
 							//set text for RelPlant1 JTextField
-							String relPlant1= null;
 							try {
 								relPlant1 = temp.getJSONObject(0).get("RelPlant1").toString();
-							} catch (Exception ex) {relPlant1 = "-";}
+							} catch (Exception ex) {relPlant1 = null;}
 							txtRelPlant1.setText(relPlant1);
 							
 							//set text for RelPlant2 JTextField
-							String relPlant2= null;
 							try {
 								relPlant2 = temp.getJSONObject(0).get("RelPlant2").toString();
-							} catch (Exception ex) {relPlant2 = "-";}
+							} catch (Exception ex) {relPlant2 = null;}
 							txtRelPlant2.setText(relPlant2);
 							
 							//set text for RelSupplier JTextField
-							String relSupplier= null;
 							try {
 								relSupplier = temp.getJSONObject(0).get("RelSupplier").toString();
-							} catch (Exception ex) {relSupplier = "-";}
+							} catch (Exception ex) {relSupplier = null;}
 							txtRelSupplier.setText(relSupplier);
 							
 							//set text for Engine JTextField
-							String engine= null;
 							try {
-								engine = temp.getJSONObject(0).get("Engine").toString();
-							} catch (Exception ex) {engine = "-";}
-							txtName.setText(engine);
-							
-							//set text for Platform JTextField
-							String Platform= null;
-							try {
-								Platform = temp.getJSONObject(0).get("Platform").toString();
-							} catch (Exception ex) {Platform = "-";}
-							txtPlatform.setText(Platform);
-							
-							//set text for Customer JTextField
-							String Customer= null;
-							try {
-								Customer = temp.getJSONObject(0).get("Customer").toString();
-							} catch (Exception ex) {Customer = "-";}
-							txtCustomer.setText(Customer);							
-
-							temp = con.queryDatabase("engines", "Engine", engine);
-							//set text for Type JTextField
-							String type= null;
-							try {
-								type = temp.getJSONObject(0).get("Type").toString();
-							} catch (Exception ex) {type = "-";}
-							txtType.setText(type);							
-							
-							//set text for Volume1 JTextField
-							String volume1= null;
-							try {
-								volume1 = temp.getJSONObject(0).get("Volume").toString();
-							} catch (Exception ex) {volume1 = "-";}
-							txtVolume.setText(volume1);
-							
-							//set text for Power JTextField
-							String power= null;
-							try {
-								power = temp.getJSONObject(0).get("Power").toString();
-							} catch (Exception ex) {power = "-";}
-							txtPower.setText(power);
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-						setItemsForTable();
-					}
-					if (rbtnCreateBDL.isSelected() == true) {
-						
-						//searches for the PartNumber entered in both Bosal and Delta lists
-						try {						
-				        	JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
-				        	if (temp.length() == 0) {
+								setName(temp.getJSONObject(0).get("Engine").toString());
+							} catch (Exception ex) {setName(null);}
+							if (getName() != null) {
+								if (rbtnSearchBDL.isSelected() == true) {
+									txtName.setText(getName());
+								} else {
+									cboName.setSelectedItem(getName());
+								}
 								try {
-									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
+									temp = con.queryDatabase("engines", "Engine", getName());
+									//set text for Type JTextField
+									String type= null;
+									try {
+										type = temp.getJSONObject(0).get("Type").toString();
+									} catch (Exception ex) {type = null;}
+									txtType.setText(type);							
+									
+									//set text for Volume1 JTextField
+									String volume1= null;
+									try {
+										volume1 = temp.getJSONObject(0).get("Volume").toString();
+									} catch (Exception ex) {volume1 = null;}
+									txtVolume.setText(volume1);
+									
+									//set text for Power JTextField
+									String power= null;
+									try {
+										power = temp.getJSONObject(0).get("Power").toString();
+									} catch (Exception ex) {power = null;}
+									txtPower.setText(power);
 								} catch (Exception ex) {
 									ex.printStackTrace();
 								}
-							}
-				        	if (temp.length() > 0) {
-					        	//clear all rows on the table already
-								for (int i = table1.getRowCount(); i > 0; i--) {
-									table1.removeRow(i-1);
-								}
-								btnAdd.doClick();
-								table1.setValueAt(getSearchText(), 0, 4);
-					        	for (int i = 0; i < temp.length(); i++) {
-					        		try {
-										setPlatform(temp.getJSONObject(i).getString("Program").toString());								
-	
-										JSONArray temp2 = con.queryDatabase("programs", "Program", getPlatform());
-										for (int j = 0; j < temp2.length(); j++) {
-							        		try {
-							        			setCustomer(temp.getJSONObject(j).get("Customer").toString());
-							        		} catch (Exception ex) {
-							        		}
-							        	}
-									} catch (Exception ex) {
-									}
-					        		try {
-										custPartNum = temp.getJSONObject(i).getString("CustPartNumber").toString();
-									} catch (Exception ex) {
-									}
-					        		try {
-										description = temp.getJSONObject(i).getString("PartDescription").toString();
-									} catch (Exception ex) {
-									}
-								}	
-				        	}
-						} catch (Exception ex) {ex.printStackTrace();}
-				        if (custPartNum != null) {
-							txtCustomerPartNum.setText(custPartNum);
-						}
-				        if (description != null) {
-							txtDescription.setText(description);
-						}
-				        if (rbtnCreateBDL.isSelected() == true) {
-					        if (getCustomer() != null) {
-								cboCustomer.setSelectedItem(getCustomer());
-							}
-					        if (getPlatform() != null) {
-								cboPlatform.setSelectedItem(getPlatform());
-							}
-				        } else if (rbtnSearchBDL.isSelected() == true) {
-				        	if (getCustomer() != null) {
-								txtCustomer.setText(getCustomer());
 							}	
-				        	if (getPlatform() != null) {
-								txtPlatform.setText(getPlatform());
-							}	
-				        }	
-					}
-					if (rbtnUpdateBDL.isSelected() == true) {
-						//clears the table of any rows and adds the BDL part number to the top row of the table
-						for (int i = table1.getRowCount(); i > 0; i--) {
-							table1.removeRow(i-1);
-						}
-						btnAdd.doClick();
-						table1.setValueAt(getSearchText(), 0, 4);
-						
-						try {
-							JSONArray temp = con.queryDatabase("bosal parts", "BosalPartNumber", getSearchText());
-							if (temp.length() == 0) {
-								try {
-									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", getSearchText());
-								} catch (Exception ex) {
-									ex.printStackTrace();
-								}
-							}
-							
-							//set text for Description JTextField
-							try {
-								description = temp.getJSONObject(0).get("PartDescription").toString();
-							} catch(Exception ex) {description = "-";}
-							txtDescription.setText(description);
-							
-							//set text for CustPartNum JTextField
-							try {
-								custPartNum = temp.getJSONObject(0).get("CustPartNumber").toString();
-							} catch (Exception ex) {custPartNum = "-";}
-							txtCustomerPartNum.setText(custPartNum);
-							
-							temp = con.queryDatabase("breakdown lists info", "BreakdownListNumber", getSearchText());
-							
-							//set text for Issued By JTextField
-							String issuedBy= null;
-							try {
-								issuedBy = temp.getJSONObject(0).get("CreatedBy").toString();
-							} catch (Exception ex) {issuedBy = "-";}
-							txtIssuedBy.setText(issuedBy);
-							
-							//set text for Volume JTextField
-							String volume2= null;
-							try {
-								volume2 = temp.getJSONObject(0).get("Volume").toString();
-							} catch (Exception ex) {volume2 = "-";}
-							txtVolume2.setText(volume2);
-							
-							//set text for Length JTextField
-							String length= null;
-							try {
-								length = temp.getJSONObject(0).get("Length").toString();
-							} catch (Exception ex) {length = "-";}
-							txtLength.setText(length);
-							
-							//set text for Section JTextField
-							String section= null;
-							try {
-								section = temp.getJSONObject(0).get("Section").toString();
-							} catch (Exception ex) {section = "-";}
-							txtSection.setText(section);
-							
-							//set text for Rev JTextField
-							String rev= null;
-							try {
-								rev = temp.getJSONObject(0).get("Rev").toString();
-							} catch (Exception ex) {rev = "-";}
-							txtREV.setText(rev);
-							
-							//set text for Release Date JTextField						
-							Date releaseDate = null;
-							try {
-								releaseDate = CalendarToDate((String)temp.getJSONObject(0).get("ReleaseDate"));
-								txtRelDate.setDate(releaseDate);
-							} catch (Exception ex) {releaseDate = null;}							
-							
-							//set text for Rev Date JTextField
-							Date revDate = null;
-							try {
-								revDate = CalendarToDate((String)temp.getJSONObject(0).get("RevDate"));
-								txtREVDate.setDate(revDate);
-							} catch (Exception ex) {revDate = null;}							
-							
-							//set text for Production JTextField
-							String production= null;
-							try {
-								production = temp.getJSONObject(0).get("Production").toString();
-							} catch(Exception ex) {production = "-";}
-							txtProduction.setText(production);
-							
-							//set text for RelPlant1 JTextField
-							String relPlant1= null;
-							try {
-								relPlant1 = temp.getJSONObject(0).get("RelPlant1").toString();
-							} catch (Exception ex) {relPlant1 = "-";}
-							txtRelPlant1.setText(relPlant1);
-							
-							//set text for RelPlant2 JTextField
-							String relPlant2= null;
-							try {
-								relPlant2 = temp.getJSONObject(0).get("RelPlant2").toString();
-							} catch (Exception ex) {relPlant2 = "-";}
-							txtRelPlant2.setText(relPlant2);
-							
-							//set text for RelSupplier JTextField
-							String relSupplier= null;
-							try {
-								relSupplier = temp.getJSONObject(0).get("RelSupplier").toString();
-							} catch (Exception ex) {relSupplier = "-";}
-							txtRelSupplier.setText(relSupplier);
-							
-							//set text for Engine JTextField
-							String engine= null;
-							try {
-								engine = temp.getJSONObject(0).get("Engine").toString();
-							} catch (Exception ex) {engine = null;}
-							setName(engine);
-							
-							//set text for Platform JTextField
-							String Platform= null;
-							try {
-								Platform = temp.getJSONObject(0).get("Platform").toString();
-							} catch (Exception ex) {Platform = null;}
-							setPlatform(Platform);
-							
-							//set text for Customer JTextField
-							String Customer= null;
-							try {
-								Customer = temp.getJSONObject(0).get("Customer").toString();
-							} catch (Exception ex) {Customer = null;}
-							setCustomer(Customer);
-							
-					        if (getCustomer() != null) {
-								cboCustomer.setSelectedItem(getCustomer());
-							}
-					        if (getPlatform() != null) {
-								cboPlatform.setSelectedItem(getPlatform());
-							}
-					        if (getName() != null) {
-								cboName.setSelectedItem(getName());
-							}
-							
-							temp = con.queryDatabase("engines", "Engine", engine);
-							//set text for Type JTextField
-							String type = null;
-							try {
-								type = temp.getJSONObject(0).get("Type").toString();
-							} catch (Exception ex) {type = "-";}
-							txtType.setText(type);							
-							
-							//set text for Volume1 JTextField
-							String volume1 = null;
-							try {
-								volume1 = temp.getJSONObject(0).get("Volume").toString();
-							} catch (Exception ex) {volume1 = "-";}
-							txtVolume.setText(volume1);
-							
-							//set text for Power JTextField
-							String power = null;
-							try {
-								power = temp.getJSONObject(0).get("Power").toString();
-							} catch (Exception ex) {power = "-";}
-							txtPower.setText(power);
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
-						setItemsForTable();
+						setItemsForTable();	
 					}
 			      }
 			      public void removeUpdate(DocumentEvent documentEvent) {
@@ -1773,12 +1584,12 @@ public class BDLFrame extends JFrame
 			txtBosalPartNum.setForeground(Color.BLACK);
 			txtBosalPartNum.addMouseListener(mouseClickListener);
 			txtBosalPartNum.getDocument().addDocumentListener(documentListener);
-			txtCustomerPartNum = new JTextField();
-			txtCustomerPartNum.addMouseListener(new ContextMenuMouseListener());
-			txtCustomerPartNum.setHorizontalAlignment(JTextField.CENTER);
-			txtCustomerPartNum.setBounds(574, 119, 177, 20);
-			txtCustomerPartNum.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-			txtCustomerPartNum.setForeground(Color.BLACK);
+			txtCustomerPartNumber = new JTextField();
+			txtCustomerPartNumber.addMouseListener(new ContextMenuMouseListener());
+			txtCustomerPartNumber.setHorizontalAlignment(JTextField.CENTER);
+			txtCustomerPartNumber.setBounds(574, 119, 177, 20);
+			txtCustomerPartNumber.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			txtCustomerPartNumber.setForeground(Color.BLACK);
 			txtIMDS = new JTextField();
 			txtIMDS.addMouseListener(new ContextMenuMouseListener());
 			txtIMDS.setHorizontalAlignment(JTextField.CENTER);
@@ -1923,23 +1734,31 @@ public class BDLFrame extends JFrame
 						else if (cbxCustomer.isSelected() == false){
 							txtCustomer.setEditable(true);
 							txtCustomer.setVisible(false);
+							txtCustomer.setText("");
+							setCustomer(null);
 							cboCustomer.setVisible(true);
 							cboCustomer.setSelectedIndex(-1);
 							cboCustomer.addItemListener(cboGetInfo);
 						}
 					}					
 					if(e.getSource() == cbxPlatform){
-						if(cbxPlatform.isSelected() == true){							
+						//selected
+						if (cbxPlatform.isSelected() == true) {		
+							System.out.println("platform was selected");
 							txtPlatform.setText(getPlatform());							
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboPlatform.setVisible(false);
 							txtPlatform.setVisible(true);
 							txtPlatform.setEditable(false);
 						}
+						//deselected
 						else if (cbxPlatform.isSelected() == false){
+							System.out.println("platform was deselected");
 							txtPlatform.setEditable(true);
 							txtPlatform.setVisible(false);
-							cboPlatform.setVisible(true);
+							txtPlatform.setText("");
+							setPlatform(null);
+							cboPlatform.setVisible(true);							
 							cboPlatform.setSelectedIndex(-1);
 							cboPlatform.addItemListener(cboGetInfo);
 						}
@@ -1958,6 +1777,8 @@ public class BDLFrame extends JFrame
 							txtPower.setText("");
 							txtName.setEditable(true);
 							txtName.setVisible(false);
+							txtName.setText("");
+							setName(null);
 							cboName.setVisible(true);			
 							cboName.setSelectedIndex(-1);
 							cboName.addItemListener(cboGetInfo);
@@ -1988,7 +1809,7 @@ public class BDLFrame extends JFrame
 							txtVolume.setText("");
 							txtPower.setText("");
 							txtBosalPartNum.setText("");
-							txtCustomerPartNum.setText("");
+							txtCustomerPartNumber.setText("");
 							txtIMDS.setText("");
 							txtDescription.setText("");
 							txtVolume2.setText("");
@@ -2028,8 +1849,21 @@ public class BDLFrame extends JFrame
 							cboName.setModel(resetEngineComboBox());
 							cboName.setSelectedIndex(-1);
 							cboName.addItemListener(cboGetInfo);
-							myTable.getModel().addTableModelListener(columnListener);
+							
+							if ((myTable.getMouseListeners().length >= 2) == true) {
+								int count = myTable.getMouseListeners().length;
+								System.out.println("myTable contained "+count+" mouseListeners");
+								for (int i = count; i > 2; i--) {
+									System.out.println("removing mouse listener");
+									myTable.removeMouseListener(mouseClickListener);
+								}
+							}		
+							System.out.println("adding mouse listener");
 							myTable.addMouseListener(mouseClickListener);
+							
+							myTable.getModel().removeTableModelListener(columnListener);
+							myTable.getModel().addTableModelListener(columnListener);
+							
 							if (table1.getRowCount() != 0) {
 								for (int i = table1.getRowCount(); i > 0; i--) {
 									table1.removeRow(i-1);
@@ -2055,7 +1889,7 @@ public class BDLFrame extends JFrame
 							txtVolume.setText("");
 							txtPower.setText("");
 							txtBosalPartNum.setText("");
-							txtCustomerPartNum.setText("");
+							txtCustomerPartNumber.setText("");
 							txtIMDS.setText("");
 							txtDescription.setText("");
 							txtVolume2.setText("");
@@ -2089,6 +1923,7 @@ public class BDLFrame extends JFrame
 							cboName.setVisible(false);
 							btnAdd.setVisible(false);
 							btnDelete.setVisible(false);
+							myTable.getModel().removeTableModelListener(columnListener);
 							myTable.getModel().addTableModelListener(columnListener);
 							for (int i = table1.getRowCount(); i > 0; i--) {
 								table1.removeRow(i-1);
@@ -2122,7 +1957,7 @@ public class BDLFrame extends JFrame
 					txtVolume.setText("");
 					txtPower.setText("");
 					txtBosalPartNum.setText("");
-					txtCustomerPartNum.setText("");
+					txtCustomerPartNumber.setText("");
 					txtIMDS.setText("");
 					txtDescription.setText("");
 					txtVolume2.setText("");
@@ -2136,15 +1971,43 @@ public class BDLFrame extends JFrame
 					txtRelPlant1.setText("");
 					txtRelPlant2.setText("");
 					txtRelSupplier.setText("");
+					
 					txtCustomer.setText("");
-					txtCustomer.setVisible(false);
-					cboCustomer.setVisible(true);
 					txtPlatform.setText("");
-					txtPlatform.setVisible(false);
-					cboPlatform.setVisible(true);
 					txtName.setText("");
+					
+					txtCustomer.setVisible(false);
+					txtPlatform.setVisible(false);
 					txtName.setVisible(false);
+					
+					cboCustomer.setVisible(true);
+					cboPlatform.setVisible(true);
 					cboName.setVisible(true);
+
+					cbxCustomer.setVisible(true);
+					cbxPlatform.setVisible(true);
+					cbxName.setVisible(true);
+					
+					cboCustomer.setSelectedIndex(-1);
+					cboPlatform.setSelectedIndex(-1);
+					cboName.setSelectedIndex(-1);
+					
+					btnAdd.setVisible(true);
+					btnDelete.setVisible(true);
+					if ((myTable.getMouseListeners().length >= 2) == true) {
+						int count = myTable.getMouseListeners().length;
+						System.out.println("myTable contained "+count+" mouseListeners");
+						for (int i = count ; i > 2; i--) {
+							System.out.println("removing mouse listener");
+							myTable.removeMouseListener(mouseClickListener);
+						}
+					}					
+					System.out.println("adding mouse listener");
+					myTable.addMouseListener(mouseClickListener);
+					
+					myTable.getModel().removeTableModelListener(columnListener);
+					myTable.getModel().addTableModelListener(columnListener);
+					
 					for (int i = table1.getRowCount(); i > 0; i--) {
 						table1.removeRow(i-1);
 					}
@@ -2191,7 +2054,7 @@ public class BDLFrame extends JFrame
 			add(txtBosalPartNum);
 			add(lblBosalPartNum);
 			add(lblIMDS);
-			add(txtCustomerPartNum);
+			add(txtCustomerPartNumber);
 			add(lblCustomerPartNum);
 			add(lblDescription);
 			add(lblVolume2);
