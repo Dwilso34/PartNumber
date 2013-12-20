@@ -808,19 +808,21 @@ public class BDLFrame extends JFrame
 											s1 = s1 + ",";
 										}
 									}
-									s1 = s1 + "]";
-	
+									s1 = s1 + "]";	
 									String s2 = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"}";
 									if (!(txtREV.getText().equals("")) || !(txtREV.getText() == null)) {
 										s2 = s2+", {\"Rev\":\""+txtREV.getText()+"\"}";
-									}
-
-									if (!(txtREVDate.getDate().toString().equals("")) || !(txtREVDate.getDate().toString() == null)) {
+									}									
+									if ((txtREVDate.getDate() != null)) {
 										s2 = s2+", {\"RevDate\":\""+DateToCalendar(txtREVDate.getDate())+"\"}";
+									} else {
+										s2 = s2+", {\"RevDate\":\"\"}";
 									}
-									if (!(txtRelDate.getDate().toString().equals("")) || !(txtRelDate.getDate().toString() == null)) {
-										s2 = s2+", {\"ReleaseDate\":\""+DateToCalendar(txtRelDate.getDate())+"\"}";						}
-									
+									if ((txtRelDate.getDate() != null)) {
+										s2 = s2+", {\"ReleaseDate\":\""+DateToCalendar(txtRelDate.getDate())+"\"}";
+									} else {
+										s2 = s2+", {\"ReleaseDate\":\"\"}";
+									}								
 									if (!(txtProduction.getText().equals("")) || !(txtProduction.getText() == null)) {
 										s2 = s2+", {\"Production\":\""+txtProduction.getText()+"\"}";
 									}
