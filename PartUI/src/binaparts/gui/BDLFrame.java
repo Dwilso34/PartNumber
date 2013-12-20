@@ -1092,7 +1092,7 @@ public class BDLFrame extends JFrame
 									customerDrawingRev = temp.getJSONObject(i).get("CustDrawingRev").toString();
 									if(customerDrawingRev.length() < 3){
 										for(int j = customerDrawingRev.length(); j < 3; j++){
-											drawingRev = "0" + customerDrawingRev;
+											customerDrawingRev = "0" + customerDrawingRev;
 										}
 									}
 								}catch(Exception ex){
@@ -1832,9 +1832,7 @@ public class BDLFrame extends JFrame
 							temp1 = con.queryReturnAllCustomers();
 							temp2 = con.queryReturnAllPrograms();
 							temp3 = con.queryReturnAllEngines();
-							txtType.setText("");
-							txtVolume.setText("");
-							txtPower.setText("");
+							lblCustImage.setIcon(null);
 							txtBosalPartNum.setText("");
 							txtCustomerPartNumber.setText("");
 							txtIMDS.setText("");
@@ -1876,6 +1874,9 @@ public class BDLFrame extends JFrame
 							cboName.setModel(resetEngineComboBox());
 							cboName.setSelectedIndex(-1);
 							cboName.addItemListener(cboGetInfo);
+							txtType.setText("");
+							txtVolume.setText("");
+							txtPower.setText("");
 							
 							if ((myTable.getMouseListeners().length >= 2) == true) {
 								int count = myTable.getMouseListeners().length;
@@ -1911,6 +1912,7 @@ public class BDLFrame extends JFrame
 				{		
 					if (e.getSource() == rbtnSearchBDL){
 						try {
+							lblCustImage.setIcon(null);
 							txtIssuedBy.setText("");
 							txtType.setText("");
 							txtVolume.setText("");
@@ -1978,6 +1980,7 @@ public class BDLFrame extends JFrame
 			rbtnUpdateBDL.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e)
 				{		
+					lblCustImage.setIcon(null);
 					txtIssuedBy.setText("");
 					txtType.setText("");
 					txtVolume.setText("");
@@ -2013,6 +2016,10 @@ public class BDLFrame extends JFrame
 					cbxCustomer.setVisible(true);
 					cbxPlatform.setVisible(true);
 					cbxName.setVisible(true);
+					
+					cbxCustomer.setSelected(false);
+					cbxPlatform.setSelected(false);
+					cbxName.setSelected(false);
 					
 					cboCustomer.setSelectedIndex(-1);
 					cboPlatform.setSelectedIndex(-1);
