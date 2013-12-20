@@ -910,556 +910,554 @@ public class MainFrames extends JFrame
 	}
 }
 	class UpdatePanel extends JPanel{
-			//JLabels
-	private JLabel lblBosal;
-	private JLabel lblUpdatePart;
-	private JLabel lblBosalPartNum;
-	private JLabel lblCustomerPartNum;
-	private JLabel lblCustDrawingNum;
-	private JLabel lblCustDrawingRev;
-	private JLabel lblCustDrawingRevDate;
-	private JLabel lblSupplierPartNum;
-	private JLabel lblDescription;
-	private JLabel lblProgram;
-	private JLabel lblRev;
-	private JLabel lblDrawingNum;
-	private JLabel lblDrawingRev;
-	private JLabel lblDrawingRevDate;
-	private JLabel lblProductionReleaseDate;
-	
-	//JButtons
-	private JButton btnSave;
-	private JButton btnBack;
-	private JButton btnCheck;
-	private JButton btnDelete;
-	
-	//JRadioButton
-	private JRadioButton rbtnEurope;
-	private JRadioButton rbtnAmerica;
-	
-	//JTextFields
-	private JTextField txtFindBosal;
-	private JTextField txtCusDescrip;
-	private JTextField txtSupDescrip;
-	private JTextField txtRev;
-	private JTextField txtDrawingNum;
-	private JTextField txtDrawingRev;
-	private JTextField txtCustDrawingNum;
-	private JTextField txtCustDrawingRev;
-	
-	//JComboBoxes			
-	private JComboBox<String> cboProgram;
-	private ComboBoxModel<String> resetProgramComboBox()
-	{
-		JSONArray temp1 = new JSONArray();
-		ComboBoxModel<String> programComboBoxDefault = null;
-		String[] pros = null;
-		
-		try {
-			temp1 = con.queryReturnAllPrograms();
-			pros = new String[temp1.length()];
-			for(int i = 0; i < temp1.length(); i++){
-				pros[i] = temp1.getJSONObject(i).get("Program").toString();
-			}
-			programComboBoxDefault = (new DefaultComboBoxModel<String> (pros));
-		}catch(Exception ex){/*Ignore*/}
-		return programComboBoxDefault;
-	}
-	private JComboBox<String> cboDescrip;
-	private ComboBoxModel<String> resetDescripComboBox()
-	{
-		JSONArray temp1 = new JSONArray();
-		ComboBoxModel<String> descripComboBoxDefault = null;
-		String[] types = null;
-		
-		try {
-			temp1 = con.queryReturnAllDescriptions();
-			types = new String[temp1.length()];
-			for(int i = 0; i < temp1.length(); i++){
-				types[i] = temp1.getJSONObject(i).get("Name").toString();
-			}
-			descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
-		}catch(Exception ex){/*Ignore*/}
-		return descripComboBoxDefault;
-	}
-	
-	//JXDatePickers
-	
-	private JXDatePicker jxdCustomerDrawingRevDate;
-	private JXDatePicker jxdProductionReleaseDate;
-	private JXDatePicker jxdDrawingRevDate;
-	
-	public void resetPanelFields() {
-		txtCusDescrip.setText("");
-		txtSupDescrip.setText("");
-		txtRev.setText("");
-		txtDrawingRev.setText("");
-		txtDrawingNum.setText("");
-		txtCustDrawingNum.setText("");
-		txtCustDrawingRev.setText("");
-		cboDescrip.setSelectedIndex(-1);
-		cboProgram.setSelectedIndex(-1);
-		jxdCustomerDrawingRevDate.setDate(null);
-		jxdDrawingRevDate.setDate(null);
-		jxdProductionReleaseDate.setDate(null);
-	}
-	//Update Panel		
-	public UpdatePanel(final JPanel update) 
-	{
-		setBackground(new Color(105, 105, 105));
-	
-	//TextFields		
-		
-		txtFindBosal = new JTextField();
-		txtFindBosal.setBounds(28, 160, 174, 20);
-		txtFindBosal.setForeground(Color.BLACK);
-		txtFindBosal.addMouseListener(new ContextMenuMouseListener());
-		txtCusDescrip = new JTextField();
-		txtCusDescrip.setBounds(28, 383, 174, 20);
-		txtCusDescrip.setForeground(Color.BLACK);
-		txtCusDescrip.addMouseListener(new ContextMenuMouseListener());
-		txtSupDescrip = new JTextField();
-		txtSupDescrip.setBounds(238, 218, 174, 20);
-		txtSupDescrip.setForeground(Color.BLACK);
-		txtSupDescrip.addMouseListener(new ContextMenuMouseListener());
-		txtRev = new JTextField();
-		txtRev.setBounds(28, 327, 174, 20);
-		txtRev.setEditable(true);
-		txtRev.setForeground(Color.BLACK);
-		txtRev.addMouseListener(new ContextMenuMouseListener());
-		txtDrawingNum = new JTextField();
-		txtDrawingNum.setBounds(238, 269, 174, 20);
-		txtDrawingNum.setForeground(Color.BLACK);
-		txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
-		txtDrawingRev = new JTextField();
-		txtDrawingRev.setBounds(238, 327, 174, 20);
-		txtDrawingRev.setForeground(Color.BLACK);
-		txtDrawingRev.addMouseListener(new ContextMenuMouseListener());
-		txtCustDrawingNum = new JTextField();
-		txtCustDrawingNum.setBounds(449, 383, 174, 20);
-		txtCustDrawingNum.setForeground(Color.BLACK);
-		txtCustDrawingNum.addMouseListener(new ContextMenuMouseListener());
-		txtCustDrawingRev = new JTextField();
-		txtCustDrawingRev.setBounds(238, 383, 174, 20);
-		txtCustDrawingRev.setForeground(Color.BLACK);
-		txtCustDrawingRev.addMouseListener(new ContextMenuMouseListener());
-					
-	//JComboBoxes
-		
-		cboDescrip = new JComboBox<String>();
-		cboDescrip.setBounds(28, 218, 174, 20);
-		cboDescrip.setEditable(true);
-		cboDescrip.setForeground(Color.BLACK);
-		AutoCompleteDecorator.decorate(cboDescrip);			
-		cboDescrip.addMouseListener(new ContextMenuMouseListener());
-		cboDescrip.setModel(resetDescripComboBox());
-		cboDescrip.setSelectedIndex(-1);
-		cboProgram = new JComboBox<String>();
-		cboProgram.setBounds(30, 272, 174, 20);
-		cboProgram.setEditable(true);
-		cboProgram.setForeground(Color.BLACK);
-		AutoCompleteDecorator.decorate(cboProgram);
-		cboProgram.addMouseListener(new ContextMenuMouseListener());
-		cboProgram.setModel(resetProgramComboBox());			
-		cboProgram.setSelectedIndex(-1);
-		
-	//JXDatePickers
-		
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		jxdCustomerDrawingRevDate = new JXDatePicker();
-		jxdCustomerDrawingRevDate.addMouseListener(new ContextMenuMouseListener());
-		jxdCustomerDrawingRevDate.setFormats(dateFormat);
-		jxdCustomerDrawingRevDate.setBounds(449, 327, 174, 20);
-		jxdCustomerDrawingRevDate.setForeground(Color.BLACK);
-		jxdProductionReleaseDate = new JXDatePicker();
-		jxdProductionReleaseDate.addMouseListener(new ContextMenuMouseListener());
-		jxdProductionReleaseDate.setFormats(dateFormat);
-		jxdProductionReleaseDate.setBounds(449, 272, 174, 20);
-		jxdProductionReleaseDate.setForeground(Color.BLACK);
-		jxdDrawingRevDate = new JXDatePicker();
-		jxdDrawingRevDate.addMouseListener(new ContextMenuMouseListener());
-		jxdDrawingRevDate.setFormats(dateFormat);
-		jxdDrawingRevDate.setBounds(449, 218, 174, 20);
-		jxdDrawingRevDate.setForeground(Color.BLACK);
-		
-	//Labels		
-		
-		lblBosalPartNum = new JLabel("Bosal Part Number");
-		lblBosalPartNum.setBounds(28, 132, 130, 17);
-		lblDescription = new JLabel("Description");
-		lblDescription.setBounds(28, 193, 77, 17);
-		lblCustomerPartNum = new JLabel("Customer Part Number");
-		lblCustomerPartNum.setBounds(28, 355, 161, 17);
-		lblSupplierPartNum = new JLabel("Supplier Part Number");
-		lblSupplierPartNum.setBounds(238, 193, 149, 17);
-		lblUpdatePart = new JLabel("Update Part");
-		lblUpdatePart.setBounds(214, 25, 223, 39);
-		lblProgram = new JLabel("Program");
-		lblProgram.setBounds(28, 234, 223, 39);
-		lblRev = new JLabel("Rev Number");
-		lblRev.setBounds(28, 297, 94, 22);
-		lblDrawingNum = new JLabel("Drawing Number");
-		lblDrawingNum.setBounds(238, 234, 223, 39);
-		lblDrawingRev = new JLabel("Drawing Rev");
-		lblDrawingRev.setBounds(238, 298, 100, 20);
-		lblDrawingRev.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblDrawingRev.setForeground(Color.BLACK);
-		lblDrawingRevDate = new JLabel("Drawing Rev Date");
-		lblDrawingRevDate.setBounds(449, 191, 130, 20);
-		lblDrawingRevDate.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblDrawingRevDate.setForeground(Color.BLACK);
-		lblProductionReleaseDate= new JLabel("Production Release Date");
-		lblProductionReleaseDate.setBounds(449, 243, 174, 20);
-		lblProductionReleaseDate.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblProductionReleaseDate.setForeground(Color.BLACK);
-		lblCustDrawingNum = new JLabel("Cust Drawing Number");
-		lblCustDrawingNum.setBounds(449, 352, 223, 20);
-		lblCustDrawingRev = new JLabel("Cust Drawing Rev");
-		lblCustDrawingRev.setBounds(238, 353, 123, 20);
-		lblCustDrawingRev.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblCustDrawingRev.setForeground(Color.BLACK);
-		lblCustDrawingRevDate = new JLabel("Cust Drawing Rev Date");
-		lblCustDrawingRevDate.setBounds(449, 298, 174, 20);
-		lblCustDrawingRevDate.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblCustDrawingRevDate.setForeground(Color.BLACK);
-		
-	//JRadioButton
-		rbtnEurope = new JRadioButton("Europe Part Number");
-		rbtnEurope.setBackground(new Color(105, 105, 105));
-		rbtnEurope.setBounds(212, 85, 168, 22);
-		rbtnEurope.setFont(new Font("Tahoma", Font.BOLD, 14));
-		rbtnEurope.setForeground(Color.BLACK);
-		rbtnAmerica = new JRadioButton("Bosal Part Number");
-		rbtnAmerica.setBackground(new Color(105, 105, 105));
-		rbtnAmerica.setBounds(39, 85, 178, 22);
-		rbtnAmerica.setFont(new Font("Tahoma", Font.BOLD, 14));
-		rbtnAmerica.setForeground(Color.BLACK);
-		rbtnAmerica.doClick();
-		
-	//Images
-		
-		ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
-		lblBosal = new JLabel(bosal);
-		lblBosal.setBounds(10, 15, 194, 56);
-		
-	//Buttons		
-	
-		ImageIcon delete = new ImageIcon(getClass().getResource("/images/delete.jpg"));
-		btnDelete = new JButton(delete);
-		btnDelete.setBounds(650, 368, 106, 35);
-		btnDelete.addActionListener(new ActionListener() {
+		//JLabels
+			private JLabel lblBosal;
+			private JLabel lblUpdatePart;
+			private JLabel lblBosalPartNum;
+			private JLabel lblCustomerPartNum;
+			private JLabel lblCustDrawingNum;
+			private JLabel lblCustDrawingRev;
+			private JLabel lblCustDrawingRevDate;
+			private JLabel lblSupplierPartNum;
+			private JLabel lblDescription;
+			private JLabel lblProgram;
+			private JLabel lblRev;
+			private JLabel lblDrawingNum;
+			private JLabel lblDrawingRev;
+			private JLabel lblDrawingRevDate;
+			private JLabel lblProductionReleaseDate;
 			
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == btnDelete)
-				{
-					int n = JOptionPane.showConfirmDialog(
-						    frame,
-						    "Are you sure you want to delete part data?",
-						    "Delete:",
-						    JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE
-							);
-					if(n == 0){
-						try {
-							con.deletePart(txtFindBosal.getText());
-							resetPanelFields();
-							txtFindBosal.setText("");
-						}catch(Exception ex){
-							ex.printStackTrace();
-						}
+			//JButtons
+			private JButton btnSave;
+			private JButton btnBack;
+			private JButton btnCheck;
+			private JButton btnDelete;
+			
+			//JRadioButton
+			private JRadioButton rbtnEurope;
+			private JRadioButton rbtnAmerica;
+			
+			//JTextFields
+			private JTextField txtFindBosal;
+			private JTextField txtCusDescrip;
+			private JTextField txtSupDescrip;
+			private JTextField txtRev;
+			private JTextField txtDrawingNum;
+			private JTextField txtDrawingRev;
+			private JTextField txtCustDrawingNum;
+			private JTextField txtCustDrawingRev;
+			
+			//JComboBoxes			
+			private JComboBox<String> cboProgram;
+			private ComboBoxModel<String> resetProgramComboBox()
+			{
+				JSONArray temp1 = new JSONArray();
+				ComboBoxModel<String> programComboBoxDefault = null;
+				String[] pros = null;
+				
+				try {
+					temp1 = con.queryReturnAllPrograms();
+					pros = new String[temp1.length()];
+					for(int i = 0; i < temp1.length(); i++){
+						pros[i] = temp1.getJSONObject(i).get("Program").toString();
 					}
-					rbtnAmerica.doClick();
-				}}});
-		
-		ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
-		btnBack = new JButton(back);
-		btnBack.setBounds(650, 283, 106, 35);
-		btnBack.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == btnBack)
-				{
-					setVisible(false);
-					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-					int height = screenSize.height;
-					int width = screenSize.width;
-					frame.setResizable(false);
-					frame.setSize(width/2, height/2);
-					frame.setLocationRelativeTo(null);
-					frame.setSize(645, 545);
-					frame.setTitle("Main Menu:");
-					main.setVisible(true);
-					resetPanelFields();
-		            txtFindBosal.setText("");		            
-				}}});
-		
-		ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
-		btnSave = new JButton(save);
-		btnSave.setBounds(650, 203, 106, 35);
-		btnSave.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == btnSave)
-				{				
-					int n = JOptionPane.showConfirmDialog(
-						    frame,
-						    "Are you sure you want to save part data?",
-						    "Save:",
-						    JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE
-							);
-					if (n == 0) {
-						String BosalPartNumber = txtFindBosal.getText();						
-						String DrawingNumber = null;							
-						if (txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")) {
-							DrawingNumber = null;
-						} else {DrawingNumber = txtDrawingNum.getText();}
-						int DrawingRev;						
-						if (txtDrawingRev.getText().equals("0") || txtDrawingRev.getText().equals("")) {
-							DrawingRev = 0;
-						} else {DrawingRev = Integer.valueOf(txtDrawingRev.getText());}
-						String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());
-								
-						String CustomerPartNumber = null;
-						if (txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")) {
-							CustomerPartNumber = null;
-						} else {CustomerPartNumber = txtCusDescrip.getText();}						
-						String CustDrawingNumber = null;							
-						if (txtCustDrawingNum.getText().equals("-") || txtCustDrawingNum.getText()
-								.equals("")){
-							DrawingNumber = null;
-						} else {CustDrawingNumber = txtCustDrawingNum.getText();}
-						int CustDrawingRev = 0;						
-						if (txtCustDrawingRev.getText().equals("0") || txtCustDrawingRev.getText().equals("")) {
-							CustDrawingRev = 0;
-						} else {CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());}
-						String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());								
-						String SupplierPartNumber= null;
-						if (txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")) {
-							SupplierPartNumber = null;
-						} else {SupplierPartNumber = txtSupDescrip.getText();}
-						String Description = (String) cboDescrip.getSelectedItem();
-						String Program = (String) cboProgram.getSelectedItem();
-						int Rev = 0;
-						if (txtRev.getText().equals("0") || txtRev.getText().equals("")) {
-							Rev = 0;
-						} else {Rev = Integer.valueOf(txtRev.getText());}	
-						String ProductionReleaseDate = DateToCalendar(jxdProductionReleaseDate.getDate());															
-						
-						if (rbtnAmerica.isSelected() == true) { 
-							try {
-								con.updateBosal(BosalPartNumber, DrawingNumber, DrawingRev, 
-										DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
-										CustDrawingRevDate, SupplierPartNumber, Description, Program, Rev, 
-										ProductionReleaseDate);
-							} catch (Exception ex) {
-								ex.printStackTrace();
-							}	
-						} else if (rbtnEurope.isSelected() == true) {
-							try {
-								con.updateDelta(BosalPartNumber, DrawingNumber, DrawingRev, 
-										DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
-										CustDrawingRevDate, SupplierPartNumber, Description, Program, Rev, 
-										ProductionReleaseDate);
-							} catch (Exception ex) {
-								ex.printStackTrace();
-							}	
-						}													
-						setVisible(false);
-						Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-						int height = screenSize.height;
-						int width = screenSize.width;
-						frame.setResizable(false);
-						frame.setSize(width/2, height/2);
-						frame.setLocationRelativeTo(null);
-						frame.setSize(645, 545);
-						frame.setTitle("Main Menu:");
-						main.setVisible(true);
-						resetPanelFields();
-						txtFindBosal.setText("");						
-						rbtnAmerica.doClick();
-					}
-				}
+					programComboBoxDefault = (new DefaultComboBoxModel<String> (pros));
+				}catch(Exception ex){/*Ignore*/}
+				return programComboBoxDefault;
 			}
-		});
-		
-		ImageIcon check = new ImageIcon(getClass().getResource("/images/check.jpg"));
-		btnCheck = new JButton(check);
-		btnCheck.setBounds(214, 154, 106, 35);
-		btnCheck.addActionListener(new ActionListener() {
+			private JComboBox<String> cboDescrip;
+			private ComboBoxModel<String> resetDescripComboBox()
+			{
+				JSONArray temp1 = new JSONArray();
+				ComboBoxModel<String> descripComboBoxDefault = null;
+				String[] types = null;
+				
+				try {
+					temp1 = con.queryReturnAllDescriptions();
+					types = new String[temp1.length()];
+					for(int i = 0; i < temp1.length(); i++){
+						types[i] = temp1.getJSONObject(i).get("Name").toString();
+					}
+					descripComboBoxDefault = (new DefaultComboBoxModel<String> (types));
+				}catch(Exception ex){/*Ignore*/}
+				return descripComboBoxDefault;
+			}
 			
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == btnCheck)
-				{
-					resetPanelFields();
-					final String findBosalText = txtFindBosal.getText();
-					JSONArray temp = null;
-					try{									
-						if(rbtnAmerica.isSelected() == true) {										
-							temp = con.queryDatabase("bosal parts", "BosalPartNumber", findBosalText);
-							if (temp.length() == 0) { 
-								JOptionPane.showMessageDialog(
-									    frame,
-									    "Bosal Part Number: " + txtFindBosal.getText() + " does not exist",
-									    "Missing Part Number",
-										JOptionPane.ERROR_MESSAGE);
-								return;
-							}
-						} else if (rbtnEurope.isSelected() == true)	{
-							temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", findBosalText);
-							if (temp.length() == 0) { 
-								JOptionPane.showMessageDialog(
-									    frame,
-									    "Delta Part Number: " + txtFindBosal.getText() + " does not exist",
-									    "Missing Part Number",
-										JOptionPane.ERROR_MESSAGE);
-								return;
-							}
-						}
-						//set text for CusPartNumber JTextField
-						String cpartText= null;
-						try{
-							cpartText = temp.getJSONObject(0).getString("CustPartNumber").toString();
-						}catch(Exception ex){cpartText = "-";}
-						txtCusDescrip.setText(cpartText);
-						
-						//set text for SupPartNumber JTextField
-						String spartText= null;
-						try{
-							spartText = temp.getJSONObject(0).getString("SupPartNumber").toString();
-						}catch(Exception ex){spartText = "-";}
-						txtSupDescrip.setText(spartText);
-						
-						//set text for Description JComboBox
-						String descripText= null;
-						try{
-							descripText = temp.getJSONObject(0).getString("PartDescription").toString();
-						}catch(Exception ex){descripText = "-";}
-						cboDescrip.setSelectedItem(descripText);
-						
-						//set text for Program JComboBox
-						String programText = null;
-						try{
-							programText = temp.getJSONObject(0).getString("Program").toString();
-						}catch(Exception ex){programText = "-";}
-						cboProgram.setSelectedItem(programText);
-						
-						//set text for Rev JTextField
-						int Rev = 0;
-						try {
-							System.out.println(temp.getJSONObject(0).get("Rev").toString());
-							Rev = Integer.valueOf(temp.getJSONObject(0).get("Rev").toString());			
-							System.out.println("printing out the variable Rev "+Rev);
-						} catch (Exception ex) {Rev = -1;}
-						txtRev.setText(String.valueOf(Rev));
-						
-						//set text for DrawingNumber JTextField
-						String DrawingNumber = null;
-						try{
-							DrawingNumber = temp.getJSONObject(0).getString("DrawingNumber").toString();
-						}catch(Exception ex){DrawingNumber = "-";}
-						txtDrawingNum.setText(DrawingNumber);
-						
-						//set text for DrawingRev JTextField
-						int DrawingRev = 0;
-						try{
-							System.out.println(temp.getJSONObject(0).get("DrawingRev").toString());
-							DrawingRev = Integer.valueOf(temp.getJSONObject(0).get("DrawingRev").toString());
-							System.out.println("printing out the variable DrawingRev "+DrawingRev);
-						}catch(Exception ex){DrawingRev = -1;}
-						txtDrawingRev.setText(String.valueOf(DrawingRev));
-						
-						String CustDrawingNumber = null;
-						try{
-							System.out.println(temp.getJSONObject(0).get("CustDrawingNumber").toString());
-							CustDrawingNumber = temp.getJSONObject(0).get("CustDrawingNumber").toString();
-							System.out.println("printing out the variable CustDrawingNumber "+CustDrawingNumber);
-						}catch(Exception ex){CustDrawingNumber = "-";}
-						txtCustDrawingNum.setText(CustDrawingNumber);
-						
-						//set text for DrawingRev JTextField
-						int CustDrawingRev = 0;
-						try{		
-							System.out.println(temp.getJSONObject(0).get("CustDrawingRev").toString());
-							CustDrawingRev =Integer.valueOf(temp.getJSONObject(0).get("CustDrawingRev").toString());	
-							System.out.println("printing out the variable CustDrawingRev "+CustDrawingRev);
-						}catch(Exception ex){CustDrawingRev = -1;}
-						txtCustDrawingRev.setText(String.valueOf(CustDrawingRev));
-						
-						Date drawingRevDate = null;
-						try {
-							drawingRevDate = CalendarToDate((String)temp.getJSONObject(0).get("DrawingRevDate"));
-							jxdDrawingRevDate.setDate(drawingRevDate);
-						} catch (Exception ex) {drawingRevDate = null;}
-						
-						Date customerDrawingRevDate = null;
-						try {
-							customerDrawingRevDate = CalendarToDate((String)temp.getJSONObject(0).get("CustDrawingRevDate"));
-							jxdCustomerDrawingRevDate.setDate(customerDrawingRevDate);
-						} catch (Exception ex) {customerDrawingRevDate = null;}
-						
-						//set text for ProductionReleaseDate JComboBoxes
-						Date productionReleaseDate = null;
-						try {
-							productionReleaseDate = CalendarToDate((String)temp.getJSONObject(0).get("ProductionReleaseDate"));
-							jxdProductionReleaseDate.setDate(productionReleaseDate);
-						} catch (Exception ex) {productionReleaseDate = null;}
-					} catch (Exception ex) {
+			//JXDatePickers
+			
+			private JXDatePicker jxdCustomerDrawingRevDate;
+			private JXDatePicker jxdProductionReleaseDate;
+			private JXDatePicker jxdDrawingRevDate;
+			
+			public void resetPanelFields() {
+				txtCusDescrip.setText("");
+				txtSupDescrip.setText("");
+				txtRev.setText("");
+				txtDrawingRev.setText("");
+				txtDrawingNum.setText("");
+				txtCustDrawingNum.setText("");
+				txtCustDrawingRev.setText("");
+				cboDescrip.setSelectedIndex(-1);
+				cboProgram.setSelectedIndex(-1);
+				jxdCustomerDrawingRevDate.setDate(null);
+				jxdDrawingRevDate.setDate(null);
+				jxdProductionReleaseDate.setDate(null);
+			}
+			//Update Panel		
+			public UpdatePanel(final JPanel update) 
+			{
+				setBackground(new Color(105, 105, 105));
+			
+			//TextFields		
+				
+				txtFindBosal = new JTextField();
+				txtFindBosal.setBounds(28, 160, 174, 20);
+				txtFindBosal.setForeground(Color.BLACK);
+				txtFindBosal.addMouseListener(new ContextMenuMouseListener());
+				txtCusDescrip = new JTextField();
+				txtCusDescrip.setBounds(28, 383, 174, 20);
+				txtCusDescrip.setForeground(Color.BLACK);
+				txtCusDescrip.addMouseListener(new ContextMenuMouseListener());
+				txtSupDescrip = new JTextField();
+				txtSupDescrip.setBounds(238, 218, 174, 20);
+				txtSupDescrip.setForeground(Color.BLACK);
+				txtSupDescrip.addMouseListener(new ContextMenuMouseListener());
+				txtRev = new JTextField();
+				txtRev.setBounds(28, 327, 174, 20);
+				txtRev.setEditable(true);
+				txtRev.setForeground(Color.BLACK);
+				txtRev.addMouseListener(new ContextMenuMouseListener());
+				txtDrawingNum = new JTextField();
+				txtDrawingNum.setBounds(238, 269, 174, 20);
+				txtDrawingNum.setForeground(Color.BLACK);
+				txtDrawingNum.addMouseListener(new ContextMenuMouseListener());
+				txtDrawingRev = new JTextField();
+				txtDrawingRev.setBounds(238, 327, 174, 20);
+				txtDrawingRev.setForeground(Color.BLACK);
+				txtDrawingRev.addMouseListener(new ContextMenuMouseListener());
+				txtCustDrawingNum = new JTextField();
+				txtCustDrawingNum.setBounds(449, 383, 174, 20);
+				txtCustDrawingNum.setForeground(Color.BLACK);
+				txtCustDrawingNum.addMouseListener(new ContextMenuMouseListener());
+				txtCustDrawingRev = new JTextField();
+				txtCustDrawingRev.setBounds(238, 383, 174, 20);
+				txtCustDrawingRev.setForeground(Color.BLACK);
+				txtCustDrawingRev.addMouseListener(new ContextMenuMouseListener());
 							
-						}}
-			}});
-		
-	//ActionEvents for Radiobuttons to clear textfields
-		rbtnAmerica.addActionListener(new ActionListener(){
+			//JComboBoxes
+				
+				cboDescrip = new JComboBox<String>();
+				cboDescrip.setBounds(28, 218, 174, 20);
+				cboDescrip.setEditable(true);
+				cboDescrip.setForeground(Color.BLACK);
+				AutoCompleteDecorator.decorate(cboDescrip);			
+				cboDescrip.addMouseListener(new ContextMenuMouseListener());
+				cboDescrip.setModel(resetDescripComboBox());
+				cboDescrip.setSelectedIndex(-1);
+				cboProgram = new JComboBox<String>();
+				cboProgram.setBounds(30, 272, 174, 20);
+				cboProgram.setEditable(true);
+				cboProgram.setForeground(Color.BLACK);
+				AutoCompleteDecorator.decorate(cboProgram);
+				cboProgram.addMouseListener(new ContextMenuMouseListener());
+				cboProgram.setModel(resetProgramComboBox());			
+				cboProgram.setSelectedIndex(-1);
+				
+			//JXDatePickers
+				
+				DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+				jxdCustomerDrawingRevDate = new JXDatePicker();
+				jxdCustomerDrawingRevDate.addMouseListener(new ContextMenuMouseListener());
+				jxdCustomerDrawingRevDate.setFormats(dateFormat);
+				jxdCustomerDrawingRevDate.setBounds(449, 327, 174, 20);
+				jxdCustomerDrawingRevDate.setForeground(Color.BLACK);
+				jxdProductionReleaseDate = new JXDatePicker();
+				jxdProductionReleaseDate.addMouseListener(new ContextMenuMouseListener());
+				jxdProductionReleaseDate.setFormats(dateFormat);
+				jxdProductionReleaseDate.setBounds(449, 272, 174, 20);
+				jxdProductionReleaseDate.setForeground(Color.BLACK);
+				jxdDrawingRevDate = new JXDatePicker();
+				jxdDrawingRevDate.addMouseListener(new ContextMenuMouseListener());
+				jxdDrawingRevDate.setFormats(dateFormat);
+				jxdDrawingRevDate.setBounds(449, 218, 174, 20);
+				jxdDrawingRevDate.setForeground(Color.BLACK);
+				
+			//Labels		
+				
+				lblBosalPartNum = new JLabel("Bosal Part Number");
+				lblBosalPartNum.setBounds(28, 132, 130, 17);
+				lblDescription = new JLabel("Description");
+				lblDescription.setBounds(28, 193, 77, 17);
+				lblCustomerPartNum = new JLabel("Customer Part Number");
+				lblCustomerPartNum.setBounds(28, 355, 161, 17);
+				lblSupplierPartNum = new JLabel("Supplier Part Number");
+				lblSupplierPartNum.setBounds(238, 193, 149, 17);
+				lblUpdatePart = new JLabel("Update Part");
+				lblUpdatePart.setBounds(214, 25, 223, 39);
+				lblProgram = new JLabel("Program");
+				lblProgram.setBounds(28, 234, 223, 39);
+				lblRev = new JLabel("Rev Number");
+				lblRev.setBounds(28, 297, 94, 22);
+				lblDrawingNum = new JLabel("Drawing Number");
+				lblDrawingNum.setBounds(238, 234, 223, 39);
+				lblDrawingRev = new JLabel("Drawing Rev");
+				lblDrawingRev.setBounds(238, 298, 100, 20);
+				lblDrawingRev.setFont(new Font("Tahoma", Font.BOLD, 14));
+				lblDrawingRev.setForeground(Color.BLACK);
+				lblDrawingRevDate = new JLabel("Drawing Rev Date");
+				lblDrawingRevDate.setBounds(449, 191, 130, 20);
+				lblDrawingRevDate.setFont(new Font("Tahoma", Font.BOLD, 14));
+				lblDrawingRevDate.setForeground(Color.BLACK);
+				lblProductionReleaseDate= new JLabel("Production Release Date");
+				lblProductionReleaseDate.setBounds(449, 243, 174, 20);
+				lblProductionReleaseDate.setFont(new Font("Tahoma", Font.BOLD, 14));
+				lblProductionReleaseDate.setForeground(Color.BLACK);
+				lblCustDrawingNum = new JLabel("Cust Drawing Number");
+				lblCustDrawingNum.setBounds(449, 352, 223, 20);
+				lblCustDrawingRev = new JLabel("Cust Drawing Rev");
+				lblCustDrawingRev.setBounds(238, 353, 123, 20);
+				lblCustDrawingRev.setFont(new Font("Tahoma", Font.BOLD, 14));
+				lblCustDrawingRev.setForeground(Color.BLACK);
+				lblCustDrawingRevDate = new JLabel("Cust Drawing Rev Date");
+				lblCustDrawingRevDate.setBounds(449, 298, 174, 20);
+				lblCustDrawingRevDate.setFont(new Font("Tahoma", Font.BOLD, 14));
+				lblCustDrawingRevDate.setForeground(Color.BLACK);
+				
+			//JRadioButton
+				rbtnEurope = new JRadioButton("Europe Part Number");
+				rbtnEurope.setBackground(new Color(105, 105, 105));
+				rbtnEurope.setBounds(212, 85, 168, 22);
+				rbtnEurope.setFont(new Font("Tahoma", Font.BOLD, 14));
+				rbtnEurope.setForeground(Color.BLACK);
+				rbtnAmerica = new JRadioButton("Bosal Part Number");
+				rbtnAmerica.setBackground(new Color(105, 105, 105));
+				rbtnAmerica.setBounds(39, 85, 178, 22);
+				rbtnAmerica.setFont(new Font("Tahoma", Font.BOLD, 14));
+				rbtnAmerica.setForeground(Color.BLACK);
+				rbtnAmerica.doClick();
+				
+			//Images
+				
+				ImageIcon bosal = new ImageIcon(getClass().getResource("/images/bosal.jpg"));
+				lblBosal = new JLabel(bosal);
+				lblBosal.setBounds(10, 15, 194, 56);
+				
+			//Buttons		
 			
-			public void actionPerformed(ActionEvent e)
-			{
-				if (e.getSource() == rbtnAmerica){
-					resetPanelFields();
-		            /*txtFindBosal.setText("");
-		            txtSupDescrip.setText("");
-		            txtCusDescrip.setText("");
-		            txtRev.setText("");
-		            txtDrawingRev.setText("");
-		            txtDrawingNum.setText("");
-		            cboDescrip.setSelectedIndex(-1);
-		            cboProgram.setSelectedIndex(-1);
-		            txtFindBosal.requestFocusInWindow();
-		            jxdProductionReleaseDate.setDate(null);
-		            jxdCustomerDrawingRevDate.setDate(null);
-		            jxdDrawingRevDate.setDate(null);*/
-		           }
-		}});
-		
-		rbtnEurope.addActionListener(new ActionListener(){
-			
-			public void actionPerformed(ActionEvent e)
-			{
-				if (e.getSource() == rbtnEurope){
-					resetPanelFields();
-		            /*txtFindBosal.setText("");
-		            txtSupDescrip.setText("");
-		            txtCusDescrip.setText("");
-		            txtRev.setText("");
-		            txtDrawingRev.setText("");
-		            txtDrawingNum.setText("");
-		            cboDescrip.setSelectedIndex(-1);
-		            cboProgram.setSelectedIndex(-1);
-		            txtFindBosal.requestFocusInWindow();
-		            jxdProductionReleaseDate.setDate(null);
-		            jxdCustomerDrawingRevDate.setDate(null);
-		            jxdDrawingRevDate.setDate(null);*/
-		           }
-		}});
-		
-	//Radio Button Group
-		ButtonGroup group = new ButtonGroup();
-		group.add(rbtnEurope);
-		group.add(rbtnAmerica);
-		
-		setupPanel();
-	}
-	private void setupPanel()
+				ImageIcon delete = new ImageIcon(getClass().getResource("/images/delete.jpg"));
+				btnDelete = new JButton(delete);
+				btnDelete.setBounds(650, 368, 106, 35);
+				btnDelete.addActionListener(new ActionListener() {
+					
+					public void actionPerformed(ActionEvent e) {
+						if (e.getSource() == btnDelete)
+						{
+							int n = JOptionPane.showConfirmDialog(
+								    frame,
+								    "Are you sure you want to delete part data?",
+								    "Delete:",
+								    JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE
+									);
+							if(n == 0){
+								try {
+									con.deletePart(txtFindBosal.getText());
+									resetPanelFields();
+									txtFindBosal.setText("");
+								}catch(Exception ex){
+									ex.printStackTrace();
+								}
+							}
+							rbtnAmerica.doClick();
+						}}});
+				
+				ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
+				btnBack = new JButton(back);
+				btnBack.setBounds(650, 283, 106, 35);
+				btnBack.addActionListener(new ActionListener() {
+					
+					public void actionPerformed(ActionEvent e) {
+						if (e.getSource() == btnBack)
+						{
+							setVisible(false);
+							Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+							int height = screenSize.height;
+							int width = screenSize.width;
+							frame.setResizable(false);
+							frame.setSize(width/2, height/2);
+							frame.setLocationRelativeTo(null);
+							frame.setSize(645, 545);
+							frame.setTitle("Main Menu:");
+							main.setVisible(true);
+							resetPanelFields();
+				            txtFindBosal.setText("");		            
+						}}});
+				
+				ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
+				btnSave = new JButton(save);
+				btnSave.setBounds(650, 203, 106, 35);
+				btnSave.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (e.getSource() == btnSave)
+						{				
+							int n = JOptionPane.showConfirmDialog(
+								    frame,
+								    "Are you sure you want to save part data?",
+								    "Save:",
+								    JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE
+									);
+							if (n == 0) {
+								String BosalPartNumber = txtFindBosal.getText();						
+								String DrawingNumber = null;							
+								if (txtDrawingNum.getText().equals("-") || txtDrawingNum.getText().equals("")) {
+									DrawingNumber = null;
+								} else {DrawingNumber = txtDrawingNum.getText();}								
+								int DrawingRev;						
+								if (txtDrawingRev.getText().equals("0") || txtDrawingRev.getText().equals("")) {
+									DrawingRev = 0;
+								} else {DrawingRev = Integer.valueOf(txtDrawingRev.getText());}
+								String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());										
+								String CustomerPartNumber = null;
+								if (txtCusDescrip.getText().equals("-") || txtCusDescrip.getText().equals("")) {
+									CustomerPartNumber = null;
+								} else {CustomerPartNumber = txtCusDescrip.getText();}						
+								String CustDrawingNumber = null;							
+								if (txtCustDrawingNum.getText().equals("-") || txtCustDrawingNum.getText()
+										.equals("")){
+									CustDrawingNumber = null;
+								} else {CustDrawingNumber = txtCustDrawingNum.getText();}
+								int CustDrawingRev = 0;						
+								if (txtCustDrawingRev.getText().equals("0") || txtCustDrawingRev.getText().equals("")) {
+									CustDrawingRev = 0;
+								} else {CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());}
+								String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());								
+								String SupplierPartNumber= null;
+								if (txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")) {
+									SupplierPartNumber = null;
+								} else {SupplierPartNumber = txtSupDescrip.getText();}
+								String Description = (String) cboDescrip.getSelectedItem();
+								String Program = (String) cboProgram.getSelectedItem();
+								int Rev = 0;
+								if (txtRev.getText().equals("0") || txtRev.getText().equals("")) {
+									Rev = 0;
+								} else {Rev = Integer.valueOf(txtRev.getText());}	
+								String ProductionReleaseDate = DateToCalendar(jxdProductionReleaseDate.getDate());															
+								
+								if (rbtnAmerica.isSelected() == true) { 
+									try {
+										con.updateBosal(BosalPartNumber, DrawingNumber, DrawingRev, 
+												DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
+												CustDrawingRevDate, SupplierPartNumber, Description, Program, Rev, 
+												ProductionReleaseDate);
+									} catch (Exception ex) {
+										ex.printStackTrace();
+									}	
+								} else if (rbtnEurope.isSelected() == true) {
+									try {
+										con.updateDelta(BosalPartNumber, DrawingNumber, DrawingRev, 
+												DrawingRevDate, CustomerPartNumber, CustDrawingNumber, CustDrawingRev, 
+												CustDrawingRevDate, SupplierPartNumber, Description, Program, Rev, 
+												ProductionReleaseDate);
+									} catch (Exception ex) {
+										ex.printStackTrace();
+									}	
+								}													
+								setVisible(false);
+								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+								int height = screenSize.height;
+								int width = screenSize.width;
+								frame.setResizable(false);
+								frame.setSize(width/2, height/2);
+								frame.setLocationRelativeTo(null);
+								frame.setSize(645, 545);
+								frame.setTitle("Main Menu:");
+								main.setVisible(true);
+								resetPanelFields();
+								txtFindBosal.setText("");						
+								rbtnAmerica.doClick();
+							}
+						}
+					}
+				});
+				
+				ImageIcon check = new ImageIcon(getClass().getResource("/images/check.jpg"));
+				btnCheck = new JButton(check);
+				btnCheck.setBounds(214, 154, 106, 35);
+				btnCheck.addActionListener(new ActionListener() {
+					
+					public void actionPerformed(ActionEvent e) {
+						if (e.getSource() == btnCheck)
+						{
+							resetPanelFields();
+							final String findBosalText = txtFindBosal.getText();
+							JSONArray temp = null;
+							try{									
+								if(rbtnAmerica.isSelected() == true) {										
+									temp = con.queryDatabase("bosal parts", "BosalPartNumber", findBosalText);
+									if (temp.length() == 0) { 
+										JOptionPane.showMessageDialog(
+											    frame,
+											    "Bosal Part Number: " + txtFindBosal.getText() + " does not exist",
+											    "Missing Part Number",
+												JOptionPane.ERROR_MESSAGE);
+										return;
+									}
+								} else if (rbtnEurope.isSelected() == true)	{
+									temp = con.queryDatabase("delta 1 parts", "DeltaPartNumber", findBosalText);
+									if (temp.length() == 0) { 
+										JOptionPane.showMessageDialog(
+											    frame,
+											    "Delta Part Number: " + txtFindBosal.getText() + " does not exist",
+											    "Missing Part Number",
+												JOptionPane.ERROR_MESSAGE);
+										return;
+									}
+								}
+								//set text for CusPartNumber JTextField
+								String cpartText= null;
+								try{
+									cpartText = temp.getJSONObject(0).getString("CustPartNumber").toString();
+								}catch(Exception ex){cpartText = "-";}
+								txtCusDescrip.setText(cpartText);
+								
+								//set text for SupPartNumber JTextField
+								String spartText= null;
+								try{
+									spartText = temp.getJSONObject(0).getString("SupPartNumber").toString();
+								}catch(Exception ex){spartText = "-";}
+								txtSupDescrip.setText(spartText);
+								
+								//set text for Description JComboBox
+								String descripText= null;
+								try{
+									descripText = temp.getJSONObject(0).getString("PartDescription").toString();
+								}catch(Exception ex){descripText = "-";}
+								cboDescrip.setSelectedItem(descripText);
+								
+								//set text for Program JComboBox
+								String programText = null;
+								try{
+									programText = temp.getJSONObject(0).getString("Program").toString();
+								}catch(Exception ex){programText = "-";}
+								cboProgram.setSelectedItem(programText);
+								
+								//set text for Rev JTextField
+								int Rev = 0;
+								try {
+									System.out.println(temp.getJSONObject(0).get("Rev").toString());
+									Rev = Integer.valueOf(temp.getJSONObject(0).get("Rev").toString());			
+									System.out.println("printing out the variable Rev "+Rev);
+								} catch (Exception ex) {Rev = -1;}
+								txtRev.setText(String.valueOf(Rev));
+								
+								//set text for DrawingNumber JTextField
+								String DrawingNumber = null;
+								try{
+									DrawingNumber = temp.getJSONObject(0).getString("DrawingNumber").toString();
+								}catch(Exception ex){DrawingNumber = "-";}
+								txtDrawingNum.setText(DrawingNumber);
+								
+								//set text for DrawingRev JTextField
+								int DrawingRev = 0;
+								try{
+									System.out.println(temp.getJSONObject(0).get("DrawingRev").toString());
+									DrawingRev = Integer.valueOf(temp.getJSONObject(0).get("DrawingRev").toString());
+									System.out.println("printing out the variable DrawingRev "+DrawingRev);
+								}catch(Exception ex){DrawingRev = -1;}
+								txtDrawingRev.setText(String.valueOf(DrawingRev));
+								
+								String CustDrawingNumber = null;
+								try{
+									System.out.println(temp.getJSONObject(0).get("CustDrawingNumber").toString());
+									CustDrawingNumber = temp.getJSONObject(0).get("CustDrawingNumber").toString();
+									System.out.println("printing out the variable CustDrawingNumber "+CustDrawingNumber);
+								}catch(Exception ex){CustDrawingNumber = "-";}
+								txtCustDrawingNum.setText(CustDrawingNumber);
+								
+								//set text for DrawingRev JTextField
+								int CustDrawingRev = 0;
+								try{		
+									System.out.println(temp.getJSONObject(0).get("CustDrawingRev").toString());
+									CustDrawingRev =Integer.valueOf(temp.getJSONObject(0).get("CustDrawingRev").toString());	
+									System.out.println("printing out the variable CustDrawingRev "+CustDrawingRev);
+								}catch(Exception ex){CustDrawingRev = -1;}
+								txtCustDrawingRev.setText(String.valueOf(CustDrawingRev));
+								
+								Date drawingRevDate = null;
+								try {
+									drawingRevDate = CalendarToDate((String)temp.getJSONObject(0).get("DrawingRevDate"));
+									jxdDrawingRevDate.setDate(drawingRevDate);
+								} catch (Exception ex) {drawingRevDate = null;}
+								
+								Date customerDrawingRevDate = null;
+								try {
+									customerDrawingRevDate = CalendarToDate((String)temp.getJSONObject(0).get("CustDrawingRevDate"));
+									jxdCustomerDrawingRevDate.setDate(customerDrawingRevDate);
+								} catch (Exception ex) {customerDrawingRevDate = null;}
+								
+								//set text for ProductionReleaseDate JComboBoxes
+								Date productionReleaseDate = null;
+								try {
+									productionReleaseDate = CalendarToDate((String)temp.getJSONObject(0).get("ProductionReleaseDate"));
+									jxdProductionReleaseDate.setDate(productionReleaseDate);
+								} catch (Exception ex) {productionReleaseDate = null;}
+							} catch (Exception ex) {
+									
+								}}
+					}});
+				
+			//ActionEvents for Radiobuttons to clear textfields
+				rbtnAmerica.addActionListener(new ActionListener(){
+					
+					public void actionPerformed(ActionEvent e)
+					{
+						if (e.getSource() == rbtnAmerica){
+							resetPanelFields();
+				            /*txtFindBosal.setText("");
+				            txtSupDescrip.setText("");
+				            txtCusDescrip.setText("");
+				            txtRev.setText("");
+				            txtDrawingRev.setText("");
+				            txtDrawingNum.setText("");
+				            cboDescrip.setSelectedIndex(-1);
+				            cboProgram.setSelectedIndex(-1);
+				            txtFindBosal.requestFocusInWindow();
+				            jxdProductionReleaseDate.setDate(null);
+				            jxdCustomerDrawingRevDate.setDate(null);
+				            jxdDrawingRevDate.setDate(null);*/
+				           }
+				}});
+				
+				rbtnEurope.addActionListener(new ActionListener(){
+					
+					public void actionPerformed(ActionEvent e)
+					{
+						if (e.getSource() == rbtnEurope){
+							resetPanelFields();
+				            /*txtFindBosal.setText("");
+				            txtSupDescrip.setText("");
+				            txtCusDescrip.setText("");
+				            txtRev.setText("");
+				            txtDrawingRev.setText("");
+				            txtDrawingNum.setText("");
+				            cboDescrip.setSelectedIndex(-1);
+				            cboProgram.setSelectedIndex(-1);
+				            txtFindBosal.requestFocusInWindow();
+				            jxdProductionReleaseDate.setDate(null);
+				            jxdCustomerDrawingRevDate.setDate(null);
+				            jxdDrawingRevDate.setDate(null);*/
+				           }
+				}});
+				
+			//Radio Button Group
+				ButtonGroup group = new ButtonGroup();
+				group.add(rbtnEurope);
+				group.add(rbtnAmerica);
+				
+				setupPanel();
+			}
+			private void setupPanel()
 		{
 				
 	//Label Fonts
