@@ -770,6 +770,15 @@ public class BDLFrame extends JFrame
 			public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnSave)
 					{
+						if (cbxCustomer.isSelected() == false) {
+							cbxCustomer.doClick();
+						}
+						if (cbxPlatform.isSelected() == false) {
+							cbxPlatform.doClick();
+						}
+						if (cbxName.isSelected() == false) {
+							cbxName.doClick();
+						}
 						if(txtBosalPartNum.getText() == null || txtBosalPartNum.getText().equals("")){
 							JOptionPane.showMessageDialog(BDLframe,
 								    "Please Enter a Bosal Part Number",
