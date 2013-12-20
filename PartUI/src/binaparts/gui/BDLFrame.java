@@ -713,7 +713,6 @@ public class BDLFrame extends JFrame
 			btnAdd = new JButton("Add");
 			btnAdd.setBounds(30, 210, 75, 20);
 			btnAdd.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnAdd)
 					{				
@@ -734,7 +733,6 @@ public class BDLFrame extends JFrame
 			btnDelete = new JButton("Delete");
 			btnDelete.setBounds(115, 210, 75, 20);
 			btnDelete.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == btnDelete)
 					{
@@ -884,7 +882,6 @@ public class BDLFrame extends JFrame
 		btnPdfPrint = new JButton(print);
 		btnPdfPrint.setBounds(893, 130, 102, 34);
 		btnPdfPrint.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btnPdfPrint)
 				{
@@ -1167,8 +1164,7 @@ public class BDLFrame extends JFrame
 			for (int width : columnsWidth) {
 			            TableColumn column = myTable.getColumnModel().getColumn(i++);
 			            column.setMinWidth(width);
-			            column.setPreferredWidth(width);
-			            
+			            column.setPreferredWidth(width);			            
 			}
 		
 		//JComboBoxes
@@ -1199,25 +1195,38 @@ public class BDLFrame extends JFrame
 				{							
 					if(e.getStateChange() == ItemEvent.SELECTED){
 						if(e.getSource().equals(cboCustomer)){
-							if(e.getStateChange() == ItemEvent.SELECTED){
+						//	if(e.getStateChange() == ItemEvent.SELECTED){
 								setCustomer(cboCustomer.getSelectedItem().toString());
-								cbxCustomer.doClick();								
-							}
+								//cbxCustomer.doClick();								
+						//	}
 						}
 						else if(e.getSource().equals(cboPlatform)){							
-							if(e.getStateChange() == ItemEvent.SELECTED){
+						//	if(e.getStateChange() == ItemEvent.SELECTED){
 								setPlatform(cboPlatform.getSelectedItem().toString());
-								cbxPlatform.doClick();
-							}
+								//cbxPlatform.doClick();
+						//	}
 						}
 						else if(e.getSource().equals(cboName)){							
-							if(e.getStateChange() == ItemEvent.SELECTED){
-								if(cboName.getSelectedItem().toString() != null){
+							//if(e.getStateChange() == ItemEvent.SELECTED){
+								//if(cboName.getSelectedItem().toString() != null){
 									setName(cboName.getSelectedItem().toString());
-								}
-								cbxName.doClick();
-							}
-						}				
+									try{		
+										for(int i = 0; i < temp3.length(); i++){
+											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
+												setType(temp3.getJSONObject(i).get("Type").toString());
+												setVolume(temp3.getJSONObject(i).get("Volume").toString());
+												setPower(temp3.getJSONObject(i).get("Power").toString());
+												i=temp3.length(); //used to end for loop										
+											}
+										}	
+										txtType.setText(getType());
+										txtVolume.setText(getVolume());
+										txtPower.setText(getPower());
+									}catch(Exception ex){ex.printStackTrace();}
+						//		}
+								//cbxName.doClick();
+							//}
+						}	/*			
 						//possible truth table outcomes
 						if(cbxCustomer.isSelected() == true){
 							if(cbxPlatform.isSelected() == true){
@@ -1311,7 +1320,7 @@ public class BDLFrame extends JFrame
 									//nothing happens
 								}
 							}
-						}
+						}*//*
 						if(e.getSource().equals(cboCustomer)){		
 							//nothing is set if cboCustomer is selected				
 						}
@@ -1333,7 +1342,7 @@ public class BDLFrame extends JFrame
 							txtType.setText(getType());
 							txtVolume.setText(getVolume());
 							txtPower.setText(getPower());
-						}
+						}*/
 					}					
 				}
 			});		
@@ -1478,6 +1487,20 @@ public class BDLFrame extends JFrame
 								relSupplier = temp.getJSONObject(0).get("RelSupplier").toString();
 							} catch (Exception ex) {relSupplier = null;}
 							txtRelSupplier.setText(relSupplier);
+							
+							//set text for Customer JTextField
+							try {
+								setCustomer(temp.getJSONObject(0).get("Customer").toString());
+							} catch (Exception ex) {setCustomer(null);}
+							if (rbtnSearchBDL.isSelected() == true) {
+								if (getCustomer() != null) {
+									txtCustomer.setText(getCustomer());
+								}
+							} else {
+								if (getCustomer() != null) {
+									cboCustomer.setSelectedItem(getCustomer());
+								}
+							}
 							
 							//set text for Engine JTextField
 							try {
@@ -1724,14 +1747,16 @@ public class BDLFrame extends JFrame
 			ActionListener cbxListener = (new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					if(e.getSource() == cbxCustomer){
-						if(cbxCustomer.isSelected() == true){
+						if (cbxCustomer.isSelected() == true) {
+							System.out.println("cbxCustomer was selected");
 							txtCustomer.setText(getCustomer());
 							cboCustomer.removeItemListener(cboGetInfo);
 							cboCustomer.setVisible(false);
 							txtCustomer.setVisible(true);
 							txtCustomer.setEditable(false);
 						}
-						else if (cbxCustomer.isSelected() == false){
+						else if (cbxCustomer.isSelected() == false) {
+							System.out.println("cbxCustomer was deselected");
 							txtCustomer.setEditable(true);
 							txtCustomer.setVisible(false);
 							txtCustomer.setText("");
@@ -1741,7 +1766,7 @@ public class BDLFrame extends JFrame
 							cboCustomer.addItemListener(cboGetInfo);
 						}
 					}					
-					if(e.getSource() == cbxPlatform){
+					if (e.getSource() == cbxPlatform) {
 						//selected
 						if (cbxPlatform.isSelected() == true) {		
 							System.out.println("platform was selected");
@@ -1752,7 +1777,7 @@ public class BDLFrame extends JFrame
 							txtPlatform.setEditable(false);
 						}
 						//deselected
-						else if (cbxPlatform.isSelected() == false){
+						else if (cbxPlatform.isSelected() == false) {
 							System.out.println("platform was deselected");
 							txtPlatform.setEditable(true);
 							txtPlatform.setVisible(false);
@@ -1763,15 +1788,17 @@ public class BDLFrame extends JFrame
 							cboPlatform.addItemListener(cboGetInfo);
 						}
 					}					
-					if(e.getSource() == cbxName){
+					if (e.getSource() == cbxName) {
 						if(cbxName.isSelected() == true){
+							System.out.println("cbxName was selected");
 							txtName.setText(getName());
 							cboName.removeItemListener(cboGetInfo);	
 							cboName.setVisible(false);
 							txtName.setVisible(true);
 							txtName.setEditable(false);
 						}
-						else if (cbxName.isSelected() == false){
+						else if (cbxName.isSelected() == false) {
+							System.out.println("cbxName was deselected");
 							txtType.setText("");
 							txtVolume.setText("");
 							txtPower.setText("");
@@ -1796,7 +1823,7 @@ public class BDLFrame extends JFrame
 			rbtnCreateBDL.setBackground(new Color(105, 105, 105));
 			rbtnCreateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnCreateBDL.setForeground(Color.BLACK);
-			rbtnCreateBDL.addActionListener(new ActionListener(){				
+			rbtnCreateBDL.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e)
 				{		
 					if (e.getSource() == rbtnCreateBDL){
@@ -1852,13 +1879,13 @@ public class BDLFrame extends JFrame
 							
 							if ((myTable.getMouseListeners().length >= 2) == true) {
 								int count = myTable.getMouseListeners().length;
-								System.out.println("myTable contained "+count+" mouseListeners");
+								//System.out.println("myTable contained "+count+" mouseListeners");
 								for (int i = count; i > 2; i--) {
-									System.out.println("removing mouse listener");
+									//System.out.println("removing mouse listener");
 									myTable.removeMouseListener(mouseClickListener);
 								}
 							}		
-							System.out.println("adding mouse listener");
+							//System.out.println("adding mouse listener");
 							myTable.addMouseListener(mouseClickListener);
 							
 							myTable.getModel().removeTableModelListener(columnListener);
@@ -1879,7 +1906,7 @@ public class BDLFrame extends JFrame
 			rbtnSearchBDL.setBackground(new Color(105, 105, 105));
 			rbtnSearchBDL.setForeground(Color.BLACK);
 			rbtnSearchBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
-			rbtnSearchBDL.addActionListener(new ActionListener(){				
+			rbtnSearchBDL.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e)
 				{		
 					if (e.getSource() == rbtnSearchBDL){
@@ -1949,7 +1976,6 @@ public class BDLFrame extends JFrame
 			rbtnUpdateBDL.setForeground(Color.BLACK);
 			rbtnUpdateBDL.setFont(new Font("Tahoma", Font.BOLD, 14));
 			rbtnUpdateBDL.addActionListener(new ActionListener(){
-				
 				public void actionPerformed(ActionEvent e)
 				{		
 					txtIssuedBy.setText("");
@@ -1996,13 +2022,13 @@ public class BDLFrame extends JFrame
 					btnDelete.setVisible(true);
 					if ((myTable.getMouseListeners().length >= 2) == true) {
 						int count = myTable.getMouseListeners().length;
-						System.out.println("myTable contained "+count+" mouseListeners");
+						//System.out.println("myTable contained "+count+" mouseListeners");
 						for (int i = count ; i > 2; i--) {
-							System.out.println("removing mouse listener");
+							//System.out.println("removing mouse listener");
 							myTable.removeMouseListener(mouseClickListener);
 						}
 					}					
-					System.out.println("adding mouse listener");
+					//System.out.println("adding mouse listener");
 					myTable.addMouseListener(mouseClickListener);
 					
 					myTable.getModel().removeTableModelListener(columnListener);
