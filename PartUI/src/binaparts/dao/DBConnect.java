@@ -1489,8 +1489,8 @@ public class DBConnect {
 			String[] columnNames = getColumnNames(sourceDatabase+"`.`"+sourceTable, "All", null);
 			
 			getDBConnection();
-			String s = "INSERT INTO `"+targetDatabase+"`.`"+targetTable+"` (";
-			//loop to add all the column names as SQL parameters
+			String s = "UPDATE `"+targetDatabase+"`.`"+targetTable+"` SET ";
+			/*//loop to add all the column names as SQL parameters
 			for (int i = 0; i < columnNames.length; i++) {
 				s = s + columnNames[i];
 				if (i < (columnNames.length -1)) {
@@ -1507,11 +1507,23 @@ public class DBConnect {
 				} else {
 					s = s + ")";
 				}
-			}
+			}*/
+			s = s + "`SeqNumber` = ? WHERE `DeltaPartNumber` = ?";
 			System.out.println(s);
 			pst = con.prepareStatement(s);
 			String value = null;
+			String DeltaPartNumber = null;
 			for (int i = 0; i < json.length(); i++) {
+				value = json.getJSONObject(i).get("DeltaPartNumber").toString().substring(5);	
+				DeltaPartNumber = json.getJSONObject(i).get("DeltaPartNumber").toString();
+				System.out.println(value);
+				System.out.println(DeltaPartNumber);
+				pst.setInt(1, Integer.valueOf(value));
+				pst.setString(2, DeltaPartNumber);
+				pst.executeUpdate();
+			}
+			
+			/*for (int i = 0; i < json.length(); i++) {
 				for (int j = 0; j < (columnNames.length); j++) {
 					try {
 						value = json.getJSONObject(i).get(columnNames[j]).toString();
@@ -1530,7 +1542,7 @@ public class DBConnect {
 						} else {
 							pst.setString(j+1, value);
 						}
-					}*/
+					}/
 					
 					
 					//for updating Customers
@@ -1540,7 +1552,7 @@ public class DBConnect {
 						pst.setString(j+1,(value));
 					}
 					System.out.print(value + " ");
-				}
+				}*/
 				
 				//when data uses both CreatedBy and UpdatedBy
 				//System.out.print(username + " ");
@@ -1553,7 +1565,7 @@ public class DBConnect {
 				//pst.setTimestamp(columnNames.length, time);
 				System.out.println();
 				//pst.executeUpdate();
-			}
+			//}
 			pst.close();
 			con.close();
 		} catch (Exception ex) {
