@@ -270,7 +270,7 @@ public class BDLFrame extends JFrame
 			int rows = table1.getRowCount();
 			for(int i = 1; i < rows; i++){
 				table1.setValueAt(i, i, 0);
-				table1.setValueAt(0, i, 1);
+				//table1.setValueAt(0, i, 1);
 			}
 		}
 		public String getItemsFromTable(){
@@ -324,7 +324,6 @@ public class BDLFrame extends JFrame
 			int tempRowCount = 0;
 			try {
 				JSONArray temp = con.queryDatabase("breakdown lists", "BreakdownListNumber", getSearchText());
-				
 				//checks to see if any info was returned from the Database
 				if(temp.length() == 0){
 					JOptionPane.showMessageDialog(BDLframe,
@@ -336,7 +335,10 @@ public class BDLFrame extends JFrame
 						for (int j = 0; j < (temp.getJSONObject(i).length()-5); j++) {
 							rowCount++;
 						}
+						System.out.println("The rowCount is "+rowCount);
+						System.out.println("The temp.length is "+temp.length());
 					}
+					System.out.println(temp.toString());
 					String[] itm = new String[rowCount];
 					String[] qty = new String[rowCount];
 					//loop to dynamically grab the values from the returned JSONArray
@@ -348,7 +350,9 @@ public class BDLFrame extends JFrame
 						}
 						for (int j = 0; j < (tempRowCount/2); j++) {
 							itm[(i*10)+j] = temp.getJSONObject(i).get("Item"+(j+1)).toString();
+							System.out.println(itm[(i*10)+j]);
 							qty[(i*10)+j] = temp.getJSONObject(i).get("Qty"+(j+1)).toString();
+							System.out.println(qty[(i*10)+j]);
 						}
 					}			
 					//loop to dynamically add items from Database to table 			
@@ -805,7 +809,7 @@ public class BDLFrame extends JFrame
 									String s1 = "[{\"BreakdownListNumber\":\""+txtBosalPartNum.getText()+"\"},";
 									for(int i = 0; i < rowCount; i++){
 										itm[i] = table.getValueAt(i+1, 4).toString();
-										if(table.getValueAt(i+1,1).toString().equals("")){
+										if(table.getValueAt(i+1,1).toString().equals(null) || table.getValueAt(i+1,1).toString().equals("")){
 											qty[i] = "0";
 										} else {
 											qty[i] = table.getValueAt(i+1, 1).toString();
@@ -1206,154 +1210,27 @@ public class BDLFrame extends JFrame
 				{							
 					if(e.getStateChange() == ItemEvent.SELECTED){
 						if(e.getSource().equals(cboCustomer)){
-						//	if(e.getStateChange() == ItemEvent.SELECTED){
-								setCustomer(cboCustomer.getSelectedItem().toString());
-								//cbxCustomer.doClick();								
-						//	}
+							setCustomer(cboCustomer.getSelectedItem().toString());
 						}
 						else if(e.getSource().equals(cboPlatform)){							
-						//	if(e.getStateChange() == ItemEvent.SELECTED){
-								setPlatform(cboPlatform.getSelectedItem().toString());
-								//cbxPlatform.doClick();
-						//	}
+							setPlatform(cboPlatform.getSelectedItem().toString());
 						}
 						else if(e.getSource().equals(cboName)){							
-							//if(e.getStateChange() == ItemEvent.SELECTED){
-								//if(cboName.getSelectedItem().toString() != null){
-									setName(cboName.getSelectedItem().toString());
-									try{		
-										for(int i = 0; i < temp3.length(); i++){
-											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
-												setType(temp3.getJSONObject(i).get("Type").toString());
-												setVolume(temp3.getJSONObject(i).get("Volume").toString());
-												setPower(temp3.getJSONObject(i).get("Power").toString());
-												i=temp3.length(); //used to end for loop										
-											}
-										}	
-										txtType.setText(getType());
-										txtVolume.setText(getVolume());
-										txtPower.setText(getPower());
-									}catch(Exception ex){ex.printStackTrace();}
-						//		}
-								//cbxName.doClick();
-							//}
-						}	/*			
-						//possible truth table outcomes
-						if(cbxCustomer.isSelected() == true){
-							if(cbxPlatform.isSelected() == true){
-								if(cbxName.isSelected() == true){
-									try{		
-										for(int i = 0; i < temp3.length(); i++){
-											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
-												setType(temp3.getJSONObject(i).get("Type").toString());
-												setVolume(temp3.getJSONObject(i).get("Volume").toString());
-												setPower(temp3.getJSONObject(i).get("Power").toString());
-												i=temp3.length(); //used to end for loop										
-											}
-										}	
-									}catch(Exception ex){ex.printStackTrace();}
-								}
-								else if(cbxName.isSelected() == false){
-									//nothing happens
-								}
-							}
-							else if(cbxPlatform.isSelected() == false){
-								if(cbxName.isSelected() == true){
-									try{	
-										for(int i = 0; i < temp3.length(); i++){
-											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
-												setPlatform(temp3.getJSONObject(i).get("Platform").toString());
-												setType(temp3.getJSONObject(i).get("Type").toString());
-												setVolume(temp3.getJSONObject(i).get("Volume").toString());
-												setPower(temp3.getJSONObject(i).get("Power").toString());
-												i=temp3.length(); //used to end for loop
-											}
-										}	
-									}catch(Exception ex){ex.printStackTrace();}
-								}
-								else if(cbxName.isSelected() == false){
-									//nothing happens
-								}
-							}
-						}
-						else if(cbxCustomer.isSelected() == false){
-							if(cbxPlatform.isSelected() == true){
-								if(cbxName.isSelected() == true){
-									try{		
-										for(int i = 0; i < temp3.length(); i++){
-											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
-												setType(temp3.getJSONObject(i).get("Type").toString());
-												setVolume(temp3.getJSONObject(i).get("Volume").toString());
-												setPower(temp3.getJSONObject(i).get("Power").toString());
-												i=temp3.length(); //used to end for loop
-											}
-										}	
-										for(int i = 0; i < temp2.length(); i++){
-											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
-												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
-												i=temp2.length(); //used to end for loop
-											}
-										}
-									}catch(Exception ex){ex.printStackTrace();}
-								}
-								else if(cbxName.isSelected() == false){
-									try{
-										for(int i = 0; i < temp2.length(); i++){
-											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
-												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
-												i=temp2.length(); //used to end for loop
-											}
-										}
-									}catch(Exception ex){ex.printStackTrace();}									
-								}
-							}
-							else if(cbxPlatform.isSelected() == false){
-								if(cbxName.isSelected() == true){
-									try{
-										for(int i = 0; i < temp3.length(); i++){
-											if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
-												setPlatform(temp3.getJSONObject(i).get("Platform").toString());
-												setType(temp3.getJSONObject(i).get("Type").toString());
-												setVolume(temp3.getJSONObject(i).get("Volume").toString());
-												power = temp3.getJSONObject(i).get("Power").toString();
-												i=temp3.length(); //used to end for loop
-											}
-										}	
-										for(int i = 0; i < temp2.length(); i++){
-											if(getPlatform().equals(temp2.getJSONObject(i).get("Program").toString())){
-												setCustomer(temp2.getJSONObject(i).get("Customer").toString());
-												i=temp2.length(); //used to end for loop
-											}
-										}
-									}catch(Exception ex){ex.printStackTrace();}
-								}
-								else if(cbxName.isSelected() == false){
-									//nothing happens
-								}
-							}
-						}*//*
-						if(e.getSource().equals(cboCustomer)){		
-							//nothing is set if cboCustomer is selected				
-						}
-						if(e.getSource().equals(cboPlatform)){		
-							//only the customer is set if cboPlatform is selected
-							if(cbxCustomer.isSelected() == false){	
-								System.out.println("Setting the customer from the platform information");
-								cboCustomer.setSelectedItem(getCustomer());
-							}												
-						}
-						if(e.getSource().equals(cboName)){	
-							//both customer and platform are set if cboName is selected
-							if(cbxCustomer.isSelected() == false){						
-								cboCustomer.setSelectedItem(getCustomer());
-							}					
-							if(cbxPlatform.isSelected() == false){						
-								cboPlatform.setSelectedItem(getPlatform());					
-							}
-							txtType.setText(getType());
-							txtVolume.setText(getVolume());
-							txtPower.setText(getPower());
-						}*/
+							setName(cboName.getSelectedItem().toString());
+							try{		
+								for(int i = 0; i < temp3.length(); i++){
+									if(getName().equals(temp3.getJSONObject(i).get("Engine").toString())){
+										setType(temp3.getJSONObject(i).get("Type").toString());
+										setVolume(temp3.getJSONObject(i).get("Volume").toString());
+										setPower(temp3.getJSONObject(i).get("Power").toString());
+										i=temp3.length(); //used to end for loop										
+									}
+								}	
+								txtType.setText(getType());
+								txtVolume.setText(getVolume());
+								txtPower.setText(getPower());
+							}catch(Exception ex){ex.printStackTrace();}
+						}	
 					}					
 				}
 			});		
@@ -1403,19 +1280,19 @@ public class BDLFrame extends JFrame
 						if (custPartNumber != null) {
 							txtCustomerPartNumber.setText(custPartNumber);
 						}
-						try {
-							setPlatform(temp.getJSONObject(0).get("Program").toString());
-						} catch (Exception ex) {setPlatform(null);}
-						if (rbtnSearchBDL.isSelected() == true) {
-							if (getPlatform() != null) {
-								txtPlatform.setText(getPlatform());
+						
+						if (rbtnCreateBDL.isSelected() == true) {
+							try {
+								setPlatform(temp.getJSONObject(0).get("Program").toString());
+							} catch (Exception ex) {
+								setPlatform(null);
 							}
-						} else {
 							if (getPlatform() != null) {
 								cboPlatform.setSelectedItem(getPlatform());
 							}
 						}
-					} 
+					}
+					
 					String createdBy = null;
 					String volume2 = null;
 					String length = null;
@@ -1510,6 +1387,19 @@ public class BDLFrame extends JFrame
 							} else {
 								if (getCustomer() != null) {
 									cboCustomer.setSelectedItem(getCustomer());
+								}
+							}
+							//set text for Platform JTextField
+							try {
+								setPlatform(temp.getJSONObject(0).get("Platform").toString());
+							} catch (Exception ex) {setPlatform(null);}
+							if (rbtnSearchBDL.isSelected() == true) {
+								if (getPlatform() != null) {
+									txtPlatform.setText(getPlatform());
+								}
+							} else {
+								if (getPlatform() != null) {
+									cboPlatform.setSelectedItem(getPlatform());
 								}
 							}
 							
@@ -1759,7 +1649,6 @@ public class BDLFrame extends JFrame
 				public void actionPerformed(ActionEvent e){
 					if(e.getSource() == cbxCustomer){
 						if (cbxCustomer.isSelected() == true) {
-							System.out.println("cbxCustomer was selected");
 							txtCustomer.setText(getCustomer());
 							cboCustomer.removeItemListener(cboGetInfo);
 							cboCustomer.setVisible(false);
@@ -1767,7 +1656,6 @@ public class BDLFrame extends JFrame
 							txtCustomer.setEditable(false);
 						}
 						else if (cbxCustomer.isSelected() == false) {
-							System.out.println("cbxCustomer was deselected");
 							txtCustomer.setEditable(true);
 							txtCustomer.setVisible(false);
 							txtCustomer.setText("");
@@ -1780,7 +1668,6 @@ public class BDLFrame extends JFrame
 					if (e.getSource() == cbxPlatform) {
 						//selected
 						if (cbxPlatform.isSelected() == true) {		
-							System.out.println("platform was selected");
 							txtPlatform.setText(getPlatform());							
 							cboPlatform.removeItemListener(cboGetInfo);
 							cboPlatform.setVisible(false);
@@ -1789,7 +1676,6 @@ public class BDLFrame extends JFrame
 						}
 						//deselected
 						else if (cbxPlatform.isSelected() == false) {
-							System.out.println("platform was deselected");
 							txtPlatform.setEditable(true);
 							txtPlatform.setVisible(false);
 							txtPlatform.setText("");
@@ -1801,7 +1687,6 @@ public class BDLFrame extends JFrame
 					}					
 					if (e.getSource() == cbxName) {
 						if(cbxName.isSelected() == true){
-							System.out.println("cbxName was selected");
 							txtName.setText(getName());
 							cboName.removeItemListener(cboGetInfo);	
 							cboName.setVisible(false);
@@ -1809,7 +1694,6 @@ public class BDLFrame extends JFrame
 							txtName.setEditable(false);
 						}
 						else if (cbxName.isSelected() == false) {
-							System.out.println("cbxName was deselected");
 							txtType.setText("");
 							txtVolume.setText("");
 							txtPower.setText("");

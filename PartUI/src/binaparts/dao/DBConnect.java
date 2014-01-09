@@ -948,120 +948,125 @@ public class DBConnect {
 		try{
 			String usersname = getUsersName();
 			Timestamp timestamp = getTimestamp();
-			getDBConnection();
 			String BosalPartNumber = bdlInfo.getJSONObject(0).get("BreakdownListNumber").toString();
-			int count = (bdlInfo.length()-1);			
-			String[] values = new String[count];
-			int i = 0;
-			String statement = "INSERT INTO `breakdown lists info` (BreakdownListNumber";
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("Rev").toString();
-				statement = statement + ", Rev";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("RevDate").toString();
-				statement = statement + ", RevDate";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("ReleaseDate").toString();
-				statement = statement + ", ReleaseDate";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("Production").toString();
-				statement = statement + ", Production";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant1").toString();
-				statement = statement + ", RelPlant1";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant2").toString();
-				statement = statement + ", RelPlant2";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("RelSupplier").toString();
-				statement = statement + ", RelSupplier";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("Volume").toString();
-				statement = statement + ", Volume";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("Length").toString();
-				statement = statement + ", Length";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("Section").toString();
-				statement = statement + ", Section";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
+			if (queryDatabase("breakdown lists info", "BreakdownListNumber", BosalPartNumber).length() > 0){
+				System.out.println("breakdownlists info already existed");
+				updateBDLInfo(bdlInfo);
+			} else {
+				getDBConnection();
+				int count = (bdlInfo.length()-1);			
+				String[] values = new String[count];
+				int i = 0;
+				String statement = "INSERT INTO `breakdown lists info` (BreakdownListNumber";
 				
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("Engine").toString();
-				statement = statement + ", Engine";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("Platform").toString();
-				statement = statement + ", Platform";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			try {
-				values[i] = bdlInfo.getJSONObject(i+1).get("Customer").toString();
-				statement = statement + ", Customer";
-				i++;
-			} catch (Exception ex) {ex.printStackTrace();}
-			
-			statement = statement + ", CreatedBy, Created, UpdatedBy, Updated) VALUES(";
-			
-			//loop to add a parameter for each column value going into Database
-			for (i = 0; i < count+5; i++){
-				if (i == 0){
-					statement = statement + "?";
-				} else {
-					statement = statement + ", ?";
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("Rev").toString();
+					statement = statement + ", Rev";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("RevDate").toString();
+					statement = statement + ", RevDate";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("ReleaseDate").toString();
+					statement = statement + ", ReleaseDate";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("Production").toString();
+					statement = statement + ", Production";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant1").toString();
+					statement = statement + ", RelPlant1";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("RelPlant2").toString();
+					statement = statement + ", RelPlant2";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("RelSupplier").toString();
+					statement = statement + ", RelSupplier";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("Volume").toString();
+					statement = statement + ", Volume";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("Length").toString();
+					statement = statement + ", Length";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("Section").toString();
+					statement = statement + ", Section";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+					
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("Engine").toString();
+					statement = statement + ", Engine";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("Platform").toString();
+					statement = statement + ", Platform";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				try {
+					values[i] = bdlInfo.getJSONObject(i+1).get("Customer").toString();
+					statement = statement + ", Customer";
+					i++;
+				} catch (Exception ex) {ex.printStackTrace();}
+				
+				statement = statement + ", CreatedBy, Created, UpdatedBy, Updated) VALUES(";
+				
+				//loop to add a parameter for each column value going into Database
+				for (i = 0; i < count+5; i++){
+					if (i == 0){
+						statement = statement + "?";
+					} else {
+						statement = statement + ", ?";
+					}				
+				}
+				statement = statement + ")";
+				pst = con.prepareStatement(statement);
+				//loop to set the values of the parameters going into the Database
+				for (i = -1; i < count; i++){
+					if (i == -1){
+						pst.setString(i+2, BosalPartNumber);
+					} 
+					//if i is even then an Item is added to the parameters
+					else {
+						pst.setString(i+2, values[i]);
+					} 
 				}				
+				pst.setString((count+2), usersname);
+				pst.setTimestamp((count+3), timestamp);
+				pst.setString((count+4), usersname);
+				pst.setTimestamp((count+5), timestamp);
+				pst.executeUpdate();
+				pst.close();
+				con.close();
 			}
-			statement = statement + ")";
-			pst = con.prepareStatement(statement);
-			//loop to set the values of the parameters going into the Database
-			for (i = -1; i < count; i++){
-				if (i == -1){
-					pst.setString(i+2, BosalPartNumber);
-				} 
-				//if i is even then an Item is added to the parameters
-				else {
-					pst.setString(i+2, values[i]);
-				} 
-			}				
-			pst.setString((count+2), usersname);
-			pst.setTimestamp((count+3), timestamp);
-			pst.setString((count+4), usersname);
-			pst.setTimestamp((count+5), timestamp);
-			pst.executeUpdate();
-			pst.close();
-			con.close();
 		}catch(SQLException SQLex){
 			SQLex.printStackTrace();
 		}catch(Exception ex){
@@ -1189,12 +1194,12 @@ public class DBConnect {
 			getDBConnection();
 			String BosalPartNumber = bdl.getJSONObject(0).get("BreakdownListNumber").toString();
 			int actualBDLItemCount = 1;
-			for (double x = (((double)bdl.length())-1)/10; x > 0; x--) {
+			for (int x = ((bdl.length())-1); x > 0; x = x - 10) {
 				int count;
-				if (x >= 1) {
+				if (x >= 10) {
 					count = (20);
 				} else {
-					count = (int)(x*20);
+					count = (int)(x*2);
 				}				
 				int index = 0; //index through the JSONArray
 				String[] values = new String[count];
@@ -1245,11 +1250,11 @@ public class DBConnect {
 						}
 					} else {
 						//if i is even then an Item is added to the parameters
-						if (i%2 == 0) {
+						if (i == (count) || i == (count + 2)) {
 							pst.setString(i+2, usersname);
 						} 
 						//if i is odd then a Qty is added to the parameters
-						else if (i%2 != 0){
+						else if (i == (count + 1) || i == (count + 3)){
 							pst.setTimestamp(i+2, timestamp);
 						}
 					}						
