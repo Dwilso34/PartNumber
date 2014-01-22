@@ -258,9 +258,9 @@ public class BDLFrame extends JFrame
 		public void bdlHeaders(){
 			try{
 	            String[] columnNames = {"Item", "Qty", " ", "Description", 
-	            		"Bosal Part-NR", "OLD Part-NR", "Rev", "DWG NR", 
-	            		"DWG Rev", "DWG Rev Date", "Prod Rel Date", "FRM",
-	            		"Part-NR", "DWG-NR", "DWG Rev", "DWG Rev Date"};
+	            		"Bosal Part-NR", "Old Part-NR", "Rev", "DWG NR", 
+	            		"dwg rev", "DWG Rev Date", "Prod Rel Date", "FRM",
+	            		"Part-NR", "DWG-NR", "dwg rev", "DWG Rev Date"};
 	            String[][] data = new String[0][0];	             	      
 	            table1 = (new DefaultTableModel(data, columnNames));
 	           
@@ -679,7 +679,7 @@ public class BDLFrame extends JFrame
 			lblRelSupplier.setForeground(Color.BLACK);
 			lblBOSAL = new JLabel("BOSAL");
 			lblBOSAL.setHorizontalAlignment(SwingConstants.CENTER);
-			lblBOSAL.setBounds(407, 223, 540, 20);
+			lblBOSAL.setBounds(407, 223, 520, 20);
 			lblBOSAL.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblBOSAL.setBackground(new Color(150, 150, 150));
 			lblBOSAL.setOpaque(true);
@@ -687,7 +687,7 @@ public class BDLFrame extends JFrame
 			lblBOSAL.setForeground(Color.BLACK);
 			lblCUSTOMER = new JLabel("CUSTOMER");
 			lblCUSTOMER.setHorizontalAlignment(SwingConstants.CENTER);
-			lblCUSTOMER.setBounds(946, 223, 294, 20);
+			lblCUSTOMER.setBounds(926, 223, 314, 20);
 			lblCUSTOMER.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 			lblCUSTOMER.setBackground(new Color(150, 150, 150));
 			lblCUSTOMER.setOpaque(true);
@@ -1177,7 +1177,7 @@ public class BDLFrame extends JFrame
 			//myTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);	
 			int[] columnsWidth = {
 				     //  1   2   3   4    5   6   7   8   9  10  11  12  13  14  15  16  (Column Numbers)
-		                30, 22, 15, 306, 85, 85, 27, 77, 60, 85, 85, 30, 70, 70, 65, 85
+		                30, 22, 15, 306, 85, 85, 27, 62, 55, 85, 85, 30, 85, 85, 50, 90
 		        };
 			int i = 0;
 			for (int width : columnsWidth) {

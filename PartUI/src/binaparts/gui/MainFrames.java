@@ -26,6 +26,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,6 +36,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -782,6 +784,15 @@ public class MainFrames extends JFrame
 			
 			ImageIcon save = new ImageIcon(getClass().getResource("/images/save.jpg"));
 			btnSave = new JButton(save);
+			btnSave.registerKeyboardAction(btnSave.getActionForKeyStroke(
+                    KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false)),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false),
+                    JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+			btnSave.registerKeyboardAction(btnSave.getActionForKeyStroke(
+                    KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true)),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true),
+                    JComponent.WHEN_IN_FOCUSED_WINDOW);
 			btnSave.setBounds(601, 306, 106, 35);
 			btnSave.addActionListener(new ActionListener() {
 
@@ -847,6 +858,15 @@ public class MainFrames extends JFrame
 			
 			ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
 			btnBack = new JButton(back);
+			btnBack.registerKeyboardAction(btnBack.getActionForKeyStroke(
+                    KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false)),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0, false),
+                    JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+			btnBack.registerKeyboardAction(btnBack.getActionForKeyStroke(
+                    KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true)),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0, true),
+                    JComponent.WHEN_IN_FOCUSED_WINDOW);
 			btnBack.setBounds(601, 255, 106, 35);
 			btnBack.addActionListener(new ActionListener() {
 				
@@ -1173,6 +1193,15 @@ public class MainFrames extends JFrame
 				
 				ImageIcon back = new ImageIcon(getClass().getResource("/images/back.jpg"));
 				btnBack = new JButton(back);
+				btnBack.registerKeyboardAction(btnBack.getActionForKeyStroke(
+                        KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false)),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0, false),
+                        JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+				btnBack.registerKeyboardAction(btnBack.getActionForKeyStroke(
+                        KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true)),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0, true),
+                        JComponent.WHEN_IN_FOCUSED_WINDOW);
 				btnBack.setBounds(650, 283, 106, 35);
 				btnBack.addActionListener(new ActionListener() {
 					
@@ -1263,16 +1292,6 @@ public class MainFrames extends JFrame
 										ex.printStackTrace();
 									}	
 								}													
-								setVisible(false);
-								Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-								int height = screenSize.height;
-								int width = screenSize.width;
-								frame.setResizable(false);
-								frame.setSize(width/2, height/2);
-								frame.setLocationRelativeTo(null);
-								frame.setSize(645, 545);
-								frame.setTitle("Main Menu:");
-								main.setVisible(true);
 								resetPanelFields();
 								txtFindBosal.setText("");						
 								rbtnAmerica.doClick();
@@ -1283,6 +1302,15 @@ public class MainFrames extends JFrame
 				
 				ImageIcon check = new ImageIcon(getClass().getResource("/images/check.jpg"));
 				btnCheck = new JButton(check);
+				btnCheck.registerKeyboardAction(btnCheck.getActionForKeyStroke(
+                        KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false)),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false),
+                        JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+				btnCheck.registerKeyboardAction(btnCheck.getActionForKeyStroke(
+                        KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true)),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true),
+                        JComponent.WHEN_IN_FOCUSED_WINDOW);
 				btnCheck.setBounds(214, 154, 106, 35);
 				btnCheck.addActionListener(new ActionListener() {
 					
