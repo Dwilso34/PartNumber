@@ -327,7 +327,7 @@ public class BDLFrame extends JFrame
 				//checks to see if any info was returned from the Database
 				if(temp.length() == 0){
 					JOptionPane.showMessageDialog(BDLframe,
-						    "No Items were added to this breakdown list",
+						    "A Breakdown List does not exist for " + getSearchText(),
 						    "Invalid Entry",
 						    JOptionPane.ERROR_MESSAGE);	
 				} else {
@@ -335,10 +335,7 @@ public class BDLFrame extends JFrame
 						for (int j = 0; j < (temp.getJSONObject(i).length()-5); j++) {
 							rowCount++;
 						}
-						System.out.println("The rowCount is "+rowCount);
-						System.out.println("The temp.length is "+temp.length());
 					}
-					System.out.println(temp.toString());
 					String[] itm = new String[rowCount];
 					String[] qty = new String[rowCount];
 					//loop to dynamically grab the values from the returned JSONArray
@@ -789,6 +786,13 @@ public class BDLFrame extends JFrame
 								    "Invalid Entry",
 								    JOptionPane.ERROR_MESSAGE);					
 						} else {
+							if (rbtnCreateBDL.isSelected() == true && containsBDL() == true) {
+								JOptionPane.showMessageDialog(BDLframe,
+									    "A Breakdown List already exists for " + getSearchText(),
+									    "Invalid Entry",
+									    JOptionPane.ERROR_MESSAGE);	
+								return;
+							}
 							int n = JOptionPane.showConfirmDialog(
 								    BDLframe,
 								    "Are you sure you want to save part data?",
@@ -1249,7 +1253,13 @@ public class BDLFrame extends JFrame
 					for (int i = table1.getRowCount(); i > 0; i--) {
 						table1.removeRow(i-1);
 					}
-					
+					if (rbtnCreateBDL.isSelected() == true && containsBDL() == true) {
+						JOptionPane.showMessageDialog(BDLframe,
+							    "A Breakdown List already exists for " + getSearchText(),
+							    "Invalid Entry",
+							    JOptionPane.ERROR_MESSAGE);	
+						return;
+					}
 					//get database data on part number being searched
 					JSONArray temp = null;
 					try {
@@ -1263,6 +1273,9 @@ public class BDLFrame extends JFrame
 						}						
 					} catch (Exception ex) {
 						ex.printStackTrace();
+					}
+					if (temp.length() == 0) {
+						return;
 					}
 					//sets values common for each radio button
 					if (temp != null) {

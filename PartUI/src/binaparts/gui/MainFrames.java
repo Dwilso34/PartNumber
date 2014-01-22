@@ -1345,9 +1345,7 @@ public class MainFrames extends JFrame
 								//set text for Rev JTextField
 								int Rev = 0;
 								try {
-									System.out.println(temp.getJSONObject(0).get("Rev").toString());
 									Rev = Integer.valueOf(temp.getJSONObject(0).get("Rev").toString());			
-									System.out.println("printing out the variable Rev "+Rev);
 								} catch (Exception ex) {Rev = -1;}
 								txtRev.setText(String.valueOf(Rev));
 								
@@ -1361,26 +1359,20 @@ public class MainFrames extends JFrame
 								//set text for DrawingRev JTextField
 								int DrawingRev = 0;
 								try{
-									System.out.println(temp.getJSONObject(0).get("DrawingRev").toString());
 									DrawingRev = Integer.valueOf(temp.getJSONObject(0).get("DrawingRev").toString());
-									System.out.println("printing out the variable DrawingRev "+DrawingRev);
 								}catch(Exception ex){DrawingRev = -1;}
 								txtDrawingRev.setText(String.valueOf(DrawingRev));
 								
 								String CustDrawingNumber = null;
 								try{
-									System.out.println(temp.getJSONObject(0).get("CustDrawingNumber").toString());
 									CustDrawingNumber = temp.getJSONObject(0).get("CustDrawingNumber").toString();
-									System.out.println("printing out the variable CustDrawingNumber "+CustDrawingNumber);
 								}catch(Exception ex){CustDrawingNumber = "-";}
 								txtCustDrawingNum.setText(CustDrawingNumber);
 								
 								//set text for DrawingRev JTextField
 								int CustDrawingRev = 0;
 								try{		
-									System.out.println(temp.getJSONObject(0).get("CustDrawingRev").toString());
 									CustDrawingRev =Integer.valueOf(temp.getJSONObject(0).get("CustDrawingRev").toString());	
-									System.out.println("printing out the variable CustDrawingRev "+CustDrawingRev);
 								}catch(Exception ex){CustDrawingRev = -1;}
 								txtCustDrawingRev.setText(String.valueOf(CustDrawingRev));
 								
