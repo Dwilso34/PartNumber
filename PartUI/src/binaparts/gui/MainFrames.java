@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -231,7 +232,7 @@ public class MainFrames extends JFrame
 					public void actionPerformed(ActionEvent e) 
 					{
 						try {
-							if (con.getUserRankValue() > 0) {
+							if (con.getUserRankValue() > -1) {
 								if (e.getSource() == btnManageUsers) {
 									setVisible(false);
 									frame.setSize(745,460);
@@ -2092,7 +2093,7 @@ public class MainFrames extends JFrame
 		private JLabel lblmanageUsers;
 		private JLabel lblUsername;
 		private JLabel lblPassword;
-		private JLabel lblPassword2;
+		private JLabel lblConfirmPassword;
 		private JLabel lblRank;
 		private JLabel lblPassConfirm;	
 		private JLabel lblAddProgram;
@@ -2278,11 +2279,11 @@ public class MainFrames extends JFrame
 			lblPassword.setVisible(true);
 			lblPassword.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblPassword.setForeground(Color.BLACK);
-			lblPassword2 = new JLabel("Confirm Password:");
-			lblPassword2.setBounds(262, 228, 131, 17);
-			lblPassword2.setVisible(true);
-			lblPassword2.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblPassword2.setForeground(Color.BLACK);
+			lblConfirmPassword = new JLabel("Confirm Password:");
+			lblConfirmPassword.setBounds(262, 228, 131, 17);
+			lblConfirmPassword.setVisible(true);
+			lblConfirmPassword.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblConfirmPassword.setForeground(Color.BLACK);
 			lblRank = new JLabel("User Rank:");
 			lblRank.setBounds(318, 263, 75, 17);
 			lblRank.setVisible(true);
@@ -2524,7 +2525,7 @@ public class MainFrames extends JFrame
 						cboCustomer.setModel(resetCustomerComboBox());
 			            lblUsername.setVisible(false);
 			            lblPassword.setVisible(false);
-			            lblPassword2.setVisible(false);
+			            lblConfirmPassword.setVisible(false);
 			            lblProStart.setVisible(true);
 			            lblProEnd.setVisible(true);
 			            lblRank.setVisible(false);
@@ -2586,7 +2587,7 @@ public class MainFrames extends JFrame
 					if (e.getSource() == rbtnAddCustomer){
 						lblUsername.setVisible(false);
 			            lblPassword.setVisible(false);
-			            lblPassword2.setVisible(false);
+			            lblConfirmPassword.setVisible(false);
 			            lblRank.setVisible(false);
 			            lblProStart.setVisible(false);
 			            lblProEnd.setVisible(false);
@@ -2649,7 +2650,7 @@ public class MainFrames extends JFrame
 					if (e.getSource() == rbtnDeleteUser){
 						lblUsername.setVisible(true);
 			            lblPassword.setVisible(true);
-			            lblPassword2.setVisible(true);
+			            lblConfirmPassword.setVisible(true);
 			            lblRank.setVisible(true);
 			            lblProStart.setVisible(false);
 			            lblProEnd.setVisible(false);
@@ -2724,7 +2725,7 @@ public class MainFrames extends JFrame
 					if (e.getSource() == rbtnCreateUser){
 						lblUsername.setVisible(true);
 			            lblPassword.setVisible(true);
-			            lblPassword2.setVisible(true);
+			            lblConfirmPassword.setVisible(true);
 			            lblRank.setVisible(true);
 			            lblProStart.setVisible(false);
 			            lblProEnd.setVisible(false);
@@ -2797,7 +2798,7 @@ public class MainFrames extends JFrame
 					if (e.getSource() == rbtnChangeUserRank){
 						lblUsername.setVisible(true);
 			            lblPassword.setVisible(true);
-			            lblPassword2.setVisible(true);
+			            lblConfirmPassword.setVisible(true);
 			            lblProStart.setVisible(false);
 			            lblProEnd.setVisible(false);
 			            lblRank.setVisible(true);
@@ -2871,7 +2872,7 @@ public class MainFrames extends JFrame
 					if (e.getSource() == rbtnChangePass){
 						lblUsername.setVisible(true);
 			            lblPassword.setVisible(true);
-			            lblPassword2.setVisible(true);
+			            lblConfirmPassword.setVisible(true);
 			            lblProStart.setVisible(false);
 			            lblProEnd.setVisible(false);
 			            lblRank.setVisible(true);
@@ -2946,7 +2947,7 @@ public class MainFrames extends JFrame
 						lblCustomer.setVisible(false);
 						lblUsername.setVisible(false);
 						lblPassword.setVisible(false);
-						lblPassword2.setVisible(false);
+						lblConfirmPassword.setVisible(false);
 						lblCust.setVisible(false);
 						txtFirstName.setVisible(false);
 						txtLastName.setVisible(false);
@@ -3016,7 +3017,7 @@ public class MainFrames extends JFrame
 					{
 						lblUsername.setVisible(true);
 			            lblPassword.setVisible(true);
-			            lblPassword2.setVisible(true);
+			            lblConfirmPassword.setVisible(true);
 			            lblRank.setVisible(true);
 			            lblProStart.setVisible(false);
 			            lblProEnd.setVisible(false);
@@ -3094,28 +3095,27 @@ public class MainFrames extends JFrame
 			btnDelete.setVisible(false);
 			btnDelete.addActionListener(new ActionListener() {
 				
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					int n = 1;
 					if (e.getSource() == btnDelete)
 					{
-						if(rbtnDeleteUser.isSelected() == true){
-							if(txtUsername.getText().equals("")){
+						if (rbtnDeleteUser.isSelected() == true) {
+							if (txtUsername.getText().equals("")) {
 								JOptionPane.showMessageDialog(
 									    frame,
 									    "Please Enter A Username",
 									    "Creditenials Error",
 										JOptionPane.ERROR_MESSAGE);
-							}else{
-								try{
-									if(con.getUserRank().equals("admin")){
+							} else {
+								try {
+									if (con.getUserRankValue() > 0){
 										n = JOptionPane.showConfirmDialog(
 												    frame,
 												    "Are you sure you want to delete user: " + txtUsername.getText() + "?",
 												    "Delete:",
 												    JOptionPane.YES_NO_OPTION,
 													JOptionPane.WARNING_MESSAGE);
-									}else{
+									} else {
 										config = new ConfigurationManager(configFilePath);
 										JOptionPane.showMessageDialog(
 										    frame,
@@ -3124,409 +3124,437 @@ public class MainFrames extends JFrame
 										    "Creditenials Error",
 											JOptionPane.ERROR_MESSAGE);
 									}
-								}catch(Exception ex){/*Ignore*/}
+								} catch (Exception ex) {/*Ignore*/}
 							}
 						}
-						if(n == 0){
-							try{
+						if (n == 0) {
+							try {
 								String username = txtUsername.getText();
-						if(rbtnDeleteUser.isSelected() == true){
-							con.deleteUser(username);
-						}
-							}catch(Exception ex){/*Ignore*/}
+								if (rbtnDeleteUser.isSelected() == true) {
+									con.deleteUser(username);
+								}
+							} catch (Exception ex) {/*Ignore*/}
 							txtUsername.setText("");
 						}
-						if(rbtnAddProgram.isSelected() == true){
-							if(cboDeletePro.getSelectedItem().equals("")){
+						if (rbtnAddProgram.isSelected() == true) {
+							if (cboDeletePro.getSelectedItem().equals("")) {
 								JOptionPane.showMessageDialog(
 										frame,
 										"Please Select a Program",
 										"Creditenials Error",
 										JOptionPane.ERROR_MESSAGE);
-							}else{
-								try{
-									if(con.getUserRank().equals("admin")){
+							} else {
+								try {
+									if (con.getUserRankValue() > 0) {
 										n = JOptionPane.showConfirmDialog(
 												frame,
 												"Are you sure you want to delete " + cboDeletePro.getSelectedItem() + " ?",
 												"Delete:",
 												JOptionPane.YES_NO_OPTION,
 												JOptionPane.WARNING_MESSAGE);
-						}else{
-							config = new ConfigurationManager(configFilePath);
-							JOptionPane.showMessageDialog(
-									frame,
-									"" + (config.getProperty("appUser")
-											+ "does not have permission to Delete Programs"),
-											"Creditenials Error",
-											JOptionPane.ERROR_MESSAGE);
-						}
+									} else {
+										config = new ConfigurationManager(configFilePath);
+										JOptionPane.showMessageDialog(
+												frame,
+												"" + (config.getProperty("appUser")
+												+ "does not have permission to Delete Programs"),
+												"Creditenials Error",
+												JOptionPane.ERROR_MESSAGE);
+									}
 								}catch(Exception ex){/*Ignore*/}
 							}
 						}
-						if(rbtnAddEngine.isSelected() == true){
-							if(cboDeleteEngine.getSelectedItem().equals("")){
+						if (rbtnAddEngine.isSelected() == true) {
+							if (cboDeleteEngine.getSelectedItem().equals("")) {
 								JOptionPane.showMessageDialog(
 										frame,
 										"Please Select a Program",
 										"Creditenials Error",
 										JOptionPane.ERROR_MESSAGE);
-							}else{
-								try{
-									if(con.getUserRank().equals("admin")){
+							} else {
+								try {
+									if (con.getUserRankValue() > 0) {
 										n = JOptionPane.showConfirmDialog(
 												frame,
 												"Are you sure you want to delete " + cboDeleteEngine.getSelectedItem() + " ?",
 												"Delete:",
 												JOptionPane.YES_NO_OPTION,
 												JOptionPane.WARNING_MESSAGE);
-						}else{
-							config = new ConfigurationManager(configFilePath);
-							JOptionPane.showMessageDialog(
-									frame,
-									"" + (config.getProperty("appUser")
-											+ "does not have permission to Delete Programs"),
-											"Creditenials Error",
-											JOptionPane.ERROR_MESSAGE);
-						}
-								}catch(Exception ex){/*Ignore*/}
+									} else {
+										config = new ConfigurationManager(configFilePath);
+										JOptionPane.showMessageDialog(
+												frame,
+												"" + (config.getProperty("appUser")
+												+ "does not have permission to Delete Programs"),
+												"Creditenials Error",
+												JOptionPane.ERROR_MESSAGE);
+									}
+								} catch(Exception ex) {/*Ignore*/}
 							}
 						}
-						if(n == 0){
-							try{
+						if (n == 0) {
+							try {
 								String program = cboDeletePro.getSelectedItem().toString();
-						if(rbtnAddProgram.isSelected() == true){
+						if (rbtnAddProgram.isSelected() == true) {
 							con.deleteProgram(program);
 							cboDeletePro.setModel(resetDeleteProComboBox());
 						}
 						
-						}catch(Exception ex){/*Ignore*/}
-							cboDeletePro.setSelectedIndex(-1);
-							
+						} catch (Exception ex) {/*Ignore*/}
+							cboDeletePro.setSelectedIndex(-1);							
 						}
-						if(n == 0){
-							try{
-						String engine = cboDeleteEngine.getSelectedItem().toString();
-						if(rbtnAddEngine.isSelected() == true){
-							System.out.println("Made It");
-							con.deleteEngine(engine);
-							cboDeleteEngine.setModel(resetEngineComboBox());
-						}
-						}catch(Exception ex){/*Ignore*/}
+						if (n == 0) {
+							try {
+								String engine = cboDeleteEngine.getSelectedItem().toString();
+								if (rbtnAddEngine.isSelected() == true) {
+									System.out.println("Made It");
+									con.deleteEngine(engine);
+									cboDeleteEngine.setModel(resetEngineComboBox());
+								}
+						} catch (Exception ex) {/*Ignore*/}
 							cboDeleteEngine.setSelectedIndex(-1);
 						}
-							if(rbtnAddCustomer.isSelected() == true){
-								if(cboDeleteCust.getSelectedItem().equals("")){
-									JOptionPane.showMessageDialog(
-											frame,
-											"Please Select a Customer",
-											"Creditenials Error",
-											JOptionPane.ERROR_MESSAGE);
-								}else{
-									try{
-										if(con.getUserRank().equals("admin")){
-											n = JOptionPane.showConfirmDialog(
-													frame,
-													"Are you sure you want to delete " + cboDeleteCust.getSelectedItem() + " ?",
-													"Delete:",
-													JOptionPane.YES_NO_OPTION,
-													JOptionPane.WARNING_MESSAGE);
-										}else{
-											config = new ConfigurationManager(configFilePath);
-											JOptionPane.showMessageDialog(
-													frame,
-													"" + (config.getProperty("appUser")
-															+ "does not have permission to Delete Customers"),
-															"Creditenials Error",
-															JOptionPane.ERROR_MESSAGE);
-										}
-									}catch(Exception ex){/*Ignore*/}
-								}
+						if (rbtnAddCustomer.isSelected() == true) {
+							if (cboDeleteCust.getSelectedItem().equals("")) {
+								JOptionPane.showMessageDialog(
+										frame,
+										"Please Select a Customer",
+										"Creditenials Error",
+										JOptionPane.ERROR_MESSAGE);
+							} else {
+								try {
+									if (con.getUserRank().equals("admin")) {
+										n = JOptionPane.showConfirmDialog(
+												frame,
+												"Are you sure you want to delete " + cboDeleteCust.getSelectedItem() + " ?",
+												"Delete:",
+												JOptionPane.YES_NO_OPTION,
+												JOptionPane.WARNING_MESSAGE);
+									} else {
+										config = new ConfigurationManager(configFilePath);
+										JOptionPane.showMessageDialog(
+												frame,
+												"" + (config.getProperty("appUser")
+														+ "does not have permission to Delete Customers"),
+														"Creditenials Error",
+														JOptionPane.ERROR_MESSAGE);
+									}
+								} catch(Exception ex) {/*Ignore*/}
 							}
-							if(n == 0){
-								try{
-									String customer = cboDeleteCust.getSelectedItem().toString();
-							if(rbtnAddCustomer.isSelected() == true){
-								con.deleteCustomer(customer);
-								cboDeleteCust.setModel(resetDeleteCustComboBox());
-							}
-							}catch(Exception ex){/*Ignore*/}
-								cboDeleteCust.setSelectedIndex(-1);
-							}}}});
+						}
+						if (n == 0) {
+							try {
+								String customer = cboDeleteCust.getSelectedItem().toString();
+						if (rbtnAddCustomer.isSelected() == true) {
+							con.deleteCustomer(customer);
+							cboDeleteCust.setModel(resetDeleteCustComboBox());
+						}
+						} catch(Exception ex) {/*Ignore*/}
+							cboDeleteCust.setSelectedIndex(-1);
+						}}}});
 			
 			ImageIcon create = new ImageIcon(getClass().getResource("/images/save.jpg"));
 			btnSave = new JButton(create);
 			btnSave.setBounds(479, 365, 106, 35);
 			btnSave.addActionListener(new ActionListener() {
 				
-				public void actionPerformed(ActionEvent e) 
-				{
-					
-						if (e.getSource() == btnSave){
-							int n = 1;
-							if(rbtnCreateUser.isSelected() == true){
-								if(txtUsername.getText().equals("")){
-									JOptionPane.showMessageDialog(
-										    frame,
-										    "Please Enter A Username",
-										    "Creditenials Error",
-											JOptionPane.ERROR_MESSAGE);
-								}else{
-									try{
-										if(con.getUserRank().equals("admin")){
-											n = JOptionPane.showConfirmDialog(
-													    frame,
-													    "Are you sure you want to create user: " + txtUsername.getText() + "?",
-													    "Save:",
-													    JOptionPane.YES_NO_OPTION,
-														JOptionPane.WARNING_MESSAGE);
-										}else{
-											config = new ConfigurationManager(configFilePath);
-											JOptionPane.showMessageDialog(
-													    frame,
-													    "" + (config.getProperty("appUser") 
-													    		+ " does not have permission to Create Users"),
-													    "Creditenials Error",
-														JOptionPane.ERROR_MESSAGE);
-										}	
-									}catch(Exception ex){/*Ignore*/}
-								}
+				public void actionPerformed(ActionEvent e) {
+					if (e.getSource() == btnSave) {
+						int n = 1;
+						if (rbtnCreateUser.isSelected() == true) {
+							if (txtUsername.getText().equals("")) {
+								JOptionPane.showMessageDialog(
+									    frame,
+									    "Please Enter A Username",
+									    "Creditenials Error",
+										JOptionPane.ERROR_MESSAGE);
+							} else {
+								try {
+									if (con.getUserRankValue() > 2) {
+										n = JOptionPane.showConfirmDialog(
+												    frame,
+												    "Are you sure you want to create user: " + txtUsername.getText() + "?",
+												    "Save:",
+												    JOptionPane.YES_NO_OPTION,
+													JOptionPane.WARNING_MESSAGE);
+									} else {
+										config = new ConfigurationManager(configFilePath);
+										JOptionPane.showMessageDialog(
+												    frame,
+												    "" + (config.getProperty("appUser") 
+												    		+ " does not have permission to Create Users"),
+												    "Creditenials Error",
+													JOptionPane.ERROR_MESSAGE);
+									}	
+								} catch (Exception ex) {/*Ignore*/}
 							}
-							if(rbtnChangeUserRank.isSelected() == true){
-								if(txtUsername.getText().equals("")){
-									JOptionPane.showMessageDialog(
+						}
+						if(rbtnChangeUserRank.isSelected() == true){
+							if(txtUsername.getText().equals("")){
+								JOptionPane.showMessageDialog(
+									    frame,
+									    "Please Enter A Username",
+									    "Creditenials Error",
+										JOptionPane.ERROR_MESSAGE);
+							}else{
+								try{
+									if(con.getUserRankValue() > 2){
+										n = JOptionPane.showConfirmDialog(
+												    frame,
+												    "Are you sure you want to change " 
+												    		+ txtUsername.getText() + "'s rank to " 
+												    		+ cboUserRank.getSelectedItem().toString()+"?",
+												    "Save:",
+												    JOptionPane.YES_NO_OPTION,
+													JOptionPane.WARNING_MESSAGE);
+									}else{
+										config = new ConfigurationManager(configFilePath);
+										JOptionPane.showMessageDialog(
 										    frame,
-										    "Please Enter A Username",
+										    "" + (config.getProperty("appUser") 
+										    		+ " does not have permission to Change User Rank"),
 										    "Creditenials Error",
 											JOptionPane.ERROR_MESSAGE);
-								}else{
-									try{
-										if(con.getUserRank().equals("admin")){
-											n = JOptionPane.showConfirmDialog(
-													    frame,
-													    "Are you sure you want to change " 
-													    		+ txtUsername.getText() + "'s rank to " 
-													    		+ cboUserRank.getSelectedItem().toString()+"?",
-													    "Save:",
-													    JOptionPane.YES_NO_OPTION,
+									}
+								}catch(Exception ex){/*Ignore*/}
+							}
+						}
+						if (rbtnChangePass.isSelected() == true) {
+							if (txtUsername.getText().equals("")) {
+								JOptionPane.showMessageDialog(
+									    frame,
+									    "Please Enter A Username",
+									    "Creditenials Error",
+										JOptionPane.ERROR_MESSAGE);
+							} else {
+								n = JOptionPane.showConfirmDialog(
+								    frame,
+								    "Are you sure you want to change " + txtUsername.getText() + "'s password?",
+								    "Save:",
+								    JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE);
+							}
+						}
+						if (rbtnAddProgram.isSelected() == true) {
+							try {
+								if (con.getUserRankValue() > 0) {
+									if (txtAddCusPro.getText().equals("")) {
+										JOptionPane.showMessageDialog(
+												frame,
+												"Please Enter a Program",
+												"Creditenial Error",
+												JOptionPane.ERROR_MESSAGE);
+									} else {
+										n = JOptionPane
+												.showConfirmDialog(
+														frame,
+														"Are you sure you want to create "
+																+ txtAddCusPro
+																		.getText()
+																+ " as a new program?",
+														"Save:",
+														JOptionPane.YES_NO_OPTION,
 														JOptionPane.WARNING_MESSAGE);
-										}else{
-											config = new ConfigurationManager(configFilePath);
-											JOptionPane.showMessageDialog(
+									}
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						}
+						if (rbtnAddEngine.isSelected() == true) {
+							try {
+								if (con.getUserRankValue() > 0) {
+									if (txtEngine.getText().equals("")) {
+										JOptionPane.showMessageDialog(
+												frame,
+												"Please Enter a Program",
+												"Creditenial Error",
+												JOptionPane.ERROR_MESSAGE);
+									} else { 
+										n = JOptionPane.showConfirmDialog(
+												frame,
+												"Are you sure you want to create " + txtEngine.getText() + " as a new engine?",
+												"Save:",
+												JOptionPane.YES_NO_OPTION,
+												JOptionPane.WARNING_MESSAGE);
+									}
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						}
+						if(rbtnAddCustomer.isSelected() == true){
+							try {
+								if (con.getUserRankValue() > 0) {
+									if(txtAddCusPro.getText().equals("")){
+										JOptionPane.showMessageDialog(
+												frame,
+												"Please Enter a Customer",
+												"Creditential Error",
+												JOptionPane.ERROR_MESSAGE);
+									}else{
+										n = JOptionPane.showConfirmDialog(
+												frame,
+												"Are you sure you want to create " + txtAddCusPro.getText() + " as a new Customer?",
+												"Save",
+												JOptionPane.YES_NO_OPTION,
+												JOptionPane.WARNING_MESSAGE);
+									}
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						}
+						if (n == 0) {
+							try {
+								if (rbtnCreateUser.isSelected() == true) {
+									String confirmPassword = (new String(txtConfirmPassword.getPassword()));
+									String password = (new String(txtPassword.getPassword()));
+									String username = txtUsername.getText();
+									String firstName = txtFirstName.getText();
+									String lastName = txtLastName.getText();
+									if (comparePasswords(password, confirmPassword) == true) {
+										String rank = cboUserRank.getSelectedItem().toString();
+										con.createUser(username, password, rank, firstName, lastName);
+									} else {
+										JOptionPane.showMessageDialog(
 											    frame,
-											    "" + (config.getProperty("appUser") 
-											    		+ " does not have permission to Change User Rank"),
+											    "Passwords Do Not Match",
 											    "Creditenials Error",
 												JOptionPane.ERROR_MESSAGE);
-										}
-									}catch(Exception ex){/*Ignore*/}
+									}
 								}
-							}
-							if(rbtnChangePass.isSelected() == true){
-								if(txtUsername.getText().equals("")){
-									JOptionPane.showMessageDialog(
-										    frame,
-										    "Please Enter A Username",
-										    "Creditenials Error",
-											JOptionPane.ERROR_MESSAGE);
-								}else{
-									n = JOptionPane.showConfirmDialog(
-										    frame,
-										    "Are you sure you want to change " + txtUsername.getText() + "'s password?",
-										    "Save:",
-										    JOptionPane.YES_NO_OPTION,
-											JOptionPane.WARNING_MESSAGE);
+								if (rbtnAddCustomer.isSelected() == true) {
+									String newCust = txtCust.getText();
+									String newCustomer = txtAddCusPro.getText();
+									con.createCustomer(newCustomer, newCust);
+									cboCustomer.setModel(resetCustomerComboBox());
+									cboDeleteCust.setModel(resetDeleteCustComboBox());
 								}
-							}
-							if(rbtnAddProgram.isSelected() == true){
-								if(txtAddCusPro.getText().equals("")){
-									JOptionPane.showMessageDialog(
-											frame,
-											"Please Enter a Program",
-											"Creditenial Error",
-											JOptionPane.ERROR_MESSAGE);
-								}else{
-									n = JOptionPane.showConfirmDialog(
-											frame,
-											"Are you sure you want to create " + txtAddCusPro.getText() + " as a new program?",
-											"Save:",
-											JOptionPane.YES_NO_OPTION,
-											JOptionPane.WARNING_MESSAGE);
+								if (rbtnAddEngine.isSelected() == true) {
+									String newEngine = txtEngine.getText();
+									String newVolume = txtVolume.getText();
+									String newPower = txtPower.getText();
+									String newPlatform = cboPlatform.getSelectedItem().toString();
+									String newType = cboType.getSelectedItem().toString();
+									con.createEngine(newEngine, newPlatform, newType, newVolume, newPower);										
 								}
-							}
-							if(rbtnAddEngine.isSelected() == true){
-								if(txtEngine.getText().equals("")){
-									JOptionPane.showMessageDialog(
-											frame,
-											"Please Enter a Program",
-											"Creditenial Error",
-											JOptionPane.ERROR_MESSAGE);
-								}else{
-									n = JOptionPane.showConfirmDialog(
-											frame,
-											"Are you sure you want to create " + txtEngine.getText() + " as a new engine?",
-											"Save:",
-											JOptionPane.YES_NO_OPTION,
-											JOptionPane.WARNING_MESSAGE);
+								if (rbtnAddProgram.isSelected() == true) {
+									String Program = txtAddCusPro.getText();
+									String Customer = cboCustomer.getSelectedItem().toString();
+									String ProgramStart = txtProStart.getText();
+									String ProgramEnd = txtProEnd.getText();
+									String Cust = con.queryDatabase("customers", "Customer", Customer).getJSONObject(0).getString("Cust").toString();
+									con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd);
+									cboDeletePro.setModel(resetDeleteProComboBox());
 								}
-							}
-							if(rbtnAddCustomer.isSelected() == true){
-								if(txtAddCusPro.getText().equals("")){
-									JOptionPane.showMessageDialog(
-											frame,
-											"Please Enter a Customer",
-											"Creditential Error",
-											JOptionPane.ERROR_MESSAGE);
-								}else{
-									n = JOptionPane.showConfirmDialog(
-											frame,
-											"Are you sure you want to create " + txtAddCusPro.getText() + " as a new Customer?",
-											"Save",
-											JOptionPane.YES_NO_OPTION,
-											JOptionPane.WARNING_MESSAGE);
+								if (rbtnChangeUserRank.isSelected() == true) {
+									String rank = cboUserRank.getSelectedItem().toString();
+									String username = txtUsername.getText();
+									con.changeUserRank(username, rank);
 								}
-							}
-								if(n == 0){
-									try{
-										if(rbtnCreateUser.isSelected() == true){
-											String confirmPassword = (new String(txtConfirmPassword.getPassword()));
-											String password = (new String(txtPassword.getPassword()));
-											String username = txtUsername.getText();
-											String firstName = txtFirstName.getText();
-											String lastName = txtLastName.getText();
-											if(comparePasswords(password, confirmPassword) == true){
-												String rank = cboUserRank.getSelectedItem().toString();
-												con.createUser(username, password, rank, firstName, lastName);
-											}else{
-												JOptionPane.showMessageDialog(
-													    frame,
-													    "Passwords Do Not Match",
-													    "Creditenials Error",
-														JOptionPane.ERROR_MESSAGE);
-											}
-										}
-										if(rbtnAddCustomer.isSelected() == true){
-											String newCust = txtCust.getText();
-											String newCustomer = txtAddCusPro.getText();
-											con.createCustomer(newCustomer, newCust);
-											cboCustomer.setModel(resetCustomerComboBox());
-											cboDeleteCust.setModel(resetDeleteCustComboBox());
-										}
-										if(rbtnAddEngine.isSelected() == true){
-											String newEngine = txtEngine.getText();
-											String newVolume = txtVolume.getText();
-											String newPower = txtPower.getText();
-											String newPlatform = cboPlatform.getSelectedItem().toString();
-											String newType = cboType.getSelectedItem().toString();
-											con.createEngine(newEngine, newPlatform, newType, newVolume, newPower);
-										
-										}
-										if(rbtnAddProgram.isSelected() == true){
-											String Program = txtAddCusPro.getText();
-											String Customer = cboCustomer.getSelectedItem().toString();
-											String ProgramStart = txtProStart.getText();
-											String ProgramEnd = txtProEnd.getText();
-											String Cust = con.queryDatabase("customers", "Customer", Customer).getJSONObject(0).getString("Cust").toString();
-											con.createProgram(Customer, Cust, Program, ProgramStart, ProgramEnd);
-											cboDeletePro.setModel(resetDeleteProComboBox());
-										}
-										if(rbtnChangeUserRank.isSelected() == true){
-											String rank = cboUserRank.getSelectedItem().toString();
-											String username = txtUsername.getText();
-											con.changeUserRank(username, rank);
-										}
-										if(rbtnChangePass.isSelected() == true){
-											String confirmPassword = (new String(txtConfirmPassword.getPassword()));
-											String password = (new String(txtPassword.getPassword()));
-											String username = txtUsername.getText();
-											if(comparePasswords(password, confirmPassword) == true){
-												con.changeUserPassword(username, password);
-											}else{
-												JOptionPane.showMessageDialog(
-													    frame,
-													    "Passwords Do Not Match",
-													    "Creditenials Error",
-														JOptionPane.ERROR_MESSAGE);
-											}
-										}
-											
-									}catch(Exception ex){ex.printStackTrace();}
-									txtUsername.setText("");
-									txtPassword.setText("");
-									txtConfirmPassword.setText("");
-									txtCust.setText("");
-									txtAddCusPro.setText("");
-									txtProStart.setText("");
-									txtProEnd.setText("");	
-									txtEngine.setText("");
-									txtPower.setText("");
-									txtVolume.setText("");
-									cboPlatform.setSelectedIndex(-1);
-									cboType.setSelectedIndex(-1);
-									cboCustomer.setSelectedIndex(-1);
-									cboUserRank.setSelectedIndex(-1);
-									cboDeleteCust.setSelectedIndex(-1);
-									cboDeletePro.setSelectedIndex(-1);
-							}}}});
+								if (rbtnChangePass.isSelected() == true) {
+									String confirmPassword = (new String(txtConfirmPassword.getPassword()));
+									String password = (new String(txtPassword.getPassword()));
+									String username = txtUsername.getText();
+									if(comparePasswords(password, confirmPassword) == true){
+										con.changeUserPassword(username, password);
+									} else {
+										JOptionPane.showMessageDialog(
+											    frame,
+											    "Passwords Do Not Match",
+											    "Creditenials Error",
+												JOptionPane.ERROR_MESSAGE);
+									}
+								}
+									
+							} catch (Exception ex) {ex.printStackTrace();}
+							txtUsername.setText("");
+							txtPassword.setText("");
+							txtConfirmPassword.setText("");
+							txtCust.setText("");
+							txtAddCusPro.setText("");
+							txtProStart.setText("");
+							txtProEnd.setText("");	
+							txtEngine.setText("");
+							txtPower.setText("");
+							txtVolume.setText("");
+							cboPlatform.setSelectedIndex(-1);
+							cboType.setSelectedIndex(-1);
+							cboCustomer.setSelectedIndex(-1);
+							cboUserRank.setSelectedIndex(-1);
+							cboDeleteCust.setSelectedIndex(-1);
+							cboDeletePro.setSelectedIndex(-1);
+					}}}});
+			
 			setupPanel();
 		}
 		
-		private void setupPanel()
-	{
-		setLayout(null);
-		add(lblbosal);
-		add(lblmanageUsers);
-		add(rbtnCreateUser);
-		add(lblFirstName);
-		add(txtFirstName);
-		add(lblLastName);
-		add(txtLastName);
-		add(rbtnDeleteUser);
-		add(lblCustomer);
-		add(lblUsername);
-		add(txtUsername);
-		add(cboCustomer);
-		add(rbtnChangeUserRank);
-		add(lblPassword);
-		add(lblAddCustomer);
-		add(lblAddProgram);
-		add(txtPassword);
-		add(txtAddCusPro);
-		add(rbtnChangePass);
-		add(lblPassword2);
-		add(lblProStart);
-		add(lblCust);
-		add(txtCust);
-		add(txtProStart);
-		add(txtConfirmPassword);
-		add(lblPassConfirm);
-		add(rbtnAddCustomer);
-		add(lblRank);
-		add(lblDeleteCust);
-		add(lblProEnd);
-		add(cboDeleteCust);
-		add(txtProEnd);
-		add(cboUserRank);
-		add(rbtnAddProgram);
-		add(lblDeletePro);
-		add(cboDeletePro);
-		add(btnBack);
-		add(btnDelete);
-		add(btnSave);
-		add(lblEngine);
-		add(lblPlatform);
-		add(lblType);
-		add(lblVolume);
-		add(lblPower);
-		add(txtEngine);
-		add(cboPlatform);
-		add(cboType);
-		add(txtVolume);
-		add(txtPower);
-		add(rbtnAddEngine);
-		add(lblDeleteEngine);
-		add(cboDeleteEngine);
-	}}//End of Class ManageUsersPanel
+		private void setupPanel() {
+			setLayout(null);
+			add(lblbosal);
+			add(lblmanageUsers);
+			add(lblUsername);
+			add(txtUsername);
+			add(lblPassword);
+			add(txtPassword);
+			add(rbtnChangePass);
+			add(lblConfirmPassword);
+			add(txtConfirmPassword);
+			add(lblPassConfirm);
+			add(btnBack);
+			add(btnSave);
+			
+			try {
+				if (con.getUserRankValue() > 0) {				
+					add(rbtnAddCustomer);
+					add(rbtnAddProgram);
+					add(rbtnAddEngine);
+					add(rbtnCreateUser);
+					add(rbtnDeleteUser);
+					add(rbtnChangeUserRank);
+					add(lblFirstName);
+					add(txtFirstName);
+					add(lblLastName);
+					add(txtLastName);
+					add(lblRank);
+					add(cboUserRank);	
+					add(btnDelete);
+					
+					add(lblCustomer);
+					add(cboCustomer);
+					add(lblDeleteCust);
+					add(cboDeleteCust);
+					add(lblCust);
+					add(txtCust);
+					add(lblAddCustomer);
+					add(lblAddProgram);
+					add(txtAddCusPro);
+					add(lblPlatform);
+					add(cboPlatform);
+					add(lblProStart);
+					add(txtProStart);
+					add(lblProEnd);
+					add(txtProEnd);
+					add(lblDeletePro);
+					add(cboDeletePro);
+					add(lblEngine);
+					add(txtEngine);
+					add(lblDeleteEngine);
+					add(cboDeleteEngine);
+					add(lblType);
+					add(cboType);
+					add(lblVolume);
+					add(txtVolume);
+					add(lblPower);
+					add(txtPower);
+					
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}//End of Class ManageUsersPanel
 	class ExperimentalPanel extends JPanel{
 	//JLabels
 	private JLabel lblCreated;
