@@ -376,7 +376,7 @@ public class MainFrames extends JFrame
 	}
 	class CreatePanel extends JPanel{
 	
-//JLabel
+	//JLabel
 		private JLabel lblSeq;
 		private JLabel lblDescription;
 		private JLabel lblMaterialDescription;
@@ -476,6 +476,7 @@ public class MainFrames extends JFrame
 		private JXDatePicker jxdDrawingRevDate;
 		
 	//JButtons
+		
 		private JButton btnSave;
 		private JButton btnBack;
 		
@@ -822,10 +823,10 @@ public class MainFrames extends JFrame
 								String DrawingRevDate = DateToCalendar(jxdDrawingRevDate.getDate());								
 								String CustomerPartNumber = txtCPart.getText();
 								String CustDrawingNumber = txtCustDrawingNum.getText();
-								int CustDrawingRev;
+								String CustDrawingRev = null;
 								try{
-									CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());
-								}catch(Exception ex){CustDrawingRev = 0;}
+									CustDrawingRev = txtCustDrawingRev.getText();
+								}catch(Exception ex){}
 								String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());
 								String SupplierPartNumber = txtSPart.getText();
 								String Description = (String) cboDescrip.getSelectedItem();
@@ -1257,10 +1258,10 @@ public class MainFrames extends JFrame
 										.equals("")){
 									CustDrawingNumber = null;
 								} else {CustDrawingNumber = txtCustDrawingNum.getText();}
-								int CustDrawingRev = 0;						
+								String CustDrawingRev = null;						
 								if (txtCustDrawingRev.getText().equals("0") || txtCustDrawingRev.getText().equals("")) {
-									CustDrawingRev = 0;
-								} else {CustDrawingRev = Integer.valueOf(txtCustDrawingRev.getText());}
+									txtCustDrawingRev.setText("0");
+								} else {CustDrawingRev = txtCustDrawingRev.getText();}
 								String CustDrawingRevDate = DateToCalendar(jxdCustomerDrawingRevDate.getDate());								
 								String SupplierPartNumber= null;
 								if (txtSupDescrip.getText().equals("-") || txtSupDescrip.getText().equals("")) {
@@ -1399,10 +1400,10 @@ public class MainFrames extends JFrame
 								txtCustDrawingNum.setText(CustDrawingNumber);
 								
 								//set text for DrawingRev JTextField
-								int CustDrawingRev = 0;
+								String CustDrawingRev = null;
 								try{		
-									CustDrawingRev =Integer.valueOf(temp.getJSONObject(0).get("CustDrawingRev").toString());	
-								}catch(Exception ex){CustDrawingRev = -1;}
+									CustDrawingRev = temp.getJSONObject(0).get("CustDrawingRev").toString();	
+								}catch(Exception ex){CustDrawingRev = "-";}
 								txtCustDrawingRev.setText(String.valueOf(CustDrawingRev));
 								
 								Date drawingRevDate = null;
@@ -1501,8 +1502,6 @@ public class MainFrames extends JFrame
 		lblDrawingNum.setForeground(Color.BLACK);
 		lblCustDrawingNum.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblCustDrawingNum.setForeground(Color.BLACK);
-		
-		
 		
 	//Group Layout
 		

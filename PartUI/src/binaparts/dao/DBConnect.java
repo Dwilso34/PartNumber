@@ -843,7 +843,7 @@ public class DBConnect {
 	//inserts a new row into `parts list` to create a new part
 	public void insertNewPart(int PartType, int Material, String BosalPartNumber, String DrawingNumber,
 			int DrawingRev, String DrawingRevDate, String CustomerPartNumber, String CustDrawingNumber,
-			int CustDrawingRev, String CustDrawingRevDate, String SupplierPartNumber, String Description,
+			String CustDrawingRev, String CustDrawingRevDate, String SupplierPartNumber, String Description,
 			String Program, int Seq, String TypeDescription, int Rev, String ProductionReleaseDate) throws Exception{	
 		try{
 			String usersname = getUsersName();
@@ -880,7 +880,7 @@ public class DBConnect {
 			pst.setString(6, DrawingRevDate);
 			pst.setString(7, CustomerPartNumber);
 			pst.setString(8, CustDrawingNumber);
-			pst.setInt(9, CustDrawingRev);
+			pst.setString(9, CustDrawingRev);
 			pst.setString(10, CustDrawingRevDate);
 			pst.setString(11, SupplierPartNumber);
 			pst.setString(12, Description);
@@ -1384,7 +1384,7 @@ public class DBConnect {
 	//updates a BosalPartNumber in parts list
 	public void updateBosal(String BosalPartNumber, String DrawingNumber, int DrawingRev, 
 			String DrawingRevDate, String CusPartNumber, String CustDrawingNumber, 
-			int CustDrawingRev, String CustDrawingRevDate, String SupPartNumber, String Description, 
+			String CustDrawingRev, String CustDrawingRevDate, String SupPartNumber, String Description, 
 			String Program, int Rev, String ProductionReleaseDate) throws Exception{
 			
 			try{
@@ -1413,7 +1413,7 @@ public class DBConnect {
 				pst.setString(4, DrawingRevDate);
 				pst.setString(5, CusPartNumber);
 				pst.setString(6, CustDrawingNumber);
-				pst.setInt(7, CustDrawingRev);
+				pst.setString(7, CustDrawingRev);
 				pst.setString(8, CustDrawingRevDate);
 				pst.setString(9, SupPartNumber);
 				pst.setString(10,  Program);
@@ -1436,7 +1436,7 @@ public class DBConnect {
 	//updates a BosalPartNumber in parts list
 	public void updateDelta(String DeltaPartNumber, String DrawingNumber, int DrawingRev, 
 				String DrawingRevDate, String CusPartNumber, String CustDrawingNumber, 
-				int CustDrawingRev, String CustDrawingRevDate, String SupPartNumber, String Description, 
+				String CustDrawingRev, String CustDrawingRevDate, String SupPartNumber, String Description, 
 				String Program, int Rev, String ProductionReleaseDate) throws Exception{
 				try{
 					String usersname = getUsersName();
@@ -1464,7 +1464,7 @@ public class DBConnect {
 					pst.setString(4, DrawingRevDate);
 					pst.setString(5, CusPartNumber);
 					pst.setString(6, CustDrawingNumber);
-					pst.setInt(7, CustDrawingRev);
+					pst.setString(7, CustDrawingRev);
 					pst.setString(8, CustDrawingRevDate);
 					pst.setString(9, SupPartNumber);
 					pst.setString(10,  Program);
